@@ -1,0 +1,505 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><head>
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="GENERATOR" content="hevea 1.08">
+<style type="text/css">
+.toc{list-style:none;}
+.title{margin:auto;text-align:center}
+.center{text-align:center;margin-left:auto;margin-right:auto;}
+.flushleft{text-align:left;margin-left:0ex;margin-right:auto;}
+.flushright{text-align:right;margin-left:auto;margin-right:0ex;}
+DIV TABLE{margin-left:inherit;margin-right:inherit;}
+PRE{text-align:left;margin-left:0ex;margin-right:auto;}
+BLOCKQUOTE{margin-left:4ex;margin-right:4ex;text-align:left;}
+.part{margin:auto;text-align:center}
+</style></head><body>
+<!--HEVEA command line is: hevea python_biosql_basic.tex -->
+<!--HTMLHEAD-->
+<!--ENDHTML-->
+<!--PREFIX <ARG ></ARG>-->
+<!--CUT DEF section 1 -->
+
+<h1 align="center">Basic BioSQL with Biopython</h1>
+
+<h3 align="center">Brad Chapman (chapmanb@arches.uga.edu), Michael Hoffman
+(grouse@mail.utexas.edu)</h3>
+<!--TOC section Table of Contents-->
+
+<h2 class="section">Contents</h2><!--SEC END -->
+
+<ul class="toc"><li class="li-toc">
+<a href="#htoc1">1&nbsp;&nbsp;Other BioSQL documentation</a>
+</li><li class="li-toc"><a href="#htoc2">2&nbsp;&nbsp;Installing python database packages</a>
+<ul class="toc"><li class="li-toc">
+<a href="#htoc3">2.1&nbsp;&nbsp;MySQL</a>
+<ul class="toc"><li class="li-toc">
+<a href="#htoc4">2.1.1&nbsp;&nbsp;MySQLdb</a>
+</li></ul>
+</li><li class="li-toc"><a href="#htoc5">2.2&nbsp;&nbsp;PostgreSQL</a>
+<ul class="toc"><li class="li-toc">
+<a href="#htoc6">2.2.1&nbsp;&nbsp;psycopg</a>
+</li></ul>
+</li></ul>
+</li><li class="li-toc"><a href="#htoc7">3&nbsp;&nbsp;Getting Started</a>
+<ul class="toc"><li class="li-toc">
+<a href="#htoc8">3.1&nbsp;&nbsp;Prerequisites</a>
+</li><li class="li-toc"><a href="#htoc9">3.2&nbsp;&nbsp;Connecting to a BioSQL database</a>
+</li><li class="li-toc"><a href="#htoc10">3.3&nbsp;&nbsp;Loading a GenBank file into the database</a>
+</li><li class="li-toc"><a href="#htoc11">3.4&nbsp;&nbsp;Retrieving SeqRecord objects</a>
+</li></ul>
+</li><li class="li-toc"><a href="#htoc12">4&nbsp;&nbsp;Python Cookbook Code</a>
+</li></ul>
+
+<!--TOC section Other BioSQL documentation-->
+
+<h2 class="section"><a name="htoc1">1</a>&nbsp;&nbsp;Other BioSQL documentation</h2><!--SEC END -->
+
+This document provides a basic description of using BioSQL from
+python. To keep it simple, it does not go into non-python specific parts
+of the documentation. Other documentation which will be helpful for
+using BioSQL from Biopython is on the Biopython wiki at <a href="http://www.biopython.org/wiki/BioSQL"><tt>http://www.biopython.org/wiki/BioSQL</tt></a>,
+and in other files distributed with BioSQL. You can find these either
+as part of a BioSQL release, or you can access them directly using
+anonymous svn. The BioSQL source is hosted on a subversion (svn) based
+version control server, and its anonymous access mirror is at the URL .
+There is also a web-interface at <a href="http://code.open-bio.org/svnweb/index.cgi/biosql/browse/biosql-schema"><tt>http://code.open-bio.org/svnweb/index.cgi/biosql/browse/biosql-schema</tt></a>
+that allows browsing the repository as well as viewing and downloading
+files. Additional information for accessing O|B|F source code
+repositories is at <a href="http://www.open-bio.org/wiki/SourceCode"><tt>http://www.open-bio.org/wiki/SourceCode</tt></a>. There are two ways to get these
+docs:
+<ol class="enumerate" type="1"><li class="li-enumerate">
+You can use a commandline svn client to get the code from the
+ anonymous svn mirror at the URL
+ <a href="svn://code.open-bio.org/biosql/biosql-schema"><tt>svn://code.open-bio.org/biosql/biosql-schema</tt></a> with
+ the following commands:
+<pre class="verbatim">$ svn co svn://code.open-bio.org/biosql/biosql-schema biosql-schema
+</pre>
+ This will check out the biosql-schema repository with all tags and
+ branches into the local directory <code>biosql-schema</code> (which will
+ be created if it doesn't exist yet). Usually you will be interested
+ only in the main trunk. In this case append <code>/trunk</code> to the
+ URL:
+<pre class="verbatim">$ svn co svn://code.open-bio.org/biosql/biosql-schema/trunk biosql-schema
+</pre><br>
+<br>
+</li><li class="li-enumerate">You can browse and download the code from the web-interface to
+svn. The biosql svn repository is located at:
+<a href="http://code.open-bio.org/svnweb/index.cgi/biosql/browse/biosql-schema"><tt>http://code.open-bio.org/svnweb/index.cgi/biosql/browse/biosql-schema</tt></a>. You can download individual files, but currently the web-interface does not offer an option to download the entire repository.
+</li></ol>
+Once you have gotten the code, there are two documents worth reading:
+<ul class="itemize"><li class="li-itemize">
+ <code>INSTALL</code> – This document contains basic information
+ about BioSQL, installation instructions for the MySQL and PostgreSQL
+ databases, and information about loading the BioSQL schema into a
+ database.<br>
+<br>
+</li><li class="li-itemize"><code>doc/schema-overview.txt</code> – This is a description of the
+ current SQL schema making up the BioSQL database. Note that this document is meanwhile maintained on the BioSQL wiki at <a href="http://www.biosql.org/wiki/Schema_Overview"><tt>http://www.biosql.org/wiki/Schema_Overview</tt></a>.
+</li></ul>
+<!--TOC section Installing python database packages-->
+
+<h2 class="section"><a name="htoc2">2</a>&nbsp;&nbsp;Installing python database packages</h2><!--SEC END -->
+
+In order to access databases from within python, you'll need to install
+python interfaces to the database you are using. This section describes
+the interfaces Biopython supports for using BioSQL and basic
+installation.<br>
+<br>
+These are designed with a UNIX-like platform in mind (Linux, any of the
+various UNIXes, Mac OS X).<br>
+<br>
+For all of these installations, you'll need to have at least a database
+client installed, and also need to have the development libraries and
+header files installed. On some systems that use packaging systems
+(Red Hat, Debian, OS X) this means that you'll need to install a
+development package (for example, mysql-dev or mysql-headers or 
+mysql-libs) separately. If you start trying to install one of the python
+interfaces below and start getting errors are missing libraries or
+header files, you should check to make sure these are installed.<br>
+<br>
+The <code>INSTALL</code> document mentioned above provides information on
+install and configuring MySQL and PostgreSQL.<br>
+<br>
+<!--TOC subsection MySQL-->
+
+<h3 class="subsection"><a name="htoc3">2.1</a>&nbsp;&nbsp;MySQL</h3><!--SEC END -->
+
+MySQL access with python is fairly simple, as there is basically one
+adaptor which is regularly developed and which most people use.<br>
+<br>
+<!--TOC subsubsection MySQLdb-->
+
+<h4 class="subsubsection"><a name="htoc4">2.1.1</a>&nbsp;&nbsp;MySQLdb</h4><!--SEC END -->
+
+The MySQLdb package is a library for accessing MySQL databases.
+This interface is quite stable and completely DB API-2.0 compliant and
+seems to definitely be the one to use for MySQL access. The latest
+releases are available from: 
+<a href="http://sourceforge.net/projects/mysql-python"><tt>http://sourceforge.net/projects/mysql-python</tt></a>.<br>
+<br>
+To install, first download and unpack the tar.gz file:
+<pre class="verbatim">$ tar -xzvpf MySQL-python-0.9.2.tar.gz 
+MySQL-python-0.9.2/
+MySQL-python-0.9.2/MySQLdb/
+.....
+</pre>
+Then change into the directory containing the MySQLdb code:
+<pre class="verbatim">$ cd MySQL-python-0.9.2
+</pre>
+MySQLdb uses the standard distutils mechanisms for installing programs,
+so you should be able to build the code with:
+<pre class="verbatim">$ python setup.py build
+running build
+running build_py
+.....
+</pre>
+The <code>setup.py</code> file is pretty good at finding the MySQL libraries
+and header files on a number of platforms, so this should normally work
+well (see platform specific notes below for special cases).<br>
+<br>
+Finally, to install the library you'll need to be root on the machine,
+and do:
+<pre class="verbatim">#python setup.py install
+running install
+.....
+</pre>
+To test that everything worked smoothly, you should be able to do:
+<pre class="verbatim">$ python
+Python 2.2.2 (#1, 01/12/03, 07:51:34) 
+[GCC Apple cpp-precomp 6.14] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; import MySQLdb
+&gt;&gt;&gt;
+</pre>
+If this works happily, then you should be all set.
+<br>
+<b><font size="4">Platform specific notes:</font></b>
+<dl class="description" compact="compact"><dt class="dt-description">
+ <b>Mac OS-X</b></dt><dd class="dd-description"> – With the default setup.py file, I get the error:<br>
+<br>
+<code>ld: can't locate file for: -lmysqlclient_r</code><br>
+<br>
+The setup.py file
+ is apparently looking for a specially named thread-safe library, which
+ I didn't have installed by default. To fix this you can either
+ install the latest mysql-devel from
+ <a href="http://www.mysql.com/"><tt>http://www.mysql.com/</tt></a>, or edit MySQLdb's
+ <code>setup.py</code> file, changing this line:<br>
+<br>
+<code>thread_safe_library = YES</code><br>
+<br>
+to:<br>
+<br>
+<code>thread_safe_library = NO</code></dd></dl>
+<!--TOC subsection PostgreSQL-->
+
+<h3 class="subsection"><a name="htoc5">2.2</a>&nbsp;&nbsp;PostgreSQL</h3><!--SEC END -->
+
+In contrast to MySQL, PostgreSQL has a mess of python interfaces all of
+which are in varying states of completion and maintenance. The most
+frustrating problem with many of these is that they do not necessarily
+support the DB API-2.0 which makes them very difficult to use with
+standard python SQL access code.<br>
+<br>
+Below are the currently supported interfaces. More could of course be
+added, but probably won't be unless someone gets very excited about
+them.<br>
+<br>
+<!--TOC subsubsection psycopg-->
+
+<h4 class="subsubsection"><a name="htoc6">2.2.1</a>&nbsp;&nbsp;psycopg</h4><!--SEC END -->
+ 
+psycopg is a nice PostgreSQL python interface developed along with the
+Zope project. It is available from 
+<a href="http://www.zope.org/Members/fog/psycopg"><tt>http://www.zope.org/Members/fog/psycopg</tt></a>, and is fully
+DP API-2.0 compliant.<br>
+<br>
+psycopg requires you to make the mxDateTime package installed for
+handling of dates. This comes in the mxBase set of packages which are
+also required for Biopython, and you can get it from
+<a href="http://www.egenix.com/files/python/eGenix-mx-Extensions.html%5C#Download-mxBASE"><tt>http://www.egenix.com/files/python/eGenix-mx-Extensions.html\#Download-mxBASE</tt></a>.<br>
+<br>
+To begin installing, psycopg download the tar.gz file, unpack it, and
+change into the new directory created:
+<pre class="verbatim">$ tar -xzvpf psycopg-1.0.14.tar.gz 
+psycopg-1.0.14/
+psycopg-1.0.14/AUTHORS
+....
+$ cd psycopg-1.0.14
+</pre>
+psycopg uses the autoconf build system, so it follows a
+configure/make/make install set of steps.<br>
+<br>
+First, run the configuration:
+<pre class="verbatim">$ ./configure
+creating cache ./config.cache
+checking for python... /sw/bin/python
+checking python version... 2.2
+....
+</pre>
+If the configure has trouble finding the postgreSQL or mxDateTime
+include files ans libraries, a few useful flags to configure are:<br>
+<br>
+<code>--with-postgres-libraries=DIR</code>,<br>
+<br>
+<code>--with-postgres-includes=DIR</code>,<br>
+<br>
+<code>--with-mxdatetime-includes=DIR</code>. <br>
+<br>
+For example:
+<pre class="verbatim">$ ./configure --with-mxdatetime-includes=/sw/lib/python2.2/site-packages/mx/DateTime/mxDateTime
+</pre>
+is necessary on Mac OS X since the mxDateTime header files are in a
+unusual location.<br>
+<br>
+After the configure finished happily, you need to make the module:
+<pre class="verbatim">$ make
+gcc  -DNDEBUG -O3 -Wall -Wstrict-prototypes  -I/sw/include/python2.2
+  -I/sw/lib/python2.2/config -DHAVE_CONFIG_H=1  -DHAVE_LIBCRYPTO=1
+  -DHAVE_ASPRINTF=1  -I/sw/include/postgresql -I/sw/include/postgresql/server
+  -I/sw/lib/python2.2/site-packages/mx/DateTime/mxDateTime
+-DVERSION=\"1.0.14\" -DNDEBUG -D_REENTRANT -D_GNU_SOURCE   -c
+././module.c -o ./module.o
+....
+</pre>
+Finally, become root and install the module:
+<pre class="verbatim"># make install
+Installing shared modules...
+install -m 555 ./psycopgmodule.so /sw/lib/python2.2/site-packages
+</pre>
+To test that everything worked okay, fire up python and import the newly
+created module:
+<pre class="verbatim">$ python
+Python 2.2.2 (#1, 01/12/03, 07:51:34) 
+[GCC Apple cpp-precomp 6.14] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; import psycopg
+&gt;&gt;&gt; 
+</pre>
+No error messages here and you've done everything correctly.
+<br>
+<b><font size="4">Platform specific notes:</font></b>
+<dl class="description" compact="compact"><dt class="dt-description">
+ <b>Mac OS-X</b></dt><dd class="dd-description"> – I had a couple of things I needed to change to get
+ psycopg to compile happily. First the make complains with:<br>
+<br>
+<code>././module.c:156: only 1 arg to macro 'Dprintf' (2 expected)</code><br>
+<br>
+There seems to have been kind of mistake in how this macro was defined
+ for gnu C compilers. To fix the problem, I had to change line 107 in
+ <code>module.h</code> from:<br>
+<br>
+<code>#define Dprintf(fmt, args...)</code><br>
+<br>
+to:<br>
+<br>
+<code>static void Dprintf(const char *fmt, ...) {}</code><br>
+<br>
+After this the make will proceed for a while, and then complains with:<br>
+<br>
+<code>ld: can't open: /sw/bin//sw/bin/python</code><br>
+<br>
+This appears to be a glitch in how the Makefile is created. I had to
+ change line 136 from:<br>
+<br>
+<code>PYTHON = /sw/bin/python</code><br>
+<br>
+to:<br>
+<br>
+<code>PYTHON = python</code><br>
+<br>
+After these two changes, everything compiled fine.
+</dd></dl>
+<!--TOC section Getting Started-->
+
+<h2 class="section"><a name="htoc7">3</a>&nbsp;&nbsp;Getting Started</h2><!--SEC END -->
+
+Once you've got your python database interface installed you're ready to
+get started with BioSQL. This section is intended to get you going
+with the basics in python. For in-depth information about the BioSQL
+schema itself, you should check out the standard BioSQL documentation
+which has extensive information about setting up databases, loading SQL
+and describing what exactly is going on with all those SQL tables. For
+specific Biopython use cases, see the cookbook items (hopefully to be
+written) below.<br>
+<br>
+<!--TOC subsection Prerequisites-->
+
+<h3 class="subsection"><a name="htoc8">3.1</a>&nbsp;&nbsp;Prerequisites</h3><!--SEC END -->
+
+Allow of the work in this section assumes that you have installed a
+database, a python binding to this database, and loaded the BioSQL
+schema into the database. <br>
+<br>
+Additionally, this is written with the assumption that you know a little
+about databases in general. The most important thing that is really
+assumed is that you understand the client/server model of databases. The
+basic idea is that there is a database server which actually physically
+contains the data you are working with. This server can be located on
+your machine, a machine across the room from you, or some computer
+half-way around the world. We will not be dealing with the server here
+– we will be dealing with a client that connects to this server. <br>
+<br>
+Understanding this, for this example we are going to assume we have a
+server/client set up with the following information:
+<dl class="description" compact="compact"><dt class="dt-description">
+ <b>username</b></dt><dd class="dd-description"> – This is the user you are allowed to connect to the
+ database server as. In this example, the username is:
+ <b>chapmanb</b><br>
+<br>
+</dd><dt class="dt-description"><b>password</b></dt><dd class="dd-description"> – This is the password associated with the above use.
+ For our example, this is: <b>biopython</b><br>
+<br>
+</dd><dt class="dt-description"><b>host</b></dt><dd class="dd-description"> – This is the hostname where the server computer is
+ located. As mentioned above, this could be anywhere, but for this
+ example we will use: <b>localhost</b><br>
+<br>
+</dd><dt class="dt-description"><b>db</b></dt><dd class="dd-description"> – The name of the database where the BioSQL schema has been
+ loaded. For our example, this is: <code>bioseqdb</code><br>
+<br>
+</dd><dt class="dt-description"><b>driver</b></dt><dd class="dd-description"> – The python database adaptor that you are using. The
+ available drivers and their installation are described above.
+ Obviously, the driver and your client have to match the database
+ server type you will be dealing with. In our example, we are using a
+ MySQL database with the driver: <b>MySQLdb</b></dd></dl>
+To run these examples on your own, you'll need to know all of this
+information and adjust what is written below to get it to work for you.<br>
+<br>
+<!--TOC subsection Connecting to a BioSQL database-->
+
+<h3 class="subsection"><a name="htoc9">3.2</a>&nbsp;&nbsp;Connecting to a BioSQL database</h3><!--SEC END -->
+
+This section describes the basic steps to connect with a BioSQL
+database. Right now we are not assuming the database needs to be loaded
+with any information (that comes next), but rather just enumerating the 
+very basic steps for connecting with the database with the biopython
+implementation of BioSQL.<br>
+<br>
+Okay, now that all the preliminary ramblings are out of the way, let's
+get started actually doing this. First, we load the Biopython
+implementation of BioSQL:
+<pre class="verbatim">&gt;&gt;&gt; from BioSQL import BioSeqDatabase
+</pre>
+Now the second and final step – connect with the database:
+<pre class="verbatim">&gt;&gt;&gt; server = BioSeqDatabase.open_database(driver = "MySQLdb", user = "chapmanb",
+...             passwd = "biopython", host = "localhost", db = "bioseqdb")
+</pre>
+There you go – you've got a connection. Hmmm, wonder why I did so much
+rambling for such a simple thing? So does my psychologist.<br>
+<br>
+Now that we've got the connecting to the database out of the way, let's
+do some useful work with this database.<br>
+<br>
+<!--TOC subsection Loading a GenBank file into the database-->
+
+<h3 class="subsection"><a name="htoc10">3.3</a>&nbsp;&nbsp;Loading a GenBank file into the database</h3><!--SEC END -->
+
+Now that we've got a connection to our database, the next logical thing
+to do is load some information into it. For this example, we are going
+to assume we have a GenBank file on our computer called
+<code>cor6_6.gb</code> that we are going to work with. This is just a file of
+GenBank sequences, and in this case contains a bunch of cold resistance
+related genes from various plants. <br>
+<br>
+We want to load this file into the BioSQL server so we can query it.
+The first thing we want to do is create a BioSQL database on the server
+to cold this information. In this case, we'll simply call it
+<code>cold</code>. Again, this is a one-liner:
+<pre class="verbatim">&gt;&gt;&gt; db = server.new_database("cold")
+</pre>
+Now we want to do the loading of the file into the database. The
+Biopython implementation works by taking a standard Iterator object that
+returns Biopython SeqFeature objects and then doing the loading. If that
+last sentence doesn't make any sense at all, then you should go check
+out the standard Biopython documentation which explains it all in
+excruciating detail. So, we need to set up our Iterator for our GenBank
+file, which we can do with the following code:
+<pre class="verbatim">&gt;&gt;&gt; from Bio import GenBank
+&gt;&gt;&gt; parser = GenBank.FeatureParser()
+&gt;&gt;&gt; iterator = GenBank.Iterator(open("cor6_6.gb"), parser)
+</pre>
+With this iterator, the loading of the database is another one-liner:
+<pre class="verbatim">&gt;&gt;&gt; db.load(iterator)
+6
+&gt;&gt;&gt; server.adaptor.commit()
+</pre>
+And the GenBank file is loaded into the database. Notice that the load
+function returns the number of records loaded (6 in this case). This is
+useful for sanity checking to make sure that you didn't try to load a
+massive file and end up with a result like 3.<br>
+<br>
+Note also that BioSQL is a transactional database even in MySQL (as it
+uses InnoDB as the table handler). Hence, transactions need to be
+committed before you can go and login to the database through mysql
+and indeed find the data there.<br>
+<br>
+<!--TOC subsection Retrieving SeqRecord objects-->
+
+<h3 class="subsection"><a name="htoc11">3.4</a>&nbsp;&nbsp;Retrieving SeqRecord objects</h3><!--SEC END -->
+
+Now that our database is loaded with information, the next logical step
+is retrieving information from that database. Let's start with our
+initial connection to the database server that we got when we connected
+to it above. The first step is getting a direct connection to our
+<code>cold</code> database. The server is set up to act like a python
+dictionary, so we get our <code>cold</code> database with the following code:
+<pre class="verbatim">&gt;&gt;&gt; db = server["cold"]
+</pre>
+Now that we've got the database, we can retrieve a record based on
+accession numbers. So, to get a record for the Arabidopsis kin2 gene
+(contained in the <code>cor6_6.gb</code> file), we simply do:
+<pre class="verbatim">&gt;&gt;&gt; record = db.lookup(accession = "X62281")
+</pre>
+The <code>record</code> that we get back models as exactly as possible a
+standard SeqRecord object (again, referring to the Biopython
+documentation is a great idea if you don't understand these standard
+Biopython objects). So we can do things like retrieve basic information
+about this sequence in the standard ways:
+<pre class="verbatim">&gt;&gt;&gt; record.id
+'X62281'
+&gt;&gt;&gt; record.name
+'ATKIN2'
+&gt;&gt;&gt; record.description
+'A.thaliana kin2 gene.'
+</pre>
+We can deal with the sequence:
+<pre class="verbatim">&gt;&gt;&gt; sequence = record.seq
+&gt;&gt;&gt; sequence.alphabet
+IUPACUnambiguousDNA()
+&gt;&gt;&gt; sequence[:5].tostring()
+'ATTTG'
+</pre>
+We can deal with features:
+<pre class="verbatim">&gt;&gt;&gt; feature = record.features[0]
+&gt;&gt;&gt; feature.type
+'source'
+&gt;&gt;&gt; print feature.location
+[0..880]
+&gt;&gt;&gt; feature.qualifiers
+{'strain': ['ssp. L. Heynh, Colombia'], 'organism': ['Arabidopsis
+thaliana'], 'db_xref': ['taxon:3702']}
+</pre>
+And so on and so in. The basic idea is that you should be able to deal
+with a sequence with annotations stored in a database in exactly the
+same way you deal with sequences in flatfiles. All of the database
+access happens under the hood so you don't even have to think about SQL
+or other nastiness, but you get all the advantages of a database.<br>
+<br>
+<!--TOC section Python Cookbook Code-->
+
+<h2 class="section"><a name="htoc12">4</a>&nbsp;&nbsp;Python Cookbook Code</h2><!--SEC END -->
+
+Doing various fun things to demonstrate the usefulness of BioSQL. I
+suppose I could go ahead and write something here.<br>
+<br>
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+<!--FOOTER-->
+<hr size="2"><blockquote class="quote"><em>This document was translated from L<sup>A</sup>T<sub>E</sub>X by
+</em><a href="http://pauillac.inria.fr/%7Emaranget/hevea/index.html"><em>H<font size="2"><sup>E</sup></font>V<font size="2"><sup>E</sup></font>A</em></a><em>.</em></blockquote>
+</body></html>
