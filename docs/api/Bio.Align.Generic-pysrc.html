@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Align.Generic</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Align-module.html">Package&nbsp;Align</a> ::
+        Module&nbsp;Generic
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Align.Generic-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Align.Generic-module.html">Module Bio.Align.Generic</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2000-2004 Brad Chapman.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2001 Iddo Friedberg.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2007-2010 by Peter Cock.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># All rights reserved.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">"""Classes for generic sequence alignment.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">Contains classes to deal with generic sequence alignment stuff not</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">specific to a particular program or format.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt>  <tt class="py-comment"># Don't just use plain text in epydoc API pages!</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment"># biopython</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module Bio.Seq=Bio.Seq-module.html,Class Bio.Seq.Seq=Bio.Seq.Seq-class.html"><a title="Bio.Seq
+Bio.Seq.Seq" class="py-name" href="#" onclick="return doclink('link-1', 'Seq', 'link-1');">Seq</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name"><a title="Bio.Seq
+Bio.Seq.Seq" class="py-name" href="#" onclick="return doclink('link-2', 'Seq', 'link-1');">Seq</a></tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Module Bio.SeqRecord=Bio.SeqRecord-module.html,Class Bio.SeqRecord.SeqRecord=Bio.SeqRecord.SeqRecord-class.html"><a title="Bio.SeqRecord
+Bio.SeqRecord.SeqRecord" class="py-name" href="#" onclick="return doclink('link-4', 'SeqRecord', 'link-4');">SeqRecord</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name"><a title="Bio.SeqRecord
+Bio.SeqRecord.SeqRecord" class="py-name" href="#" onclick="return doclink('link-5', 'SeqRecord', 'link-4');">SeqRecord</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-6" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-6', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name" targets="Package Bio.Alphabet=Bio.Alphabet-module.html,Class Bio.Alphabet.Alphabet=Bio.Alphabet.Alphabet-class.html"><a title="Bio.Alphabet
+Bio.Alphabet.Alphabet" class="py-name" href="#" onclick="return doclink('link-7', 'Alphabet', 'link-7');">Alphabet</a></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="Alignment"></a><div id="Alignment-def"><a name="L23"></a><tt class="py-lineno"> 23</tt> <a class="py-toggle" href="#" id="Alignment-toggle" onclick="return toggle('Alignment');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html">Alignment</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Alignment-expanded"><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">    <tt class="py-docstring">"""Represent a set of alignments (DEPRECATED).</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">    This is a base class to represent alignments, which can be subclassed</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">    to deal with an alignment in a specific format.</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    With the introduction of the MultipleSeqAlignment class in Bio.Align,</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">    this base class is deprecated and is likely to be removed in future</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">    releases of Biopython.</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="Alignment.__init__"></a><div id="Alignment.__init__-def"><a name="L33"></a><tt class="py-lineno"> 33</tt> <a class="py-toggle" href="#" id="Alignment.__init__-toggle" onclick="return toggle('Alignment.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">alphabet</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.__init__-expanded"><a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-docstring">"""Initialize a new Alignment object.</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">            - alphabet - The alphabet to use for the sequence objects that are</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">              created. This alphabet must be a gapped type.</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">        e.g.</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; from Bio.Alphabet import IUPAC, Gapped</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Alpha", "ACTGCTAGCTAG")</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Beta",  "ACT-CTAGCTAG")</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Gamma", "ACTGCTAGATAG")</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print(align)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGCTAG Alpha</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">        ACT-CTAGCTAG Beta</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGATAG Gamma</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt id="link-8" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-8', 'Bio', 'link-0');">Bio</a></tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is deprecated and is likely to be removed in a future release of Biopython."</tt><tt class="py-op">,</tt> <tt id="link-9" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-9', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Class Bio.BiopythonDeprecationWarning=Bio.BiopythonDeprecationWarning-class.html"><a title="Bio.BiopythonDeprecationWarning" class="py-name" href="#" onclick="return doclink('link-10', 'BiopythonDeprecationWarning', 'link-10');">BiopythonDeprecationWarning</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-op">(</tt><tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-11" class="py-name" targets="Variable Bio.SearchIO._model.hsp.HSP.alphabet=Bio.SearchIO._model.hsp.HSP-class.html#alphabet,Variable Bio.SearchIO._model.hsp.HSPFragment.alphabet=Bio.SearchIO._model.hsp.HSPFragment-class.html#alphabet"><a title="Bio.SearchIO._model.hsp.HSP.alphabet
+Bio.SearchIO._model.hsp.HSPFragment.alphabet" class="py-name" href="#" onclick="return doclink('link-11', 'alphabet', 'link-11');">alphabet</a></tt><tt class="py-op">,</tt> <tt id="link-12" class="py-name"><a title="Bio.Alphabet
+Bio.Alphabet.Alphabet" class="py-name" href="#" onclick="return doclink('link-12', 'Alphabet', 'link-7');">Alphabet</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="Bio.Alphabet
+Bio.Alphabet.Alphabet" class="py-name" href="#" onclick="return doclink('link-13', 'Alphabet', 'link-7');">Alphabet</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-keyword">or</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-14" class="py-name"><a title="Bio.SearchIO._model.hsp.HSP.alphabet
+Bio.SearchIO._model.hsp.HSPFragment.alphabet" class="py-name" href="#" onclick="return doclink('link-14', 'alphabet', 'link-11');">alphabet</a></tt><tt class="py-op">,</tt> <tt id="link-15" class="py-name"><a title="Bio.Alphabet
+Bio.Alphabet.Alphabet" class="py-name" href="#" onclick="return doclink('link-15', 'Alphabet', 'link-7');">Alphabet</a></tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Class Bio.Alphabet.AlphabetEncoder=Bio.Alphabet.AlphabetEncoder-class.html"><a title="Bio.Alphabet.AlphabetEncoder" class="py-name" href="#" onclick="return doclink('link-16', 'AlphabetEncoder', 'link-16');">AlphabetEncoder</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Invalid alphabet argument"</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_alphabet</tt> <tt class="py-op">=</tt> <tt id="link-17" class="py-name"><a title="Bio.SearchIO._model.hsp.HSP.alphabet
+Bio.SearchIO._model.hsp.HSPFragment.alphabet" class="py-name" href="#" onclick="return doclink('link-17', 'alphabet', 'link-11');">alphabet</a></tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-comment"># hold everything at a list of SeqRecord objects</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="Alignment._str_line"></a><div id="Alignment._str_line-def"><a name="L63"></a><tt class="py-lineno"> 63</tt> <a class="py-toggle" href="#" id="Alignment._str_line-toggle" onclick="return toggle('Alignment._str_line');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#_str_line">_str_line</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">record</tt><tt class="py-op">,</tt> <tt class="py-param">length</tt><tt class="py-op">=</tt><tt class="py-number">50</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment._str_line-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment._str_line-expanded"><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a truncated string representation of a SeqRecord (PRIVATE).</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">        This is a PRIVATE function used by the __str__ method.</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Variable Bio.SeqRecord.SeqRecord.seq=Bio.SeqRecord.SeqRecord-class.html#seq,Variable BioSQL.BioSeq.DBSeqRecord.seq=BioSQL.BioSeq.DBSeqRecord-class.html#seq"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-18', 'seq', 'link-18');">seq</a></tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">.</tt><tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"CodonSeq"</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-19', 'seq', 'link-18');">seq</a></tt><tt class="py-op">)</tt> <tt class="py-op">&lt;=</tt> <tt id="link-20" class="py-name" targets="Method Bio.Blast.NCBIStandalone._AlignmentConsumer.length()=Bio.Blast.NCBIStandalone._AlignmentConsumer-class.html#length"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.length" class="py-name" href="#" onclick="return doclink('link-20', 'length', 'link-20');">length</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"%s %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-21', 'seq', 'link-18');">seq</a></tt><tt class="py-op">,</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-22', 'id', 'link-22');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"%s...%s %s"</tt> \ </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">                       <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-23', 'seq', 'link-18');">seq</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt id="link-24" class="py-name"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.length" class="py-name" href="#" onclick="return doclink('link-24', 'length', 'link-20');">length</a></tt> <tt class="py-op">-</tt> <tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-25', 'seq', 'link-18');">seq</a></tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">3</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-26', 'id', 'link-22');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-27', 'seq', 'link-18');">seq</a></tt><tt class="py-op">)</tt> <tt class="py-op">&lt;=</tt> <tt id="link-28" class="py-name"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.length" class="py-name" href="#" onclick="return doclink('link-28', 'length', 'link-20');">length</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"%s %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-29', 'seq', 'link-18');">seq</a></tt><tt class="py-op">,</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-30', 'id', 'link-22');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"%s...%s %s"</tt> \ </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">                       <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-31', 'seq', 'link-18');">seq</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt id="link-32" class="py-name"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.length" class="py-name" href="#" onclick="return doclink('link-32', 'length', 'link-20');">length</a></tt> <tt class="py-op">-</tt> <tt class="py-number">6</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-33', 'seq', 'link-18');">seq</a></tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">3</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-34', 'id', 'link-22');">id</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.__str__"></a><div id="Alignment.__str__-def"><a name="L81"></a><tt class="py-lineno"> 81</tt> <a class="py-toggle" href="#" id="Alignment.__str__-toggle" onclick="return toggle('Alignment.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.__str__-expanded"><a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a multi-line string summary of the alignment.</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring">        This output is intended to be readable, but large alignments are</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring">        shown truncated.  A maximum of 20 rows (sequences) and 50 columns</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">        are shown, with the record identifiers.  This should fit nicely on a</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">        single screen. e.g.</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; from Bio.Alphabet import IUPAC, Gapped</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Alpha", "ACTGCTAGCTAG")</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Beta",  "ACT-CTAGCTAG")</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Gamma", "ACTGCTAGATAG")</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print(align)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring">        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGCTAG Alpha</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">        ACT-CTAGCTAG Beta</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGATAG Gamma</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">        See also the alignment's format method.</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-name">rows</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-name">lines</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">"%s alignment with %i rows and %i columns"</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">                 <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_alphabet</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">rows</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name" targets="Method Bio.Align.Generic.Alignment.get_alignment_length()=Bio.Align.Generic.Alignment-class.html#get_alignment_length"><a title="Bio.Align.Generic.Alignment.get_alignment_length" class="py-name" href="#" onclick="return doclink('link-35', 'get_alignment_length', 'link-35');">get_alignment_length</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">rows</tt> <tt class="py-op">&lt;=</tt> <tt class="py-number">20</tt><tt class="py-op">:</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">            <tt class="py-name">lines</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.extend()=Bio.Align.MultipleSeqAlignment-class.html#extend,Method Bio.SCOP.Raf.SeqMap.extend()=Bio.SCOP.Raf.SeqMap-class.html#extend,Method Bio.Seq.MutableSeq.extend()=Bio.Seq.MutableSeq-class.html#extend"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-36', 'extend', 'link-36');">extend</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Method Bio.Align.Generic.Alignment._str_line()=Bio.Align.Generic.Alignment-class.html#_str_line"><a title="Bio.Align.Generic.Alignment._str_line" class="py-name" href="#" onclick="return doclink('link-37', '_str_line', 'link-37');">_str_line</a></tt><tt class="py-op">(</tt><tt class="py-name">rec</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">rec</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">)</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">            <tt class="py-name">lines</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-38', 'extend', 'link-36');">extend</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="Bio.Align.Generic.Alignment._str_line" class="py-name" href="#" onclick="return doclink('link-39', '_str_line', 'link-37');">_str_line</a></tt><tt class="py-op">(</tt><tt class="py-name">rec</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">rec</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">18</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">            <tt class="py-name">lines</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-40', 'append', 'link-40');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">"..."</tt><tt class="py-op">)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-name">lines</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-41', 'append', 'link-40');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="Bio.Align.Generic.Alignment._str_line" class="py-name" href="#" onclick="return doclink('link-42', '_str_line', 'link-37');">_str_line</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"\n"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">lines</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.__repr__"></a><div id="Alignment.__repr__-def"><a name="L113"></a><tt class="py-lineno">113</tt> <a class="py-toggle" href="#" id="Alignment.__repr__-toggle" onclick="return toggle('Alignment.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.__repr__-expanded"><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a representation of the object for debugging.</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"><tt class="py-docstring">        The representation cannot be used with eval() to recreate the object,</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"><tt class="py-docstring">        which is usually possible with simple python ojects.  For example:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-docstring">        &lt;Bio.Align.Generic.Alignment instance (2 records of length 14,</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-docstring">        SingleLetterAlphabet()) at a3c184c&gt;</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"><tt class="py-docstring">        The hex string is the memory address of the object, see help(id).</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-docstring">        This provides a simple way to visually distinguish alignments of</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-docstring">        the same size.</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-comment"># A doctest for __repr__ would be nice, but __class__ comes out differently</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">        <tt class="py-comment"># if run via the __main__ trick.</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"&lt;%s instance (%i records of length %i, %s) at %x&gt;"</tt> <tt class="py-op">%</tt> \ </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">               <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="Bio.Align.Generic.Alignment.get_alignment_length" class="py-name" href="#" onclick="return doclink('link-43', 'get_alignment_length', 'link-35');">get_alignment_length</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_alphabet</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-44" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-44', 'id', 'link-22');">id</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-comment"># This version is useful for doing eval(repr(alignment)),</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-comment"># but it can be VERY long:</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-comment"># return "%s(%s, %s)" \</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-comment">#       % (self.__class__, repr(self._records), repr(self._alphabet))</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.format"></a><div id="Alignment.format-def"><a name="L136"></a><tt class="py-lineno">136</tt> <a class="py-toggle" href="#" id="Alignment.format-toggle" onclick="return toggle('Alignment.format');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#format">format</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.format-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.format-expanded"><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns the alignment as a string in the specified file format.</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line"><tt class="py-docstring">        The format should be a lower case string supported as an output</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"><tt class="py-docstring">        format by Bio.AlignIO (such as "fasta", "clustal", "phylip",</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"><tt class="py-docstring">        "stockholm", etc), which is used to turn the alignment into a</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"><tt class="py-docstring">        string.</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line"><tt class="py-docstring">        e.g.</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; from Bio.Alphabet import IUPAC, Gapped</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Alpha", "ACTGCTAGCTAG")</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Beta",  "ACT-CTAGCTAG")</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Gamma", "ACTGCTAGATAG")</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print(align.format("fasta"))</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;Alpha</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGCTAG</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;Beta</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">        ACT-CTAGCTAG</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;Gamma</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGATAG</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"><tt class="py-docstring">        &lt;BLANKLINE&gt;</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print(align.format("phylip"))</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-docstring">         3 12</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"><tt class="py-docstring">        Alpha      ACTGCTAGCT AG</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"><tt class="py-docstring">        Beta       ACT-CTAGCT AG</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"><tt class="py-docstring">        Gamma      ACTGCTAGAT AG</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"><tt class="py-docstring">        &lt;BLANKLINE&gt;</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"><tt class="py-docstring">        For Python 2.6, 3.0 or later see also the built in format() function.</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">        <tt class="py-comment"># See also the __format__ added for Python 2.6 / 3.0, PEP 3101</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-comment"># See also the SeqRecord class and its format() method using Bio.SeqIO</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-45" class="py-name" targets="Method Bio.Align.Generic.Alignment.__format__()=Bio.Align.Generic.Alignment-class.html#__format__,Method Bio.Phylo.BaseTree.Tree.__format__()=Bio.Phylo.BaseTree.Tree-class.html#__format__,Method Bio.SeqRecord.SeqRecord.__format__()=Bio.SeqRecord.SeqRecord-class.html#__format__"><a title="Bio.Align.Generic.Alignment.__format__
+Bio.Phylo.BaseTree.Tree.__format__
+Bio.SeqRecord.SeqRecord.__format__" class="py-name" href="#" onclick="return doclink('link-45', '__format__', 'link-45');">__format__</a></tt><tt class="py-op">(</tt><tt id="link-46" class="py-name" targets="Method Bio.Align.Generic.Alignment.format()=Bio.Align.Generic.Alignment-class.html#format,Method Bio.Motif._Motif.Motif.format()=Bio.Motif._Motif.Motif-class.html#format,Method Bio.Phylo.BaseTree.Tree.format()=Bio.Phylo.BaseTree.Tree-class.html#format,Method Bio.Restriction.Restriction.RestrictionBatch.format()=Bio.Restriction.Restriction.RestrictionBatch-class.html#format,Method Bio.SeqRecord.SeqRecord.format()=Bio.SeqRecord.SeqRecord-class.html#format,Method Bio.motifs.Motif.format()=Bio.motifs.Motif-class.html#format"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-46', 'format', 'link-46');">format</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.__format__"></a><div id="Alignment.__format__-def"><a name="L172"></a><tt class="py-lineno">172</tt> <a class="py-toggle" href="#" id="Alignment.__format__-toggle" onclick="return toggle('Alignment.__format__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#__format__">__format__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">format_spec</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.__format__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.__format__-expanded"><a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns the alignment as a string in the specified file format.</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line"><tt class="py-docstring">        This method supports the python format() function added in</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring">        Python 2.6/3.0.  The format_spec should be a lower case</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"><tt class="py-docstring">        string supported by Bio.AlignIO as an output file format.</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line"><tt class="py-docstring">        See also the alignment's format() method."""</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">format_spec</tt><tt class="py-op">:</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">            <tt class="py-keyword">from</tt> <tt id="link-47" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-47', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-48" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-48', '_py3k', 'link-48');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">            <tt class="py-keyword">from</tt> <tt id="link-49" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-49', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-50" class="py-name" targets="Package Bio.AlignIO=Bio.AlignIO-module.html"><a title="Bio.AlignIO" class="py-name" href="#" onclick="return doclink('link-50', 'AlignIO', 'link-50');">AlignIO</a></tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">            <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">StringIO</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">            <tt id="link-51" class="py-name"><a title="Bio.AlignIO" class="py-name" href="#" onclick="return doclink('link-51', 'AlignIO', 'link-50');">AlignIO</a></tt><tt class="py-op">.</tt><tt id="link-52" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-52', 'write', 'link-52');">write</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">handle</tt><tt class="py-op">,</tt> <tt class="py-name">format_spec</tt><tt class="py-op">)</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt class="py-name">getvalue</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">            <tt class="py-comment"># Follow python convention and default to using __str__</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.get_all_seqs"></a><div id="Alignment.get_all_seqs-def"><a name="L189"></a><tt class="py-lineno">189</tt> <a class="py-toggle" href="#" id="Alignment.get_all_seqs-toggle" onclick="return toggle('Alignment.get_all_seqs');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#get_all_seqs">get_all_seqs</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.get_all_seqs-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.get_all_seqs-expanded"><a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">        <tt class="py-docstring">"""Return all of the sequences involved in the alignment (DEPRECATED).</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring">        The return value is a list of SeqRecord objects.</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">        This method is deprecated, as the Alignment object itself now offers</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"><tt class="py-docstring">        much of the functionality of a list of SeqRecord objects (e.g.</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"><tt class="py-docstring">        iteration or slicing to create a sub-alignment). Instead use the</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"><tt class="py-docstring">        Python builtin function list, i.e. my_list = list(my_align)</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt id="link-53" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-53', 'Bio', 'link-0');">Bio</a></tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">        <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"This method is deprecated, since the alignment object"</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">                      <tt class="py-string">"now acts more like a list. Instead of calling "</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">                      <tt class="py-string">"align.get_all_seqs() you can use list(align)"</tt><tt class="py-op">,</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">                      <tt id="link-54" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-54', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-55" class="py-name"><a title="Bio.BiopythonDeprecationWarning" class="py-name" href="#" onclick="return doclink('link-55', 'BiopythonDeprecationWarning', 'link-10');">BiopythonDeprecationWarning</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt> </tt>
+</div><a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.__iter__"></a><div id="Alignment.__iter__-def"><a name="L207"></a><tt class="py-lineno">207</tt> <a class="py-toggle" href="#" id="Alignment.__iter__-toggle" onclick="return toggle('Alignment.__iter__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#__iter__">__iter__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.__iter__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.__iter__-expanded"><a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-docstring">"""Iterate over alignment rows as SeqRecord objects.</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line"><tt class="py-docstring">        e.g.</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; from Bio.Alphabet import IUPAC, Gapped</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Alpha", "ACTGCTAGCTAG")</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Beta",  "ACT-CTAGCTAG")</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Gamma", "ACTGCTAGATAG")</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; for record in align:</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"><tt class="py-docstring">        ...    print(record.id)</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"><tt class="py-docstring">        ...    print(record.seq)</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line"><tt class="py-docstring">        Alpha</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGCTAG</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line"><tt class="py-docstring">        Beta</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line"><tt class="py-docstring">        ACT-CTAGCTAG</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line"><tt class="py-docstring">        Gamma</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGATAG</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">iter</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.get_seq_by_num"></a><div id="Alignment.get_seq_by_num-def"><a name="L229"></a><tt class="py-lineno">229</tt> <a class="py-toggle" href="#" id="Alignment.get_seq_by_num-toggle" onclick="return toggle('Alignment.get_seq_by_num');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#get_seq_by_num">get_seq_by_num</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">number</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.get_seq_by_num-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.get_seq_by_num-expanded"><a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">        <tt class="py-docstring">"""Retrieve a sequence by row number (DEPRECATED).</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"><tt class="py-docstring">        Returns:</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line"><tt class="py-docstring">            - A Seq object for the requested sequence.</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line"><tt class="py-docstring">        Raises:</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line"><tt class="py-docstring">            - IndexError - If the specified number is out of range.</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line"><tt class="py-docstring">        NOTE: This is a legacy method.  In new code where you need to access</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line"><tt class="py-docstring">        the rows of the alignment (i.e. the sequences) consider iterating</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line"><tt class="py-docstring">        over them or accessing them as SeqRecord objects.</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt id="link-56" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-56', 'Bio', 'link-0');">Bio</a></tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"This is a legacy method and is likely to be removed in a future release of Biopython. In new code where you need to access the rows of the alignment (i.e. the sequences) consider iterating over them or accessing them as SeqRecord objects."</tt><tt class="py-op">,</tt> <tt id="link-57" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-57', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-58" class="py-name"><a title="Bio.BiopythonDeprecationWarning" class="py-name" href="#" onclick="return doclink('link-58', 'BiopythonDeprecationWarning', 'link-10');">BiopythonDeprecationWarning</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">[</tt><tt id="link-59" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Pathway.number=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#number"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.number" class="py-name" href="#" onclick="return doclink('link-59', 'number', 'link-59');">number</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-60" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-60', 'seq', 'link-18');">seq</a></tt> </tt>
+</div><a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.__len__"></a><div id="Alignment.__len__-def"><a name="L247"></a><tt class="py-lineno">247</tt> <a class="py-toggle" href="#" id="Alignment.__len__-toggle" onclick="return toggle('Alignment.__len__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#__len__">__len__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.__len__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.__len__-expanded"><a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns the number of sequences in the alignment.</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line"><tt class="py-docstring">        Use len(alignment) to get the number of sequences (i.e. the number of</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line"><tt class="py-docstring">        rows), and alignment.get_alignment_length() to get the length of the</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line"><tt class="py-docstring">        longest sequence (i.e. the number of columns).</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line"><tt class="py-docstring">        This is easy to remember if you think of the alignment as being like a</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line"><tt class="py-docstring">        list of SeqRecord objects.</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.get_alignment_length"></a><div id="Alignment.get_alignment_length-def"><a name="L259"></a><tt class="py-lineno">259</tt> <a class="py-toggle" href="#" id="Alignment.get_alignment_length-toggle" onclick="return toggle('Alignment.get_alignment_length');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#get_alignment_length">get_alignment_length</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.get_alignment_length-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.get_alignment_length-expanded"><a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">        <tt class="py-docstring">"""Return the maximum length of the alignment.</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line"><tt class="py-docstring">        All objects in the alignment should (hopefully) have the same</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line"><tt class="py-docstring">        length. This function will go through and find this length</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line"><tt class="py-docstring">        by finding the maximum length of sequences in the alignment.</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; from Bio.Alphabet import IUPAC, Gapped</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Alpha", "ACTGCTAGCTAG")</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Beta",  "ACT-CTAGCTAG")</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Gamma", "ACTGCTAGATAG")</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.get_alignment_length()</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line"><tt class="py-docstring">        12</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line"><tt class="py-docstring">        If you want to know the number of sequences in the alignment,</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line"><tt class="py-docstring">        use len(align) instead:</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; len(align)</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line"><tt class="py-docstring">        3</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">        <tt class="py-name">max_length</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line"> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">record</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">:</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-61" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-61', 'seq', 'link-18');">seq</a></tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-name">max_length</tt><tt class="py-op">:</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">                <tt class="py-name">max_length</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-62', 'seq', 'link-18');">seq</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line"> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">max_length</tt> </tt>
+</div><a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.add_sequence"></a><div id="Alignment.add_sequence-def"><a name="L289"></a><tt class="py-lineno">289</tt> <a class="py-toggle" href="#" id="Alignment.add_sequence-toggle" onclick="return toggle('Alignment.add_sequence');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#add_sequence">add_sequence</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">descriptor</tt><tt class="py-op">,</tt> <tt class="py-param">sequence</tt><tt class="py-op">,</tt> <tt class="py-param">start</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">end</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line">                     <tt class="py-param">weight</tt><tt class="py-op">=</tt><tt class="py-number">1.0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.add_sequence-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.add_sequence-expanded"><a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">        <tt class="py-docstring">"""Add a sequence to the alignment.</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line"><tt class="py-docstring">        This doesn't do any kind of alignment, it just adds in the sequence</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line"><tt class="py-docstring">        object, which is assumed to be prealigned with the existing</tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line"><tt class="py-docstring">        sequences.</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line"><tt class="py-docstring">            - descriptor - The descriptive id of the sequence being added.</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line"><tt class="py-docstring">              This will be used as the resulting SeqRecord's</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line"><tt class="py-docstring">              .id property (and, for historical compatibility,</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line"><tt class="py-docstring">              also the .description property)</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line"><tt class="py-docstring">            - sequence - A string with sequence info.</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line"><tt class="py-docstring">            - start - You can explicitly set the start point of the sequence.</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line"><tt class="py-docstring">              This is useful (at least) for BLAST alignments, which can</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line"><tt class="py-docstring">              just be partial alignments of sequences.</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line"><tt class="py-docstring">            - end - Specify the end of the sequence, which is important</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line"><tt class="py-docstring">              for the same reason as the start.</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line"><tt class="py-docstring">            - weight - The weight to place on the sequence in the alignment.</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line"><tt class="py-docstring">              By default, all sequences have the same weight. (0.0 =&gt;</tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line"><tt class="py-docstring">              no weight, 1.0 =&gt; highest weight)</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line">        <tt class="py-name">new_seq</tt> <tt class="py-op">=</tt> <tt id="link-63" class="py-name"><a title="Bio.Seq
+Bio.Seq.Seq" class="py-name" href="#" onclick="return doclink('link-63', 'Seq', 'link-1');">Seq</a></tt><tt class="py-op">(</tt><tt id="link-64" class="py-name" targets="Method Bio.FSSP.FSSPAlignDict.sequence()=Bio.FSSP.FSSPAlignDict-class.html#sequence,Method Bio.GenBank._FeatureConsumer.sequence()=Bio.GenBank._FeatureConsumer-class.html#sequence,Method Bio.GenBank._RecordConsumer.sequence()=Bio.GenBank._RecordConsumer-class.html#sequence,Method Bio.Phylo.PhyloXMLIO.Writer.sequence()=Bio.Phylo.PhyloXMLIO.Writer-class.html#sequence"><a title="Bio.FSSP.FSSPAlignDict.sequence
+Bio.GenBank._FeatureConsumer.sequence
+Bio.GenBank._RecordConsumer.sequence
+Bio.Phylo.PhyloXMLIO.Writer.sequence" class="py-name" href="#" onclick="return doclink('link-64', 'sequence', 'link-64');">sequence</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_alphabet</tt><tt class="py-op">)</tt> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line"> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line">        <tt class="py-comment"># We are now effectively using the SeqRecord's .id as</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line">        <tt class="py-comment"># the primary identifier (e.g. in Bio.SeqIO) so we should</tt> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line">        <tt class="py-comment"># populate it with the descriptor.</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line">        <tt class="py-comment"># For backwards compatibility, also store this in the</tt> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line">        <tt class="py-comment"># SeqRecord's description property.</tt> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line">        <tt class="py-name">new_record</tt> <tt class="py-op">=</tt> <tt id="link-65" class="py-name"><a title="Bio.SeqRecord
+Bio.SeqRecord.SeqRecord" class="py-name" href="#" onclick="return doclink('link-65', 'SeqRecord', 'link-4');">SeqRecord</a></tt><tt class="py-op">(</tt><tt class="py-name">new_seq</tt><tt class="py-op">,</tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line">                               <tt id="link-66" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-66', 'id', 'link-22');">id</a></tt><tt class="py-op">=</tt><tt class="py-name">descriptor</tt><tt class="py-op">,</tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line">                               <tt id="link-67" class="py-name" targets="Method Bio.Blast.NCBIStandalone._DescriptionConsumer.description()=Bio.Blast.NCBIStandalone._DescriptionConsumer-class.html#description,Method Bio.Phylo.PhyloXMLIO.Writer.description()=Bio.Phylo.PhyloXMLIO.Writer-class.html#description,Variable Bio.SearchIO._model.hit.Hit.description=Bio.SearchIO._model.hit.Hit-class.html#description,Variable Bio.SearchIO._model.query.QueryResult.description=Bio.SearchIO._model.query.QueryResult-class.html#description"><a title="Bio.Blast.NCBIStandalone._DescriptionConsumer.description
+Bio.Phylo.PhyloXMLIO.Writer.description
+Bio.SearchIO._model.hit.Hit.description
+Bio.SearchIO._model.query.QueryResult.description" class="py-name" href="#" onclick="return doclink('link-67', 'description', 'link-67');">description</a></tt><tt class="py-op">=</tt><tt class="py-name">descriptor</tt><tt class="py-op">)</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line"> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line">        <tt class="py-comment"># hack! We really need to work out how to deal with annotations</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">        <tt class="py-comment"># and features in biopython. Right now, I'll just use the</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line">        <tt class="py-comment"># generic annotations dictionary we've got to store the start</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line">        <tt class="py-comment"># and end, but we should think up something better. I don't know</tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">        <tt class="py-comment"># if I'm really a big fan of the LocatableSeq thing they've got</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">        <tt class="py-comment"># in BioPerl, but I'm not positive what the best thing to do on</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">        <tt class="py-comment"># this is...</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-68" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.start=Bio.SeqFeature.CompoundLocation-class.html#start,Variable Bio.SeqFeature.FeatureLocation.start=Bio.SeqFeature.FeatureLocation-class.html#start"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-68', 'start', 'link-68');">start</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line">            <tt class="py-name">new_record</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name" targets="Variable BioSQL.BioSeq.DBSeqRecord.annotations=BioSQL.BioSeq.DBSeqRecord-class.html#annotations"><a title="BioSQL.BioSeq.DBSeqRecord.annotations" class="py-name" href="#" onclick="return doclink('link-69', 'annotations', 'link-69');">annotations</a></tt><tt class="py-op">[</tt><tt class="py-string">'start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-70" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-70', 'start', 'link-68');">start</a></tt> </tt>
+<a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-71" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.end=Bio.SeqFeature.CompoundLocation-class.html#end,Variable Bio.SeqFeature.FeatureLocation.end=Bio.SeqFeature.FeatureLocation-class.html#end"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-71', 'end', 'link-71');">end</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line">            <tt class="py-name">new_record</tt><tt class="py-op">.</tt><tt id="link-72" class="py-name"><a title="BioSQL.BioSeq.DBSeqRecord.annotations" class="py-name" href="#" onclick="return doclink('link-72', 'annotations', 'link-69');">annotations</a></tt><tt class="py-op">[</tt><tt class="py-string">'end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-73" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-73', 'end', 'link-71');">end</a></tt> </tt>
+<a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line"> </tt>
+<a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line">        <tt class="py-comment"># another hack to add weight information to the sequence</tt> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line">        <tt class="py-name">new_record</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name"><a title="BioSQL.BioSeq.DBSeqRecord.annotations" class="py-name" href="#" onclick="return doclink('link-74', 'annotations', 'link-69');">annotations</a></tt><tt class="py-op">[</tt><tt class="py-string">'weight'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">weight</tt> </tt>
+<a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line"> </tt>
+<a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">.</tt><tt id="link-75" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-75', 'append', 'link-40');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">new_record</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.get_column"></a><div id="Alignment.get_column-def"><a name="L340"></a><tt class="py-lineno">340</tt> <a class="py-toggle" href="#" id="Alignment.get_column-toggle" onclick="return toggle('Alignment.get_column');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#get_column">get_column</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">col</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.get_column-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.get_column-expanded"><a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a string containing a given column.</tt> </tt>
+<a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line"><tt class="py-docstring">        e.g.</tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; from Bio.Alphabet import IUPAC, Gapped</tt> </tt>
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))</tt> </tt>
+<a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Alpha", "ACTGCTAGCTAG")</tt> </tt>
+<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Beta",  "ACT-CTAGCTAG")</tt> </tt>
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Gamma", "ACTGCTAGATAG")</tt> </tt>
+<a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.get_column(0)</tt> </tt>
+<a name="L351"></a><tt class="py-lineno">351</tt>  <tt class="py-line"><tt class="py-docstring">        'AAA'</tt> </tt>
+<a name="L352"></a><tt class="py-lineno">352</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.get_column(3)</tt> </tt>
+<a name="L353"></a><tt class="py-lineno">353</tt>  <tt class="py-line"><tt class="py-docstring">        'G-G'</tt> </tt>
+<a name="L354"></a><tt class="py-lineno">354</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L355"></a><tt class="py-lineno">355</tt>  <tt class="py-line">        <tt class="py-comment"># TODO - Support negative indices?</tt> </tt>
+<a name="L356"></a><tt class="py-lineno">356</tt>  <tt class="py-line">        <tt class="py-name">col_str</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L357"></a><tt class="py-lineno">357</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">col</tt> <tt class="py-op">&gt;=</tt> <tt class="py-number">0</tt> <tt class="py-keyword">and</tt> <tt class="py-name">col</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-76" class="py-name"><a title="Bio.Align.Generic.Alignment.get_alignment_length" class="py-name" href="#" onclick="return doclink('link-76', 'get_alignment_length', 'link-35');">get_alignment_length</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L358"></a><tt class="py-lineno">358</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">rec</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">:</tt> </tt>
+<a name="L359"></a><tt class="py-lineno">359</tt>  <tt class="py-line">            <tt class="py-name">col_str</tt> <tt class="py-op">+=</tt> <tt class="py-name">rec</tt><tt class="py-op">.</tt><tt id="link-77" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-77', 'seq', 'link-18');">seq</a></tt><tt class="py-op">[</tt><tt class="py-name">col</tt><tt class="py-op">]</tt> </tt>
+<a name="L360"></a><tt class="py-lineno">360</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">col_str</tt> </tt>
+</div><a name="L361"></a><tt class="py-lineno">361</tt>  <tt class="py-line"> </tt>
+<a name="Alignment.__getitem__"></a><div id="Alignment.__getitem__-def"><a name="L362"></a><tt class="py-lineno">362</tt> <a class="py-toggle" href="#" id="Alignment.__getitem__-toggle" onclick="return toggle('Alignment.__getitem__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic.Alignment-class.html#__getitem__">__getitem__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">index</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Alignment.__getitem__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Alignment.__getitem__-expanded"><a name="L363"></a><tt class="py-lineno">363</tt>  <tt class="py-line">        <tt class="py-docstring">"""Access part of the alignment.</tt> </tt>
+<a name="L364"></a><tt class="py-lineno">364</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L365"></a><tt class="py-lineno">365</tt>  <tt class="py-line"><tt class="py-docstring">        We'll use the following example alignment here for illustration:</tt> </tt>
+<a name="L366"></a><tt class="py-lineno">366</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L367"></a><tt class="py-lineno">367</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; from Bio.Alphabet import IUPAC, Gapped</tt> </tt>
+<a name="L368"></a><tt class="py-lineno">368</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))</tt> </tt>
+<a name="L369"></a><tt class="py-lineno">369</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Alpha",  "ACTGCTAGCTAG")</tt> </tt>
+<a name="L370"></a><tt class="py-lineno">370</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Beta",   "ACT-CTAGCTAG")</tt> </tt>
+<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Gamma",  "ACTGCTAGATAG")</tt> </tt>
+<a name="L372"></a><tt class="py-lineno">372</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Delta",  "ACTGCTTGCTAG")</tt> </tt>
+<a name="L373"></a><tt class="py-lineno">373</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; align.add_sequence("Epsilon", "ACTGCTTGATAG")</tt> </tt>
+<a name="L374"></a><tt class="py-lineno">374</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L375"></a><tt class="py-lineno">375</tt>  <tt class="py-line"><tt class="py-docstring">        You can access a row of the alignment as a SeqRecord using an integer</tt> </tt>
+<a name="L376"></a><tt class="py-lineno">376</tt>  <tt class="py-line"><tt class="py-docstring">        index (think of the alignment as a list of SeqRecord objects here):</tt> </tt>
+<a name="L377"></a><tt class="py-lineno">377</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L378"></a><tt class="py-lineno">378</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; first_record = align[0]</tt> </tt>
+<a name="L379"></a><tt class="py-lineno">379</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print("%s %s" % (first_record.id, first_record.seq))</tt> </tt>
+<a name="L380"></a><tt class="py-lineno">380</tt>  <tt class="py-line"><tt class="py-docstring">        Alpha ACTGCTAGCTAG</tt> </tt>
+<a name="L381"></a><tt class="py-lineno">381</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; last_record = align[-1]</tt> </tt>
+<a name="L382"></a><tt class="py-lineno">382</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print("%s %s" % (last_record.id, last_record.seq))</tt> </tt>
+<a name="L383"></a><tt class="py-lineno">383</tt>  <tt class="py-line"><tt class="py-docstring">        Epsilon ACTGCTTGATAG</tt> </tt>
+<a name="L384"></a><tt class="py-lineno">384</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L385"></a><tt class="py-lineno">385</tt>  <tt class="py-line"><tt class="py-docstring">        You can also access use python's slice notation to create a sub-alignment</tt> </tt>
+<a name="L386"></a><tt class="py-lineno">386</tt>  <tt class="py-line"><tt class="py-docstring">        containing only some of the SeqRecord objects:</tt> </tt>
+<a name="L387"></a><tt class="py-lineno">387</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L388"></a><tt class="py-lineno">388</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; sub_alignment = align[2:5]</tt> </tt>
+<a name="L389"></a><tt class="py-lineno">389</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print(sub_alignment)</tt> </tt>
+<a name="L390"></a><tt class="py-lineno">390</tt>  <tt class="py-line"><tt class="py-docstring">        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns</tt> </tt>
+<a name="L391"></a><tt class="py-lineno">391</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGATAG Gamma</tt> </tt>
+<a name="L392"></a><tt class="py-lineno">392</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTTGCTAG Delta</tt> </tt>
+<a name="L393"></a><tt class="py-lineno">393</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTTGATAG Epsilon</tt> </tt>
+<a name="L394"></a><tt class="py-lineno">394</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L395"></a><tt class="py-lineno">395</tt>  <tt class="py-line"><tt class="py-docstring">        This includes support for a step, i.e. align[start:end:step], which</tt> </tt>
+<a name="L396"></a><tt class="py-lineno">396</tt>  <tt class="py-line"><tt class="py-docstring">        can be used to select every second sequence:</tt> </tt>
+<a name="L397"></a><tt class="py-lineno">397</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L398"></a><tt class="py-lineno">398</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; sub_alignment = align[::2]</tt> </tt>
+<a name="L399"></a><tt class="py-lineno">399</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print(sub_alignment)</tt> </tt>
+<a name="L400"></a><tt class="py-lineno">400</tt>  <tt class="py-line"><tt class="py-docstring">        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns</tt> </tt>
+<a name="L401"></a><tt class="py-lineno">401</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGCTAG Alpha</tt> </tt>
+<a name="L402"></a><tt class="py-lineno">402</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGATAG Gamma</tt> </tt>
+<a name="L403"></a><tt class="py-lineno">403</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTTGATAG Epsilon</tt> </tt>
+<a name="L404"></a><tt class="py-lineno">404</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L405"></a><tt class="py-lineno">405</tt>  <tt class="py-line"><tt class="py-docstring">        Or to get a copy of the alignment with the rows in reverse order:</tt> </tt>
+<a name="L406"></a><tt class="py-lineno">406</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L407"></a><tt class="py-lineno">407</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; rev_alignment = align[::-1]</tt> </tt>
+<a name="L408"></a><tt class="py-lineno">408</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print(rev_alignment)</tt> </tt>
+<a name="L409"></a><tt class="py-lineno">409</tt>  <tt class="py-line"><tt class="py-docstring">        Gapped(IUPACUnambiguousDNA(), '-') alignment with 5 rows and 12 columns</tt> </tt>
+<a name="L410"></a><tt class="py-lineno">410</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTTGATAG Epsilon</tt> </tt>
+<a name="L411"></a><tt class="py-lineno">411</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTTGCTAG Delta</tt> </tt>
+<a name="L412"></a><tt class="py-lineno">412</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGATAG Gamma</tt> </tt>
+<a name="L413"></a><tt class="py-lineno">413</tt>  <tt class="py-line"><tt class="py-docstring">        ACT-CTAGCTAG Beta</tt> </tt>
+<a name="L414"></a><tt class="py-lineno">414</tt>  <tt class="py-line"><tt class="py-docstring">        ACTGCTAGCTAG Alpha</tt> </tt>
+<a name="L415"></a><tt class="py-lineno">415</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L416"></a><tt class="py-lineno">416</tt>  <tt class="py-line"><tt class="py-docstring">        Right now, these are the ONLY indexing operations supported.  The use of</tt> </tt>
+<a name="L417"></a><tt class="py-lineno">417</tt>  <tt class="py-line"><tt class="py-docstring">        a second column based index is under discussion for a future update.</tt> </tt>
+<a name="L418"></a><tt class="py-lineno">418</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L419"></a><tt class="py-lineno">419</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-78" class="py-name" targets="Method Bio.Crystal.Chain.index()=Bio.Crystal.Chain-class.html#index,Method Bio.SCOP.Raf.SeqMap.index()=Bio.SCOP.Raf.SeqMap-class.html#index,Method Bio.SearchIO._model.hit.Hit.index()=Bio.SearchIO._model.hit.Hit-class.html#index,Method Bio.SearchIO._model.query.QueryResult.index()=Bio.SearchIO._model.query.QueryResult-class.html#index,Function Bio.SearchIO.index()=Bio.SearchIO-module.html#index,Method Bio.Seq.MutableSeq.index()=Bio.Seq.MutableSeq-class.html#index,Function Bio.SeqIO.index()=Bio.SeqIO-module.html#index"><a title="Bio.Crystal.Chain.index
+Bio.SCOP.Raf.SeqMap.index
+Bio.SearchIO._model.hit.Hit.index
+Bio.SearchIO._model.query.QueryResult.index
+Bio.SearchIO.index
+Bio.Seq.MutableSeq.index
+Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-78', 'index', 'link-78');">index</a></tt><tt class="py-op">,</tt> <tt class="py-name">int</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L420"></a><tt class="py-lineno">420</tt>  <tt class="py-line">            <tt class="py-comment"># e.g. result = align[x]</tt> </tt>
+<a name="L421"></a><tt class="py-lineno">421</tt>  <tt class="py-line">            <tt class="py-comment"># Return a SeqRecord</tt> </tt>
+<a name="L422"></a><tt class="py-lineno">422</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">[</tt><tt id="link-79" class="py-name"><a title="Bio.Crystal.Chain.index
+Bio.SCOP.Raf.SeqMap.index
+Bio.SearchIO._model.hit.Hit.index
+Bio.SearchIO._model.query.QueryResult.index
+Bio.SearchIO.index
+Bio.Seq.MutableSeq.index
+Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-79', 'index', 'link-78');">index</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L423"></a><tt class="py-lineno">423</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-80" class="py-name"><a title="Bio.Crystal.Chain.index
+Bio.SCOP.Raf.SeqMap.index
+Bio.SearchIO._model.hit.Hit.index
+Bio.SearchIO._model.query.QueryResult.index
+Bio.SearchIO.index
+Bio.Seq.MutableSeq.index
+Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-80', 'index', 'link-78');">index</a></tt><tt class="py-op">,</tt> <tt class="py-name">slice</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L424"></a><tt class="py-lineno">424</tt>  <tt class="py-line">            <tt class="py-comment"># e.g. sub_aling = align[i:j:k]</tt> </tt>
+<a name="L425"></a><tt class="py-lineno">425</tt>  <tt class="py-line">            <tt class="py-comment"># Return a new Alignment using only the specified records.</tt> </tt>
+<a name="L426"></a><tt class="py-lineno">426</tt>  <tt class="py-line">            <tt class="py-comment"># TODO - See Bug 2554 for changing the __init__ method</tt> </tt>
+<a name="L427"></a><tt class="py-lineno">427</tt>  <tt class="py-line">            <tt class="py-comment"># to allow us to do this more cleanly.</tt> </tt>
+<a name="L428"></a><tt class="py-lineno">428</tt>  <tt class="py-line">            <tt class="py-name">sub_align</tt> <tt class="py-op">=</tt> <tt id="link-81" class="py-name" targets="Class Bio.Align.Generic.Alignment=Bio.Align.Generic.Alignment-class.html,Class Bio.Blast.Record.Alignment=Bio.Blast.Record.Alignment-class.html,Class Bio.Wise.psw.Alignment=Bio.Wise.psw.Alignment-class.html"><a title="Bio.Align.Generic.Alignment
+Bio.Blast.Record.Alignment
+Bio.Wise.psw.Alignment" class="py-name" href="#" onclick="return doclink('link-81', 'Alignment', 'link-81');">Alignment</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_alphabet</tt><tt class="py-op">)</tt> </tt>
+<a name="L429"></a><tt class="py-lineno">429</tt>  <tt class="py-line">            <tt class="py-name">sub_align</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_records</tt><tt class="py-op">[</tt><tt id="link-82" class="py-name"><a title="Bio.Crystal.Chain.index
+Bio.SCOP.Raf.SeqMap.index
+Bio.SearchIO._model.hit.Hit.index
+Bio.SearchIO._model.query.QueryResult.index
+Bio.SearchIO.index
+Bio.Seq.MutableSeq.index
+Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-82', 'index', 'link-78');">index</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L430"></a><tt class="py-lineno">430</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">sub_align</tt> </tt>
+<a name="L431"></a><tt class="py-lineno">431</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-83" class="py-name"><a title="Bio.Crystal.Chain.index
+Bio.SCOP.Raf.SeqMap.index
+Bio.SearchIO._model.hit.Hit.index
+Bio.SearchIO._model.query.QueryResult.index
+Bio.SearchIO.index
+Bio.Seq.MutableSeq.index
+Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-83', 'index', 'link-78');">index</a></tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L432"></a><tt class="py-lineno">432</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">"Row and Column indexing is not currently supported,"</tt> </tt>
+<a name="L433"></a><tt class="py-lineno">433</tt>  <tt class="py-line">                            <tt class="py-string">"but may be in future."</tt><tt class="py-op">)</tt> </tt>
+<a name="L434"></a><tt class="py-lineno">434</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L435"></a><tt class="py-lineno">435</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">"Invalid index type."</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L436"></a><tt class="py-lineno">436</tt>  <tt class="py-line"> </tt>
+<a name="L437"></a><tt class="py-lineno">437</tt>  <tt class="py-line"> </tt>
+<a name="_test"></a><div id="_test-def"><a name="L438"></a><tt class="py-lineno">438</tt> <a class="py-toggle" href="#" id="_test-toggle" onclick="return toggle('_test');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Align.Generic-module.html#_test">_test</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_test-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_test-expanded"><a name="L439"></a><tt class="py-lineno">439</tt>  <tt class="py-line">    <tt class="py-docstring">"""Run the Bio.Align.Generic module's doctests."""</tt> </tt>
+<a name="L440"></a><tt class="py-lineno">440</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"Running doctests..."</tt><tt class="py-op">)</tt> </tt>
+<a name="L441"></a><tt class="py-lineno">441</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">doctest</tt> </tt>
+<a name="L442"></a><tt class="py-lineno">442</tt>  <tt class="py-line">    <tt class="py-name">doctest</tt><tt class="py-op">.</tt><tt class="py-name">testmod</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L443"></a><tt class="py-lineno">443</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"Done"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L444"></a><tt class="py-lineno">444</tt>  <tt class="py-line"> </tt>
+<a name="L445"></a><tt class="py-lineno">445</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L446"></a><tt class="py-lineno">446</tt>  <tt class="py-line">    <tt id="link-84" class="py-name" targets="Function Bio.Align.Applications._ClustalOmega._test()=Bio.Align.Applications._ClustalOmega-module.html#_test,Function Bio.Align.Applications._Clustalw._test()=Bio.Align.Applications._Clustalw-module.html#_test,Function Bio.Align.Applications._Dialign._test()=Bio.Align.Applications._Dialign-module.html#_test,Function Bio.Align.Applications._MSAProbs._test()=Bio.Align.Applications._MSAProbs-module.html#_test,Function Bio.Align.Applications._Muscle._test()=Bio.Align.Applications._Muscle-module.html#_test,Function Bio.Align.Applications._Prank._test()=Bio.Align.Applications._Prank-module.html#_test,Function Bio.Align.Applications._Probcons._test()=Bio.Align.Applications._Probcons-module.html#_test,Function Bio.Align.Applications._TCoffee._test()=Bio.Align.Applications._TCoffee-module.html#_test,Function Bio.Align.Generic._test()=Bio.Align.Generic-module.html#_test,Function Bio.Application._test()=Bio.Application-module.html#_test,Function Bio.Blast.Applications._test()=Bio.Blast.Applications-module.html#_test,Function Bio.DocSQL._test()=Bio.DocSQL-module.html#_test,Function Bio.Emboss.Applications._test()=Bio.Emboss.Applications-module.html#_test,Function Bio.Entrez._test()=Bio.Entrez-module.html#_test,Function Bio.KDTree.KDTree'._test()=Bio.KDTree.KDTree%27-module.html#_test,Function Bio.PDB.Selection._test()=Bio.PDB.Selection-module.html#_test,Function Bio.Seq._test()=Bio.Seq-module.html#_test,Function Bio.SeqUtils.MeltingTemp._test()=Bio.SeqUtils.MeltingTemp-module.html#_test,Function Bio.SeqUtils._test()=Bio.SeqUtils-module.html#_test,Function Bio.Sequencing.Applications._Novoalign._test()=Bio.Sequencing.Applications._Novoalign-module.html#_test,Function Bio.Sequencing.Applications._bwa._test()=Bio.Sequencing.Applications._bwa-module.html#_test,Function Bio.Sequencing.Applications._samtools._test()=Bio.Sequencing.Applications._samtools-module.html#_test,Function Bio.Statistics.lowess._test()=Bio.Statistics.lowess-module.html#_test,Function Bio.Wise._test()=Bio.Wise-module.html#_test,Function Bio.Wise.dnal._test()=Bio.Wise.dnal-module.html#_test,Function Bio.Wise.psw._test()=Bio.Wise.psw-module.html#_test,Function Bio.motifs.applications._alignace._test()=Bio.motifs.applications._alignace-module.html#_test,Function Bio.motifs.applications._xxmotif._test()=Bio.motifs.applications._xxmotif-module.html#_test,Function Bio.pairwise2._test()=Bio.pairwise2-module.html#_test"><a title="Bio.Align.Applications._ClustalOmega._test
+Bio.Align.Applications._Clustalw._test
+Bio.Align.Applications._Dialign._test
+Bio.Align.Applications._MSAProbs._test
+Bio.Align.Applications._Muscle._test
+Bio.Align.Applications._Prank._test
+Bio.Align.Applications._Probcons._test
+Bio.Align.Applications._TCoffee._test
+Bio.Align.Generic._test
+Bio.Application._test
+Bio.Blast.Applications._test
+Bio.DocSQL._test
+Bio.Emboss.Applications._test
+Bio.Entrez._test
+Bio.KDTree.KDTree'._test
+Bio.PDB.Selection._test
+Bio.Seq._test
+Bio.SeqUtils.MeltingTemp._test
+Bio.SeqUtils._test
+Bio.Sequencing.Applications._Novoalign._test
+Bio.Sequencing.Applications._bwa._test
+Bio.Sequencing.Applications._samtools._test
+Bio.Statistics.lowess._test
+Bio.Wise._test
+Bio.Wise.dnal._test
+Bio.Wise.psw._test
+Bio.motifs.applications._alignace._test
+Bio.motifs.applications._xxmotif._test
+Bio.pairwise2._test" class="py-name" href="#" onclick="return doclink('link-84', '_test', 'link-84');">_test</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L447"></a><tt class="py-lineno">447</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:57 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Graphics.Comparative</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Graphics-module.html">Package&nbsp;Graphics</a> ::
+        Module&nbsp;Comparative
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Graphics.Comparative-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Graphics.Comparative-module.html">Module Bio.Graphics.Comparative</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Plots to compare information between different sources.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">This file contains high level plots which are designed to be used to</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">compare different types of information. The most basic example is comparing</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">two variables in a traditional scatter plot.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># reportlab</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">pdfgen</tt> <tt class="py-keyword">import</tt> <tt class="py-name">canvas</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">lib</tt> <tt class="py-keyword">import</tt> <tt class="py-name">colors</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">graphics</tt><tt class="py-op">.</tt><tt class="py-name">charts</tt><tt class="py-op">.</tt><tt class="py-name">lineplots</tt> <tt class="py-keyword">import</tt> <tt class="py-name">LinePlot</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">lib</tt><tt class="py-op">.</tt><tt class="py-name">pagesizes</tt> <tt class="py-keyword">import</tt> <tt class="py-name">letter</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">lib</tt><tt class="py-op">.</tt><tt class="py-name">units</tt> <tt class="py-keyword">import</tt> <tt class="py-name">inch</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">graphics</tt><tt class="py-op">.</tt><tt class="py-name">shapes</tt> <tt class="py-keyword">import</tt> <tt class="py-name">Drawing</tt><tt class="py-op">,</tt> <tt class="py-name">String</tt><tt class="py-op">,</tt> <tt class="py-name">Group</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">graphics</tt> <tt class="py-keyword">import</tt> <tt class="py-name">renderPDF</tt><tt class="py-op">,</tt> <tt class="py-name">renderPS</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">reportlab</tt><tt class="py-op">.</tt><tt class="py-name">graphics</tt><tt class="py-op">.</tt><tt class="py-name">charts</tt><tt class="py-op">.</tt><tt class="py-name">markers</tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.Graphics=Bio.Graphics-module.html,Class Bio.KEGG.KGML.KGML_pathway.Graphics=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html"><a title="Bio.Graphics
+Bio.KEGG.KGML.KGML_pathway.Graphics" class="py-name" href="#" onclick="return doclink('link-1', 'Graphics', 'link-1');">Graphics</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Function Bio.Graphics._write()=Bio.Graphics-module.html#_write,Method Bio.Motif._Motif.Motif._write()=Bio.Motif._Motif.Motif-class.html#_write"><a title="Bio.Graphics._write
+Bio.Motif._Motif.Motif._write" class="py-name" href="#" onclick="return doclink('link-2', '_write', 'link-2');">_write</a></tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"> </tt>
+<a name="ComparativeScatterPlot"></a><div id="ComparativeScatterPlot-def"><a name="L28"></a><tt class="py-lineno"> 28</tt> <a class="py-toggle" href="#" id="ComparativeScatterPlot-toggle" onclick="return toggle('ComparativeScatterPlot');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Graphics.Comparative.ComparativeScatterPlot-class.html">ComparativeScatterPlot</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ComparativeScatterPlot-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ComparativeScatterPlot-expanded"><a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">    <tt class="py-docstring">"""Display a scatter-type plot comparing two different kinds of info.</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">    Attributes;</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">     - display_info - a 2D list of the information we'll be outputting. Each</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">       top level list is a different data type, and each data point is a</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">       two-tuple of the coordinates of a point.</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">    So if you had two distributions of points, it should look like::</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">       display_info = [[(1, 2), (3, 4)],</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">                       [(5, 6), (7, 8)]]</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">    If everything is just one set of points, display_info can look like::</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">        display_info = [[(1, 2), (3, 4), (5, 6)]]</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="ComparativeScatterPlot.__init__"></a><div id="ComparativeScatterPlot.__init__-def"><a name="L45"></a><tt class="py-lineno"> 45</tt> <a class="py-toggle" href="#" id="ComparativeScatterPlot.__init__-toggle" onclick="return toggle('ComparativeScatterPlot.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">output_format</tt><tt class="py-op">=</tt><tt class="py-string">'pdf'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ComparativeScatterPlot.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ComparativeScatterPlot.__init__-expanded"><a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">        <tt class="py-comment"># customizable attributes</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">number_of_columns</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">page_size</tt> <tt class="py-op">=</tt> <tt class="py-name">letter</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">title_size</tt> <tt class="py-op">=</tt> <tt class="py-number">20</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">output_format</tt> <tt class="py-op">=</tt> <tt class="py-name">output_format</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-comment"># the information we'll be writing</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">display_info</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-comment"># initial colors and shapes used for drawing points</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">color_choices</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">colors</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.red()=Bio.Phylo.PhyloXMLIO.Writer-class.html#red"><a title="Bio.Phylo.PhyloXMLIO.Writer.red" class="py-name" href="#" onclick="return doclink('link-3', 'red', 'link-3');">red</a></tt><tt class="py-op">,</tt> <tt class="py-name">colors</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.green()=Bio.Phylo.PhyloXMLIO.Writer-class.html#green"><a title="Bio.Phylo.PhyloXMLIO.Writer.green" class="py-name" href="#" onclick="return doclink('link-4', 'green', 'link-4');">green</a></tt><tt class="py-op">,</tt> <tt class="py-name">colors</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.blue()=Bio.Phylo.PhyloXMLIO.Writer-class.html#blue"><a title="Bio.Phylo.PhyloXMLIO.Writer.blue" class="py-name" href="#" onclick="return doclink('link-5', 'blue', 'link-5');">blue</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">                              <tt class="py-name">colors</tt><tt class="py-op">.</tt><tt class="py-name">yellow</tt><tt class="py-op">,</tt> <tt class="py-name">colors</tt><tt class="py-op">.</tt><tt class="py-name">orange</tt><tt class="py-op">,</tt> <tt class="py-name">colors</tt><tt class="py-op">.</tt><tt class="py-name">black</tt><tt class="py-op">]</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">shape_choices</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">makeFilledCircle</tt><tt class="py-op">,</tt> <tt class="py-name">makeEmptySquare</tt><tt class="py-op">,</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">                              <tt class="py-name">makeFilledDiamond</tt><tt class="py-op">,</tt> <tt class="py-name">makeFilledSquare</tt><tt class="py-op">,</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">                              <tt class="py-name">makeEmptyCircle</tt><tt class="py-op">,</tt> <tt class="py-name">makeSmiley</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="ComparativeScatterPlot.draw_to_file"></a><div id="ComparativeScatterPlot.draw_to_file-def"><a name="L63"></a><tt class="py-lineno"> 63</tt> <a class="py-toggle" href="#" id="ComparativeScatterPlot.draw_to_file-toggle" onclick="return toggle('ComparativeScatterPlot.draw_to_file');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#draw_to_file">draw_to_file</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">output_file</tt><tt class="py-op">,</tt> <tt class="py-param">title</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ComparativeScatterPlot.draw_to_file-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ComparativeScatterPlot.draw_to_file-expanded"><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-docstring">"""Write the comparative plot to a file.</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring">         - output_file - The name of the file to output the information to,</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"><tt class="py-docstring">           or a handle to write to.</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-docstring">         - title - A title to display on the graphic.</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt id="link-6" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.width=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#width,Method Bio.Phylo.PhyloXMLIO.Writer.width()=Bio.Phylo.PhyloXMLIO.Writer-class.html#width"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-6', 'width', 'link-6');">width</a></tt><tt class="py-op">,</tt> <tt id="link-7" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.height=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#height"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.height" class="py-name" href="#" onclick="return doclink('link-7', 'height', 'link-7');">height</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">page_size</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-name">cur_drawing</tt> <tt class="py-op">=</tt> <tt class="py-name">Drawing</tt><tt class="py-op">(</tt><tt id="link-8" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-8', 'width', 'link-6');">width</a></tt><tt class="py-op">,</tt> <tt id="link-9" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.height" class="py-name" href="#" onclick="return doclink('link-9', 'height', 'link-7');">height</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Method Bio.Graphics.BasicChromosome.Organism._draw_title()=Bio.Graphics.BasicChromosome.Organism-class.html#_draw_title,Method Bio.Graphics.Comparative.ComparativeScatterPlot._draw_title()=Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_draw_title,Method Bio.Graphics.Distribution.BarChartDistribution._draw_title()=Bio.Graphics.Distribution.BarChartDistribution-class.html#_draw_title,Method Bio.Graphics.Distribution.DistributionPage._draw_title()=Bio.Graphics.Distribution.DistributionPage-class.html#_draw_title"><a title="Bio.Graphics.BasicChromosome.Organism._draw_title
+Bio.Graphics.Comparative.ComparativeScatterPlot._draw_title
+Bio.Graphics.Distribution.BarChartDistribution._draw_title
+Bio.Graphics.Distribution.DistributionPage._draw_title" class="py-name" href="#" onclick="return doclink('link-10', '_draw_title', 'link-10');">_draw_title</a></tt><tt class="py-op">(</tt><tt class="py-name">cur_drawing</tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name" targets="Method Bio.Blast.NCBIStandalone._AlignmentConsumer.title()=Bio.Blast.NCBIStandalone._AlignmentConsumer-class.html#title,Method Bio.GenBank._FeatureConsumer.title()=Bio.GenBank._FeatureConsumer-class.html#title,Method Bio.GenBank._RecordConsumer.title()=Bio.GenBank._RecordConsumer-class.html#title"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.title
+Bio.GenBank._FeatureConsumer.title
+Bio.GenBank._RecordConsumer.title" class="py-name" href="#" onclick="return doclink('link-11', 'title', 'link-11');">title</a></tt><tt class="py-op">,</tt> <tt id="link-12" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-12', 'width', 'link-6');">width</a></tt><tt class="py-op">,</tt> <tt id="link-13" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.height" class="py-name" href="#" onclick="return doclink('link-13', 'height', 'link-7');">height</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">start_x</tt> <tt class="py-op">=</tt> <tt class="py-name">inch</tt> <tt class="py-op">*</tt> <tt class="py-number">.5</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-name">end_x</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-14', 'width', 'link-6');">width</a></tt> <tt class="py-op">-</tt> <tt class="py-name">inch</tt> <tt class="py-op">*</tt> <tt class="py-number">.5</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-name">end_y</tt> <tt class="py-op">=</tt> <tt id="link-15" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.height" class="py-name" href="#" onclick="return doclink('link-15', 'height', 'link-7');">height</a></tt> <tt class="py-op">-</tt> <tt class="py-number">1.5</tt> <tt class="py-op">*</tt> <tt class="py-name">inch</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-name">start_y</tt> <tt class="py-op">=</tt> <tt class="py-number">.5</tt> <tt class="py-op">*</tt> <tt class="py-name">inch</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method Bio.Graphics.Comparative.ComparativeScatterPlot._draw_scatter_plot()=Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_draw_scatter_plot"><a title="Bio.Graphics.Comparative.ComparativeScatterPlot._draw_scatter_plot" class="py-name" href="#" onclick="return doclink('link-16', '_draw_scatter_plot', 'link-16');">_draw_scatter_plot</a></tt><tt class="py-op">(</tt><tt class="py-name">cur_drawing</tt><tt class="py-op">,</tt> <tt class="py-name">start_x</tt><tt class="py-op">,</tt> <tt class="py-name">start_y</tt><tt class="py-op">,</tt> <tt class="py-name">end_x</tt><tt class="py-op">,</tt> <tt class="py-name">end_y</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-17" class="py-name"><a title="Bio.Graphics._write
+Bio.Motif._Motif.Motif._write" class="py-name" href="#" onclick="return doclink('link-17', '_write', 'link-2');">_write</a></tt><tt class="py-op">(</tt><tt class="py-name">cur_drawing</tt><tt class="py-op">,</tt> <tt class="py-name">output_file</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">output_format</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"> </tt>
+<a name="ComparativeScatterPlot._draw_title"></a><div id="ComparativeScatterPlot._draw_title-def"><a name="L85"></a><tt class="py-lineno"> 85</tt> <a class="py-toggle" href="#" id="ComparativeScatterPlot._draw_title-toggle" onclick="return toggle('ComparativeScatterPlot._draw_title');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_draw_title">_draw_title</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">cur_drawing</tt><tt class="py-op">,</tt> <tt class="py-param">title</tt><tt class="py-op">,</tt> <tt class="py-param">width</tt><tt class="py-op">,</tt> <tt class="py-param">height</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ComparativeScatterPlot._draw_title-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ComparativeScatterPlot._draw_title-expanded"><a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-docstring">"""Add a title to the page we are outputting.</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-name">title_string</tt> <tt class="py-op">=</tt> <tt class="py-name">String</tt><tt class="py-op">(</tt><tt id="link-18" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-18', 'width', 'link-6');">width</a></tt> <tt class="py-op">/</tt> <tt class="py-number">2</tt><tt class="py-op">,</tt> <tt id="link-19" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.height" class="py-name" href="#" onclick="return doclink('link-19', 'height', 'link-7');">height</a></tt> <tt class="py-op">-</tt> <tt class="py-name">inch</tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.title
+Bio.GenBank._FeatureConsumer.title
+Bio.GenBank._RecordConsumer.title" class="py-name" href="#" onclick="return doclink('link-20', 'title', 'link-11');">title</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-name">title_string</tt><tt class="py-op">.</tt><tt class="py-name">fontName</tt> <tt class="py-op">=</tt> <tt class="py-string">'Helvetica-Bold'</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-name">title_string</tt><tt class="py-op">.</tt><tt class="py-name">fontSize</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">title_size</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">title_string</tt><tt class="py-op">.</tt><tt class="py-name">textAnchor</tt> <tt class="py-op">=</tt> <tt class="py-string">"middle"</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-name">cur_drawing</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method Bio.Graphics.BasicChromosome._ChromosomeComponent.add()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#add,Method Bio.Nexus.Nexus.StepMatrix.add()=Bio.Nexus.Nexus.StepMatrix-class.html#add,Method Bio.Nexus.Nodes.Chain.add()=Bio.Nexus.Nodes.Chain-class.html#add,Method Bio.PDB.Entity.Entity.add()=Bio.PDB.Entity.Entity-class.html#add,Method Bio.PDB.Residue.DisorderedResidue.add()=Bio.PDB.Residue.DisorderedResidue-class.html#add,Method Bio.PDB.Residue.Residue.add()=Bio.PDB.Residue.Residue-class.html#add,Method Bio.Restriction.Restriction.RestrictionBatch.add()=Bio.Restriction.Restriction.RestrictionBatch-class.html#add"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-21', 'add', 'link-21');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">title_string</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"> </tt>
+<a name="ComparativeScatterPlot._draw_scatter_plot"></a><div id="ComparativeScatterPlot._draw_scatter_plot-def"><a name="L95"></a><tt class="py-lineno"> 95</tt> <a class="py-toggle" href="#" id="ComparativeScatterPlot._draw_scatter_plot-toggle" onclick="return toggle('ComparativeScatterPlot._draw_scatter_plot');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_draw_scatter_plot">_draw_scatter_plot</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">cur_drawing</tt><tt class="py-op">,</tt> <tt class="py-param">x_start</tt><tt class="py-op">,</tt> <tt class="py-param">y_start</tt><tt class="py-op">,</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">                           <tt class="py-param">x_end</tt><tt class="py-op">,</tt> <tt class="py-param">y_end</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ComparativeScatterPlot._draw_scatter_plot-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ComparativeScatterPlot._draw_scatter_plot-expanded"><a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-docstring">"""Draw a scatter plot on the drawing with the given coordinates."""</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt> <tt class="py-op">=</tt> <tt class="py-name">LinePlot</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-comment"># set the dimensions of the scatter plot</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-22', 'x', 'link-22');">x</a></tt> <tt class="py-op">=</tt> <tt class="py-name">x_start</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.y=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#y"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-23', 'y', 'link-23');">y</a></tt> <tt class="py-op">=</tt> <tt class="py-name">y_start</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-24', 'width', 'link-6');">width</a></tt> <tt class="py-op">=</tt> <tt id="link-25" class="py-name" targets="Method Bio.FSSP.FSSPAlignDict.abs()=Bio.FSSP.FSSPAlignDict-class.html#abs"><a title="Bio.FSSP.FSSPAlignDict.abs" class="py-name" href="#" onclick="return doclink('link-25', 'abs', 'link-25');">abs</a></tt><tt class="py-op">(</tt><tt class="py-name">x_start</tt> <tt class="py-op">-</tt> <tt class="py-name">x_end</tt><tt class="py-op">)</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.height" class="py-name" href="#" onclick="return doclink('link-26', 'height', 'link-7');">height</a></tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="Bio.FSSP.FSSPAlignDict.abs" class="py-name" href="#" onclick="return doclink('link-27', 'abs', 'link-25');">abs</a></tt><tt class="py-op">(</tt><tt class="py-name">y_start</tt> <tt class="py-op">-</tt> <tt class="py-name">y_end</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-28', 'data', 'link-28');">data</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">display_info</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">joinedLines</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-comment"># set the axes of the plot</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-name">x_min</tt><tt class="py-op">,</tt> <tt class="py-name">x_max</tt><tt class="py-op">,</tt> <tt class="py-name">y_min</tt><tt class="py-op">,</tt> <tt class="py-name">y_max</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Method Bio.Graphics.Comparative.ComparativeScatterPlot._find_min_max()=Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_find_min_max"><a title="Bio.Graphics.Comparative.ComparativeScatterPlot._find_min_max" class="py-name" href="#" onclick="return doclink('link-29', '_find_min_max', 'link-29');">_find_min_max</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">display_info</tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">xValueAxis</tt><tt class="py-op">.</tt><tt class="py-name">valueMin</tt> <tt class="py-op">=</tt> <tt class="py-name">x_min</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">xValueAxis</tt><tt class="py-op">.</tt><tt class="py-name">valueMax</tt> <tt class="py-op">=</tt> <tt class="py-name">x_max</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">xValueAxis</tt><tt class="py-op">.</tt><tt class="py-name">valueStep</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">x_max</tt> <tt class="py-op">-</tt> <tt class="py-name">x_min</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-number">10.0</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">yValueAxis</tt><tt class="py-op">.</tt><tt class="py-name">valueMin</tt> <tt class="py-op">=</tt> <tt class="py-name">y_min</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">yValueAxis</tt><tt class="py-op">.</tt><tt class="py-name">valueMax</tt> <tt class="py-op">=</tt> <tt class="py-name">y_max</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">yValueAxis</tt><tt class="py-op">.</tt><tt class="py-name">valueStep</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">y_max</tt> <tt class="py-op">-</tt> <tt class="py-name">y_min</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-number">10.0</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name" targets="Method Bio.Graphics.Comparative.ComparativeScatterPlot._set_colors_and_shapes()=Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_set_colors_and_shapes"><a title="Bio.Graphics.Comparative.ComparativeScatterPlot._set_colors_and_shapes" class="py-name" href="#" onclick="return doclink('link-30', '_set_colors_and_shapes', 'link-30');">_set_colors_and_shapes</a></tt><tt class="py-op">(</tt><tt class="py-name">scatter_plot</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">display_info</tt><tt class="py-op">)</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-name">cur_drawing</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-31', 'add', 'link-21');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">scatter_plot</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="ComparativeScatterPlot._set_colors_and_shapes"></a><div id="ComparativeScatterPlot._set_colors_and_shapes-def"><a name="L124"></a><tt class="py-lineno">124</tt> <a class="py-toggle" href="#" id="ComparativeScatterPlot._set_colors_and_shapes-toggle" onclick="return toggle('ComparativeScatterPlot._set_colors_and_shapes');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_set_colors_and_shapes">_set_colors_and_shapes</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">scatter_plot</tt><tt class="py-op">,</tt> <tt class="py-param">display_info</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ComparativeScatterPlot._set_colors_and_shapes-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ComparativeScatterPlot._set_colors_and_shapes-expanded"><a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt class="py-docstring">"""Set the colors and shapes of the points displayed.</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"><tt class="py-docstring">        By default this just sets all of the points according to the order</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line"><tt class="py-docstring">        of colors and shapes defined in self.color_choices and</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"><tt class="py-docstring">        self.shape_choices. The first 5 shapes and colors are unique, the</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"><tt class="py-docstring">        rest of them are just set to the same color and shape (since I</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"><tt class="py-docstring">        ran out of shapes!).</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"><tt class="py-docstring">        You can change how this function works by either changing the</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"><tt class="py-docstring">        values of the color_choices and shape_choices attributes, or</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"><tt class="py-docstring">        by inheriting from this class and overriding this function.</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">value_num</tt> <tt class="py-keyword">in</tt> <tt id="link-32" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-32', 'range', 'link-32');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">display_info</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">            <tt class="py-comment"># if we have unique colors, add them</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">value_num</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">color_choices</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">                <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-name">value_num</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">strokeColor</tt> <tt class="py-op">=</tt> \ </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">color_choices</tt><tt class="py-op">[</tt><tt class="py-name">value_num</tt><tt class="py-op">]</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">                <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-name">value_num</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.symbol()=Bio.Phylo.PhyloXMLIO.Writer-class.html#symbol"><a title="Bio.Phylo.PhyloXMLIO.Writer.symbol" class="py-name" href="#" onclick="return doclink('link-33', 'symbol', 'link-33');">symbol</a></tt> <tt class="py-op">=</tt> \ </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">shape_choices</tt><tt class="py-op">[</tt><tt class="py-name">value_num</tt><tt class="py-op">]</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">            <tt class="py-comment"># otherwise just use the last number</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-name">value_num</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">strokeColor</tt> <tt class="py-op">=</tt> \ </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                  <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">color_choices</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">                <tt class="py-name">scatter_plot</tt><tt class="py-op">.</tt><tt class="py-name">lines</tt><tt class="py-op">[</tt><tt class="py-name">value_num</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.symbol" class="py-name" href="#" onclick="return doclink('link-34', 'symbol', 'link-33');">symbol</a></tt> <tt class="py-op">=</tt> \ </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                  <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">shape_choices</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"> </tt>
+<a name="ComparativeScatterPlot._find_min_max"></a><div id="ComparativeScatterPlot._find_min_max-def"><a name="L151"></a><tt class="py-lineno">151</tt> <a class="py-toggle" href="#" id="ComparativeScatterPlot._find_min_max-toggle" onclick="return toggle('ComparativeScatterPlot._find_min_max');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#_find_min_max">_find_min_max</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">info</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ComparativeScatterPlot._find_min_max-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ComparativeScatterPlot._find_min_max-expanded"><a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">        <tt class="py-docstring">"""Find the min and max for the x and y coordinates in the given data."""</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">        <tt class="py-name">x_min</tt> <tt class="py-op">=</tt> <tt class="py-name">info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">        <tt class="py-name">x_max</tt> <tt class="py-op">=</tt> <tt class="py-name">info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">        <tt class="py-name">y_min</tt> <tt class="py-op">=</tt> <tt class="py-name">info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-name">y_max</tt> <tt class="py-op">=</tt> <tt class="py-name">info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">two_d_list</tt> <tt class="py-keyword">in</tt> <tt class="py-name">info</tt><tt class="py-op">:</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt id="link-35" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-35', 'x', 'link-22');">x</a></tt><tt class="py-op">,</tt> <tt id="link-36" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-36', 'y', 'link-23');">y</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">two_d_list</tt><tt class="py-op">:</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-37" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-37', 'x', 'link-22');">x</a></tt> <tt class="py-op">&gt;</tt> <tt class="py-name">x_max</tt><tt class="py-op">:</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">                    <tt class="py-name">x_max</tt> <tt class="py-op">=</tt> <tt id="link-38" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-38', 'x', 'link-22');">x</a></tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-39" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-39', 'x', 'link-22');">x</a></tt> <tt class="py-op">&lt;</tt> <tt class="py-name">x_min</tt><tt class="py-op">:</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">                    <tt class="py-name">x_min</tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-40', 'x', 'link-22');">x</a></tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-41" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-41', 'y', 'link-23');">y</a></tt> <tt class="py-op">&gt;</tt> <tt class="py-name">y_max</tt><tt class="py-op">:</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">                    <tt class="py-name">y_max</tt> <tt class="py-op">=</tt> <tt id="link-42" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-42', 'y', 'link-23');">y</a></tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-43" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-43', 'y', 'link-23');">y</a></tt> <tt class="py-op">&lt;</tt> <tt class="py-name">y_min</tt><tt class="py-op">:</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                    <tt class="py-name">y_min</tt> <tt class="py-op">=</tt> <tt id="link-44" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-44', 'y', 'link-23');">y</a></tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">x_min</tt><tt class="py-op">,</tt> <tt class="py-name">x_max</tt><tt class="py-op">,</tt> <tt class="py-name">y_min</tt><tt class="py-op">,</tt> <tt class="py-name">y_max</tt> </tt>
+</div></div><a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:41 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,925 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Phylo._utils</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Phylo-module.html">Package&nbsp;Phylo</a> ::
+        Module&nbsp;_utils
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Phylo._utils-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Phylo._utils-module.html" onclick="show_private();">Module Bio.Phylo._utils</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license. Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Utilities for handling, displaying and exporting Phylo trees.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">Third-party libraries are loaded when the corresponding function is called.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">math</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class Bio.MissingPythonDependencyError=Bio.MissingPythonDependencyError-class.html"><a title="Bio.MissingPythonDependencyError" class="py-name" href="#" onclick="return doclink('link-1', 'MissingPythonDependencyError', 'link-1');">MissingPythonDependencyError</a></tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="to_networkx"></a><div id="to_networkx-def"><a name="L18"></a><tt class="py-lineno"> 18</tt> <a class="py-toggle" href="#" id="to_networkx-toggle" onclick="return toggle('to_networkx');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo._utils-module.html#to_networkx">to_networkx</a><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="to_networkx-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="to_networkx-expanded"><a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt class="py-docstring">"""Convert a Tree object to a networkx graph.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    The result is useful for graph-oriented analysis, and also interactive</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">    plotting with pylab, matplotlib or pygraphviz, though the resulting diagram</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">    is usually not ideal for displaying a phylogeny.</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">    Requires NetworkX version 0.99 or later.</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">networkx</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt id="link-2" class="py-name"><a title="Bio.MissingPythonDependencyError" class="py-name" href="#" onclick="return doclink('link-2', 'MissingPythonDependencyError', 'link-1');">MissingPythonDependencyError</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">            <tt class="py-string">"Install NetworkX if you want to use to_networkx."</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-comment"># NB (1/2010): the networkx API stabilized at v.1.0</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-comment"># 1.0+: edges accept arbitrary data as kwargs, weights are floats</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-comment"># 0.99: edges accept weight as a string, nothing else</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">    <tt class="py-comment"># pre-0.99: edges accept no additional data</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">    <tt class="py-comment"># Ubuntu Lucid LTS uses v0.99, let's support everything</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt class="py-name">__version__</tt> <tt class="py-op">&gt;=</tt> <tt class="py-string">'1.0'</tt><tt class="py-op">:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">add_edge</tt><tt class="py-op">(</tt><tt class="py-param">graph</tt><tt class="py-op">,</tt> <tt class="py-param">n1</tt><tt class="py-op">,</tt> <tt class="py-param">n2</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">            <tt class="py-name">graph</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.add_edge()=Bio.Pathway.Rep.Graph.Graph-class.html#add_edge,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.add_edge()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#add_edge"><a title="Bio.Pathway.Rep.Graph.Graph.add_edge
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_edge" class="py-name" href="#" onclick="return doclink('link-3', 'add_edge', 'link-3');">add_edge</a></tt><tt class="py-op">(</tt><tt id="link-4" class="py-name" targets="Variable Bio.PDB.Polypeptide.n1=Bio.PDB.Polypeptide-module.html#n1"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-4', 'n1', 'link-4');">n1</a></tt><tt class="py-op">,</tt> <tt class="py-name">n2</tt><tt class="py-op">,</tt> <tt class="py-name">weight</tt><tt class="py-op">=</tt><tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.branch_length()=Bio.Phylo.PhyloXMLIO.Writer-class.html#branch_length"><a title="Bio.Phylo.PhyloXMLIO.Writer.branch_length" class="py-name" href="#" onclick="return doclink('link-5', 'branch_length', 'link-5');">branch_length</a></tt> <tt class="py-keyword">or</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">            <tt class="py-comment"># Copy branch color value as hex, if available</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">n2</tt><tt class="py-op">,</tt> <tt class="py-string">'color'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Variable Bio.Phylo.BaseTree.Clade.color=Bio.Phylo.BaseTree.Clade-class.html#color,Method Bio.Phylo.PhyloXMLIO.Parser.color()=Bio.Phylo.PhyloXMLIO.Parser-class.html#color,Method Bio.Phylo.PhyloXMLIO.Writer.color()=Bio.Phylo.PhyloXMLIO.Writer-class.html#color"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-6', 'color', 'link-6');">color</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">                <tt class="py-name">graph</tt><tt class="py-op">[</tt><tt id="link-7" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-7', 'n1', 'link-4');">n1</a></tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">n2</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'color'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-8', 'color', 'link-6');">color</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method Bio.Phylo.BaseTree.BranchColor.to_hex()=Bio.Phylo.BaseTree.BranchColor-class.html#to_hex"><a title="Bio.Phylo.BaseTree.BranchColor.to_hex" class="py-name" href="#" onclick="return doclink('link-9', 'to_hex', 'link-9');">to_hex</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-10" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-10', 'n1', 'link-4');">n1</a></tt><tt class="py-op">,</tt> <tt class="py-string">'color'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt id="link-11" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-11', 'n1', 'link-4');">n1</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-12', 'color', 'link-6');">color</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">                <tt class="py-comment"># Cascading color attributes</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">                <tt class="py-name">graph</tt><tt class="py-op">[</tt><tt id="link-13" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-13', 'n1', 'link-4');">n1</a></tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">n2</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'color'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-14', 'n1', 'link-4');">n1</a></tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-15', 'color', 'link-6');">color</a></tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="Bio.Phylo.BaseTree.BranchColor.to_hex" class="py-name" href="#" onclick="return doclink('link-16', 'to_hex', 'link-9');">to_hex</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">                <tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-17', 'color', 'link-6');">color</a></tt> <tt class="py-op">=</tt> <tt id="link-18" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-18', 'n1', 'link-4');">n1</a></tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-19', 'color', 'link-6');">color</a></tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">            <tt class="py-comment"># Copy branch weight value (float) if available</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">n2</tt><tt class="py-op">,</tt> <tt class="py-string">'width'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.width=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#width,Method Bio.Phylo.PhyloXMLIO.Writer.width()=Bio.Phylo.PhyloXMLIO.Writer-class.html#width"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-20', 'width', 'link-20');">width</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">                <tt class="py-name">graph</tt><tt class="py-op">[</tt><tt id="link-21" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-21', 'n1', 'link-4');">n1</a></tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">n2</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'width'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-22', 'width', 'link-20');">width</a></tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-23" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-23', 'n1', 'link-4');">n1</a></tt><tt class="py-op">,</tt> <tt class="py-string">'width'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt id="link-24" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-24', 'n1', 'link-4');">n1</a></tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-25', 'width', 'link-20');">width</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">                <tt class="py-comment"># Cascading width attributes</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">                <tt class="py-name">graph</tt><tt class="py-op">[</tt><tt id="link-26" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-26', 'n1', 'link-4');">n1</a></tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">n2</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'width'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-27', 'n1', 'link-4');">n1</a></tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-28', 'width', 'link-20');">width</a></tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">                <tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-29', 'width', 'link-20');">width</a></tt> <tt class="py-op">=</tt> <tt id="link-30" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-30', 'n1', 'link-4');">n1</a></tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-31', 'width', 'link-20');">width</a></tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt class="py-name">__version__</tt> <tt class="py-op">&gt;=</tt> <tt class="py-string">'0.99'</tt><tt class="py-op">:</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">add_edge</tt><tt class="py-op">(</tt><tt class="py-param">graph</tt><tt class="py-op">,</tt> <tt class="py-param">n1</tt><tt class="py-op">,</tt> <tt class="py-param">n2</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">            <tt class="py-name">graph</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.add_edge
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_edge" class="py-name" href="#" onclick="return doclink('link-32', 'add_edge', 'link-3');">add_edge</a></tt><tt class="py-op">(</tt><tt id="link-33" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-33', 'n1', 'link-4');">n1</a></tt><tt class="py-op">,</tt> <tt class="py-name">n2</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">n2</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.branch_length" class="py-name" href="#" onclick="return doclink('link-34', 'branch_length', 'link-5');">branch_length</a></tt> <tt class="py-keyword">or</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">add_edge</tt><tt class="py-op">(</tt><tt class="py-param">graph</tt><tt class="py-op">,</tt> <tt class="py-param">n1</tt><tt class="py-op">,</tt> <tt class="py-param">n2</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-name">graph</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.add_edge
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_edge" class="py-name" href="#" onclick="return doclink('link-35', 'add_edge', 'link-3');">add_edge</a></tt><tt class="py-op">(</tt><tt id="link-36" class="py-name"><a title="Bio.PDB.Polypeptide.n1" class="py-name" href="#" onclick="return doclink('link-36', 'n1', 'link-4');">n1</a></tt><tt class="py-op">,</tt> <tt class="py-name">n2</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">build_subgraph</tt><tt class="py-op">(</tt><tt class="py-param">graph</tt><tt class="py-op">,</tt> <tt class="py-param">top</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-docstring">"""Walk down the Tree, building graphs, edges and nodes."""</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-37" class="py-name" targets="Variable Bio.Phylo.BaseTree.Tree.clade=Bio.Phylo.BaseTree.Tree-class.html#clade,Method Bio.Phylo.PhyloXMLIO.Writer.clade()=Bio.Phylo.PhyloXMLIO.Writer-class.html#clade"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-37', 'clade', 'link-37');">clade</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">top</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">            <tt class="py-name">graph</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.add_node()=Bio.Pathway.Rep.Graph.Graph-class.html#add_node,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.add_node()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#add_node"><a title="Bio.Pathway.Rep.Graph.Graph.add_node
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_node" class="py-name" href="#" onclick="return doclink('link-38', 'add_node', 'link-38');">add_node</a></tt><tt class="py-op">(</tt><tt id="link-39" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-39', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-40" class="py-name" targets="Variable Bio.Phylo.BaseTree.Clade.root=Bio.Phylo.BaseTree.Clade-class.html#root,Variable Bio.Phylo._cdao_owl.root=Bio.Phylo._cdao_owl-module.html#root"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-40', 'root', 'link-40');">root</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">            <tt id="link-41" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.add_edge
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_edge" class="py-name" href="#" onclick="return doclink('link-41', 'add_edge', 'link-3');">add_edge</a></tt><tt class="py-op">(</tt><tt class="py-name">graph</tt><tt class="py-op">,</tt> <tt class="py-name">top</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-42', 'root', 'link-40');">root</a></tt><tt class="py-op">,</tt> <tt id="link-43" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-43', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-44', 'root', 'link-40');">root</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">            <tt class="py-name">build_subgraph</tt><tt class="py-op">(</tt><tt class="py-name">graph</tt><tt class="py-op">,</tt> <tt id="link-45" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-45', 'clade', 'link-37');">clade</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt class="py-name">rooted</tt><tt class="py-op">:</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-name">G</tt> <tt class="py-op">=</tt> <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt class="py-name">DiGraph</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">G</tt> <tt class="py-op">=</tt> <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name" targets="Module Bio.Pathway.Rep.Graph=Bio.Pathway.Rep.Graph-module.html,Class Bio.Pathway.Rep.Graph.Graph=Bio.Pathway.Rep.Graph.Graph-class.html"><a title="Bio.Pathway.Rep.Graph
+Bio.Pathway.Rep.Graph.Graph" class="py-name" href="#" onclick="return doclink('link-46', 'Graph', 'link-46');">Graph</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">    <tt class="py-name">G</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.add_node
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_node" class="py-name" href="#" onclick="return doclink('link-47', 'add_node', 'link-38');">add_node</a></tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-48', 'root', 'link-40');">root</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt class="py-name">build_subgraph</tt><tt class="py-op">(</tt><tt class="py-name">G</tt><tt class="py-op">,</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-49', 'root', 'link-40');">root</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">G</tt> </tt>
+</div><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"> </tt>
+<a name="draw_graphviz"></a><div id="draw_graphviz-def"><a name="L78"></a><tt class="py-lineno"> 78</tt> <a class="py-toggle" href="#" id="draw_graphviz-toggle" onclick="return toggle('draw_graphviz');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo._utils-module.html#draw_graphviz">draw_graphviz</a><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">,</tt> <tt class="py-param">label_func</tt><tt class="py-op">=</tt><tt class="py-name">str</tt><tt class="py-op">,</tt> <tt class="py-param">prog</tt><tt class="py-op">=</tt><tt class="py-string">'twopi'</tt><tt class="py-op">,</tt> <tt class="py-param">args</tt><tt class="py-op">=</tt><tt class="py-string">''</tt><tt class="py-op">,</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">                  <tt class="py-param">node_color</tt><tt class="py-op">=</tt><tt class="py-string">'#c0deff'</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="draw_graphviz-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="draw_graphviz-expanded"><a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">    <tt class="py-docstring">"""Display a tree or clade as a graph, using the graphviz engine.</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring">    Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring">    The third and fourth parameters apply to Graphviz, and the remaining</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring">    arbitrary keyword arguments are passed directly to networkx.draw(), which</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">    in turn mostly wraps matplotlib/pylab.  See the documentation for Graphviz</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">    and networkx for detailed explanations.</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring">    The NetworkX/matplotlib parameters are described in the docstrings for</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">    networkx.draw() and pylab.scatter(), but the most reasonable options to try</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">    are: *alpha, node_color, node_size, node_shape, edge_color, style,</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring">    font_size, font_color, font_weight, font_family*</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring">    :Parameters:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">        label_func : callable</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">            A function to extract a label from a node. By default this is str(),</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">            but you can use a different function to select another string</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">            associated with each node. If this function returns None for a node,</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">            no label will be shown for that node.</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-docstring">            The label will also be silently skipped if the throws an exception</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-docstring">            related to ordinary attribute access (LookupError, AttributeError,</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring">            ValueError); all other exception types will still be raised. This</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-docstring">            means you can use a lambda expression that simply attempts to look</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-docstring">            up the desired value without checking if the intermediate attributes</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"><tt class="py-docstring">            are available:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-docstring">                &gt;&gt;&gt; Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-docstring">        prog : string</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-docstring">            The Graphviz program to use when rendering the graph. 'twopi'</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-docstring">            behaves the best for large graphs, reliably avoiding crossing edges,</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"><tt class="py-docstring">            but for moderate graphs 'neato' looks a bit nicer.  For small</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"><tt class="py-docstring">            directed graphs, 'dot' may produce a normal-looking cladogram, but</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"><tt class="py-docstring">            will cross and distort edges in larger graphs. (The programs 'circo'</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"><tt class="py-docstring">            and 'fdp' are not recommended.)</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-docstring">        args : string</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-docstring">            Options passed to the external graphviz program.  Normally not</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-docstring">            needed, but offered here for completeness.</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"><tt class="py-docstring">    Example</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-docstring">    -------</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; import pylab</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import Phylo</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; tree = Phylo.read('ex/apaf.xml', 'phyloxml')</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; Phylo.draw_graphviz(tree)</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; pylab.show()</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; pylab.savefig('apaf.png')</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">networkx</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt id="link-50" class="py-name"><a title="Bio.MissingPythonDependencyError" class="py-name" href="#" onclick="return doclink('link-50', 'MissingPythonDependencyError', 'link-1');">MissingPythonDependencyError</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">            <tt class="py-string">"Install NetworkX if you want to use to_networkx."</tt><tt class="py-op">)</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">    <tt class="py-name">G</tt> <tt class="py-op">=</tt> <tt id="link-51" class="py-name" targets="Function Bio.Phylo._utils.to_networkx()=Bio.Phylo._utils-module.html#to_networkx"><a title="Bio.Phylo._utils.to_networkx" class="py-name" href="#" onclick="return doclink('link-51', 'to_networkx', 'link-51');">to_networkx</a></tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">)</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">        <tt class="py-comment"># NetworkX version 1.8 or later (2013-01-20)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">        <tt class="py-name">Gi</tt> <tt class="py-op">=</tt> <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt class="py-name">convert_node_labels_to_integers</tt><tt class="py-op">(</tt><tt class="py-name">G</tt><tt class="py-op">,</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">                                                      <tt class="py-name">label_attribute</tt><tt class="py-op">=</tt><tt class="py-string">'label'</tt><tt class="py-op">)</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">        <tt class="py-name">int_labels</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">integer</tt><tt class="py-op">,</tt> <tt class="py-name">nodeattrs</tt> <tt class="py-keyword">in</tt> <tt class="py-name">Gi</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name" targets="Method Bio.Nexus.Trees.Tree.node()=Bio.Nexus.Trees.Tree-class.html#node"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-52', 'node', 'link-52');">node</a></tt><tt class="py-op">.</tt><tt id="link-53" class="py-name" targets="Method Bio.Crystal.Crystal.items()=Bio.Crystal.Crystal-class.html#items,Method Bio.File._IndexedSeqFileDict.items()=Bio.File._IndexedSeqFileDict-class.html#items,Method Bio.Phylo.PhyloXML.Events.items()=Bio.Phylo.PhyloXML.Events-class.html#items,Variable Bio.SearchIO._model.query.QueryResult.items=Bio.SearchIO._model.query.QueryResult-class.html#items,Method Bio._py3k._ordereddict.OrderedDict.items()=Bio._py3k._ordereddict.OrderedDict-class.html#items,Method BioSQL.BioSeqDatabase.BioSeqDatabase.items()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#items,Method BioSQL.BioSeqDatabase.DBServer.items()=BioSQL.BioSeqDatabase.DBServer-class.html#items"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-53', 'items', 'link-53');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">            <tt class="py-name">int_labels</tt><tt class="py-op">[</tt><tt class="py-name">nodeattrs</tt><tt class="py-op">[</tt><tt class="py-string">'label'</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">integer</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">TypeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-comment"># Older NetworkX versions (before 1.8)</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">        <tt class="py-name">Gi</tt> <tt class="py-op">=</tt> <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt class="py-name">convert_node_labels_to_integers</tt><tt class="py-op">(</tt><tt class="py-name">G</tt><tt class="py-op">,</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                                                      <tt class="py-name">discard_old_labels</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">        <tt class="py-name">int_labels</tt> <tt class="py-op">=</tt> <tt class="py-name">Gi</tt><tt class="py-op">.</tt><tt class="py-name">node_labels</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">        <tt class="py-name">posi</tt> <tt class="py-op">=</tt> <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt class="py-name">graphviz_layout</tt><tt class="py-op">(</tt><tt class="py-name">Gi</tt><tt class="py-op">,</tt> <tt class="py-name">prog</tt><tt class="py-op">,</tt> <tt class="py-name">args</tt><tt class="py-op">=</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt id="link-54" class="py-name"><a title="Bio.MissingPythonDependencyError" class="py-name" href="#" onclick="return doclink('link-54', 'MissingPythonDependencyError', 'link-1');">MissingPythonDependencyError</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">            <tt class="py-string">"Install PyGraphviz or pydot if you want to use draw_graphviz."</tt><tt class="py-op">)</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">get_label_mapping</tt><tt class="py-op">(</tt><tt class="py-param">G</tt><tt class="py-op">,</tt> <tt class="py-param">selection</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">        <tt class="py-docstring">"""Apply the user-specified node relabeling."""</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-55" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-55', 'node', 'link-52');">node</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">G</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.nodes()=Bio.Pathway.Rep.Graph.Graph-class.html#nodes,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.nodes()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#nodes"><a title="Bio.Pathway.Rep.Graph.Graph.nodes
+Bio.Pathway.Rep.MultiGraph.MultiGraph.nodes" class="py-name" href="#" onclick="return doclink('link-56', 'nodes', 'link-56');">nodes</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">selection</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-op">(</tt><tt id="link-57" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-57', 'node', 'link-52');">node</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">selection</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">                <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">                    <tt class="py-name">label</tt> <tt class="py-op">=</tt> <tt class="py-name">label_func</tt><tt class="py-op">(</tt><tt id="link-58" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-58', 'node', 'link-52');">node</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">label</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt id="link-59" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-59', 'node', 'link-52');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">.</tt><tt class="py-name">__name__</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">                        <tt class="py-keyword">yield</tt> <tt class="py-op">(</tt><tt id="link-60" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-60', 'node', 'link-52');">node</a></tt><tt class="py-op">,</tt> <tt class="py-name">label</tt><tt class="py-op">)</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                <tt class="py-keyword">except</tt> <tt class="py-op">(</tt><tt class="py-name">LookupError</tt><tt class="py-op">,</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">,</tt> <tt class="py-name">ValueError</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-string">'nodelist'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">kwargs</tt><tt class="py-op">:</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">        <tt id="link-61" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.labels()=Bio.Pathway.Rep.Graph.Graph-class.html#labels,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.labels()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#labels"><a title="Bio.Pathway.Rep.Graph.Graph.labels
+Bio.Pathway.Rep.MultiGraph.MultiGraph.labels" class="py-name" href="#" onclick="return doclink('link-61', 'labels', 'link-61');">labels</a></tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">get_label_mapping</tt><tt class="py-op">(</tt><tt class="py-name">G</tt><tt class="py-op">,</tt> <tt id="link-62" class="py-name" targets="Method Bio.Nexus.Nexus.StepMatrix.set()=Bio.Nexus.Nexus.StepMatrix-class.html#set,Method Bio.PDB.QCPSuperimposer.QCPSuperimposer.set()=Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html#set,Method Bio.SVDSuperimposer.SVDSuperimposer.set()=Bio.SVDSuperimposer.SVDSuperimposer-class.html#set"><a title="Bio.Nexus.Nexus.StepMatrix.set
+Bio.PDB.QCPSuperimposer.QCPSuperimposer.set
+Bio.SVDSuperimposer.SVDSuperimposer.set" class="py-name" href="#" onclick="return doclink('link-62', 'set', 'link-62');">set</a></tt><tt class="py-op">(</tt><tt class="py-name">kwargs</tt><tt class="py-op">[</tt><tt class="py-string">'nodelist'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt id="link-63" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.labels
+Bio.Pathway.Rep.MultiGraph.MultiGraph.labels" class="py-name" href="#" onclick="return doclink('link-63', 'labels', 'link-61');">labels</a></tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-name">get_label_mapping</tt><tt class="py-op">(</tt><tt class="py-name">G</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">    <tt class="py-name">kwargs</tt><tt class="py-op">[</tt><tt class="py-string">'nodelist'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt id="link-64" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.labels
+Bio.Pathway.Rep.MultiGraph.MultiGraph.labels" class="py-name" href="#" onclick="return doclink('link-64', 'labels', 'link-61');">labels</a></tt><tt class="py-op">.</tt><tt id="link-65" class="py-name" targets="Method Bio.Crystal.Crystal.keys()=Bio.Crystal.Crystal-class.html#keys,Method Bio.File._IndexedSeqFileDict.keys()=Bio.File._IndexedSeqFileDict-class.html#keys,Method Bio.File._SQLiteManySeqFilesDict.keys()=Bio.File._SQLiteManySeqFilesDict-class.html#keys,Method Bio.PDB.AbstractPropertyMap.AbstractPropertyMap.keys()=Bio.PDB.AbstractPropertyMap.AbstractPropertyMap-class.html#keys,Method Bio.Phylo.PhyloXML.Events.keys()=Bio.Phylo.PhyloXML.Events-class.html#keys,Method Bio._py3k._ordereddict.OrderedDict.keys()=Bio._py3k._ordereddict.OrderedDict-class.html#keys,Method BioSQL.BioSeqDatabase.BioSeqDatabase.keys()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#keys,Method BioSQL.BioSeqDatabase.DBServer.keys()=BioSQL.BioSeqDatabase.DBServer-class.html#keys"><a title="Bio.Crystal.Crystal.keys
+Bio.File._IndexedSeqFileDict.keys
+Bio.File._SQLiteManySeqFilesDict.keys
+Bio.PDB.AbstractPropertyMap.AbstractPropertyMap.keys
+Bio.Phylo.PhyloXML.Events.keys
+Bio._py3k._ordereddict.OrderedDict.keys
+BioSQL.BioSeqDatabase.BioSeqDatabase.keys
+BioSQL.BioSeqDatabase.DBServer.keys" class="py-name" href="#" onclick="return doclink('link-65', 'keys', 'link-65');">keys</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-string">'edge_color'</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">kwargs</tt><tt class="py-op">:</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">        <tt class="py-name">kwargs</tt><tt class="py-op">[</tt><tt class="py-string">'edge_color'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">e</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">dict</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">                                <tt class="py-name">e</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name" targets="Method Bio.Crystal.Crystal.get()=Bio.Crystal.Crystal-class.html#get,Method Bio.Data.CodonTable.AmbiguousForwardTable.get()=Bio.Data.CodonTable.AmbiguousForwardTable-class.html#get,Method Bio.File._IndexedSeqFileDict.get()=Bio.File._IndexedSeqFileDict-class.html#get,Method Bio.File._IndexedSeqFileProxy.get()=Bio.File._IndexedSeqFileProxy-class.html#get,Method Bio.File._SQLiteManySeqFilesDict.get()=Bio.File._SQLiteManySeqFilesDict-class.html#get,Method Bio.Restriction.Restriction.RestrictionBatch.get()=Bio.Restriction.Restriction.RestrictionBatch-class.html#get,Method Bio.SearchIO._index.SearchIndexer.get()=Bio.SearchIO._index.SearchIndexer-class.html#get,Method Bio.SeqIO._index.SeqFileRandomAccess.get()=Bio.SeqIO._index.SeqFileRandomAccess-class.html#get,Method Bio.SeqIO._index.SffRandomAccess.get()=Bio.SeqIO._index.SffRandomAccess-class.html#get,Method Bio.SeqIO._index.SffTrimedRandomAccess.get()=Bio.SeqIO._index.SffTrimedRandomAccess-class.html#get,Method Bio.SeqIO._index.UniprotRandomAccess.get()=Bio.SeqIO._index.UniprotRandomAccess-class.html#get"><a title="Bio.Crystal.Crystal.get
+Bio.Data.CodonTable.AmbiguousForwardTable.get
+Bio.File._IndexedSeqFileDict.get
+Bio.File._IndexedSeqFileProxy.get
+Bio.File._SQLiteManySeqFilesDict.get
+Bio.Restriction.Restriction.RestrictionBatch.get
+Bio.SearchIO._index.SearchIndexer.get
+Bio.SeqIO._index.SeqFileRandomAccess.get
+Bio.SeqIO._index.SffRandomAccess.get
+Bio.SeqIO._index.SffTrimedRandomAccess.get
+Bio.SeqIO._index.UniprotRandomAccess.get" class="py-name" href="#" onclick="return doclink('link-66', 'get', 'link-66');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'color'</tt><tt class="py-op">,</tt> <tt class="py-string">'k'</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-string">'k'</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">                                <tt class="py-keyword">for</tt> <tt class="py-name">e</tt> <tt class="py-keyword">in</tt> <tt class="py-name">G</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.edges()=Bio.Pathway.Rep.Graph.Graph-class.html#edges,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.edges()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#edges"><a title="Bio.Pathway.Rep.Graph.Graph.edges
+Bio.Pathway.Rep.MultiGraph.MultiGraph.edges" class="py-name" href="#" onclick="return doclink('link-67', 'edges', 'link-67');">edges</a></tt><tt class="py-op">(</tt><tt id="link-68" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-68', 'data', 'link-68');">data</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-string">'width'</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">kwargs</tt><tt class="py-op">:</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-name">kwargs</tt><tt class="py-op">[</tt><tt class="py-string">'width'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">e</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">dict</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">                           <tt class="py-name">e</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name"><a title="Bio.Crystal.Crystal.get
+Bio.Data.CodonTable.AmbiguousForwardTable.get
+Bio.File._IndexedSeqFileDict.get
+Bio.File._IndexedSeqFileProxy.get
+Bio.File._SQLiteManySeqFilesDict.get
+Bio.Restriction.Restriction.RestrictionBatch.get
+Bio.SearchIO._index.SearchIndexer.get
+Bio.SeqIO._index.SeqFileRandomAccess.get
+Bio.SeqIO._index.SffRandomAccess.get
+Bio.SeqIO._index.SffTrimedRandomAccess.get
+Bio.SeqIO._index.UniprotRandomAccess.get" class="py-name" href="#" onclick="return doclink('link-69', 'get', 'link-66');">get</a></tt><tt class="py-op">(</tt><tt class="py-string">'width'</tt><tt class="py-op">,</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">                           <tt class="py-keyword">for</tt> <tt class="py-name">e</tt> <tt class="py-keyword">in</tt> <tt class="py-name">G</tt><tt class="py-op">.</tt><tt id="link-70" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.edges
+Bio.Pathway.Rep.MultiGraph.MultiGraph.edges" class="py-name" href="#" onclick="return doclink('link-70', 'edges', 'link-67');">edges</a></tt><tt class="py-op">(</tt><tt id="link-71" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-71', 'data', 'link-68');">data</a></tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">    <tt class="py-name">posn</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">n</tt><tt class="py-op">,</tt> <tt class="py-name">posi</tt><tt class="py-op">[</tt><tt class="py-name">int_labels</tt><tt class="py-op">[</tt><tt class="py-name">n</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">n</tt> <tt class="py-keyword">in</tt> <tt class="py-name">G</tt><tt class="py-op">)</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">    <tt class="py-name">networkx</tt><tt class="py-op">.</tt><tt id="link-72" class="py-name" targets="Method Bio.Graphics.BasicChromosome.Chromosome.draw()=Bio.Graphics.BasicChromosome.Chromosome-class.html#draw,Method Bio.Graphics.BasicChromosome.ChromosomeSegment.draw()=Bio.Graphics.BasicChromosome.ChromosomeSegment-class.html#draw,Method Bio.Graphics.BasicChromosome.Organism.draw()=Bio.Graphics.BasicChromosome.Organism-class.html#draw,Method Bio.Graphics.BasicChromosome.SpacerSegment.draw()=Bio.Graphics.BasicChromosome.SpacerSegment-class.html#draw,Method Bio.Graphics.BasicChromosome._ChromosomeComponent.draw()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#draw,Method Bio.Graphics.Distribution.BarChartDistribution.draw()=Bio.Graphics.Distribution.BarChartDistribution-class.html#draw,Method Bio.Graphics.Distribution.DistributionPage.draw()=Bio.Graphics.Distribution.DistributionPage-class.html#draw,Method Bio.Graphics.Distribution.LineDistribution.draw()=Bio.Graphics.Distribution.LineDistribution-class.html#draw,Method Bio.Graphics.GenomeDiagram._CircularDrawer.CircularDrawer.draw()=Bio.Graphics.GenomeDiagram._CircularDrawer.CircularDrawer-class.html#draw,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.draw()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#draw,Method Bio.Graphics.GenomeDiagram._LinearDrawer.LinearDrawer.draw()=Bio.Graphics.GenomeDiagram._LinearDrawer.LinearDrawer-class.html#draw,Method Bio.Graphics.KGML_vis.KGMLCanvas.draw()=Bio.Graphics.KGML_vis.KGMLCanvas-class.html#draw,Function Bio.Phylo._utils.draw()=Bio.Phylo._utils-module.html#draw"><a title="Bio.Graphics.BasicChromosome.Chromosome.draw
+Bio.Graphics.BasicChromosome.ChromosomeSegment.draw
+Bio.Graphics.BasicChromosome.Organism.draw
+Bio.Graphics.BasicChromosome.SpacerSegment.draw
+Bio.Graphics.BasicChromosome._ChromosomeComponent.draw
+Bio.Graphics.Distribution.BarChartDistribution.draw
+Bio.Graphics.Distribution.DistributionPage.draw
+Bio.Graphics.Distribution.LineDistribution.draw
+Bio.Graphics.GenomeDiagram._CircularDrawer.CircularDrawer.draw
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.draw
+Bio.Graphics.GenomeDiagram._LinearDrawer.LinearDrawer.draw
+Bio.Graphics.KGML_vis.KGMLCanvas.draw
+Bio.Phylo._utils.draw" class="py-name" href="#" onclick="return doclink('link-72', 'draw', 'link-72');">draw</a></tt><tt class="py-op">(</tt><tt class="py-name">G</tt><tt class="py-op">,</tt> <tt class="py-name">posn</tt><tt class="py-op">,</tt> <tt id="link-73" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.labels
+Bio.Pathway.Rep.MultiGraph.MultiGraph.labels" class="py-name" href="#" onclick="return doclink('link-73', 'labels', 'link-61');">labels</a></tt><tt class="py-op">=</tt><tt id="link-74" class="py-name"><a title="Bio.Pathway.Rep.Graph.Graph.labels
+Bio.Pathway.Rep.MultiGraph.MultiGraph.labels" class="py-name" href="#" onclick="return doclink('link-74', 'labels', 'link-61');">labels</a></tt><tt class="py-op">,</tt> <tt class="py-name">with_labels</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">                  <tt class="py-name">node_color</tt><tt class="py-op">=</tt><tt class="py-name">node_color</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line"> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"> </tt>
+<a name="draw_ascii"></a><div id="draw_ascii-def"><a name="L188"></a><tt class="py-lineno">188</tt> <a class="py-toggle" href="#" id="draw_ascii-toggle" onclick="return toggle('draw_ascii');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo._utils-module.html#draw_ascii">draw_ascii</a><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">,</tt> <tt class="py-param">file</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">column_width</tt><tt class="py-op">=</tt><tt class="py-number">80</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="draw_ascii-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="draw_ascii-expanded"><a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">    <tt class="py-docstring">"""Draw an ascii-art phylogram of the given tree.</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"><tt class="py-docstring">    The printed result looks like::</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring">                                        _________ Orange</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">                         ______________|</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"><tt class="py-docstring">                        |              |______________ Tangerine</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"><tt class="py-docstring">          ______________|</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"><tt class="py-docstring">         |              |          _________________________ Grapefruit</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"><tt class="py-docstring">        _|              |_________|</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line"><tt class="py-docstring">         |                        |______________ Pummelo</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line"><tt class="py-docstring">         |</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line"><tt class="py-docstring">         |__________________________________ Apple</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"><tt class="py-docstring">    :Parameters:</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-docstring">        file : file-like object</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"><tt class="py-docstring">            File handle opened for writing the output drawing. (Default:</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line"><tt class="py-docstring">            standard output)</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line"><tt class="py-docstring">        column_width : int</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"><tt class="py-docstring">            Total number of text columns used by the drawing.</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">file</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-name">file</tt> <tt class="py-op">=</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">    <tt class="py-name">taxa</tt> <tt class="py-op">=</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-75" class="py-name" targets="Method Bio.Nexus.Trees.Tree.get_terminals()=Bio.Nexus.Trees.Tree-class.html#get_terminals,Method Bio.Phylo.BaseTree.TreeMixin.get_terminals()=Bio.Phylo.BaseTree.TreeMixin-class.html#get_terminals"><a title="Bio.Nexus.Trees.Tree.get_terminals
+Bio.Phylo.BaseTree.TreeMixin.get_terminals" class="py-name" href="#" onclick="return doclink('link-75', 'get_terminals', 'link-75');">get_terminals</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">    <tt class="py-comment"># Some constants for the drawing calculations</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">    <tt class="py-name">max_label_width</tt> <tt class="py-op">=</tt> <tt id="link-76" class="py-name" targets="Variable Bio.motifs.matrix.PositionSpecificScoringMatrix.max=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#max"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-76', 'max', 'link-76');">max</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">taxon</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">taxon</tt> <tt class="py-keyword">in</tt> <tt class="py-name">taxa</tt><tt class="py-op">)</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">    <tt class="py-name">drawing_width</tt> <tt class="py-op">=</tt> <tt class="py-name">column_width</tt> <tt class="py-op">-</tt> <tt class="py-name">max_label_width</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">    <tt class="py-name">drawing_height</tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">taxa</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">get_col_positions</tt><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create a mapping of each clade to its column position."""</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt id="link-77" class="py-name" targets="Method Bio.Phylo.BaseTree.TreeMixin.depths()=Bio.Phylo.BaseTree.TreeMixin-class.html#depths"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-77', 'depths', 'link-77');">depths</a></tt> <tt class="py-op">=</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-78', 'depths', 'link-77');">depths</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">        <tt class="py-comment"># If there are no branch lengths, assume unit branch lengths</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-79" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-79', 'max', 'link-76');">max</a></tt><tt class="py-op">(</tt><tt id="link-80" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-80', 'depths', 'link-77');">depths</a></tt><tt class="py-op">.</tt><tt id="link-81" class="py-name" targets="Method Bio.Crystal.Crystal.values()=Bio.Crystal.Crystal-class.html#values,Method Bio.File._IndexedSeqFileDict.values()=Bio.File._IndexedSeqFileDict-class.html#values,Method Bio.Phylo.PhyloXML.Events.values()=Bio.Phylo.PhyloXML.Events-class.html#values,Method Bio._py3k._ordereddict.OrderedDict.values()=Bio._py3k._ordereddict.OrderedDict-class.html#values,Method BioSQL.BioSeqDatabase.BioSeqDatabase.values()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#values,Method BioSQL.BioSeqDatabase.DBServer.values()=BioSQL.BioSeqDatabase.DBServer-class.html#values"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-81', 'values', 'link-81');">values</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">            <tt id="link-82" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-82', 'depths', 'link-77');">depths</a></tt> <tt class="py-op">=</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-83" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-83', 'depths', 'link-77');">depths</a></tt><tt class="py-op">(</tt><tt class="py-name">unit_branch_lengths</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">        <tt class="py-comment"># Potential drawing overflow due to rounding -- 1 char per tree layer</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">        <tt class="py-name">fudge_margin</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">ceil</tt><tt class="py-op">(</tt><tt class="py-name">math</tt><tt class="py-op">.</tt><tt class="py-name">log</tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">taxa</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">        <tt class="py-name">cols_per_branch_unit</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">drawing_width</tt> <tt class="py-op">-</tt> <tt class="py-name">fudge_margin</tt><tt class="py-op">)</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">                                <tt class="py-op">/</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-84', 'max', 'link-76');">max</a></tt><tt class="py-op">(</tt><tt id="link-85" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-85', 'depths', 'link-77');">depths</a></tt><tt class="py-op">.</tt><tt id="link-86" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-86', 'values', 'link-81');">values</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt id="link-87" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-87', 'clade', 'link-37');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">blen</tt> <tt class="py-op">*</tt> <tt class="py-name">cols_per_branch_unit</tt> <tt class="py-op">+</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">                    <tt class="py-keyword">for</tt> <tt id="link-88" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-88', 'clade', 'link-37');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-name">blen</tt> <tt class="py-keyword">in</tt> <tt id="link-89" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-89', 'depths', 'link-77');">depths</a></tt><tt class="py-op">.</tt><tt id="link-90" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-90', 'items', 'link-53');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">get_row_positions</tt><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">        <tt class="py-name">positions</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">taxon</tt><tt class="py-op">,</tt> <tt class="py-number">2</tt> <tt class="py-op">*</tt> <tt class="py-name">idx</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">idx</tt><tt class="py-op">,</tt> <tt class="py-name">taxon</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">taxa</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line"> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">calc_row</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">subclade</tt> <tt class="py-keyword">in</tt> <tt id="link-91" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-91', 'clade', 'link-37');">clade</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">subclade</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">positions</tt><tt class="py-op">:</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">                    <tt class="py-name">calc_row</tt><tt class="py-op">(</tt><tt class="py-name">subclade</tt><tt class="py-op">)</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">            <tt class="py-name">positions</tt><tt class="py-op">[</tt><tt id="link-92" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-92', 'clade', 'link-37');">clade</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">positions</tt><tt class="py-op">[</tt><tt id="link-93" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-93', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">                                 <tt class="py-name">positions</tt><tt class="py-op">[</tt><tt id="link-94" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-94', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line"> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">        <tt class="py-name">calc_row</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-95" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-95', 'root', 'link-40');">root</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">positions</tt> </tt>
+</div><a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line"> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">    <tt class="py-name">col_positions</tt> <tt class="py-op">=</tt> <tt class="py-name">get_col_positions</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">)</tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">    <tt class="py-name">row_positions</tt> <tt class="py-op">=</tt> <tt class="py-name">get_row_positions</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">)</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">    <tt class="py-name">char_matrix</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">[</tt><tt class="py-string">' '</tt> <tt class="py-keyword">for</tt> <tt id="link-96" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-96', 'x', 'link-96');">x</a></tt> <tt class="py-keyword">in</tt> <tt id="link-97" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-97', 'range', 'link-97');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">drawing_width</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">                   <tt class="py-keyword">for</tt> <tt id="link-98" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.y=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#y"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-98', 'y', 'link-98');">y</a></tt> <tt class="py-keyword">in</tt> <tt id="link-99" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-99', 'range', 'link-97');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">drawing_height</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line"> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">draw_clade</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">,</tt> <tt class="py-param">startcol</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">        <tt class="py-name">thiscol</tt> <tt class="py-op">=</tt> <tt class="py-name">col_positions</tt><tt class="py-op">[</tt><tt id="link-100" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-100', 'clade', 'link-37');">clade</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">        <tt class="py-name">thisrow</tt> <tt class="py-op">=</tt> <tt class="py-name">row_positions</tt><tt class="py-op">[</tt><tt id="link-101" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-101', 'clade', 'link-37');">clade</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">        <tt class="py-comment"># Draw a horizontal line</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">col</tt> <tt class="py-keyword">in</tt> <tt id="link-102" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-102', 'range', 'link-97');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">startcol</tt><tt class="py-op">,</tt> <tt class="py-name">thiscol</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">            <tt class="py-name">char_matrix</tt><tt class="py-op">[</tt><tt class="py-name">thisrow</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">col</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'_'</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-103" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-103', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">:</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">            <tt class="py-comment"># Draw a vertical line</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">            <tt class="py-name">toprow</tt> <tt class="py-op">=</tt> <tt class="py-name">row_positions</tt><tt class="py-op">[</tt><tt id="link-104" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-104', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">            <tt class="py-name">botrow</tt> <tt class="py-op">=</tt> <tt class="py-name">row_positions</tt><tt class="py-op">[</tt><tt id="link-105" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-105', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">row</tt> <tt class="py-keyword">in</tt> <tt id="link-106" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-106', 'range', 'link-97');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">toprow</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">botrow</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">                <tt class="py-name">char_matrix</tt><tt class="py-op">[</tt><tt class="py-name">row</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">thiscol</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'|'</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">            <tt class="py-comment"># NB: Short terminal branches need something to stop rstrip()</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">col_positions</tt><tt class="py-op">[</tt><tt id="link-107" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-107', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">-</tt> <tt class="py-name">thiscol</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">                <tt class="py-name">char_matrix</tt><tt class="py-op">[</tt><tt class="py-name">toprow</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">thiscol</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">','</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">            <tt class="py-comment"># Draw descendents</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">child</tt> <tt class="py-keyword">in</tt> <tt id="link-108" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-108', 'clade', 'link-37');">clade</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">                <tt class="py-name">draw_clade</tt><tt class="py-op">(</tt><tt class="py-name">child</tt><tt class="py-op">,</tt> <tt class="py-name">thiscol</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line"> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">    <tt class="py-name">draw_clade</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-109" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-109', 'root', 'link-40');">root</a></tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">    <tt class="py-comment"># Print the complete drawing</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">idx</tt><tt class="py-op">,</tt> <tt class="py-name">row</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">char_matrix</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">        <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-110" class="py-name" targets="Method Bio.Seq.Seq.rstrip()=Bio.Seq.Seq-class.html#rstrip"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-110', 'rstrip', 'link-110');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">        <tt class="py-comment"># Add labels for terminal taxa in the right margin</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">idx</tt> <tt class="py-op">%</tt> <tt class="py-number">2</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">            <tt class="py-name">line</tt> <tt class="py-op">+=</tt> <tt class="py-string">' '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">taxa</tt><tt class="py-op">[</tt><tt class="py-name">idx</tt> <tt class="py-op">//</tt> <tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line">        <tt class="py-name">file</tt><tt class="py-op">.</tt><tt id="link-111" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-111', 'write', 'link-111');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt> <tt class="py-op">+</tt> <tt class="py-string">'\n'</tt><tt class="py-op">)</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">    <tt class="py-name">file</tt><tt class="py-op">.</tt><tt id="link-112" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-112', 'write', 'link-111');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">'\n'</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line"> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line"> </tt>
+<a name="draw"></a><div id="draw-def"><a name="L281"></a><tt class="py-lineno">281</tt> <a class="py-toggle" href="#" id="draw-toggle" onclick="return toggle('draw');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo._utils-module.html#draw">draw</a><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">,</tt> <tt class="py-param">label_func</tt><tt class="py-op">=</tt><tt class="py-name">str</tt><tt class="py-op">,</tt> <tt class="py-param">do_show</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-param">show_confidence</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line">         <tt class="py-comment"># For power users</tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">         <tt class="py-param">axes</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">branch_labels</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="draw-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="draw-expanded"><a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">    <tt class="py-docstring">"""Plot the given tree using matplotlib (or pylab).</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line"><tt class="py-docstring">    The graphic is a rooted tree, drawn with roughly the same algorithm as</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line"><tt class="py-docstring">    draw_ascii.</tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line"><tt class="py-docstring">    Additional keyword arguments passed into this function are used as pyplot</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"><tt class="py-docstring">    options. The input format should be in the form of:</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line"><tt class="py-docstring">    pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict), or</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line"><tt class="py-docstring">    pyplot_option_name=(dict).</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line"><tt class="py-docstring">    Example using the pyplot options 'axhspan' and 'axvline':</tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"><tt class="py-docstring">    ...     axvline={'x':'0', 'ymin':'0', 'ymax':'1'})</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line"><tt class="py-docstring">    Visual aspects of the plot can also be modified using pyplot's own functions</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line"><tt class="py-docstring">    and objects (via pylab or matplotlib). In particular, the pyplot.rcParams</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line"><tt class="py-docstring">    object can be used to scale the font size (rcParams["font.size"]) and line</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line"><tt class="py-docstring">    width (rcParams["lines.linewidth"]).</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line"><tt class="py-docstring">    :Parameters:</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line"><tt class="py-docstring">        label_func : callable</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line"><tt class="py-docstring">            A function to extract a label from a node. By default this is str(),</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line"><tt class="py-docstring">            but you can use a different function to select another string</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line"><tt class="py-docstring">            associated with each node. If this function returns None for a node,</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line"><tt class="py-docstring">            no label will be shown for that node.</tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line"><tt class="py-docstring">        do_show : bool</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line"><tt class="py-docstring">            Whether to show() the plot automatically.</tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line"><tt class="py-docstring">        show_confidence : bool</tt> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line"><tt class="py-docstring">            Whether to display confidence values, if present on the tree.</tt> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line"><tt class="py-docstring">        axes : matplotlib/pylab axes</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line"><tt class="py-docstring">            If a valid matplotlib.axes.Axes instance, the phylogram is plotted</tt> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line"><tt class="py-docstring">            in that Axes. By default (None), a new figure is created.</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line"><tt class="py-docstring">        branch_labels : dict or callable</tt> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"><tt class="py-docstring">            A mapping of each clade to the label that will be shown along the</tt> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line"><tt class="py-docstring">            branch leading to it. By default this is the confidence value(s) of</tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line"><tt class="py-docstring">            the clade, taken from the ``confidence`` attribute, and can be</tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line"><tt class="py-docstring">            easily toggled off with this function's ``show_confidence`` option.</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line"><tt class="py-docstring">            But if you would like to alter the formatting of confidence values,</tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line"><tt class="py-docstring">            or label the branches with something other than confidence, then use</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line"><tt class="py-docstring">            this option.</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line"> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">matplotlib</tt><tt class="py-op">.</tt><tt class="py-name">pyplot</tt> <tt class="py-keyword">as</tt> <tt class="py-name">plt</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line">            <tt class="py-keyword">import</tt> <tt class="py-name">pylab</tt> <tt class="py-keyword">as</tt> <tt class="py-name">plt</tt> </tt>
+<a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-113" class="py-name"><a title="Bio.MissingPythonDependencyError" class="py-name" href="#" onclick="return doclink('link-113', 'MissingPythonDependencyError', 'link-1');">MissingPythonDependencyError</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line">                <tt class="py-string">"Install matplotlib or pylab if you want to use draw."</tt><tt class="py-op">)</tt> </tt>
+<a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line"> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">matplotlib</tt><tt class="py-op">.</tt><tt class="py-name">collections</tt> <tt class="py-keyword">as</tt> <tt class="py-name">mpcollections</tt> </tt>
+<a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line"> </tt>
+<a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line">    <tt class="py-comment"># Arrays that store lines for the plot of clades</tt> </tt>
+<a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line">    <tt class="py-name">horizontal_linecollections</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L340"></a><tt class="py-lineno">340</tt>  <tt class="py-line">    <tt class="py-name">vertical_linecollections</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line"> </tt>
+<a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line">    <tt class="py-comment"># Options for displaying branch labels / confidence</tt> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">conf2str</tt><tt class="py-op">(</tt><tt class="py-param">conf</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">conf</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">conf</tt><tt class="py-op">:</tt> </tt>
+<a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">conf</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">conf</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">branch_labels</tt><tt class="py-op">:</tt> </tt>
+<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">show_confidence</tt><tt class="py-op">:</tt> </tt>
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">format_branch_label</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-114" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-114', 'clade', 'link-37');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-string">'confidences'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L351"></a><tt class="py-lineno">351</tt>  <tt class="py-line">                    <tt class="py-comment"># phyloXML supports multiple confidences</tt> </tt>
+<a name="L352"></a><tt class="py-lineno">352</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-string">'/'</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">conf2str</tt><tt class="py-op">(</tt><tt class="py-name">cnf</tt><tt class="py-op">.</tt><tt id="link-115" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.value()=Bio.Phylo.PhyloXMLIO.Writer-class.html#value"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-115', 'value', 'link-115');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L353"></a><tt class="py-lineno">353</tt>  <tt class="py-line">                                    <tt class="py-keyword">for</tt> <tt class="py-name">cnf</tt> <tt class="py-keyword">in</tt> <tt id="link-116" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-116', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">confidences</tt><tt class="py-op">)</tt> </tt>
+<a name="L354"></a><tt class="py-lineno">354</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-117" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-117', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-118" class="py-name" targets="Variable Bio.Phylo.PhyloXML.Clade.confidence=Bio.Phylo.PhyloXML.Clade-class.html#confidence,Variable Bio.Phylo.PhyloXML.Phylogeny.confidence=Bio.Phylo.PhyloXML.Phylogeny-class.html#confidence,Method Bio.Phylo.PhyloXMLIO.Parser.confidence()=Bio.Phylo.PhyloXMLIO.Parser-class.html#confidence,Method Bio.Phylo.PhyloXMLIO.Writer.confidence()=Bio.Phylo.PhyloXMLIO.Writer-class.html#confidence"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-118', 'confidence', 'link-118');">confidence</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L355"></a><tt class="py-lineno">355</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-name">conf2str</tt><tt class="py-op">(</tt><tt id="link-119" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-119', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-120" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-120', 'confidence', 'link-118');">confidence</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L356"></a><tt class="py-lineno">356</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L357"></a><tt class="py-lineno">357</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L358"></a><tt class="py-lineno">358</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">format_branch_label</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L359"></a><tt class="py-lineno">359</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L360"></a><tt class="py-lineno">360</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">branch_labels</tt><tt class="py-op">,</tt> <tt class="py-name">dict</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L361"></a><tt class="py-lineno">361</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">format_branch_label</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L362"></a><tt class="py-lineno">362</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">branch_labels</tt><tt class="py-op">.</tt><tt id="link-121" class="py-name"><a title="Bio.Crystal.Crystal.get
+Bio.Data.CodonTable.AmbiguousForwardTable.get
+Bio.File._IndexedSeqFileDict.get
+Bio.File._IndexedSeqFileProxy.get
+Bio.File._SQLiteManySeqFilesDict.get
+Bio.Restriction.Restriction.RestrictionBatch.get
+Bio.SearchIO._index.SearchIndexer.get
+Bio.SeqIO._index.SeqFileRandomAccess.get
+Bio.SeqIO._index.SffRandomAccess.get
+Bio.SeqIO._index.SffTrimedRandomAccess.get
+Bio.SeqIO._index.UniprotRandomAccess.get" class="py-name" href="#" onclick="return doclink('link-121', 'get', 'link-66');">get</a></tt><tt class="py-op">(</tt><tt id="link-122" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-122', 'clade', 'link-37');">clade</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L363"></a><tt class="py-lineno">363</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L364"></a><tt class="py-lineno">364</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">callable</tt><tt class="py-op">(</tt><tt class="py-name">branch_labels</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> \ </tt>
+<a name="L365"></a><tt class="py-lineno">365</tt>  <tt class="py-line">            <tt class="py-string">"branch_labels must be either a dict or a callable (function)"</tt> </tt>
+<a name="L366"></a><tt class="py-lineno">366</tt>  <tt class="py-line">        <tt class="py-name">format_branch_label</tt> <tt class="py-op">=</tt> <tt class="py-name">branch_labels</tt> </tt>
+<a name="L367"></a><tt class="py-lineno">367</tt>  <tt class="py-line"> </tt>
+<a name="L368"></a><tt class="py-lineno">368</tt>  <tt class="py-line">    <tt class="py-comment"># Layout</tt> </tt>
+<a name="L369"></a><tt class="py-lineno">369</tt>  <tt class="py-line"> </tt>
+<a name="L370"></a><tt class="py-lineno">370</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">get_x_positions</tt><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create a mapping of each clade to its horizontal position.</tt> </tt>
+<a name="L372"></a><tt class="py-lineno">372</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L373"></a><tt class="py-lineno">373</tt>  <tt class="py-line"><tt class="py-docstring">        Dict of {clade: x-coord}</tt> </tt>
+<a name="L374"></a><tt class="py-lineno">374</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L375"></a><tt class="py-lineno">375</tt>  <tt class="py-line">        <tt id="link-123" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-123', 'depths', 'link-77');">depths</a></tt> <tt class="py-op">=</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-124" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-124', 'depths', 'link-77');">depths</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L376"></a><tt class="py-lineno">376</tt>  <tt class="py-line">        <tt class="py-comment"># If there are no branch lengths, assume unit branch lengths</tt> </tt>
+<a name="L377"></a><tt class="py-lineno">377</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-125" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-125', 'max', 'link-76');">max</a></tt><tt class="py-op">(</tt><tt id="link-126" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-126', 'depths', 'link-77');">depths</a></tt><tt class="py-op">.</tt><tt id="link-127" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-127', 'values', 'link-81');">values</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L378"></a><tt class="py-lineno">378</tt>  <tt class="py-line">            <tt id="link-128" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-128', 'depths', 'link-77');">depths</a></tt> <tt class="py-op">=</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-129" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-129', 'depths', 'link-77');">depths</a></tt><tt class="py-op">(</tt><tt class="py-name">unit_branch_lengths</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L379"></a><tt class="py-lineno">379</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-130" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.depths" class="py-name" href="#" onclick="return doclink('link-130', 'depths', 'link-77');">depths</a></tt> </tt>
+</div><a name="L380"></a><tt class="py-lineno">380</tt>  <tt class="py-line"> </tt>
+<a name="L381"></a><tt class="py-lineno">381</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">get_y_positions</tt><tt class="py-op">(</tt><tt class="py-param">tree</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L382"></a><tt class="py-lineno">382</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create a mapping of each clade to its vertical position.</tt> </tt>
+<a name="L383"></a><tt class="py-lineno">383</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L384"></a><tt class="py-lineno">384</tt>  <tt class="py-line"><tt class="py-docstring">        Dict of {clade: y-coord}.</tt> </tt>
+<a name="L385"></a><tt class="py-lineno">385</tt>  <tt class="py-line"><tt class="py-docstring">        Coordinates are negative, and integers for tips.</tt> </tt>
+<a name="L386"></a><tt class="py-lineno">386</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L387"></a><tt class="py-lineno">387</tt>  <tt class="py-line">        <tt class="py-name">maxheight</tt> <tt class="py-op">=</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-131" class="py-name" targets="Method Bio.Nexus.Trees.Tree.count_terminals()=Bio.Nexus.Trees.Tree-class.html#count_terminals,Method Bio.Phylo.BaseTree.TreeMixin.count_terminals()=Bio.Phylo.BaseTree.TreeMixin-class.html#count_terminals"><a title="Bio.Nexus.Trees.Tree.count_terminals
+Bio.Phylo.BaseTree.TreeMixin.count_terminals" class="py-name" href="#" onclick="return doclink('link-131', 'count_terminals', 'link-131');">count_terminals</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L388"></a><tt class="py-lineno">388</tt>  <tt class="py-line">        <tt class="py-comment"># Rows are defined by the tips</tt> </tt>
+<a name="L389"></a><tt class="py-lineno">389</tt>  <tt class="py-line">        <tt class="py-name">heights</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">tip</tt><tt class="py-op">,</tt> <tt class="py-name">maxheight</tt> <tt class="py-op">-</tt> <tt id="link-132" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-132', 'i', 'link-132');">i</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L390"></a><tt class="py-lineno">390</tt>  <tt class="py-line">                       <tt class="py-keyword">for</tt> <tt id="link-133" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-133', 'i', 'link-132');">i</a></tt><tt class="py-op">,</tt> <tt class="py-name">tip</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">reversed</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-134" class="py-name"><a title="Bio.Nexus.Trees.Tree.get_terminals
+Bio.Phylo.BaseTree.TreeMixin.get_terminals" class="py-name" href="#" onclick="return doclink('link-134', 'get_terminals', 'link-75');">get_terminals</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L391"></a><tt class="py-lineno">391</tt>  <tt class="py-line"> </tt>
+<a name="L392"></a><tt class="py-lineno">392</tt>  <tt class="py-line">        <tt class="py-comment"># Internal nodes: place at midpoint of children</tt> </tt>
+<a name="L393"></a><tt class="py-lineno">393</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">calc_row</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L394"></a><tt class="py-lineno">394</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">subclade</tt> <tt class="py-keyword">in</tt> <tt id="link-135" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-135', 'clade', 'link-37');">clade</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L395"></a><tt class="py-lineno">395</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">subclade</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">heights</tt><tt class="py-op">:</tt> </tt>
+<a name="L396"></a><tt class="py-lineno">396</tt>  <tt class="py-line">                    <tt class="py-name">calc_row</tt><tt class="py-op">(</tt><tt class="py-name">subclade</tt><tt class="py-op">)</tt> </tt>
+<a name="L397"></a><tt class="py-lineno">397</tt>  <tt class="py-line">            <tt class="py-comment"># Closure over heights</tt> </tt>
+<a name="L398"></a><tt class="py-lineno">398</tt>  <tt class="py-line">            <tt class="py-name">heights</tt><tt class="py-op">[</tt><tt id="link-136" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-136', 'clade', 'link-37');">clade</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">heights</tt><tt class="py-op">[</tt><tt id="link-137" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-137', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> </tt>
+<a name="L399"></a><tt class="py-lineno">399</tt>  <tt class="py-line">                              <tt class="py-name">heights</tt><tt class="py-op">[</tt><tt id="link-138" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-138', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-number">2.0</tt> </tt>
+</div><a name="L400"></a><tt class="py-lineno">400</tt>  <tt class="py-line"> </tt>
+<a name="L401"></a><tt class="py-lineno">401</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-139" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-139', 'root', 'link-40');">root</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">:</tt> </tt>
+<a name="L402"></a><tt class="py-lineno">402</tt>  <tt class="py-line">            <tt class="py-name">calc_row</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-140" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-140', 'root', 'link-40');">root</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L403"></a><tt class="py-lineno">403</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">heights</tt> </tt>
+</div><a name="L404"></a><tt class="py-lineno">404</tt>  <tt class="py-line"> </tt>
+<a name="L405"></a><tt class="py-lineno">405</tt>  <tt class="py-line">    <tt class="py-name">x_posns</tt> <tt class="py-op">=</tt> <tt class="py-name">get_x_positions</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">)</tt> </tt>
+<a name="L406"></a><tt class="py-lineno">406</tt>  <tt class="py-line">    <tt class="py-name">y_posns</tt> <tt class="py-op">=</tt> <tt class="py-name">get_y_positions</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">)</tt> </tt>
+<a name="L407"></a><tt class="py-lineno">407</tt>  <tt class="py-line">    <tt class="py-comment"># The function draw_clade closes over the axes object</tt> </tt>
+<a name="L408"></a><tt class="py-lineno">408</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">axes</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L409"></a><tt class="py-lineno">409</tt>  <tt class="py-line">        <tt class="py-name">fig</tt> <tt class="py-op">=</tt> <tt class="py-name">plt</tt><tt class="py-op">.</tt><tt class="py-name">figure</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L410"></a><tt class="py-lineno">410</tt>  <tt class="py-line">        <tt class="py-name">axes</tt> <tt class="py-op">=</tt> <tt class="py-name">fig</tt><tt class="py-op">.</tt><tt class="py-name">add_subplot</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L411"></a><tt class="py-lineno">411</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">axes</tt><tt class="py-op">,</tt> <tt class="py-name">plt</tt><tt class="py-op">.</tt><tt class="py-name">matplotlib</tt><tt class="py-op">.</tt><tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">Axes</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L412"></a><tt class="py-lineno">412</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Invalid argument for axes: %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">axes</tt><tt class="py-op">)</tt> </tt>
+<a name="L413"></a><tt class="py-lineno">413</tt>  <tt class="py-line"> </tt>
+<a name="L414"></a><tt class="py-lineno">414</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">draw_clade_lines</tt><tt class="py-op">(</tt><tt class="py-param">use_linecollection</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">orientation</tt><tt class="py-op">=</tt><tt class="py-string">'horizontal'</tt><tt class="py-op">,</tt> </tt>
+<a name="L415"></a><tt class="py-lineno">415</tt>  <tt class="py-line">                         <tt class="py-param">y_here</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">x_start</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">x_here</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">y_bot</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">y_top</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> </tt>
+<a name="L416"></a><tt class="py-lineno">416</tt>  <tt class="py-line">                         <tt class="py-param">color</tt><tt class="py-op">=</tt><tt class="py-string">'black'</tt><tt class="py-op">,</tt> <tt class="py-param">lw</tt><tt class="py-op">=</tt><tt class="py-string">'.1'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L417"></a><tt class="py-lineno">417</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create a line with or without a line collection object.</tt> </tt>
+<a name="L418"></a><tt class="py-lineno">418</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L419"></a><tt class="py-lineno">419</tt>  <tt class="py-line"><tt class="py-docstring">        Graphical formatting of the lines representing clades in the plot can be</tt> </tt>
+<a name="L420"></a><tt class="py-lineno">420</tt>  <tt class="py-line"><tt class="py-docstring">        customized by altering this function.</tt> </tt>
+<a name="L421"></a><tt class="py-lineno">421</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L422"></a><tt class="py-lineno">422</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">use_linecollection</tt> <tt class="py-keyword">is</tt> <tt class="py-name">False</tt> <tt class="py-keyword">and</tt> <tt class="py-name">orientation</tt> <tt class="py-op">==</tt> <tt class="py-string">'horizontal'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L423"></a><tt class="py-lineno">423</tt>  <tt class="py-line">            <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">hlines</tt><tt class="py-op">(</tt><tt class="py-name">y_here</tt><tt class="py-op">,</tt> <tt class="py-name">x_start</tt><tt class="py-op">,</tt> <tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt id="link-141" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-141', 'color', 'link-6');">color</a></tt><tt class="py-op">=</tt><tt id="link-142" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-142', 'color', 'link-6');">color</a></tt><tt class="py-op">,</tt> <tt class="py-name">lw</tt><tt class="py-op">=</tt><tt class="py-name">lw</tt><tt class="py-op">)</tt> </tt>
+<a name="L424"></a><tt class="py-lineno">424</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-op">(</tt><tt class="py-name">use_linecollection</tt> <tt class="py-keyword">is</tt> <tt class="py-name">True</tt> <tt class="py-keyword">and</tt> <tt class="py-name">orientation</tt> <tt class="py-op">==</tt> <tt class="py-string">'horizontal'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L425"></a><tt class="py-lineno">425</tt>  <tt class="py-line">            <tt class="py-name">horizontal_linecollections</tt><tt class="py-op">.</tt><tt id="link-143" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-143', 'append', 'link-143');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">mpcollections</tt><tt class="py-op">.</tt><tt class="py-name">LineCollection</tt><tt class="py-op">(</tt> </tt>
+<a name="L426"></a><tt class="py-lineno">426</tt>  <tt class="py-line">                <tt class="py-op">[</tt><tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">x_start</tt><tt class="py-op">,</tt> <tt class="py-name">y_here</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt class="py-name">y_here</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt id="link-144" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-144', 'color', 'link-6');">color</a></tt><tt class="py-op">=</tt><tt id="link-145" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-145', 'color', 'link-6');">color</a></tt><tt class="py-op">,</tt> <tt class="py-name">lw</tt><tt class="py-op">=</tt><tt class="py-name">lw</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+<a name="L427"></a><tt class="py-lineno">427</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-op">(</tt><tt class="py-name">use_linecollection</tt> <tt class="py-keyword">is</tt> <tt class="py-name">False</tt> <tt class="py-keyword">and</tt> <tt class="py-name">orientation</tt> <tt class="py-op">==</tt> <tt class="py-string">'vertical'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L428"></a><tt class="py-lineno">428</tt>  <tt class="py-line">            <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">vlines</tt><tt class="py-op">(</tt><tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt class="py-name">y_bot</tt><tt class="py-op">,</tt> <tt class="py-name">y_top</tt><tt class="py-op">,</tt> <tt id="link-146" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-146', 'color', 'link-6');">color</a></tt><tt class="py-op">=</tt><tt id="link-147" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-147', 'color', 'link-6');">color</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L429"></a><tt class="py-lineno">429</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-op">(</tt><tt class="py-name">use_linecollection</tt> <tt class="py-keyword">is</tt> <tt class="py-name">True</tt> <tt class="py-keyword">and</tt> <tt class="py-name">orientation</tt> <tt class="py-op">==</tt> <tt class="py-string">'vertical'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L430"></a><tt class="py-lineno">430</tt>  <tt class="py-line">            <tt class="py-name">vertical_linecollections</tt><tt class="py-op">.</tt><tt id="link-148" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-148', 'append', 'link-143');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">mpcollections</tt><tt class="py-op">.</tt><tt class="py-name">LineCollection</tt><tt class="py-op">(</tt> </tt>
+<a name="L431"></a><tt class="py-lineno">431</tt>  <tt class="py-line">                <tt class="py-op">[</tt><tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt class="py-name">y_bot</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt class="py-name">y_top</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt id="link-149" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-149', 'color', 'link-6');">color</a></tt><tt class="py-op">=</tt><tt id="link-150" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-150', 'color', 'link-6');">color</a></tt><tt class="py-op">,</tt> <tt class="py-name">lw</tt><tt class="py-op">=</tt><tt class="py-name">lw</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L432"></a><tt class="py-lineno">432</tt>  <tt class="py-line"> </tt>
+<a name="L433"></a><tt class="py-lineno">433</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">draw_clade</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">,</tt> <tt class="py-param">x_start</tt><tt class="py-op">,</tt> <tt class="py-param">color</tt><tt class="py-op">,</tt> <tt class="py-param">lw</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L434"></a><tt class="py-lineno">434</tt>  <tt class="py-line">        <tt class="py-docstring">"""Recursively draw a tree, down from the given clade."""</tt> </tt>
+<a name="L435"></a><tt class="py-lineno">435</tt>  <tt class="py-line">        <tt class="py-name">x_here</tt> <tt class="py-op">=</tt> <tt class="py-name">x_posns</tt><tt class="py-op">[</tt><tt id="link-151" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-151', 'clade', 'link-37');">clade</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L436"></a><tt class="py-lineno">436</tt>  <tt class="py-line">        <tt class="py-name">y_here</tt> <tt class="py-op">=</tt> <tt class="py-name">y_posns</tt><tt class="py-op">[</tt><tt id="link-152" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-152', 'clade', 'link-37');">clade</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L437"></a><tt class="py-lineno">437</tt>  <tt class="py-line">        <tt class="py-comment"># phyloXML-only graphics annotations</tt> </tt>
+<a name="L438"></a><tt class="py-lineno">438</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-153" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-153', 'clade', 'link-37');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-string">'color'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt id="link-154" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-154', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-155" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-155', 'color', 'link-6');">color</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L439"></a><tt class="py-lineno">439</tt>  <tt class="py-line">            <tt id="link-156" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-156', 'color', 'link-6');">color</a></tt> <tt class="py-op">=</tt> <tt id="link-157" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-157', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-158" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-158', 'color', 'link-6');">color</a></tt><tt class="py-op">.</tt><tt id="link-159" class="py-name"><a title="Bio.Phylo.BaseTree.BranchColor.to_hex" class="py-name" href="#" onclick="return doclink('link-159', 'to_hex', 'link-9');">to_hex</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L440"></a><tt class="py-lineno">440</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-160" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-160', 'clade', 'link-37');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-string">'width'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt id="link-161" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-161', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-162" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-162', 'width', 'link-20');">width</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L441"></a><tt class="py-lineno">441</tt>  <tt class="py-line">            <tt class="py-name">lw</tt> <tt class="py-op">=</tt> <tt id="link-163" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-163', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt id="link-164" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.width
+Bio.Phylo.PhyloXMLIO.Writer.width" class="py-name" href="#" onclick="return doclink('link-164', 'width', 'link-20');">width</a></tt> <tt class="py-op">*</tt> <tt class="py-name">plt</tt><tt class="py-op">.</tt><tt class="py-name">rcParams</tt><tt class="py-op">[</tt><tt class="py-string">'lines.linewidth'</tt><tt class="py-op">]</tt> </tt>
+<a name="L442"></a><tt class="py-lineno">442</tt>  <tt class="py-line">        <tt class="py-comment"># Draw a horizontal line from start to here</tt> </tt>
+<a name="L443"></a><tt class="py-lineno">443</tt>  <tt class="py-line">        <tt class="py-name">draw_clade_lines</tt><tt class="py-op">(</tt><tt class="py-name">use_linecollection</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">orientation</tt><tt class="py-op">=</tt><tt class="py-string">'horizontal'</tt><tt class="py-op">,</tt> </tt>
+<a name="L444"></a><tt class="py-lineno">444</tt>  <tt class="py-line">                         <tt class="py-name">y_here</tt><tt class="py-op">=</tt><tt class="py-name">y_here</tt><tt class="py-op">,</tt> <tt class="py-name">x_start</tt><tt class="py-op">=</tt><tt class="py-name">x_start</tt><tt class="py-op">,</tt> <tt class="py-name">x_here</tt><tt class="py-op">=</tt><tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt id="link-165" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-165', 'color', 'link-6');">color</a></tt><tt class="py-op">=</tt><tt id="link-166" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-166', 'color', 'link-6');">color</a></tt><tt class="py-op">,</tt> <tt class="py-name">lw</tt><tt class="py-op">=</tt><tt class="py-name">lw</tt><tt class="py-op">)</tt> </tt>
+<a name="L445"></a><tt class="py-lineno">445</tt>  <tt class="py-line">        <tt class="py-comment"># Add node/taxon labels</tt> </tt>
+<a name="L446"></a><tt class="py-lineno">446</tt>  <tt class="py-line">        <tt class="py-name">label</tt> <tt class="py-op">=</tt> <tt class="py-name">label_func</tt><tt class="py-op">(</tt><tt id="link-167" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-167', 'clade', 'link-37');">clade</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L447"></a><tt class="py-lineno">447</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">label</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt id="link-168" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-168', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">.</tt><tt class="py-name">__name__</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L448"></a><tt class="py-lineno">448</tt>  <tt class="py-line">            <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">text</tt><tt class="py-op">(</tt><tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt class="py-name">y_here</tt><tt class="py-op">,</tt> <tt class="py-string">' %s'</tt> <tt class="py-op">%</tt> </tt>
+<a name="L449"></a><tt class="py-lineno">449</tt>  <tt class="py-line">                      <tt class="py-name">label</tt><tt class="py-op">,</tt> <tt class="py-name">verticalalignment</tt><tt class="py-op">=</tt><tt class="py-string">'center'</tt><tt class="py-op">)</tt> </tt>
+<a name="L450"></a><tt class="py-lineno">450</tt>  <tt class="py-line">        <tt class="py-comment"># Add label above the branch (optional)</tt> </tt>
+<a name="L451"></a><tt class="py-lineno">451</tt>  <tt class="py-line">        <tt class="py-name">conf_label</tt> <tt class="py-op">=</tt> <tt class="py-name">format_branch_label</tt><tt class="py-op">(</tt><tt id="link-169" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-169', 'clade', 'link-37');">clade</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L452"></a><tt class="py-lineno">452</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">conf_label</tt><tt class="py-op">:</tt> </tt>
+<a name="L453"></a><tt class="py-lineno">453</tt>  <tt class="py-line">            <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">text</tt><tt class="py-op">(</tt><tt class="py-number">0.5</tt> <tt class="py-op">*</tt> <tt class="py-op">(</tt><tt class="py-name">x_start</tt> <tt class="py-op">+</tt> <tt class="py-name">x_here</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">y_here</tt><tt class="py-op">,</tt> <tt class="py-name">conf_label</tt><tt class="py-op">,</tt> </tt>
+<a name="L454"></a><tt class="py-lineno">454</tt>  <tt class="py-line">                      <tt class="py-name">fontsize</tt><tt class="py-op">=</tt><tt class="py-string">'small'</tt><tt class="py-op">,</tt> <tt class="py-name">horizontalalignment</tt><tt class="py-op">=</tt><tt class="py-string">'center'</tt><tt class="py-op">)</tt> </tt>
+<a name="L455"></a><tt class="py-lineno">455</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-170" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-170', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">:</tt> </tt>
+<a name="L456"></a><tt class="py-lineno">456</tt>  <tt class="py-line">            <tt class="py-comment"># Draw a vertical line connecting all children</tt> </tt>
+<a name="L457"></a><tt class="py-lineno">457</tt>  <tt class="py-line">            <tt class="py-name">y_top</tt> <tt class="py-op">=</tt> <tt class="py-name">y_posns</tt><tt class="py-op">[</tt><tt id="link-171" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-171', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L458"></a><tt class="py-lineno">458</tt>  <tt class="py-line">            <tt class="py-name">y_bot</tt> <tt class="py-op">=</tt> <tt class="py-name">y_posns</tt><tt class="py-op">[</tt><tt id="link-172" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-172', 'clade', 'link-37');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L459"></a><tt class="py-lineno">459</tt>  <tt class="py-line">            <tt class="py-comment"># Only apply widths to horizontal lines, like Archaeopteryx</tt> </tt>
+<a name="L460"></a><tt class="py-lineno">460</tt>  <tt class="py-line">            <tt class="py-name">draw_clade_lines</tt><tt class="py-op">(</tt><tt class="py-name">use_linecollection</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-name">orientation</tt><tt class="py-op">=</tt><tt class="py-string">'vertical'</tt><tt class="py-op">,</tt> </tt>
+<a name="L461"></a><tt class="py-lineno">461</tt>  <tt class="py-line">                             <tt class="py-name">x_here</tt><tt class="py-op">=</tt><tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt class="py-name">y_bot</tt><tt class="py-op">=</tt><tt class="py-name">y_bot</tt><tt class="py-op">,</tt> <tt class="py-name">y_top</tt><tt class="py-op">=</tt><tt class="py-name">y_top</tt><tt class="py-op">,</tt> <tt id="link-173" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-173', 'color', 'link-6');">color</a></tt><tt class="py-op">=</tt><tt id="link-174" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-174', 'color', 'link-6');">color</a></tt><tt class="py-op">,</tt> <tt class="py-name">lw</tt><tt class="py-op">=</tt><tt class="py-name">lw</tt><tt class="py-op">)</tt> </tt>
+<a name="L462"></a><tt class="py-lineno">462</tt>  <tt class="py-line">            <tt class="py-comment"># Draw descendents</tt> </tt>
+<a name="L463"></a><tt class="py-lineno">463</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">child</tt> <tt class="py-keyword">in</tt> <tt id="link-175" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-175', 'clade', 'link-37');">clade</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L464"></a><tt class="py-lineno">464</tt>  <tt class="py-line">                <tt class="py-name">draw_clade</tt><tt class="py-op">(</tt><tt class="py-name">child</tt><tt class="py-op">,</tt> <tt class="py-name">x_here</tt><tt class="py-op">,</tt> <tt id="link-176" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.color
+Bio.Phylo.PhyloXMLIO.Parser.color
+Bio.Phylo.PhyloXMLIO.Writer.color" class="py-name" href="#" onclick="return doclink('link-176', 'color', 'link-6');">color</a></tt><tt class="py-op">,</tt> <tt class="py-name">lw</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L465"></a><tt class="py-lineno">465</tt>  <tt class="py-line"> </tt>
+<a name="L466"></a><tt class="py-lineno">466</tt>  <tt class="py-line">    <tt class="py-name">draw_clade</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-177" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-177', 'root', 'link-40');">root</a></tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-string">'k'</tt><tt class="py-op">,</tt> <tt class="py-name">plt</tt><tt class="py-op">.</tt><tt class="py-name">rcParams</tt><tt class="py-op">[</tt><tt class="py-string">'lines.linewidth'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L467"></a><tt class="py-lineno">467</tt>  <tt class="py-line"> </tt>
+<a name="L468"></a><tt class="py-lineno">468</tt>  <tt class="py-line">    <tt class="py-comment"># If line collections were used to create clade lines, here they are added</tt> </tt>
+<a name="L469"></a><tt class="py-lineno">469</tt>  <tt class="py-line">    <tt class="py-comment"># to the pyplot plot.</tt> </tt>
+<a name="L470"></a><tt class="py-lineno">470</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-178" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-178', 'i', 'link-132');">i</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">horizontal_linecollections</tt><tt class="py-op">:</tt> </tt>
+<a name="L471"></a><tt class="py-lineno">471</tt>  <tt class="py-line">        <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">add_collection</tt><tt class="py-op">(</tt><tt id="link-179" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-179', 'i', 'link-132');">i</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L472"></a><tt class="py-lineno">472</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-180" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-180', 'i', 'link-132');">i</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">vertical_linecollections</tt><tt class="py-op">:</tt> </tt>
+<a name="L473"></a><tt class="py-lineno">473</tt>  <tt class="py-line">        <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">add_collection</tt><tt class="py-op">(</tt><tt id="link-181" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-181', 'i', 'link-132');">i</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L474"></a><tt class="py-lineno">474</tt>  <tt class="py-line"> </tt>
+<a name="L475"></a><tt class="py-lineno">475</tt>  <tt class="py-line">    <tt class="py-comment"># Aesthetics</tt> </tt>
+<a name="L476"></a><tt class="py-lineno">476</tt>  <tt class="py-line"> </tt>
+<a name="L477"></a><tt class="py-lineno">477</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">,</tt> <tt class="py-string">'name'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-182" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-182', 'name', 'link-182');">name</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L478"></a><tt class="py-lineno">478</tt>  <tt class="py-line">        <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">set_title</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-183" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-183', 'name', 'link-182');">name</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L479"></a><tt class="py-lineno">479</tt>  <tt class="py-line">    <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">set_xlabel</tt><tt class="py-op">(</tt><tt class="py-string">'branch length'</tt><tt class="py-op">)</tt> </tt>
+<a name="L480"></a><tt class="py-lineno">480</tt>  <tt class="py-line">    <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">set_ylabel</tt><tt class="py-op">(</tt><tt class="py-string">'taxa'</tt><tt class="py-op">)</tt> </tt>
+<a name="L481"></a><tt class="py-lineno">481</tt>  <tt class="py-line">    <tt class="py-comment"># Add margins around the tree to prevent overlapping the axes</tt> </tt>
+<a name="L482"></a><tt class="py-lineno">482</tt>  <tt class="py-line">    <tt class="py-name">xmax</tt> <tt class="py-op">=</tt> <tt id="link-184" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-184', 'max', 'link-76');">max</a></tt><tt class="py-op">(</tt><tt class="py-name">x_posns</tt><tt class="py-op">.</tt><tt id="link-185" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-185', 'values', 'link-81');">values</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L483"></a><tt class="py-lineno">483</tt>  <tt class="py-line">    <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">set_xlim</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-number">0.05</tt> <tt class="py-op">*</tt> <tt class="py-name">xmax</tt><tt class="py-op">,</tt> <tt class="py-number">1.25</tt> <tt class="py-op">*</tt> <tt class="py-name">xmax</tt><tt class="py-op">)</tt> </tt>
+<a name="L484"></a><tt class="py-lineno">484</tt>  <tt class="py-line">    <tt class="py-comment"># Also invert the y-axis (origin at the top)</tt> </tt>
+<a name="L485"></a><tt class="py-lineno">485</tt>  <tt class="py-line">    <tt class="py-comment"># Add a small vertical margin, but avoid including 0 and N+1 on the y axis</tt> </tt>
+<a name="L486"></a><tt class="py-lineno">486</tt>  <tt class="py-line">    <tt class="py-name">axes</tt><tt class="py-op">.</tt><tt class="py-name">set_ylim</tt><tt class="py-op">(</tt><tt id="link-186" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-186', 'max', 'link-76');">max</a></tt><tt class="py-op">(</tt><tt class="py-name">y_posns</tt><tt class="py-op">.</tt><tt id="link-187" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-187', 'values', 'link-81');">values</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-number">0.8</tt><tt class="py-op">,</tt> <tt class="py-number">0.2</tt><tt class="py-op">)</tt> </tt>
+<a name="L487"></a><tt class="py-lineno">487</tt>  <tt class="py-line"> </tt>
+<a name="L488"></a><tt class="py-lineno">488</tt>  <tt class="py-line">    <tt class="py-comment"># Parse and process key word arguments as pyplot options</tt> </tt>
+<a name="L489"></a><tt class="py-lineno">489</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-188" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-188', 'value', 'link-115');">value</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">kwargs</tt><tt class="py-op">.</tt><tt id="link-189" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-189', 'items', 'link-53');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L490"></a><tt class="py-lineno">490</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L491"></a><tt class="py-lineno">491</tt>  <tt class="py-line">            <tt class="py-comment"># Check that the pyplot option input is iterable, as required</tt> </tt>
+<a name="L492"></a><tt class="py-lineno">492</tt>  <tt class="py-line">            <tt class="py-op">[</tt><tt id="link-190" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-190', 'i', 'link-132');">i</a></tt> <tt class="py-keyword">for</tt> <tt id="link-191" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-191', 'i', 'link-132');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-192" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-192', 'value', 'link-115');">value</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L493"></a><tt class="py-lineno">493</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">TypeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L494"></a><tt class="py-lineno">494</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">'Keyword argument "%s=%s" is not in the format '</tt> </tt>
+<a name="L495"></a><tt class="py-lineno">495</tt>  <tt class="py-line">                             <tt class="py-string">'pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict),'</tt> </tt>
+<a name="L496"></a><tt class="py-lineno">496</tt>  <tt class="py-line">                             <tt class="py-string">' or pyplot_option_name=(dict) '</tt> </tt>
+<a name="L497"></a><tt class="py-lineno">497</tt>  <tt class="py-line">                             <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-193" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-193', 'value', 'link-115');">value</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L498"></a><tt class="py-lineno">498</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-194" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-194', 'value', 'link-115');">value</a></tt><tt class="py-op">,</tt> <tt class="py-name">dict</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L499"></a><tt class="py-lineno">499</tt>  <tt class="py-line">            <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">plt</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">(</tt><tt class="py-op">**</tt><tt class="py-name">dict</tt><tt class="py-op">(</tt><tt id="link-195" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-195', 'value', 'link-115');">value</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L500"></a><tt class="py-lineno">500</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-keyword">not</tt> <tt class="py-op">(</tt><tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-196" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-196', 'value', 'link-115');">value</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">tuple</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L501"></a><tt class="py-lineno">501</tt>  <tt class="py-line">            <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">plt</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt id="link-197" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-197', 'value', 'link-115');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L502"></a><tt class="py-lineno">502</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-op">(</tt><tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-198" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-198', 'value', 'link-115');">value</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">tuple</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L503"></a><tt class="py-lineno">503</tt>  <tt class="py-line">            <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">plt</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt id="link-199" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-199', 'value', 'link-115');">value</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">dict</tt><tt class="py-op">(</tt><tt id="link-200" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-200', 'value', 'link-115');">value</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L504"></a><tt class="py-lineno">504</tt>  <tt class="py-line"> </tt>
+<a name="L505"></a><tt class="py-lineno">505</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">do_show</tt><tt class="py-op">:</tt> </tt>
+<a name="L506"></a><tt class="py-lineno">506</tt>  <tt class="py-line">        <tt class="py-name">plt</tt><tt class="py-op">.</tt><tt class="py-name">show</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L507"></a><tt class="py-lineno">507</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:34 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

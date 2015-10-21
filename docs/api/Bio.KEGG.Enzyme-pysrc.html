@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.KEGG.Enzyme</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.KEGG-module.html">Package&nbsp;KEGG</a> ::
+        Package&nbsp;Enzyme
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.KEGG.Enzyme-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.KEGG.Enzyme-module.html">Package Bio.KEGG.Enzyme</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2007 by Michiel de Hoon.  All rights reserved.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">"""Code to work with the KEGG Enzyme database.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">Functions:</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">parse - Returns an iterator giving Record objects.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring">Classes:</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">Record               -- Holds the information from a KEGG Enzyme record.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.KEGG=Bio.KEGG-module.html"><a title="Bio.KEGG" class="py-name" href="#" onclick="return doclink('link-1', 'KEGG', 'link-1');">KEGG</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Function Bio.KEGG._write_kegg()=Bio.KEGG-module.html#_write_kegg"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-2', '_write_kegg', 'link-2');">_write_kegg</a></tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name"><a title="Bio.KEGG" class="py-name" href="#" onclick="return doclink('link-4', 'KEGG', 'link-1');">KEGG</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name" targets="Function Bio.KEGG._wrap_kegg()=Bio.KEGG-module.html#_wrap_kegg"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-5', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-comment"># Set up line wrapping rules (see Bio.KEGG._wrap_kegg)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt id="link-6" class="py-name" targets="Variable Bio.KEGG.Enzyme.rxn_wrap=Bio.KEGG.Enzyme-module.html#rxn_wrap"><a title="Bio.KEGG.Enzyme.rxn_wrap" class="py-name" href="#" onclick="return doclink('link-6', 'rxn_wrap', 'link-6');">rxn_wrap</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-string">" + "</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-string">" = "</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-string">" "</tt><tt class="py-op">,</tt> <tt class="py-string">"$"</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">            <tt class="py-op">(</tt><tt class="py-string">"-"</tt><tt class="py-op">,</tt> <tt class="py-string">"$"</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt id="link-7" class="py-name" targets="Variable Bio.KEGG.Compound.name_wrap=Bio.KEGG.Compound-module.html#name_wrap,Variable Bio.KEGG.Enzyme.name_wrap=Bio.KEGG.Enzyme-module.html#name_wrap"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-7', 'name_wrap', 'link-7');">name_wrap</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">             <tt class="py-op">(</tt><tt class="py-string">" "</tt><tt class="py-op">,</tt> <tt class="py-string">"$"</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">             <tt class="py-op">(</tt><tt class="py-string">"-"</tt><tt class="py-op">,</tt> <tt class="py-string">"$"</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt id="link-8" class="py-name" targets="Function Bio.KEGG.Compound.id_wrap()=Bio.KEGG.Compound-module.html#id_wrap,Function Bio.KEGG.Enzyme.id_wrap()=Bio.KEGG.Enzyme-module.html#id_wrap"><a title="Bio.KEGG.Compound.id_wrap
+Bio.KEGG.Enzyme.id_wrap" class="py-name" href="#" onclick="return doclink('link-8', 'id_wrap', 'link-8');">id_wrap</a></tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt class="py-name">indent</tt><tt class="py-op">:</tt> <tt class="py-op">[</tt><tt class="py-name">indent</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-string">" "</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Function Bio.KEGG.Compound.struct_wrap()=Bio.KEGG.Compound-module.html#struct_wrap,Function Bio.KEGG.Enzyme.struct_wrap()=Bio.KEGG.Enzyme-module.html#struct_wrap"><a title="Bio.KEGG.Compound.struct_wrap
+Bio.KEGG.Enzyme.struct_wrap" class="py-name" href="#" onclick="return doclink('link-9', 'struct_wrap', 'link-9');">struct_wrap</a></tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt class="py-name">indent</tt><tt class="py-op">:</tt> <tt class="py-op">[</tt><tt class="py-name">indent</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-string">"  "</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"> </tt>
+<a name="Record"></a><div id="Record-def"><a name="L35"></a><tt class="py-lineno"> 35</tt> <a class="py-toggle" href="#" id="Record-toggle" onclick="return toggle('Record');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html">Record</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Record-expanded"><a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">    <tt class="py-docstring">"""Holds info from a KEGG Enzyme record.</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">    Members:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">    entry       The EC number (withou the 'EC ').</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">    name        A list of the enzyme names.</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">    classname   A list of the classification terms.</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">    sysname     The systematic name of the enzyme.</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">    reaction    A list of the reaction description strings.</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    substrate   A list of the substrates.</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">    product     A list of the products.</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">    inhibitor   A list of the inhibitors.</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    cofactor    A list of the cofactors.</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    effector    A list of the effectors.</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">    comment     A list of the comment strings.</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">    pathway     A list of 3-tuples: (database, id, pathway)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">    genes       A list of 2-tuples: (organism, list of gene ids)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">    disease     A list of 3-tuples: (database, id, disease)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">    structures  A list of 2-tuples: (database, list of struct ids)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    dblinks     A list of 2-tuples: (database, list of db ids)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="Record.__init__"></a><div id="Record.__init__-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="Record.__init__-toggle" onclick="return toggle('Record.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.__init__-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-docstring">"""__init___(self)</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">        Create a new Record.</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Reaction.entry=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#entry,Function Bio.TogoWS.entry()=Bio.TogoWS-module.html#entry"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-10', 'entry', 'link-10');">entry</a></tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-11', 'name', 'link-11');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">classname</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">sysname</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.reaction=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#reaction"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.reaction" class="py-name" href="#" onclick="return doclink('link-12', 'reaction', 'link-12');">reaction</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">substrate</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">product</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">inhibitor</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cofactor</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">effector</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method Bio.GenBank._FeatureConsumer.comment()=Bio.GenBank._FeatureConsumer-class.html#comment,Method Bio.GenBank._RecordConsumer.comment()=Bio.GenBank._RecordConsumer-class.html#comment"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-13', 'comment', 'link-13');">comment</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">pathway</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Pathway.genes=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#genes"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.genes" class="py-name" href="#" onclick="return doclink('link-14', 'genes', 'link-14');">genes</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">disease</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">structures</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dblinks</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"> </tt>
+<a name="Record.__str__"></a><div id="Record.__str__-def"><a name="L78"></a><tt class="py-lineno"> 78</tt> <a class="py-toggle" href="#" id="Record.__str__-toggle" onclick="return toggle('Record.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.__str__-expanded"><a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-docstring">"""__str__(self)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">        Returns a string representation of this Record.</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.KEGG.Compound.Record._entry()=Bio.KEGG.Compound.Record-class.html#_entry,Method Bio.KEGG.Enzyme.Record._entry()=Bio.KEGG.Enzyme.Record-class.html#_entry"><a title="Bio.KEGG.Compound.Record._entry
+Bio.KEGG.Enzyme.Record._entry" class="py-name" href="#" onclick="return doclink('link-15', '_entry', 'link-15');">_entry</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method Bio.KEGG.Compound.Record._name()=Bio.KEGG.Compound.Record-class.html#_name,Method Bio.KEGG.Enzyme.Record._name()=Bio.KEGG.Enzyme.Record-class.html#_name"><a title="Bio.KEGG.Compound.Record._name
+Bio.KEGG.Enzyme.Record._name" class="py-name" href="#" onclick="return doclink('link-16', '_name', 'link-16');">_name</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._classname()=Bio.KEGG.Enzyme.Record-class.html#_classname"><a title="Bio.KEGG.Enzyme.Record._classname" class="py-name" href="#" onclick="return doclink('link-17', '_classname', 'link-17');">_classname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._sysname()=Bio.KEGG.Enzyme.Record-class.html#_sysname"><a title="Bio.KEGG.Enzyme.Record._sysname" class="py-name" href="#" onclick="return doclink('link-18', '_sysname', 'link-18');">_sysname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._reaction()=Bio.KEGG.Enzyme.Record-class.html#_reaction"><a title="Bio.KEGG.Enzyme.Record._reaction" class="py-name" href="#" onclick="return doclink('link-19', '_reaction', 'link-19');">_reaction</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._substrate()=Bio.KEGG.Enzyme.Record-class.html#_substrate"><a title="Bio.KEGG.Enzyme.Record._substrate" class="py-name" href="#" onclick="return doclink('link-20', '_substrate', 'link-20');">_substrate</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._product()=Bio.KEGG.Enzyme.Record-class.html#_product"><a title="Bio.KEGG.Enzyme.Record._product" class="py-name" href="#" onclick="return doclink('link-21', '_product', 'link-21');">_product</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._inhibitor()=Bio.KEGG.Enzyme.Record-class.html#_inhibitor"><a title="Bio.KEGG.Enzyme.Record._inhibitor" class="py-name" href="#" onclick="return doclink('link-22', '_inhibitor', 'link-22');">_inhibitor</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._cofactor()=Bio.KEGG.Enzyme.Record-class.html#_cofactor"><a title="Bio.KEGG.Enzyme.Record._cofactor" class="py-name" href="#" onclick="return doclink('link-23', '_cofactor', 'link-23');">_cofactor</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._effector()=Bio.KEGG.Enzyme.Record-class.html#_effector"><a title="Bio.KEGG.Enzyme.Record._effector" class="py-name" href="#" onclick="return doclink('link-24', '_effector', 'link-24');">_effector</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._comment()=Bio.KEGG.Enzyme.Record-class.html#_comment"><a title="Bio.KEGG.Enzyme.Record._comment" class="py-name" href="#" onclick="return doclink('link-25', '_comment', 'link-25');">_comment</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Method Bio.KEGG.Compound.Record._pathway()=Bio.KEGG.Compound.Record-class.html#_pathway,Method Bio.KEGG.Enzyme.Record._pathway()=Bio.KEGG.Enzyme.Record-class.html#_pathway"><a title="Bio.KEGG.Compound.Record._pathway
+Bio.KEGG.Enzyme.Record._pathway" class="py-name" href="#" onclick="return doclink('link-26', '_pathway', 'link-26');">_pathway</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._genes()=Bio.KEGG.Enzyme.Record-class.html#_genes"><a title="Bio.KEGG.Enzyme.Record._genes" class="py-name" href="#" onclick="return doclink('link-27', '_genes', 'link-27');">_genes</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method Bio.KEGG.Enzyme.Record._disease()=Bio.KEGG.Enzyme.Record-class.html#_disease"><a title="Bio.KEGG.Enzyme.Record._disease" class="py-name" href="#" onclick="return doclink('link-28', '_disease', 'link-28');">_disease</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Method Bio.KEGG.Compound.Record._structures()=Bio.KEGG.Compound.Record-class.html#_structures,Method Bio.KEGG.Enzyme.Record._structures()=Bio.KEGG.Enzyme.Record-class.html#_structures"><a title="Bio.KEGG.Compound.Record._structures
+Bio.KEGG.Enzyme.Record._structures" class="py-name" href="#" onclick="return doclink('link-29', '_structures', 'link-29');">_structures</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name" targets="Method Bio.KEGG.Compound.Record._dblinks()=Bio.KEGG.Compound.Record-class.html#_dblinks,Method Bio.KEGG.Enzyme.Record._dblinks()=Bio.KEGG.Enzyme.Record-class.html#_dblinks"><a title="Bio.KEGG.Compound.Record._dblinks
+Bio.KEGG.Enzyme.Record._dblinks" class="py-name" href="#" onclick="return doclink('link-30', '_dblinks', 'link-30');">_dblinks</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">               <tt class="py-string">"///"</tt> </tt>
+</div><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="Record._entry"></a><div id="Record._entry-def"><a name="L101"></a><tt class="py-lineno">101</tt> <a class="py-toggle" href="#" id="Record._entry-toggle" onclick="return toggle('Record._entry');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_entry">_entry</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._entry-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._entry-expanded"><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-31" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-31', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"ENTRY"</tt><tt class="py-op">,</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt class="py-string">"EC "</tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-32', 'entry', 'link-10');">entry</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"> </tt>
+<a name="Record._name"></a><div id="Record._name-def"><a name="L105"></a><tt class="py-lineno">105</tt> <a class="py-toggle" href="#" id="Record._name-toggle" onclick="return toggle('Record._name');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_name">_name</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._name-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._name-expanded"><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-33" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-33', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"NAME"</tt><tt class="py-op">,</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-34" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-34', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-35" class="py-name"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-35', 'name_wrap', 'link-7');">name_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-36', 'name', 'link-11');">name</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt>
+<a name="Record._classname"></a><div id="Record._classname-def"><a name="L110"></a><tt class="py-lineno">110</tt> <a class="py-toggle" href="#" id="Record._classname-toggle" onclick="return toggle('Record._classname');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_classname">_classname</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._classname-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._classname-expanded"><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-37" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-37', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"CLASS"</tt><tt class="py-op">,</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">                           <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">classname</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"> </tt>
+<a name="Record._sysname"></a><div id="Record._sysname-def"><a name="L114"></a><tt class="py-lineno">114</tt> <a class="py-toggle" href="#" id="Record._sysname-toggle" onclick="return toggle('Record._sysname');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_sysname">_sysname</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._sysname-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._sysname-expanded"><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-38" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-38', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"SYSNAME"</tt><tt class="py-op">,</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-39" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-39', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-40" class="py-name"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-40', 'name_wrap', 'link-7');">name_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">sysname</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"> </tt>
+<a name="Record._reaction"></a><div id="Record._reaction-def"><a name="L119"></a><tt class="py-lineno">119</tt> <a class="py-toggle" href="#" id="Record._reaction-toggle" onclick="return toggle('Record._reaction');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_reaction">_reaction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._reaction-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._reaction-expanded"><a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-41" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-41', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"REACTION"</tt><tt class="py-op">,</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-42" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-42', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-43" class="py-name"><a title="Bio.KEGG.Enzyme.rxn_wrap" class="py-name" href="#" onclick="return doclink('link-43', 'rxn_wrap', 'link-6');">rxn_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.reaction" class="py-name" href="#" onclick="return doclink('link-44', 'reaction', 'link-12');">reaction</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="Record._substrate"></a><div id="Record._substrate-def"><a name="L124"></a><tt class="py-lineno">124</tt> <a class="py-toggle" href="#" id="Record._substrate-toggle" onclick="return toggle('Record._substrate');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_substrate">_substrate</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._substrate-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._substrate-expanded"><a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-45" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-45', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"SUBSTRATE"</tt><tt class="py-op">,</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-46" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-46', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-47" class="py-name"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-47', 'name_wrap', 'link-7');">name_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">substrate</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line"> </tt>
+<a name="Record._product"></a><div id="Record._product-def"><a name="L129"></a><tt class="py-lineno">129</tt> <a class="py-toggle" href="#" id="Record._product-toggle" onclick="return toggle('Record._product');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_product">_product</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._product-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._product-expanded"><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-48" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-48', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"PRODUCT"</tt><tt class="py-op">,</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-49" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-49', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-50" class="py-name"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-50', 'name_wrap', 'link-7');">name_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">product</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"> </tt>
+<a name="Record._inhibitor"></a><div id="Record._inhibitor-def"><a name="L134"></a><tt class="py-lineno">134</tt> <a class="py-toggle" href="#" id="Record._inhibitor-toggle" onclick="return toggle('Record._inhibitor');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_inhibitor">_inhibitor</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._inhibitor-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._inhibitor-expanded"><a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-51" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-51', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"INHIBITOR"</tt><tt class="py-op">,</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-52" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-52', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-53" class="py-name"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-53', 'name_wrap', 'link-7');">name_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">inhibitor</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"> </tt>
+<a name="Record._cofactor"></a><div id="Record._cofactor-def"><a name="L139"></a><tt class="py-lineno">139</tt> <a class="py-toggle" href="#" id="Record._cofactor-toggle" onclick="return toggle('Record._cofactor');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_cofactor">_cofactor</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._cofactor-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._cofactor-expanded"><a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-54" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-54', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"COFACTOR"</tt><tt class="py-op">,</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-55" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-55', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-56" class="py-name"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-56', 'name_wrap', 'link-7');">name_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">cofactor</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"> </tt>
+<a name="Record._effector"></a><div id="Record._effector-def"><a name="L144"></a><tt class="py-lineno">144</tt> <a class="py-toggle" href="#" id="Record._effector-toggle" onclick="return toggle('Record._effector');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_effector">_effector</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._effector-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._effector-expanded"><a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-57" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-57', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"EFFECTOR"</tt><tt class="py-op">,</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-58" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-58', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-59" class="py-name"><a title="Bio.KEGG.Compound.name_wrap
+Bio.KEGG.Enzyme.name_wrap" class="py-name" href="#" onclick="return doclink('link-59', 'name_wrap', 'link-7');">name_wrap</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">effector</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"> </tt>
+<a name="Record._comment"></a><div id="Record._comment-def"><a name="L149"></a><tt class="py-lineno">149</tt> <a class="py-toggle" href="#" id="Record._comment-toggle" onclick="return toggle('Record._comment');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_comment">_comment</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._comment-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._comment-expanded"><a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-60" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-60', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"COMMENT"</tt><tt class="py-op">,</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-61" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-61', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-62" class="py-name"><a title="Bio.KEGG.Compound.id_wrap
+Bio.KEGG.Enzyme.id_wrap" class="py-name" href="#" onclick="return doclink('link-62', 'id_wrap', 'link-8');">id_wrap</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-63', 'comment', 'link-13');">comment</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"> </tt>
+<a name="Record._pathway"></a><div id="Record._pathway-def"><a name="L154"></a><tt class="py-lineno">154</tt> <a class="py-toggle" href="#" id="Record._pathway-toggle" onclick="return toggle('Record._pathway');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_pathway">_pathway</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._pathway-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._pathway-expanded"><a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-64" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-64', 'entry', 'link-10');">entry</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">pathway</tt><tt class="py-op">:</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">            <tt class="py-name">s</tt><tt class="py-op">.</tt><tt id="link-65" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-65', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-66" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-66', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-string">": "</tt> <tt class="py-op">+</tt> <tt id="link-67" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-67', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-string">"  "</tt> <tt class="py-op">+</tt> <tt id="link-68" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-68', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-69" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-69', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"PATHWAY"</tt><tt class="py-op">,</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-70" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-70', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-71" class="py-name"><a title="Bio.KEGG.Compound.id_wrap
+Bio.KEGG.Enzyme.id_wrap" class="py-name" href="#" onclick="return doclink('link-71', 'id_wrap', 'link-8');">id_wrap</a></tt><tt class="py-op">(</tt><tt class="py-number">16</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">s</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"> </tt>
+<a name="Record._genes"></a><div id="Record._genes-def"><a name="L162"></a><tt class="py-lineno">162</tt> <a class="py-toggle" href="#" id="Record._genes-toggle" onclick="return toggle('Record._genes');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_genes">_genes</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._genes-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._genes-expanded"><a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-72" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-72', 'entry', 'link-10');">entry</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-73" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.genes" class="py-name" href="#" onclick="return doclink('link-73', 'genes', 'link-14');">genes</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">            <tt class="py-name">s</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-74', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-75" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-75', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-string">": "</tt> <tt class="py-op">+</tt> <tt class="py-string">" "</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-76" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-76', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-77" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-77', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"GENES"</tt><tt class="py-op">,</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-78" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-78', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-79" class="py-name"><a title="Bio.KEGG.Compound.id_wrap
+Bio.KEGG.Enzyme.id_wrap" class="py-name" href="#" onclick="return doclink('link-79', 'id_wrap', 'link-8');">id_wrap</a></tt><tt class="py-op">(</tt><tt class="py-number">5</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">s</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"> </tt>
+<a name="Record._disease"></a><div id="Record._disease-def"><a name="L170"></a><tt class="py-lineno">170</tt> <a class="py-toggle" href="#" id="Record._disease-toggle" onclick="return toggle('Record._disease');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_disease">_disease</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._disease-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._disease-expanded"><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-80" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-80', 'entry', 'link-10');">entry</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">disease</tt><tt class="py-op">:</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">            <tt class="py-name">s</tt><tt class="py-op">.</tt><tt id="link-81" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-81', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-82" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-82', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-string">": "</tt> <tt class="py-op">+</tt> <tt id="link-83" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-83', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-string">"  "</tt> <tt class="py-op">+</tt> <tt id="link-84" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-84', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-85" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-85', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"DISEASE"</tt><tt class="py-op">,</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-86" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-86', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-87" class="py-name"><a title="Bio.KEGG.Compound.id_wrap
+Bio.KEGG.Enzyme.id_wrap" class="py-name" href="#" onclick="return doclink('link-87', 'id_wrap', 'link-8');">id_wrap</a></tt><tt class="py-op">(</tt><tt class="py-number">13</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">s</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="Record._structures"></a><div id="Record._structures-def"><a name="L178"></a><tt class="py-lineno">178</tt> <a class="py-toggle" href="#" id="Record._structures-toggle" onclick="return toggle('Record._structures');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_structures">_structures</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._structures-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._structures-expanded"><a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-88" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-88', 'entry', 'link-10');">entry</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">structures</tt><tt class="py-op">:</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">            <tt class="py-name">s</tt><tt class="py-op">.</tt><tt id="link-89" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-89', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-90" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-90', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-string">": "</tt> <tt class="py-op">+</tt> <tt class="py-string">"  "</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-91" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-91', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"  "</tt><tt class="py-op">)</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-92" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-92', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"STRUCTURES"</tt><tt class="py-op">,</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">                           <tt class="py-op">[</tt><tt id="link-93" class="py-name"><a title="Bio.KEGG._wrap_kegg" class="py-name" href="#" onclick="return doclink('link-93', '_wrap_kegg', 'link-5');">_wrap_kegg</a></tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-name">wrap_rule</tt><tt class="py-op">=</tt><tt id="link-94" class="py-name"><a title="Bio.KEGG.Compound.struct_wrap
+Bio.KEGG.Enzyme.struct_wrap" class="py-name" href="#" onclick="return doclink('link-94', 'struct_wrap', 'link-9');">struct_wrap</a></tt><tt class="py-op">(</tt><tt class="py-number">5</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">                            <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">s</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"> </tt>
+<a name="Record._dblinks"></a><div id="Record._dblinks-def"><a name="L186"></a><tt class="py-lineno">186</tt> <a class="py-toggle" href="#" id="Record._dblinks-toggle" onclick="return toggle('Record._dblinks');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme.Record-class.html#_dblinks">_dblinks</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record._dblinks-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record._dblinks-expanded"><a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">        <tt class="py-comment"># This is a bit of a cheat that won't work if enzyme entries</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">        <tt class="py-comment"># have more than one link id per db id. For now, that's not</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">        <tt class="py-comment"># the case - storing links ids in a list is only to make</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">        <tt class="py-comment"># this class similar to the Compound.Record class.</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-95" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-95', 'entry', 'link-10');">entry</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dblinks</tt><tt class="py-op">:</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">            <tt class="py-name">s</tt><tt class="py-op">.</tt><tt id="link-96" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-96', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-97" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-97', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-string">": "</tt> <tt class="py-op">+</tt> <tt class="py-string">"  "</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-98" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-98', 'entry', 'link-10');">entry</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-99" class="py-name"><a title="Bio.KEGG._write_kegg" class="py-name" href="#" onclick="return doclink('link-99', '_write_kegg', 'link-2');">_write_kegg</a></tt><tt class="py-op">(</tt><tt class="py-string">"DBLINKS"</tt><tt class="py-op">,</tt> <tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"> </tt>
+<a name="parse"></a><div id="parse-def"><a name="L197"></a><tt class="py-lineno">197</tt> <a class="py-toggle" href="#" id="parse-toggle" onclick="return toggle('parse');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.KEGG.Enzyme-module.html#parse">parse</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="parse-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="parse-expanded"><a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parse a KEGG Enzyme file, returning Record objects.</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line"><tt class="py-docstring">    This is an iterator function, typically used in a for loop.  For</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line"><tt class="py-docstring">    example, using one of the example KEGG files in the Biopython</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"><tt class="py-docstring">    test suite,</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; with open("KEGG/enzyme.sample") as handle:</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-docstring">    ...     for record in parse(handle):</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"><tt class="py-docstring">    ...         print("%s %s" % (record.entry, record.name[0]))</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line"><tt class="py-docstring">    1.1.1.1 Alcohol dehydrogenase</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"><tt class="py-docstring">    1.1.1.62 Estradiol 17beta-dehydrogenase</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line"><tt class="py-docstring">    1.1.1.68 Transferred to EC 1.7.99.5</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line"><tt class="py-docstring">    1.6.5.3 NADH dehydrogenase (ubiquinone)</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line"><tt class="py-docstring">    1.14.13.28 3,9-Dihydroxypterocarpan 6a-monooxygenase</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"><tt class="py-docstring">    2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line"><tt class="py-docstring">    3.1.1.6 Acetylesterase</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line"><tt class="py-docstring">    2.7.2.1 Acetate kinase</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">    <tt class="py-name">record</tt> <tt class="py-op">=</tt> <tt id="link-100" class="py-name" targets="Class Bio.Affy.CelFile.Record=Bio.Affy.CelFile.Record-class.html,Module Bio.Blast.Record=Bio.Blast.Record-module.html,Class Bio.Cluster.Record=Bio.Cluster.Record-class.html,Class Bio.Compass.Record=Bio.Compass.Record-class.html,Class Bio.Emboss.Primer3.Record=Bio.Emboss.Primer3.Record-class.html,Class Bio.ExPASy.Enzyme.Record=Bio.ExPASy.Enzyme.Record-class.html,Class Bio.ExPASy.Prodoc.Record=Bio.ExPASy.Prodoc.Record-class.html,Class Bio.ExPASy.Prosite.Record=Bio.ExPASy.Prosite.Record-class.html,Class Bio.ExPASy.ScanProsite.Record=Bio.ExPASy.ScanProsite.Record-class.html,Module Bio.GenBank.Record=Bio.GenBank.Record-module.html,Class Bio.GenBank.Record.Record=Bio.GenBank.Record.Record-class.html,Module Bio.Geo.Record=Bio.Geo.Record-module.html,Class Bio.Geo.Record.Record=Bio.Geo.Record.Record-class.html,Class Bio.KEGG.Compound.Record=Bio.KEGG.Compound.Record-class.html,Class Bio.KEGG.Enzyme.Record=Bio.KEGG.Enzyme.Record-class.html,Class Bio.Medline.Record=Bio.Medline.Record-class.html,Class Bio.Motif.Parsers.AlignAce.Record=Bio.Motif.Parsers.AlignAce.Record-class.html,Class Bio.Motif.Parsers.MAST.Record=Bio.Motif.Parsers.MAST.Record-class.html,Class Bio.PopGen.FDist.Record=Bio.PopGen.FDist.Record-class.html,Class Bio.PopGen.GenePop.LargeFileParser.Record=Bio.PopGen.GenePop.LargeFileParser.Record-class.html,Class Bio.PopGen.GenePop.Record=Bio.PopGen.GenePop.Record-class.html,Class Bio.SCOP.Cla.Record=Bio.SCOP.Cla.Record-class.html,Class Bio.SCOP.Des.Record=Bio.SCOP.Des.Record-class.html,Class Bio.SCOP.Dom.Record=Bio.SCOP.Dom.Record-class.html,Class Bio.SCOP.Hie.Record=Bio.SCOP.Hie.Record-class.html,Class Bio.Sequencing.Phd.Record=Bio.Sequencing.Phd.Record-class.html,Class Bio.SwissProt.KeyWList.Record=Bio.SwissProt.KeyWList.Record-class.html,Class Bio.SwissProt.Record=Bio.SwissProt.Record-class.html,Class Bio.UniGene.Record=Bio.UniGene.Record-class.html,Class Bio.motifs.alignace.Record=Bio.motifs.alignace.Record-class.html,Class Bio.motifs.jaspar.Record=Bio.motifs.jaspar.Record-class.html,Class Bio.motifs.mast.Record=Bio.motifs.mast.Record-class.html,Class Bio.motifs.meme.Record=Bio.motifs.meme.Record-class.html,Class Bio.motifs.transfac.Record=Bio.motifs.transfac.Record-class.html"><a title="Bio.Affy.CelFile.Record
+Bio.Blast.Record
+Bio.Cluster.Record
+Bio.Compass.Record
+Bio.Emboss.Primer3.Record
+Bio.ExPASy.Enzyme.Record
+Bio.ExPASy.Prodoc.Record
+Bio.ExPASy.Prosite.Record
+Bio.ExPASy.ScanProsite.Record
+Bio.GenBank.Record
+Bio.GenBank.Record.Record
+Bio.Geo.Record
+Bio.Geo.Record.Record
+Bio.KEGG.Compound.Record
+Bio.KEGG.Enzyme.Record
+Bio.Medline.Record
+Bio.Motif.Parsers.AlignAce.Record
+Bio.Motif.Parsers.MAST.Record
+Bio.PopGen.FDist.Record
+Bio.PopGen.GenePop.LargeFileParser.Record
+Bio.PopGen.GenePop.Record
+Bio.SCOP.Cla.Record
+Bio.SCOP.Des.Record
+Bio.SCOP.Dom.Record
+Bio.SCOP.Hie.Record
+Bio.Sequencing.Phd.Record
+Bio.SwissProt.KeyWList.Record
+Bio.SwissProt.Record
+Bio.UniGene.Record
+Bio.motifs.alignace.Record
+Bio.motifs.jaspar.Record
+Bio.motifs.mast.Record
+Bio.motifs.meme.Record
+Bio.motifs.transfac.Record" class="py-name" href="#" onclick="return doclink('link-100', 'Record', 'link-100');">Record</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">handle</tt><tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">3</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">"///"</tt><tt class="py-op">:</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">record</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">            <tt class="py-name">record</tt> <tt class="py-op">=</tt> <tt id="link-101" class="py-name"><a title="Bio.Affy.CelFile.Record
+Bio.Blast.Record
+Bio.Cluster.Record
+Bio.Compass.Record
+Bio.Emboss.Primer3.Record
+Bio.ExPASy.Enzyme.Record
+Bio.ExPASy.Prodoc.Record
+Bio.ExPASy.Prosite.Record
+Bio.ExPASy.ScanProsite.Record
+Bio.GenBank.Record
+Bio.GenBank.Record.Record
+Bio.Geo.Record
+Bio.Geo.Record.Record
+Bio.KEGG.Compound.Record
+Bio.KEGG.Enzyme.Record
+Bio.Medline.Record
+Bio.Motif.Parsers.AlignAce.Record
+Bio.Motif.Parsers.MAST.Record
+Bio.PopGen.FDist.Record
+Bio.PopGen.GenePop.LargeFileParser.Record
+Bio.PopGen.GenePop.Record
+Bio.SCOP.Cla.Record
+Bio.SCOP.Des.Record
+Bio.SCOP.Dom.Record
+Bio.SCOP.Hie.Record
+Bio.Sequencing.Phd.Record
+Bio.SwissProt.KeyWList.Record
+Bio.SwissProt.Record
+Bio.UniGene.Record
+Bio.motifs.alignace.Record
+Bio.motifs.jaspar.Record
+Bio.motifs.mast.Record
+Bio.motifs.meme.Record
+Bio.motifs.transfac.Record" class="py-name" href="#" onclick="return doclink('link-101', 'Record', 'link-100');">Record</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">            <tt class="py-keyword">continue</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">12</tt><tt class="py-op">]</tt> <tt class="py-op">!=</tt> <tt class="py-string">"            "</tt><tt class="py-op">:</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">            <tt class="py-name">keyword</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">12</tt><tt class="py-op">]</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">        <tt id="link-102" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-102', 'data', 'link-102');">data</a></tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-number">12</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-103" class="py-name" targets="Method Bio.Seq.Seq.strip()=Bio.Seq.Seq-class.html#strip"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-103', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"ENTRY       "</tt><tt class="py-op">:</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">            <tt class="py-name">words</tt> <tt class="py-op">=</tt> <tt id="link-104" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-104', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-105" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-105', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-106" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-106', 'entry', 'link-10');">entry</a></tt> <tt class="py-op">=</tt> <tt class="py-name">words</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"CLASS       "</tt><tt class="py-op">:</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">classname</tt><tt class="py-op">.</tt><tt id="link-107" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-107', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-108" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-108', 'data', 'link-102');">data</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"COFACTOR    "</tt><tt class="py-op">:</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">cofactor</tt><tt class="py-op">.</tt><tt id="link-109" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-109', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-110" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-110', 'data', 'link-102');">data</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"COMMENT     "</tt><tt class="py-op">:</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-111" class="py-name"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-111', 'comment', 'link-13');">comment</a></tt><tt class="py-op">.</tt><tt id="link-112" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-112', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-113" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-113', 'data', 'link-102');">data</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"DBLINKS     "</tt><tt class="py-op">:</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-string">":"</tt> <tt class="py-keyword">in</tt> <tt id="link-114" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-114', 'data', 'link-102');">data</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">                <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-115" class="py-name" targets="Method Bio.Crystal.Crystal.values()=Bio.Crystal.Crystal-class.html#values,Method Bio.File._IndexedSeqFileDict.values()=Bio.File._IndexedSeqFileDict-class.html#values,Method Bio.Phylo.PhyloXML.Events.values()=Bio.Phylo.PhyloXML.Events-class.html#values,Method Bio._py3k._ordereddict.OrderedDict.values()=Bio._py3k._ordereddict.OrderedDict-class.html#values,Method BioSQL.BioSeqDatabase.BioSeqDatabase.values()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#values,Method BioSQL.BioSeqDatabase.DBServer.values()=BioSQL.BioSeqDatabase.DBServer-class.html#values"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-115', 'values', 'link-115');">values</a></tt> <tt class="py-op">=</tt> <tt id="link-116" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-116', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-117" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-117', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">":"</tt><tt class="py-op">)</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">                <tt id="link-118" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-118', 'values', 'link-115');">values</a></tt> <tt class="py-op">=</tt> <tt id="link-119" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-119', 'values', 'link-115');">values</a></tt><tt class="py-op">.</tt><tt id="link-120" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-120', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-121" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-121', 'values', 'link-115');">values</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">dblinks</tt><tt class="py-op">.</tt><tt id="link-122" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-122', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">)</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">dblinks</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">                <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-123" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-123', 'values', 'link-115');">values</a></tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">                <tt id="link-124" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-124', 'values', 'link-115');">values</a></tt><tt class="py-op">.</tt><tt id="link-125" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.extend()=Bio.Align.MultipleSeqAlignment-class.html#extend,Method Bio.SCOP.Raf.SeqMap.extend()=Bio.SCOP.Raf.SeqMap-class.html#extend,Method Bio.Seq.MutableSeq.extend()=Bio.Seq.MutableSeq-class.html#extend"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-125', 'extend', 'link-125');">extend</a></tt><tt class="py-op">(</tt><tt id="link-126" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-126', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-127" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-127', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-128" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-128', 'values', 'link-115');">values</a></tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">dblinks</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"DISEASE     "</tt><tt class="py-op">:</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-string">":"</tt> <tt class="py-keyword">in</tt> <tt id="link-129" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-129', 'data', 'link-102');">data</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">                <tt id="link-130" class="py-name" targets="Method Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database()=Bio.Blast.NCBIStandalone._DatabaseReportConsumer-class.html#database"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-130', 'database', 'link-130');">database</a></tt><tt class="py-op">,</tt> <tt id="link-131" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-131', 'data', 'link-102');">data</a></tt> <tt class="py-op">=</tt> <tt id="link-132" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-132', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-133" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-133', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">":"</tt><tt class="py-op">)</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">                <tt id="link-134" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Pathway.number=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#number"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.number" class="py-name" href="#" onclick="return doclink('link-134', 'number', 'link-134');">number</a></tt><tt class="py-op">,</tt> <tt id="link-135" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-135', 'name', 'link-11');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-136" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-136', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-137" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-137', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-138" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-138', 'database', 'link-130');">database</a></tt><tt class="py-op">,</tt> <tt id="link-139" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.number" class="py-name" href="#" onclick="return doclink('link-139', 'number', 'link-134');">number</a></tt><tt class="py-op">,</tt> <tt id="link-140" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-140', 'name', 'link-11');">name</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">disease</tt><tt class="py-op">.</tt><tt id="link-141" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-141', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">)</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">disease</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">                <tt id="link-142" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-142', 'database', 'link-130');">database</a></tt><tt class="py-op">,</tt> <tt id="link-143" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.number" class="py-name" href="#" onclick="return doclink('link-143', 'number', 'link-134');">number</a></tt><tt class="py-op">,</tt> <tt id="link-144" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-144', 'name', 'link-11');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">                <tt id="link-145" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-145', 'name', 'link-11');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-146" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-146', 'name', 'link-11');">name</a></tt> <tt class="py-op">+</tt> <tt class="py-string">" "</tt> <tt class="py-op">+</tt> <tt id="link-147" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-147', 'data', 'link-102');">data</a></tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt id="link-148" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-148', 'database', 'link-130');">database</a></tt><tt class="py-op">,</tt> <tt id="link-149" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.number" class="py-name" href="#" onclick="return doclink('link-149', 'number', 'link-134');">number</a></tt><tt class="py-op">,</tt> <tt id="link-150" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-150', 'name', 'link-11');">name</a></tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">disease</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"EFFECTOR    "</tt><tt class="py-op">:</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">effector</tt><tt class="py-op">.</tt><tt id="link-151" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-151', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-152" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-152', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-153" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-153', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"GENES       "</tt><tt class="py-op">:</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-154" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-154', 'data', 'link-102');">data</a></tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">:</tt><tt class="py-number">5</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">': '</tt><tt class="py-op">:</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">                <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-155" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-155', 'values', 'link-115');">values</a></tt> <tt class="py-op">=</tt> <tt id="link-156" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-156', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-157" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-157', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">":"</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">                <tt id="link-158" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-158', 'values', 'link-115');">values</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt id="link-159" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.value()=Bio.Phylo.PhyloXMLIO.Writer-class.html#value"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-159', 'value', 'link-159');">value</a></tt><tt class="py-op">.</tt><tt id="link-160" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-160', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">"("</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-keyword">for</tt> <tt id="link-161" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-161', 'value', 'link-159');">value</a></tt> <tt class="py-keyword">in</tt> <tt id="link-162" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-162', 'values', 'link-115');">values</a></tt><tt class="py-op">.</tt><tt id="link-163" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-163', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-164" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-164', 'values', 'link-115');">values</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-165" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.genes" class="py-name" href="#" onclick="return doclink('link-165', 'genes', 'link-14');">genes</a></tt><tt class="py-op">.</tt><tt id="link-166" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-166', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">)</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-167" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.genes" class="py-name" href="#" onclick="return doclink('link-167', 'genes', 'link-14');">genes</a></tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">                <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-168" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-168', 'values', 'link-115');">values</a></tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt id="link-169" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-169', 'value', 'link-159');">value</a></tt> <tt class="py-keyword">in</tt> <tt id="link-170" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-170', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-171" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-171', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">                    <tt id="link-172" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-172', 'value', 'link-159');">value</a></tt> <tt class="py-op">=</tt> <tt id="link-173" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-173', 'value', 'link-159');">value</a></tt><tt class="py-op">.</tt><tt id="link-174" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-174', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">"("</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">                    <tt id="link-175" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-175', 'values', 'link-115');">values</a></tt><tt class="py-op">.</tt><tt id="link-176" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-176', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-177" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-177', 'value', 'link-159');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-178" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-178', 'values', 'link-115');">values</a></tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-179" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.genes" class="py-name" href="#" onclick="return doclink('link-179', 'genes', 'link-14');">genes</a></tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"INHIBITOR   "</tt><tt class="py-op">:</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">inhibitor</tt><tt class="py-op">.</tt><tt id="link-180" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-180', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-181" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-181', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-182" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-182', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"NAME        "</tt><tt class="py-op">:</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-183" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-183', 'name', 'link-11');">name</a></tt><tt class="py-op">.</tt><tt id="link-184" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-184', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-185" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-185', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-186" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-186', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"PATHWAY     "</tt><tt class="py-op">:</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-187" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-187', 'data', 'link-102');">data</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">5</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'PATH:'</tt><tt class="py-op">:</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line">                <tt class="py-name">_</tt><tt class="py-op">,</tt> <tt class="py-name">map_num</tt><tt class="py-op">,</tt> <tt id="link-188" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-188', 'name', 'link-11');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-189" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-189', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-190" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-190', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">                <tt class="py-name">pathway</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-string">'PATH'</tt><tt class="py-op">,</tt> <tt class="py-name">map_num</tt><tt class="py-op">,</tt> <tt id="link-191" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-191', 'name', 'link-11');">name</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">pathway</tt><tt class="py-op">.</tt><tt id="link-192" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-192', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">pathway</tt><tt class="py-op">)</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line">                <tt class="py-name">ec_num</tt><tt class="py-op">,</tt> <tt id="link-193" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-193', 'name', 'link-11');">name</a></tt> <tt class="py-op">=</tt> <tt id="link-194" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-194', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-195" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-195', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">                <tt class="py-name">pathway</tt> <tt class="py-op">=</tt> <tt class="py-string">'PATH'</tt><tt class="py-op">,</tt> <tt class="py-name">ec_num</tt><tt class="py-op">,</tt> <tt id="link-196" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-196', 'name', 'link-11');">name</a></tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">pathway</tt><tt class="py-op">.</tt><tt id="link-197" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-197', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">pathway</tt><tt class="py-op">)</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"PRODUCT     "</tt><tt class="py-op">:</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">product</tt><tt class="py-op">.</tt><tt id="link-198" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-198', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-199" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-199', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-200" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-200', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"REACTION    "</tt><tt class="py-op">:</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-201" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.reaction" class="py-name" href="#" onclick="return doclink('link-201', 'reaction', 'link-12');">reaction</a></tt><tt class="py-op">.</tt><tt id="link-202" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-202', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-203" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-203', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-204" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-204', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"STRUCTURES  "</tt><tt class="py-op">:</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-205" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-205', 'data', 'link-102');">data</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">4</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'PDB:'</tt><tt class="py-op">:</tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line">                <tt id="link-206" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-206', 'database', 'link-130');">database</a></tt> <tt class="py-op">=</tt> <tt id="link-207" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-207', 'data', 'link-102');">data</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">3</tt><tt class="py-op">]</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line">                <tt class="py-name">accessions</tt> <tt class="py-op">=</tt> <tt id="link-208" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-208', 'data', 'link-102');">data</a></tt><tt class="py-op">[</tt><tt class="py-number">4</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-209" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-209', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-210" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-210', 'database', 'link-130');">database</a></tt><tt class="py-op">,</tt> <tt class="py-name">accessions</tt><tt class="py-op">)</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">structures</tt><tt class="py-op">.</tt><tt id="link-211" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-211', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">row</tt><tt class="py-op">)</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">structures</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line">                <tt id="link-212" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-212', 'database', 'link-130');">database</a></tt><tt class="py-op">,</tt> <tt class="py-name">accessions</tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line">                <tt class="py-name">accessions</tt><tt class="py-op">.</tt><tt id="link-213" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-213', 'extend', 'link-125');">extend</a></tt><tt class="py-op">(</tt><tt id="link-214" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-214', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-215" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-215', 'split', 'link-105');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">                <tt class="py-name">row</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-216" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-216', 'database', 'link-130');">database</a></tt><tt class="py-op">,</tt> <tt class="py-name">accessions</tt><tt class="py-op">)</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">                <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">structures</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">row</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"SUBSTRATE   "</tt><tt class="py-op">:</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">substrate</tt><tt class="py-op">.</tt><tt id="link-217" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-217', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-218" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-218', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-219" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-219', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">keyword</tt> <tt class="py-op">==</tt> <tt class="py-string">"SYSNAME     "</tt><tt class="py-op">:</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">sysname</tt><tt class="py-op">.</tt><tt id="link-220" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-220', 'append', 'link-65');">append</a></tt><tt class="py-op">(</tt><tt id="link-221" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-221', 'data', 'link-102');">data</a></tt><tt class="py-op">.</tt><tt id="link-222" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-222', 'strip', 'link-103');">strip</a></tt><tt class="py-op">(</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line"> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line"> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-223" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-223', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-224" class="py-name" targets="Module Bio.Phylo._utils=Bio.Phylo._utils-module.html,Module Bio.SearchIO._utils=Bio.SearchIO._utils-module.html,Module Bio._utils=Bio._utils-module.html"><a title="Bio.Phylo._utils
+Bio.SearchIO._utils
+Bio._utils" class="py-name" href="#" onclick="return doclink('link-224', '_utils', 'link-224');">_utils</a></tt> <tt class="py-keyword">import</tt> <tt id="link-225" class="py-name" targets="Function Bio._utils.run_doctest()=Bio._utils-module.html#run_doctest"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-225', 'run_doctest', 'link-225');">run_doctest</a></tt> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line">    <tt id="link-226" class="py-name"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-226', 'run_doctest', 'link-225');">run_doctest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:37 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

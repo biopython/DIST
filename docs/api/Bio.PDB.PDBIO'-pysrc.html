@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.PDB.PDBIO'</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.PDB-module.html">Package&nbsp;PDB</a> ::
+        Module&nbsp;PDBIO'
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.PDB.PDBIO%27-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.PDB.PDBIO%27-module.html">Module Bio.PDB.PDBIO'</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Output of PDB files."""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-1', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">basestring</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-2', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Package Bio.PDB=Bio.PDB-module.html"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-3', 'PDB', 'link-3');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Module Bio.PDB.StructureBuilder=Bio.PDB.StructureBuilder-module.html,Class Bio.PDB.StructureBuilder.StructureBuilder=Bio.PDB.StructureBuilder.StructureBuilder-class.html"><a title="Bio.PDB.StructureBuilder
+Bio.PDB.StructureBuilder.StructureBuilder" class="py-name" href="#" onclick="return doclink('link-4', 'StructureBuilder', 'link-4');">StructureBuilder</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name"><a title="Bio.PDB.StructureBuilder
+Bio.PDB.StructureBuilder.StructureBuilder" class="py-name" href="#" onclick="return doclink('link-5', 'StructureBuilder', 'link-4');">StructureBuilder</a></tt>  <tt class="py-comment"># To allow saving of chains, residues, etc..</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-6" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-6', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Package Bio.Data=Bio.Data-module.html"><a title="Bio.Data" class="py-name" href="#" onclick="return doclink('link-7', 'Data', 'link-7');">Data</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Module Bio.Data.IUPACData=Bio.Data.IUPACData-module.html"><a title="Bio.Data.IUPACData" class="py-name" href="#" onclick="return doclink('link-8', 'IUPACData', 'link-8');">IUPACData</a></tt> <tt class="py-keyword">import</tt> <tt id="link-9" class="py-name" targets="Variable Bio.Data.IUPACData.atom_weights=Bio.Data.IUPACData-module.html#atom_weights,Variable Bio.PDB.PDBIO'.atom_weights=Bio.PDB.PDBIO%27-module.html#atom_weights"><a title="Bio.Data.IUPACData.atom_weights
+Bio.PDB.PDBIO'.atom_weights" class="py-name" href="#" onclick="return doclink('link-9', 'atom_weights', 'link-9');">atom_weights</a></tt>  <tt class="py-comment"># Allowed Elements</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable Bio.PDB.PDBIO'._ATOM_FORMAT_STRING=Bio.PDB.PDBIO%27-module.html#_ATOM_FORMAT_STRING"><a title="Bio.PDB.PDBIO'._ATOM_FORMAT_STRING" class="py-name" href="#" onclick="return doclink('link-10', '_ATOM_FORMAT_STRING', 'link-10');">_ATOM_FORMAT_STRING</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="Select"></a><div id="Select-def"><a name="L18"></a><tt class="py-lineno"> 18</tt> <a class="py-toggle" href="#" id="Select-toggle" onclick="return toggle('Select');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.Select-class.html">Select</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Select-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Select-expanded"><a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt class="py-docstring">"""Select everything fo PDB output (for use as a bas class).</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    Default selection (everything) during writing - can be used as base class</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">    to implement selective output. This selects which entities will be written out.</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="Select.__repr__"></a><div id="Select.__repr__-def"><a name="L25"></a><tt class="py-lineno"> 25</tt> <a class="py-toggle" href="#" id="Select.__repr__-toggle" onclick="return toggle('Select.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.Select-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Select.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Select.__repr__-expanded"><a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"&lt;Select all&gt;"</tt> </tt>
+</div><a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"> </tt>
+<a name="Select.accept_model"></a><div id="Select.accept_model-def"><a name="L28"></a><tt class="py-lineno"> 28</tt> <a class="py-toggle" href="#" id="Select.accept_model-toggle" onclick="return toggle('Select.accept_model');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.Select-class.html#accept_model">accept_model</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Select.accept_model-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Select.accept_model-expanded"><a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">        <tt class="py-docstring">"""Overload this to reject models for output."""</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"> </tt>
+<a name="Select.accept_chain"></a><div id="Select.accept_chain-def"><a name="L32"></a><tt class="py-lineno"> 32</tt> <a class="py-toggle" href="#" id="Select.accept_chain-toggle" onclick="return toggle('Select.accept_chain');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.Select-class.html#accept_chain">accept_chain</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">chain</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Select.accept_chain-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Select.accept_chain-expanded"><a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-docstring">"""Overload this to reject chains for output."""</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"> </tt>
+<a name="Select.accept_residue"></a><div id="Select.accept_residue-def"><a name="L36"></a><tt class="py-lineno"> 36</tt> <a class="py-toggle" href="#" id="Select.accept_residue-toggle" onclick="return toggle('Select.accept_residue');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.Select-class.html#accept_residue">accept_residue</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">residue</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Select.accept_residue-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Select.accept_residue-expanded"><a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-docstring">"""Overload this to reject residues for output."""</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="Select.accept_atom"></a><div id="Select.accept_atom-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="Select.accept_atom-toggle" onclick="return toggle('Select.accept_atom');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.Select-class.html#accept_atom">accept_atom</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">atom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Select.accept_atom-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Select.accept_atom-expanded"><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-docstring">"""Overload this to reject atoms for output."""</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div></div><a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"> </tt>
+<a name="PDBIO"></a><div id="PDBIO-def"><a name="L45"></a><tt class="py-lineno"> 45</tt> <a class="py-toggle" href="#" id="PDBIO-toggle" onclick="return toggle('PDBIO');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.PDBIO-class.html">PDBIO</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PDBIO-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="PDBIO-expanded"><a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-docstring">"""Write a Structure object (or a subset of a Structure object) as a PDB file.</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    Example:</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; p=PDBParser()</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; s=p.get_structure("1fat", "1fat.pdb")</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; io=PDBIO()</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; io.set_structure(s)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; io.save("out.pdb")</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="PDBIO.__init__"></a><div id="PDBIO.__init__-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="PDBIO.__init__-toggle" onclick="return toggle('PDBIO.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.PDBIO-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">use_model_flag</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PDBIO.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PDBIO.__init__-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-docstring">"""Creat the PDBIO object.</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">        @param use_model_flag: if 1, force use of the MODEL record in output.</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">        @type use_model_flag: int</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">use_model_flag</tt> <tt class="py-op">=</tt> <tt class="py-name">use_model_flag</tt> </tt>
+</div><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">    <tt class="py-comment"># private mathods</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"> </tt>
+<a name="PDBIO._get_atom_line"></a><div id="PDBIO._get_atom_line-def"><a name="L66"></a><tt class="py-lineno"> 66</tt> <a class="py-toggle" href="#" id="PDBIO._get_atom_line-toggle" onclick="return toggle('PDBIO._get_atom_line');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.PDBIO-class.html#_get_atom_line">_get_atom_line</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">atom</tt><tt class="py-op">,</tt> <tt class="py-param">hetfield</tt><tt class="py-op">,</tt> <tt class="py-param">segid</tt><tt class="py-op">,</tt> <tt class="py-param">atom_number</tt><tt class="py-op">,</tt> <tt class="py-param">resname</tt><tt class="py-op">,</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">                       <tt class="py-param">resseq</tt><tt class="py-op">,</tt> <tt class="py-param">icode</tt><tt class="py-op">,</tt> <tt class="py-param">chain_id</tt><tt class="py-op">,</tt> <tt class="py-param">charge</tt><tt class="py-op">=</tt><tt class="py-string">"  "</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PDBIO._get_atom_line-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PDBIO._get_atom_line-expanded"><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns an ATOM PDB string (PRIVATE)."""</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">hetfield</tt> <tt class="py-op">!=</tt> <tt class="py-string">" "</tt><tt class="py-op">:</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">            <tt class="py-name">record_type</tt> <tt class="py-op">=</tt> <tt class="py-string">"HETATM"</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">            <tt class="py-name">record_type</tt> <tt class="py-op">=</tt> <tt class="py-string">"ATOM  "</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.element=Bio.KEGG.KGML.KGML_pathway.Component-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Entry.element=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Graphics.element=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.element=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.element=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Relation.element=Bio.KEGG.KGML.KGML_pathway.Relation-class.html#element,Variable Bio.Phylo._cdao_owl.element=Bio.Phylo._cdao_owl-module.html#element"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-11', 'element', 'link-11');">element</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt id="link-12" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-12', 'element', 'link-11');">element</a></tt> <tt class="py-op">=</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-13', 'element', 'link-11');">element</a></tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.Seq.Seq.strip()=Bio.Seq.Seq-class.html#strip"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-14', 'strip', 'link-14');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.Seq.Seq.upper()=Bio.Seq.Seq-class.html#upper,Method Bio.Seq.UnknownSeq.upper()=Bio.Seq.UnknownSeq-class.html#upper,Method Bio.SeqRecord.SeqRecord.upper()=Bio.SeqRecord.SeqRecord-class.html#upper"><a title="Bio.Seq.Seq.upper
+Bio.Seq.UnknownSeq.upper
+Bio.SeqRecord.SeqRecord.upper" class="py-name" href="#" onclick="return doclink('link-15', 'upper', 'link-15');">upper</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-16" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-16', 'element', 'link-11');">element</a></tt><tt class="py-op">.</tt><tt class="py-name">capitalize</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-17" class="py-name"><a title="Bio.Data.IUPACData.atom_weights
+Bio.PDB.PDBIO'.atom_weights" class="py-name" href="#" onclick="return doclink('link-17', 'atom_weights', 'link-9');">atom_weights</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">                <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Unrecognised element %r"</tt> <tt class="py-op">%</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-18', 'element', 'link-11');">element</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">            <tt id="link-19" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-19', 'element', 'link-11');">element</a></tt> <tt class="py-op">=</tt> <tt id="link-20" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-20', 'element', 'link-11');">element</a></tt><tt class="py-op">.</tt><tt class="py-name">rjust</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt id="link-21" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-21', 'element', 'link-11');">element</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"  "</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt id="link-22" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-22', 'name', 'link-22');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_fullname()=Bio.PDB.Atom.Atom-class.html#get_fullname"><a title="Bio.PDB.Atom.Atom.get_fullname" class="py-name" href="#" onclick="return doclink('link-23', 'get_fullname', 'link-23');">get_fullname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">altloc</tt> <tt class="py-op">=</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_altloc()=Bio.PDB.Atom.Atom-class.html#get_altloc"><a title="Bio.PDB.Atom.Atom.get_altloc" class="py-name" href="#" onclick="return doclink('link-24', 'get_altloc', 'link-24');">get_altloc</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt id="link-25" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-25', 'x', 'link-25');">x</a></tt><tt class="py-op">,</tt> <tt id="link-26" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.y=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#y"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-26', 'y', 'link-26');">y</a></tt><tt class="py-op">,</tt> <tt class="py-name">z</tt> <tt class="py-op">=</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_coord()=Bio.PDB.Atom.Atom-class.html#get_coord"><a title="Bio.PDB.Atom.Atom.get_coord" class="py-name" href="#" onclick="return doclink('link-27', 'get_coord', 'link-27');">get_coord</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-name">bfactor</tt> <tt class="py-op">=</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_bfactor()=Bio.PDB.Atom.Atom-class.html#get_bfactor"><a title="Bio.PDB.Atom.Atom.get_bfactor" class="py-name" href="#" onclick="return doclink('link-28', 'get_bfactor', 'link-28');">get_bfactor</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">occupancy</tt> <tt class="py-op">=</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_occupancy()=Bio.PDB.Atom.Atom-class.html#get_occupancy"><a title="Bio.PDB.Atom.Atom.get_occupancy" class="py-name" href="#" onclick="return doclink('link-29', 'get_occupancy', 'link-29');">get_occupancy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">            <tt class="py-name">occupancy_str</tt> <tt class="py-op">=</tt> <tt class="py-string">"%6.2f"</tt> <tt class="py-op">%</tt> <tt class="py-name">occupancy</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">TypeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">occupancy</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">                <tt class="py-name">occupancy_str</tt> <tt class="py-op">=</tt> <tt class="py-string">" "</tt> <tt class="py-op">*</tt> <tt class="py-number">6</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">                <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">                <tt class="py-keyword">from</tt> <tt id="link-30" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-30', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-31" class="py-name" targets="Class Bio.BiopythonWarning=Bio.BiopythonWarning-class.html"><a title="Bio.BiopythonWarning" class="py-name" href="#" onclick="return doclink('link-31', 'BiopythonWarning', 'link-31');">BiopythonWarning</a></tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">                <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"Missing occupancy in atom %s written as blank"</tt> <tt class="py-op">%</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">                              <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_full_id()=Bio.PDB.Atom.Atom-class.html#get_full_id,Method Bio.PDB.Entity.Entity.get_full_id()=Bio.PDB.Entity.Entity-class.html#get_full_id"><a title="Bio.PDB.Atom.Atom.get_full_id
+Bio.PDB.Entity.Entity.get_full_id" class="py-name" href="#" onclick="return doclink('link-32', 'get_full_id', 'link-32');">get_full_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-33" class="py-name"><a title="Bio.BiopythonWarning" class="py-name" href="#" onclick="return doclink('link-33', 'BiopythonWarning', 'link-31');">BiopythonWarning</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">                <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">"Invalid occupancy %r in atom %r"</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">                                <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">occupancy</tt><tt class="py-op">,</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.PDB.Atom.Atom.get_full_id
+Bio.PDB.Entity.Entity.get_full_id" class="py-name" href="#" onclick="return doclink('link-34', 'get_full_id', 'link-32');">get_full_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-name">args</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">record_type</tt><tt class="py-op">,</tt> <tt class="py-name">atom_number</tt><tt class="py-op">,</tt> <tt id="link-35" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-35', 'name', 'link-22');">name</a></tt><tt class="py-op">,</tt> <tt class="py-name">altloc</tt><tt class="py-op">,</tt> <tt class="py-name">resname</tt><tt class="py-op">,</tt> <tt id="link-36" class="py-name" targets="Variable Bio.FSSP.fssp_rec.align.chain_id=Bio.FSSP.fssp_rec.align-class.html#chain_id"><a title="Bio.FSSP.fssp_rec.align.chain_id" class="py-name" href="#" onclick="return doclink('link-36', 'chain_id', 'link-36');">chain_id</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">                <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt><tt class="py-op">,</tt> <tt id="link-37" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-37', 'x', 'link-25');">x</a></tt><tt class="py-op">,</tt> <tt id="link-38" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-38', 'y', 'link-26');">y</a></tt><tt class="py-op">,</tt> <tt class="py-name">z</tt><tt class="py-op">,</tt> <tt class="py-name">occupancy_str</tt><tt class="py-op">,</tt> <tt class="py-name">bfactor</tt><tt class="py-op">,</tt> <tt class="py-name">segid</tt><tt class="py-op">,</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">                <tt id="link-39" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-39', 'element', 'link-11');">element</a></tt><tt class="py-op">,</tt> <tt class="py-name">charge</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-40" class="py-name"><a title="Bio.PDB.PDBIO'._ATOM_FORMAT_STRING" class="py-name" href="#" onclick="return doclink('link-40', '_ATOM_FORMAT_STRING', 'link-10');">_ATOM_FORMAT_STRING</a></tt> <tt class="py-op">%</tt> <tt class="py-name">args</tt> </tt>
+</div><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">    <tt class="py-comment"># Public methods</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"> </tt>
+<a name="PDBIO.set_structure"></a><div id="PDBIO.set_structure-def"><a name="L105"></a><tt class="py-lineno">105</tt> <a class="py-toggle" href="#" id="PDBIO.set_structure-toggle" onclick="return toggle('PDBIO.set_structure');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.PDBIO-class.html#set_structure">set_structure</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pdb_object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PDBIO.set_structure-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PDBIO.set_structure-expanded"><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-comment"># Check what the user is providing and build a structure appropriately</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">pdb_object</tt><tt class="py-op">.</tt><tt class="py-name">level</tt> <tt class="py-op">==</tt> <tt class="py-string">"S"</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">            <tt id="link-41" class="py-name" targets="Variable Bio.SubsMat.MatrixInfo.structure=Bio.SubsMat.MatrixInfo-module.html#structure"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-41', 'structure', 'link-41');">structure</a></tt> <tt class="py-op">=</tt> <tt class="py-name">pdb_object</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-name">sb</tt> <tt class="py-op">=</tt> <tt id="link-42" class="py-name"><a title="Bio.PDB.StructureBuilder
+Bio.PDB.StructureBuilder.StructureBuilder" class="py-name" href="#" onclick="return doclink('link-42', 'StructureBuilder', 'link-4');">StructureBuilder</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">            <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name" targets="Method Bio.PDB.StructureBuilder.StructureBuilder.init_structure()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#init_structure"><a title="Bio.PDB.StructureBuilder.StructureBuilder.init_structure" class="py-name" href="#" onclick="return doclink('link-43', 'init_structure', 'link-43');">init_structure</a></tt><tt class="py-op">(</tt><tt class="py-string">'pdb'</tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">            <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name" targets="Method Bio.PDB.StructureBuilder.StructureBuilder.init_seg()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#init_seg"><a title="Bio.PDB.StructureBuilder.StructureBuilder.init_seg" class="py-name" href="#" onclick="return doclink('link-44', 'init_seg', 'link-44');">init_seg</a></tt><tt class="py-op">(</tt><tt class="py-string">' '</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">            <tt class="py-comment"># Build parts as necessary</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">pdb_object</tt><tt class="py-op">.</tt><tt class="py-name">level</tt> <tt class="py-op">==</tt> <tt class="py-string">"M"</tt><tt class="py-op">:</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">                <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-45" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-45', 'structure', 'link-41');">structure</a></tt><tt class="py-op">.</tt><tt id="link-46" class="py-name" targets="Method Bio.Graphics.BasicChromosome._ChromosomeComponent.add()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#add,Method Bio.Nexus.Nexus.StepMatrix.add()=Bio.Nexus.Nexus.StepMatrix-class.html#add,Method Bio.Nexus.Nodes.Chain.add()=Bio.Nexus.Nodes.Chain-class.html#add,Method Bio.PDB.Entity.Entity.add()=Bio.PDB.Entity.Entity-class.html#add,Method Bio.PDB.Residue.DisorderedResidue.add()=Bio.PDB.Residue.DisorderedResidue-class.html#add,Method Bio.PDB.Residue.Residue.add()=Bio.PDB.Residue.Residue-class.html#add,Method Bio.Restriction.Restriction.RestrictionBatch.add()=Bio.Restriction.Restriction.RestrictionBatch-class.html#add"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-46', 'add', 'link-46');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">pdb_object</tt><tt class="py-op">)</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-47', 'structure', 'link-41');">structure</a></tt> <tt class="py-op">=</tt> <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-48', 'structure', 'link-41');">structure</a></tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">                <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name" targets="Method Bio.PDB.StructureBuilder.StructureBuilder.init_model()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#init_model"><a title="Bio.PDB.StructureBuilder.StructureBuilder.init_model" class="py-name" href="#" onclick="return doclink('link-49', 'init_model', 'link-49');">init_model</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">pdb_object</tt><tt class="py-op">.</tt><tt class="py-name">level</tt> <tt class="py-op">==</tt> <tt class="py-string">"C"</tt><tt class="py-op">:</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">                    <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-50', 'structure', 'link-41');">structure</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-51', 'add', 'link-46');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">pdb_object</tt><tt class="py-op">)</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                    <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name" targets="Method Bio.PDB.StructureBuilder.StructureBuilder.init_chain()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#init_chain"><a title="Bio.PDB.StructureBuilder.StructureBuilder.init_chain" class="py-name" href="#" onclick="return doclink('link-52', 'init_chain', 'link-52');">init_chain</a></tt><tt class="py-op">(</tt><tt class="py-string">'A'</tt><tt class="py-op">)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">pdb_object</tt><tt class="py-op">.</tt><tt class="py-name">level</tt> <tt class="py-op">==</tt> <tt class="py-string">"R"</tt><tt class="py-op">:</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">                        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">                            <tt class="py-name">parent_id</tt> <tt class="py-op">=</tt> <tt class="py-name">pdb_object</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-53', 'id', 'link-53');">id</a></tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                            <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-54', 'structure', 'link-41');">structure</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'A'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-55', 'id', 'link-53');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-name">parent_id</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">                        <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt><tt class="py-op">:</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">                            <tt class="py-keyword">pass</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                        <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-56', 'structure', 'link-41');">structure</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'A'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-57', 'add', 'link-46');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">pdb_object</tt><tt class="py-op">)</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">                    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">                        <tt class="py-comment"># Atom</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">                        <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name" targets="Method Bio.PDB.StructureBuilder.StructureBuilder.init_residue()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#init_residue"><a title="Bio.PDB.StructureBuilder.StructureBuilder.init_residue" class="py-name" href="#" onclick="return doclink('link-58', 'init_residue', 'link-58');">init_residue</a></tt><tt class="py-op">(</tt><tt class="py-string">'DUM'</tt><tt class="py-op">,</tt> <tt class="py-string">' '</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-string">' '</tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">                        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">                            <tt class="py-name">parent_id</tt> <tt class="py-op">=</tt> <tt class="py-name">pdb_object</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt><tt class="py-op">.</tt><tt id="link-59" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-59', 'id', 'link-53');">id</a></tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">                            <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-60" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-60', 'structure', 'link-41');">structure</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'A'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-61" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-61', 'id', 'link-53');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-name">parent_id</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">                        <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt><tt class="py-op">:</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">                            <tt class="py-keyword">pass</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">                        <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-62', 'structure', 'link-41');">structure</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'A'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">child_list</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-63', 'add', 'link-46');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">pdb_object</tt><tt class="py-op">)</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line"> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-comment"># Return structure</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">            <tt id="link-64" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-64', 'structure', 'link-41');">structure</a></tt> <tt class="py-op">=</tt> <tt class="py-name">sb</tt><tt class="py-op">.</tt><tt id="link-65" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-65', 'structure', 'link-41');">structure</a></tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-66', 'structure', 'link-41');">structure</a></tt> <tt class="py-op">=</tt> <tt id="link-67" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-67', 'structure', 'link-41');">structure</a></tt> </tt>
+</div><a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"> </tt>
+<a name="PDBIO.save"></a><div id="PDBIO.save-def"><a name="L144"></a><tt class="py-lineno">144</tt> <a class="py-toggle" href="#" id="PDBIO.save-toggle" onclick="return toggle('PDBIO.save');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PDBIO'.PDBIO-class.html#save">save</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">file</tt><tt class="py-op">,</tt> <tt class="py-param">select</tt><tt class="py-op">=</tt><tt id="link-68" class="py-name" targets="Class Bio.PDB.PDBIO'.Select=Bio.PDB.PDBIO%27.Select-class.html"><a title="Bio.PDB.PDBIO'.Select" class="py-name" href="#" onclick="return doclink('link-68', 'Select', 'link-68');">Select</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-param">write_end</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PDBIO.save-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PDBIO.save-expanded"><a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"><tt class="py-docstring">        @param file: output file</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"><tt class="py-docstring">        @type file: string or filehandle</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"><tt class="py-docstring">        @param select: selects which entities will be written.</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"><tt class="py-docstring">        @type select: object</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">        Typically select is a subclass of L{Select}, it should</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring">        have the following methods:</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">         - accept_model(model)</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring">         - accept_chain(chain)</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">         - accept_residue(residue)</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"><tt class="py-docstring">         - accept_atom(atom)</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"><tt class="py-docstring">                </tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-docstring">        These methods should return 1 if the entity is to be</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"><tt class="py-docstring">        written out, 0 otherwise.</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"><tt class="py-docstring">        Typically select is a subclass of L{Select}.</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">        <tt class="py-name">get_atom_line</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name" targets="Method Bio.PDB.PDBIO'.PDBIO._get_atom_line()=Bio.PDB.PDBIO%27.PDBIO-class.html#_get_atom_line"><a title="Bio.PDB.PDBIO'.PDBIO._get_atom_line" class="py-name" href="#" onclick="return doclink('link-69', '_get_atom_line', 'link-69');">_get_atom_line</a></tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">file</tt><tt class="py-op">,</tt> <tt class="py-name">basestring</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">            <tt class="py-name">fp</tt> <tt class="py-op">=</tt> <tt id="link-70" class="py-name" targets="Function Bio.bgzf.open()=Bio.bgzf-module.html#open"><a title="Bio.bgzf.open" class="py-name" href="#" onclick="return doclink('link-70', 'open', 'link-70');">open</a></tt><tt class="py-op">(</tt><tt class="py-name">file</tt><tt class="py-op">,</tt> <tt class="py-string">"w"</tt><tt class="py-op">)</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">            <tt class="py-name">close_file</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">            <tt class="py-comment"># filehandle, I hope :-)</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">            <tt class="py-name">fp</tt> <tt class="py-op">=</tt> <tt class="py-name">file</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">            <tt class="py-name">close_file</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">        <tt class="py-comment"># multiple models?</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-71" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-71', 'structure', 'link-41');">structure</a></tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">1</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">use_model_flag</tt><tt class="py-op">:</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">            <tt class="py-name">model_flag</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">            <tt class="py-name">model_flag</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">model</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-72" class="py-name"><a title="Bio.SubsMat.MatrixInfo.structure" class="py-name" href="#" onclick="return doclink('link-72', 'structure', 'link-41');">structure</a></tt><tt class="py-op">.</tt><tt id="link-73" class="py-name" targets="Method Bio.PDB.Entity.Entity.get_list()=Bio.PDB.Entity.Entity-class.html#get_list"><a title="Bio.PDB.Entity.Entity.get_list" class="py-name" href="#" onclick="return doclink('link-73', 'get_list', 'link-73');">get_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-74" class="py-name" targets="Method Bio.GA.Selection.Abstract.AbstractSelection.select()=Bio.GA.Selection.Abstract.AbstractSelection-class.html#select,Method Bio.GA.Selection.Diversity.DiversitySelection.select()=Bio.GA.Selection.Diversity.DiversitySelection-class.html#select,Method Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.select()=Bio.GA.Selection.RouletteWheel.RouletteWheelSelection-class.html#select,Method Bio.GA.Selection.Tournament.TournamentSelection.select()=Bio.GA.Selection.Tournament.TournamentSelection-class.html#select"><a title="Bio.GA.Selection.Abstract.AbstractSelection.select
+Bio.GA.Selection.Diversity.DiversitySelection.select
+Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.select
+Bio.GA.Selection.Tournament.TournamentSelection.select" class="py-name" href="#" onclick="return doclink('link-74', 'select', 'link-74');">select</a></tt><tt class="py-op">.</tt><tt id="link-75" class="py-name" targets="Method Bio.PDB.Dice.ChainSelector.accept_model()=Bio.PDB.Dice.ChainSelector-class.html#accept_model,Method Bio.PDB.PDBIO'.Select.accept_model()=Bio.PDB.PDBIO%27.Select-class.html#accept_model"><a title="Bio.PDB.Dice.ChainSelector.accept_model
+Bio.PDB.PDBIO'.Select.accept_model" class="py-name" href="#" onclick="return doclink('link-75', 'accept_model', 'link-75');">accept_model</a></tt><tt class="py-op">(</tt><tt class="py-name">model</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">                <tt class="py-keyword">continue</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">            <tt class="py-comment"># necessary for ENDMDL</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">            <tt class="py-comment"># do not write ENDMDL if no residues were written</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">            <tt class="py-comment"># for this model</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">            <tt class="py-name">model_residues_written</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">            <tt class="py-name">atom_number</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">model_flag</tt><tt class="py-op">:</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">                <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt id="link-76" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-76', 'write', 'link-76');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">"MODEL      %s\n"</tt> <tt class="py-op">%</tt> <tt class="py-name">model</tt><tt class="py-op">.</tt><tt class="py-name">serial_num</tt><tt class="py-op">)</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">chain</tt> <tt class="py-keyword">in</tt> <tt class="py-name">model</tt><tt class="py-op">.</tt><tt id="link-77" class="py-name"><a title="Bio.PDB.Entity.Entity.get_list" class="py-name" href="#" onclick="return doclink('link-77', 'get_list', 'link-73');">get_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-78" class="py-name"><a title="Bio.GA.Selection.Abstract.AbstractSelection.select
+Bio.GA.Selection.Diversity.DiversitySelection.select
+Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.select
+Bio.GA.Selection.Tournament.TournamentSelection.select" class="py-name" href="#" onclick="return doclink('link-78', 'select', 'link-74');">select</a></tt><tt class="py-op">.</tt><tt id="link-79" class="py-name" targets="Method Bio.PDB.Dice.ChainSelector.accept_chain()=Bio.PDB.Dice.ChainSelector-class.html#accept_chain,Method Bio.PDB.PDBIO'.Select.accept_chain()=Bio.PDB.PDBIO%27.Select-class.html#accept_chain"><a title="Bio.PDB.Dice.ChainSelector.accept_chain
+Bio.PDB.PDBIO'.Select.accept_chain" class="py-name" href="#" onclick="return doclink('link-79', 'accept_chain', 'link-79');">accept_chain</a></tt><tt class="py-op">(</tt><tt class="py-name">chain</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">                    <tt class="py-keyword">continue</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">                <tt id="link-80" class="py-name"><a title="Bio.FSSP.fssp_rec.align.chain_id" class="py-name" href="#" onclick="return doclink('link-80', 'chain_id', 'link-36');">chain_id</a></tt> <tt class="py-op">=</tt> <tt class="py-name">chain</tt><tt class="py-op">.</tt><tt id="link-81" class="py-name" targets="Method Bio.Nexus.Nodes.Node.get_id()=Bio.Nexus.Nodes.Node-class.html#get_id,Method Bio.PDB.Atom.Atom.get_id()=Bio.PDB.Atom.Atom-class.html#get_id,Method Bio.PDB.Entity.DisorderedEntityWrapper.get_id()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#get_id,Method Bio.PDB.Entity.Entity.get_id()=Bio.PDB.Entity.Entity-class.html#get_id,Method Bio.PDB.FragmentMapper'.Fragment.get_id()=Bio.PDB.FragmentMapper%27.Fragment-class.html#get_id"><a title="Bio.Nexus.Nodes.Node.get_id
+Bio.PDB.Atom.Atom.get_id
+Bio.PDB.Entity.DisorderedEntityWrapper.get_id
+Bio.PDB.Entity.Entity.get_id
+Bio.PDB.FragmentMapper'.Fragment.get_id" class="py-name" href="#" onclick="return doclink('link-81', 'get_id', 'link-81');">get_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">                <tt class="py-comment"># necessary for TER</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">                <tt class="py-comment"># do not write TER if no residues were written</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">                <tt class="py-comment"># for this chain</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">                <tt class="py-name">chain_residues_written</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">residue</tt> <tt class="py-keyword">in</tt> <tt class="py-name">chain</tt><tt class="py-op">.</tt><tt id="link-82" class="py-name" targets="Method Bio.PDB.Chain.Chain.get_unpacked_list()=Bio.PDB.Chain.Chain-class.html#get_unpacked_list,Method Bio.PDB.Residue.Residue.get_unpacked_list()=Bio.PDB.Residue.Residue-class.html#get_unpacked_list"><a title="Bio.PDB.Chain.Chain.get_unpacked_list
+Bio.PDB.Residue.Residue.get_unpacked_list" class="py-name" href="#" onclick="return doclink('link-82', 'get_unpacked_list', 'link-82');">get_unpacked_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-83" class="py-name"><a title="Bio.GA.Selection.Abstract.AbstractSelection.select
+Bio.GA.Selection.Diversity.DiversitySelection.select
+Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.select
+Bio.GA.Selection.Tournament.TournamentSelection.select" class="py-name" href="#" onclick="return doclink('link-83', 'select', 'link-74');">select</a></tt><tt class="py-op">.</tt><tt id="link-84" class="py-name" targets="Method Bio.PDB.Dice.ChainSelector.accept_residue()=Bio.PDB.Dice.ChainSelector-class.html#accept_residue,Method Bio.PDB.PDBIO'.Select.accept_residue()=Bio.PDB.PDBIO%27.Select-class.html#accept_residue"><a title="Bio.PDB.Dice.ChainSelector.accept_residue
+Bio.PDB.PDBIO'.Select.accept_residue" class="py-name" href="#" onclick="return doclink('link-84', 'accept_residue', 'link-84');">accept_residue</a></tt><tt class="py-op">(</tt><tt class="py-name">residue</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">                        <tt class="py-keyword">continue</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">                    <tt class="py-name">hetfield</tt><tt class="py-op">,</tt> <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt> <tt class="py-op">=</tt> <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-85" class="py-name"><a title="Bio.Nexus.Nodes.Node.get_id
+Bio.PDB.Atom.Atom.get_id
+Bio.PDB.Entity.DisorderedEntityWrapper.get_id
+Bio.PDB.Entity.Entity.get_id
+Bio.PDB.FragmentMapper'.Fragment.get_id" class="py-name" href="#" onclick="return doclink('link-85', 'get_id', 'link-81');">get_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">                    <tt class="py-name">resname</tt> <tt class="py-op">=</tt> <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-86" class="py-name" targets="Method Bio.PDB.Residue.Residue.get_resname()=Bio.PDB.Residue.Residue-class.html#get_resname"><a title="Bio.PDB.Residue.Residue.get_resname" class="py-name" href="#" onclick="return doclink('link-86', 'get_resname', 'link-86');">get_resname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">                    <tt class="py-name">segid</tt> <tt class="py-op">=</tt> <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-87" class="py-name" targets="Method Bio.PDB.Residue.Residue.get_segid()=Bio.PDB.Residue.Residue-class.html#get_segid"><a title="Bio.PDB.Residue.Residue.get_segid" class="py-name" href="#" onclick="return doclink('link-87', 'get_segid', 'link-87');">get_segid</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">                    <tt class="py-keyword">for</tt> <tt class="py-name">atom</tt> <tt class="py-keyword">in</tt> <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-88" class="py-name"><a title="Bio.PDB.Chain.Chain.get_unpacked_list
+Bio.PDB.Residue.Residue.get_unpacked_list" class="py-name" href="#" onclick="return doclink('link-88', 'get_unpacked_list', 'link-82');">get_unpacked_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt id="link-89" class="py-name"><a title="Bio.GA.Selection.Abstract.AbstractSelection.select
+Bio.GA.Selection.Diversity.DiversitySelection.select
+Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.select
+Bio.GA.Selection.Tournament.TournamentSelection.select" class="py-name" href="#" onclick="return doclink('link-89', 'select', 'link-74');">select</a></tt><tt class="py-op">.</tt><tt id="link-90" class="py-name" targets="Method Bio.PDB.Dice.ChainSelector.accept_atom()=Bio.PDB.Dice.ChainSelector-class.html#accept_atom,Method Bio.PDB.PDBIO'.Select.accept_atom()=Bio.PDB.PDBIO%27.Select-class.html#accept_atom"><a title="Bio.PDB.Dice.ChainSelector.accept_atom
+Bio.PDB.PDBIO'.Select.accept_atom" class="py-name" href="#" onclick="return doclink('link-90', 'accept_atom', 'link-90');">accept_atom</a></tt><tt class="py-op">(</tt><tt class="py-name">atom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">                            <tt class="py-name">chain_residues_written</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">                            <tt class="py-name">model_residues_written</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">                            <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-name">get_atom_line</tt><tt class="py-op">(</tt><tt class="py-name">atom</tt><tt class="py-op">,</tt> <tt class="py-name">hetfield</tt><tt class="py-op">,</tt> <tt class="py-name">segid</tt><tt class="py-op">,</tt> <tt class="py-name">atom_number</tt><tt class="py-op">,</tt> <tt class="py-name">resname</tt><tt class="py-op">,</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">                                <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt><tt class="py-op">,</tt> <tt id="link-91" class="py-name"><a title="Bio.FSSP.fssp_rec.align.chain_id" class="py-name" href="#" onclick="return doclink('link-91', 'chain_id', 'link-36');">chain_id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">                            <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt id="link-92" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-92', 'write', 'link-76');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">                            <tt class="py-name">atom_number</tt> <tt class="py-op">=</tt> <tt class="py-name">atom_number</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">chain_residues_written</tt><tt class="py-op">:</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">                    <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt id="link-93" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-93', 'write', 'link-76');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">"TER\n"</tt><tt class="py-op">)</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">model_flag</tt> <tt class="py-keyword">and</tt> <tt class="py-name">model_residues_written</tt><tt class="py-op">:</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">                <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt id="link-94" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-94', 'write', 'link-76');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">"ENDMDL\n"</tt><tt class="py-op">)</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">write_end</tt><tt class="py-op">:</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">                <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt id="link-95" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-95', 'write', 'link-76');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">'END\n'</tt><tt class="py-op">)</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">close_file</tt><tt class="py-op">:</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">            <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt id="link-96" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.close()=Bio.File._IndexedSeqFileDict-class.html#close,Method Bio.File._SQLiteManySeqFilesDict.close()=Bio.File._SQLiteManySeqFilesDict-class.html#close,Method Bio.SeqIO.SffIO._AddTellHandle.close()=Bio.SeqIO.SffIO._AddTellHandle-class.html#close,Method Bio.bgzf.BgzfReader.close()=Bio.bgzf.BgzfReader-class.html#close,Method Bio.bgzf.BgzfWriter.close()=Bio.bgzf.BgzfWriter-class.html#close,Method BioSQL.BioSeqDatabase.Adaptor.close()=BioSQL.BioSeqDatabase.Adaptor-class.html#close,Method BioSQL.BioSeqDatabase.DBServer.close()=BioSQL.BioSeqDatabase.DBServer-class.html#close"><a title="Bio.File._IndexedSeqFileDict.close
+Bio.File._SQLiteManySeqFilesDict.close
+Bio.SeqIO.SffIO._AddTellHandle.close
+Bio.bgzf.BgzfReader.close
+Bio.bgzf.BgzfWriter.close
+BioSQL.BioSeqDatabase.Adaptor.close
+BioSQL.BioSeqDatabase.DBServer.close" class="py-name" href="#" onclick="return doclink('link-96', 'close', 'link-96');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line"> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-97" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-97', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-98" class="py-name"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-98', 'PDB', 'link-3');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-99" class="py-name" targets="Class Bio.PDB.PDBParser'.PDBParser=Bio.PDB.PDBParser%27.PDBParser-class.html"><a title="Bio.PDB.PDBParser'.PDBParser" class="py-name" href="#" onclick="return doclink('link-99', 'PDBParser', 'link-99');">PDBParser</a></tt> <tt class="py-keyword">import</tt> <tt id="link-100" class="py-name"><a title="Bio.PDB.PDBParser'.PDBParser" class="py-name" href="#" onclick="return doclink('link-100', 'PDBParser', 'link-99');">PDBParser</a></tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line"> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line"> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">    <tt class="py-name">p</tt> <tt class="py-op">=</tt> <tt id="link-101" class="py-name"><a title="Bio.PDB.PDBParser'.PDBParser" class="py-name" href="#" onclick="return doclink('link-101', 'PDBParser', 'link-99');">PDBParser</a></tt><tt class="py-op">(</tt><tt class="py-name">PERMISSIVE</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line"> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">    <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-name">p</tt><tt class="py-op">.</tt><tt id="link-102" class="py-name" targets="Method Bio.PDB.MMCIFParser'.MMCIFParser.get_structure()=Bio.PDB.MMCIFParser%27.MMCIFParser-class.html#get_structure,Method Bio.PDB.PDBParser'.PDBParser.get_structure()=Bio.PDB.PDBParser%27.PDBParser-class.html#get_structure,Method Bio.PDB.StructureBuilder.StructureBuilder.get_structure()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#get_structure"><a title="Bio.PDB.MMCIFParser'.MMCIFParser.get_structure
+Bio.PDB.PDBParser'.PDBParser.get_structure
+Bio.PDB.StructureBuilder.StructureBuilder.get_structure" class="py-name" href="#" onclick="return doclink('link-102', 'get_structure', 'link-102');">get_structure</a></tt><tt class="py-op">(</tt><tt class="py-string">"test"</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line"> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">    <tt class="py-name">io</tt> <tt class="py-op">=</tt> <tt id="link-103" class="py-name" targets="Class Bio.PDB.PDBIO'.PDBIO=Bio.PDB.PDBIO%27.PDBIO-class.html"><a title="Bio.PDB.PDBIO'.PDBIO" class="py-name" href="#" onclick="return doclink('link-103', 'PDBIO', 'link-103');">PDBIO</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">    <tt class="py-name">io</tt><tt class="py-op">.</tt><tt id="link-104" class="py-name" targets="Method Bio.PDB.PDBIO'.PDBIO.set_structure()=Bio.PDB.PDBIO%27.PDBIO-class.html#set_structure"><a title="Bio.PDB.PDBIO'.PDBIO.set_structure" class="py-name" href="#" onclick="return doclink('link-104', 'set_structure', 'link-104');">set_structure</a></tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">    <tt class="py-name">io</tt><tt class="py-op">.</tt><tt id="link-105" class="py-name" targets="Method Bio.Cluster.Record.save()=Bio.Cluster.Record-class.html#save,Function Bio.MarkovModel.save()=Bio.MarkovModel-module.html#save,Method Bio.PDB.PDBIO'.PDBIO.save()=Bio.PDB.PDBIO%27.PDBIO-class.html#save,Function Bio.trie.save()=Bio.trie-module.html#save"><a title="Bio.Cluster.Record.save
+Bio.MarkovModel.save
+Bio.PDB.PDBIO'.PDBIO.save
+Bio.trie.save" class="py-name" href="#" onclick="return doclink('link-105', 'save', 'link-105');">save</a></tt><tt class="py-op">(</tt><tt class="py-string">"out1.pdb"</tt><tt class="py-op">)</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">    <tt class="py-keyword">with</tt> <tt id="link-106" class="py-name"><a title="Bio.bgzf.open" class="py-name" href="#" onclick="return doclink('link-106', 'open', 'link-70');">open</a></tt><tt class="py-op">(</tt><tt class="py-string">"out2.pdb"</tt><tt class="py-op">,</tt> <tt class="py-string">"w"</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">fp</tt><tt class="py-op">:</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">        <tt class="py-name">s1</tt> <tt class="py-op">=</tt> <tt class="py-name">p</tt><tt class="py-op">.</tt><tt id="link-107" class="py-name"><a title="Bio.PDB.MMCIFParser'.MMCIFParser.get_structure
+Bio.PDB.PDBParser'.PDBParser.get_structure
+Bio.PDB.StructureBuilder.StructureBuilder.get_structure" class="py-name" href="#" onclick="return doclink('link-107', 'get_structure', 'link-102');">get_structure</a></tt><tt class="py-op">(</tt><tt class="py-string">"test1"</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">        <tt class="py-name">s2</tt> <tt class="py-op">=</tt> <tt class="py-name">p</tt><tt class="py-op">.</tt><tt id="link-108" class="py-name"><a title="Bio.PDB.MMCIFParser'.MMCIFParser.get_structure
+Bio.PDB.PDBParser'.PDBParser.get_structure
+Bio.PDB.StructureBuilder.StructureBuilder.get_structure" class="py-name" href="#" onclick="return doclink('link-108', 'get_structure', 'link-102');">get_structure</a></tt><tt class="py-op">(</tt><tt class="py-string">"test2"</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">        <tt class="py-name">io</tt> <tt class="py-op">=</tt> <tt id="link-109" class="py-name"><a title="Bio.PDB.PDBIO'.PDBIO" class="py-name" href="#" onclick="return doclink('link-109', 'PDBIO', 'link-103');">PDBIO</a></tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">        <tt class="py-name">io</tt><tt class="py-op">.</tt><tt id="link-110" class="py-name"><a title="Bio.PDB.PDBIO'.PDBIO.set_structure" class="py-name" href="#" onclick="return doclink('link-110', 'set_structure', 'link-104');">set_structure</a></tt><tt class="py-op">(</tt><tt class="py-name">s1</tt><tt class="py-op">)</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">        <tt class="py-name">io</tt><tt class="py-op">.</tt><tt id="link-111" class="py-name"><a title="Bio.Cluster.Record.save
+Bio.MarkovModel.save
+Bio.PDB.PDBIO'.PDBIO.save
+Bio.trie.save" class="py-name" href="#" onclick="return doclink('link-111', 'save', 'link-105');">save</a></tt><tt class="py-op">(</tt><tt class="py-name">fp</tt><tt class="py-op">)</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">        <tt class="py-name">io</tt><tt class="py-op">.</tt><tt id="link-112" class="py-name"><a title="Bio.PDB.PDBIO'.PDBIO.set_structure" class="py-name" href="#" onclick="return doclink('link-112', 'set_structure', 'link-104');">set_structure</a></tt><tt class="py-op">(</tt><tt class="py-name">s2</tt><tt class="py-op">)</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">        <tt class="py-name">io</tt><tt class="py-op">.</tt><tt id="link-113" class="py-name"><a title="Bio.Cluster.Record.save
+Bio.MarkovModel.save
+Bio.PDB.PDBIO'.PDBIO.save
+Bio.trie.save" class="py-name" href="#" onclick="return doclink('link-113', 'save', 'link-105');">save</a></tt><tt class="py-op">(</tt><tt class="py-name">fp</tt><tt class="py-op">,</tt> <tt class="py-name">write_end</tt><tt class="py-op">=</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:56 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

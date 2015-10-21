@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.pairwise2</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Module&nbsp;pairwise2
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.pairwise2-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module pairwise2</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.pairwise2-pysrc.html">source&nbsp;code</a></span></p>
+<p>This package implements pairwise sequence alignment using a dynamic
+programming algorithm.</p>
+<p>This provides functions to get global and local alignments between two
+sequences.  A global alignment finds the best concordance between all
+characters in two sequences.  A local alignment finds just the
+subsequences that align the best.</p>
+<p>When doing alignments, you can specify the match score and gap
+penalties.  The match score indicates the compatibility between an
+alignment of two characters in the sequences.  Highly compatible
+characters should be given positive scores, and incompatible ones
+should be given negative scores or 0.  The gap penalties should be
+negative.</p>
+<p>The names of the alignment functions in this module follow the
+convention
+&lt;alignment type&gt;XX
+where &lt;alignment type&gt; is either &quot;global&quot; or &quot;local&quot; and XX is a 2
+character code indicating the parameters it takes.  The first
+character indicates the parameters for matches (and mismatches), and
+the second indicates the parameters for gap penalties.</p>
+<p>The match parameters are:</p>
+<pre class="rst-literal-block">
+CODE  DESCRIPTION
+x     No parameters.  Identical characters have score of 1, otherwise 0.
+m     A match score is the score of identical chars, otherwise mismatch score.
+d     A dictionary returns the score of any pair of characters.
+c     A callback function returns scores.
+</pre>
+<p>The gap penalty parameters are:</p>
+<pre class="rst-literal-block">
+CODE  DESCRIPTION
+x     No gap penalties.
+s     Same open and extend gap penalties for both sequences.
+d     The sequences have different open and extend gap penalties.
+c     A callback function returns the gap penalties.
+</pre>
+<p>All the different alignment functions are contained in an object
+&quot;align&quot;.  For example:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> pairwise2
+<span class="py-prompt">&gt;&gt;&gt; </span>alignments = pairwise2.align.globalxx(<span class="py-string">&quot;ACCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>)</pre>
+</blockquote>
+<p>will return a list of the alignments between the two strings.  The
+parameters of the alignment function depends on the function called.
+Some examples:</p>
+<pre class="rst-literal-block">
+# Find the best global alignment between the two sequences.
+# Identical characters are given 1 point.  No points are deducted
+# for mismatches or gaps.
+&gt;&gt;&gt; from Bio.pairwise2 import format_alignment
+&gt;&gt;&gt; for a in pairwise2.align.globalxx(&quot;ACCGT&quot;, &quot;ACG&quot;):
+...     print(format_alignment(*a))
+ACCGT
+|||||
+AC-G-
+  Score=3
+&lt;BLANKLINE&gt;
+ACCGT
+|||||
+A-CG-
+  Score=3
+&lt;BLANKLINE&gt;
+
+# Same thing as before, but with a local alignment.
+&gt;&gt;&gt; for a in pairwise2.align.localxx(&quot;ACCGT&quot;, &quot;ACG&quot;):
+...     print(format_alignment(*a))
+ACCGT
+||||
+AC-G-
+  Score=3
+&lt;BLANKLINE&gt;
+ACCGT
+||||
+A-CG-
+  Score=3
+&lt;BLANKLINE&gt;
+
+# Do a global alignment.  Identical characters are given 2 points,
+# 1 point is deducted for each non-identical character.
+&gt;&gt;&gt; for a in pairwise2.align.globalmx(&quot;ACCGT&quot;, &quot;ACG&quot;, 2, -1):
+...     print(format_alignment(*a))
+ACCGT
+|||||
+AC-G-
+  Score=6
+&lt;BLANKLINE&gt;
+ACCGT
+|||||
+A-CG-
+  Score=6
+&lt;BLANKLINE&gt;
+
+# Same as above, except now 0.5 points are deducted when opening a
+# gap, and 0.1 points are deducted when extending it.
+&gt;&gt;&gt; for a in pairwise2.align.globalms(&quot;ACCGT&quot;, &quot;ACG&quot;, 2, -1, -.5, -.1):
+...     print(format_alignment(*a))
+ACCGT
+|||||
+AC-G-
+  Score=5
+&lt;BLANKLINE&gt;
+ACCGT
+|||||
+A-CG-
+  Score=5
+&lt;BLANKLINE&gt;
+</pre>
+<p>The alignment function can also use known matrices already included in
+Biopython ( Bio.SubsMat -&gt; MatrixInfo ):</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; from Bio.SubsMat import MatrixInfo as matlist
+&gt;&gt;&gt; matrix = matlist.blosum62
+&gt;&gt;&gt; for a in pairwise2.align.globaldx(&quot;KEVLA&quot;, &quot;EVL&quot;, matrix):
+...     print(format_alignment(*a))
+KEVLA
+|||||
+-EVL-
+  Score=13
+&lt;BLANKLINE&gt;
+</pre>
+<p>To see a description of the parameters for a function, please look at
+the docstring for the function via the help function, e.g.
+type help(pairwise2.align.localds) at the Python prompt.</p>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.pairwise2.identity_match-class.html" class="summary-name">identity_match</a><br />
+      identity_match([match][, mismatch]) -&gt; match_fn
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.pairwise2.dictionary_match-class.html" class="summary-name">dictionary_match</a><br />
+      dictionary_match(score_dict[, symmetric]) -&gt; match_fn
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.pairwise2.affine_penalty-class.html" class="summary-name">affine_penalty</a><br />
+      affine_penalty(open, extend[, penalize_extend_when_opening]) -&gt; gap_fn
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_align"></a><span class="summary-sig-name">_align</span>(<span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">match_fn</span>,
+        <span class="summary-sig-arg">gap_A_fn</span>,
+        <span class="summary-sig-arg">gap_B_fn</span>,
+        <span class="summary-sig-arg">penalize_extend_when_opening</span>,
+        <span class="summary-sig-arg">penalize_end_gaps</span>,
+        <span class="summary-sig-arg">align_globally</span>,
+        <span class="summary-sig-arg">gap_char</span>,
+        <span class="summary-sig-arg">force_generic</span>,
+        <span class="summary-sig-arg">score_only</span>,
+        <span class="summary-sig-arg">one_alignment_only</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_align">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_make_score_matrix_generic"></a><span class="summary-sig-name">_make_score_matrix_generic</span>(<span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">match_fn</span>,
+        <span class="summary-sig-arg">gap_A_fn</span>,
+        <span class="summary-sig-arg">gap_B_fn</span>,
+        <span class="summary-sig-arg">penalize_extend_when_opening</span>,
+        <span class="summary-sig-arg">penalize_end_gaps</span>,
+        <span class="summary-sig-arg">align_globally</span>,
+        <span class="summary-sig-arg">score_only</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_make_score_matrix_generic">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_recover_alignments"></a><span class="summary-sig-name">_recover_alignments</span>(<span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">starts</span>,
+        <span class="summary-sig-arg">score_matrix</span>,
+        <span class="summary-sig-arg">trace_matrix</span>,
+        <span class="summary-sig-arg">align_globally</span>,
+        <span class="summary-sig-arg">gap_char</span>,
+        <span class="summary-sig-arg">one_alignment_only</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_recover_alignments">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_find_start"></a><span class="summary-sig-name">_find_start</span>(<span class="summary-sig-arg">score_matrix</span>,
+        <span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">gap_A_fn</span>,
+        <span class="summary-sig-arg">gap_B_fn</span>,
+        <span class="summary-sig-arg">penalize_end_gaps</span>,
+        <span class="summary-sig-arg">align_globally</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_start">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_find_global_start"></a><span class="summary-sig-name">_find_global_start</span>(<span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">score_matrix</span>,
+        <span class="summary-sig-arg">gap_A_fn</span>,
+        <span class="summary-sig-arg">gap_B_fn</span>,
+        <span class="summary-sig-arg">penalize_end_gaps</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_global_start">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_find_local_start"></a><span class="summary-sig-name">_find_local_start</span>(<span class="summary-sig-arg">score_matrix</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_local_start">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_clean_alignments"></a><span class="summary-sig-name">_clean_alignments</span>(<span class="summary-sig-arg">alignments</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_clean_alignments">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_pad_until_equal"></a><span class="summary-sig-name">_pad_until_equal</span>(<span class="summary-sig-arg">s1</span>,
+        <span class="summary-sig-arg">s2</span>,
+        <span class="summary-sig-arg">char</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_pad_until_equal">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_lpad_until_equal"></a><span class="summary-sig-name">_lpad_until_equal</span>(<span class="summary-sig-arg">s1</span>,
+        <span class="summary-sig-arg">s2</span>,
+        <span class="summary-sig-arg">char</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_lpad_until_equal">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_pad"></a><span class="summary-sig-name">_pad</span>(<span class="summary-sig-arg">s</span>,
+        <span class="summary-sig-arg">char</span>,
+        <span class="summary-sig-arg">n</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_pad">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_lpad"></a><span class="summary-sig-name">_lpad</span>(<span class="summary-sig-arg">s</span>,
+        <span class="summary-sig-arg">char</span>,
+        <span class="summary-sig-arg">n</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_lpad">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="calc_affine_penalty"></a><span class="summary-sig-name">calc_affine_penalty</span>(<span class="summary-sig-arg">length</span>,
+        <span class="summary-sig-arg">open</span>,
+        <span class="summary-sig-arg">extend</span>,
+        <span class="summary-sig-arg">penalize_extend_when_opening</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#calc_affine_penalty">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.pairwise2-module.html#print_matrix" class="summary-sig-name">print_matrix</a>(<span class="summary-sig-arg">matrix</span>)</span><br />
+      Print out a matrix.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#print_matrix">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">string</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="format_alignment"></a><span class="summary-sig-name">format_alignment</span>(<span class="summary-sig-arg">align1</span>,
+        <span class="summary-sig-arg">align2</span>,
+        <span class="summary-sig-arg">score</span>,
+        <span class="summary-sig-arg">begin</span>,
+        <span class="summary-sig-arg">end</span>)</span><br />
+      Format the alignment prettily into a string.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#format_alignment">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_test"></a><span class="summary-sig-name">_test</span>()</span><br />
+      Run the module's doctests (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_test">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="MAX_ALIGNMENTS"></a><span class="summary-name">MAX_ALIGNMENTS</span> = <code title="1000">1000</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="align"></a><span class="summary-name">align</span> = <code title="align()">align()</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_PRECISION"></a><span class="summary-name">_PRECISION</span> = <code title="1000">1000</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio'"><code class="variable-quote">'</code><code class="variable-string">Bio</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="print_matrix"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">print_matrix</span>(<span class="sig-arg">matrix</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.pairwise2-pysrc.html#print_matrix">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Print out a matrix.  For debugging purposes.
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:31 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

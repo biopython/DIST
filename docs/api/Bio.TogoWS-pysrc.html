@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.TogoWS</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;TogoWS
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.TogoWS-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.TogoWS-module.html">Package Bio.TogoWS</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2010-2011 by Peter Cock.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Provides code to access the TogoWS integrated websevices of DBCLS, Japan.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">This module aims to make the TogoWS (from DBCLS, Japan) easier to use. See:</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">http://togows.dbcls.jp/</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">The TogoWS REST service provides simple access to a range of databases, acting</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring">as a proxy to shield you from all the different provider APIs. This works using</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">simple URLs (which this module will construct for you). For more details, see</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">http://togows.dbcls.jp/site/en/rest.html</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring">The functionality is somewhat similar to Biopython's Bio.Entrez module which</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">provides access to the NCBI's Entrez Utilities (E-Utils) which also covers a</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">wide range of databases.</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">Currently TogoWS does not provide any usage guidelines (unlike the NCBI whose</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">requirements are reasonably clear). To avoid risking overloading the service,</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">Biopython will only allow three calls per second.</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">The TogoWS SOAP service offers a more complex API for calling web services</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">(essentially calling remote functions) provided by DDBJ, KEGG and PDBj. For</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">example, this allows you to run a remote BLAST search at the DDBJ. This is</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">not yet covered by this module, however there are lots of Python examples</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">on the TogoWS website using the SOAPpy python library. See:</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">http://togows.dbcls.jp/site/en/soap.html</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">http://soapy.sourceforge.net/</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">time</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-1', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Function Bio._py3k._binary_to_string_handle()=Bio._py3k-module.html#_binary_to_string_handle"><a title="Bio._py3k._binary_to_string_handle" class="py-name" href="#" onclick="return doclink('link-2', '_binary_to_string_handle', 'link-2');">_binary_to_string_handle</a></tt><tt class="py-op">,</tt> <tt id="link-3" class="py-name" targets="Function Bio._py3k._as_bytes()=Bio._py3k-module.html#_as_bytes"><a title="Bio._py3k._as_bytes" class="py-name" href="#" onclick="return doclink('link-3', '_as_bytes', 'link-3');">_as_bytes</a></tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-comment"># Importing these functions with leading underscore as not intended for reuse</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-4" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-4', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-5', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">urlopen</tt> <tt class="py-keyword">as</tt> <tt class="py-name">_urlopen</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-6" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-6', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-7', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">quote</tt> <tt class="py-keyword">as</tt> <tt class="py-name">_quote</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-comment"># Constant</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt id="link-8" class="py-name" targets="Variable Bio.TogoWS._BASE_URL=Bio.TogoWS-module.html#_BASE_URL"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-8', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"http://togows.dbcls.jp"</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-comment"># Caches:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Variable Bio.TogoWS._search_db_names=Bio.TogoWS-module.html#_search_db_names"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-9', '_search_db_names', 'link-9');">_search_db_names</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable Bio.TogoWS._entry_db_names=Bio.TogoWS-module.html#_entry_db_names"><a title="Bio.TogoWS._entry_db_names" class="py-name" href="#" onclick="return doclink('link-10', '_entry_db_names', 'link-10');">_entry_db_names</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt id="link-11" class="py-name" targets="Variable Bio.TogoWS._entry_db_fields=Bio.TogoWS-module.html#_entry_db_fields"><a title="Bio.TogoWS._entry_db_fields" class="py-name" href="#" onclick="return doclink('link-11', '_entry_db_fields', 'link-11');">_entry_db_fields</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt id="link-12" class="py-name" targets="Variable Bio.TogoWS._entry_db_formats=Bio.TogoWS-module.html#_entry_db_formats"><a title="Bio.TogoWS._entry_db_formats" class="py-name" href="#" onclick="return doclink('link-12', '_entry_db_formats', 'link-12');">_entry_db_formats</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt id="link-13" class="py-name" targets="Variable Bio.TogoWS._convert_formats=Bio.TogoWS-module.html#_convert_formats"><a title="Bio.TogoWS._convert_formats" class="py-name" href="#" onclick="return doclink('link-13', '_convert_formats', 'link-13');">_convert_formats</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"> </tt>
+<a name="_get_fields"></a><div id="_get_fields-def"><a name="L55"></a><tt class="py-lineno"> 55</tt> <a class="py-toggle" href="#" id="_get_fields-toggle" onclick="return toggle('_get_fields');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#_get_fields">_get_fields</a><tt class="py-op">(</tt><tt class="py-param">url</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_fields-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_fields-expanded"><a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">    <tt class="py-docstring">"""Queries a TogoWS URL for a plain text list of values (PRIVATE)."""</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">    <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name" targets="Function Bio.Entrez._open()=Bio.Entrez-module.html#_open,Function Bio.SCOP._open()=Bio.SCOP-module.html#_open,Function Bio.TogoWS._open()=Bio.TogoWS-module.html#_open"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-14', '_open', 'link-14');">_open</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-name">fields</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Function Bio.Affy.CelFile.read()=Bio.Affy.CelFile-module.html#read,Function Bio.AlignIO.read()=Bio.AlignIO-module.html#read,Function Bio.Blast.NCBIXML.read()=Bio.Blast.NCBIXML-module.html#read,Function Bio.Cluster.read()=Bio.Cluster-module.html#read,Function Bio.Compass.read()=Bio.Compass-module.html#read,Function Bio.Emboss.Primer3.read()=Bio.Emboss.Primer3-module.html#read,Function Bio.Emboss.PrimerSearch.read()=Bio.Emboss.PrimerSearch-module.html#read,Method Bio.Entrez.Parser.DataHandler.read()=Bio.Entrez.Parser.DataHandler-class.html#read,Function Bio.Entrez.read()=Bio.Entrez-module.html#read,Function Bio.ExPASy.Enzyme.read()=Bio.ExPASy.Enzyme-module.html#read,Function Bio.ExPASy.Prodoc.read()=Bio.ExPASy.Prodoc-module.html#read,Function Bio.ExPASy.Prosite.read()=Bio.ExPASy.Prosite-module.html#read,Function Bio.ExPASy.ScanProsite.read()=Bio.ExPASy.ScanProsite-module.html#read,Method Bio.File.UndoHandle.read()=Bio.File.UndoHandle-class.html#read,Function Bio.KEGG.KGML.KGML_parser.read()=Bio.KEGG.KGML.KGML_parser-module.html#read,Function Bio.Medline.read()=Bio.Medline-module.html#read,Function Bio.Motif.Parsers.AlignAce.read()=Bio.Motif.Parsers.AlignAce-module.html#read,Function Bio.Motif.Parsers.MAST.read()=Bio.Motif.Parsers.MAST-module.html#read,Function Bio.Motif.Parsers.MEME.read()=Bio.Motif.Parsers.MEME-module.html#read,Function Bio.Motif.read()=Bio.Motif-module.html#read,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.read()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#read,Method Bio.Nexus.Nexus.Nexus.read()=Bio.Nexus.Nexus.Nexus-class.html#read,Function Bio.Phylo.PAML.baseml.read()=Bio.Phylo.PAML.baseml-module.html#read,Function Bio.Phylo.PAML.codeml.read()=Bio.Phylo.PAML.codeml-module.html#read,Function Bio.Phylo.PAML.yn00.read()=Bio.Phylo.PAML.yn00-module.html#read,Method Bio.Phylo.PhyloXMLIO.Parser.read()=Bio.Phylo.PhyloXMLIO.Parser-class.html#read,Function Bio.Phylo.PhyloXMLIO.read()=Bio.Phylo.PhyloXMLIO-module.html#read,Function Bio.Phylo._io.read()=Bio.Phylo._io-module.html#read,Function Bio.PopGen.GenePop.FileParser.read()=Bio.PopGen.GenePop.FileParser-module.html#read,Function Bio.PopGen.GenePop.LargeFileParser.read()=Bio.PopGen.GenePop.LargeFileParser-module.html#read,Function Bio.PopGen.GenePop.read()=Bio.PopGen.GenePop-module.html#read,Function Bio.SearchIO.read()=Bio.SearchIO-module.html#read,Method Bio.SeqIO.SffIO._AddTellHandle.read()=Bio.SeqIO.SffIO._AddTellHandle-class.html#read,Function Bio.SeqIO.read()=Bio.SeqIO-module.html#read,Function Bio.Sequencing.Ace.read()=Bio.Sequencing.Ace-module.html#read,Function Bio.Sequencing.Phd.read()=Bio.Sequencing.Phd-module.html#read,Function Bio.SwissProt.read()=Bio.SwissProt-module.html#read,Function Bio.UniGene.read()=Bio.UniGene-module.html#read,Method Bio.bgzf.BgzfReader.read()=Bio.bgzf.BgzfReader-class.html#read,Function Bio.motifs.alignace.read()=Bio.motifs.alignace-module.html#read,Function Bio.motifs.jaspar.read()=Bio.motifs.jaspar-module.html#read,Function Bio.motifs.mast.read()=Bio.motifs.mast-module.html#read,Function Bio.motifs.meme.read()=Bio.motifs.meme-module.html#read,Function Bio.motifs.read()=Bio.motifs-module.html#read,Function Bio.motifs.transfac.read()=Bio.motifs.transfac-module.html#read"><a title="Bio.Affy.CelFile.read
+Bio.AlignIO.read
+Bio.Blast.NCBIXML.read
+Bio.Cluster.read
+Bio.Compass.read
+Bio.Emboss.Primer3.read
+Bio.Emboss.PrimerSearch.read
+Bio.Entrez.Parser.DataHandler.read
+Bio.Entrez.read
+Bio.ExPASy.Enzyme.read
+Bio.ExPASy.Prodoc.read
+Bio.ExPASy.Prosite.read
+Bio.ExPASy.ScanProsite.read
+Bio.File.UndoHandle.read
+Bio.KEGG.KGML.KGML_parser.read
+Bio.Medline.read
+Bio.Motif.Parsers.AlignAce.read
+Bio.Motif.Parsers.MAST.read
+Bio.Motif.Parsers.MEME.read
+Bio.Motif.read
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.read
+Bio.Nexus.Nexus.Nexus.read
+Bio.Phylo.PAML.baseml.read
+Bio.Phylo.PAML.codeml.read
+Bio.Phylo.PAML.yn00.read
+Bio.Phylo.PhyloXMLIO.Parser.read
+Bio.Phylo.PhyloXMLIO.read
+Bio.Phylo._io.read
+Bio.PopGen.GenePop.FileParser.read
+Bio.PopGen.GenePop.LargeFileParser.read
+Bio.PopGen.GenePop.read
+Bio.SearchIO.read
+Bio.SeqIO.SffIO._AddTellHandle.read
+Bio.SeqIO.read
+Bio.Sequencing.Ace.read
+Bio.Sequencing.Phd.read
+Bio.SwissProt.read
+Bio.UniGene.read
+Bio.bgzf.BgzfReader.read
+Bio.motifs.alignace.read
+Bio.motifs.jaspar.read
+Bio.motifs.mast.read
+Bio.motifs.meme.read
+Bio.motifs.read
+Bio.motifs.transfac.read" class="py-name" href="#" onclick="return doclink('link-15', 'read', 'link-15');">read</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method Bio.Seq.Seq.strip()=Bio.Seq.Seq-class.html#strip"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-16', 'strip', 'link-16');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-17', 'split', 'link-17');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">    <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.close()=Bio.File._IndexedSeqFileDict-class.html#close,Method Bio.File._SQLiteManySeqFilesDict.close()=Bio.File._SQLiteManySeqFilesDict-class.html#close,Method Bio.SeqIO.SffIO._AddTellHandle.close()=Bio.SeqIO.SffIO._AddTellHandle-class.html#close,Method Bio.bgzf.BgzfReader.close()=Bio.bgzf.BgzfReader-class.html#close,Method Bio.bgzf.BgzfWriter.close()=Bio.bgzf.BgzfWriter-class.html#close,Method BioSQL.BioSeqDatabase.Adaptor.close()=BioSQL.BioSeqDatabase.Adaptor-class.html#close,Method BioSQL.BioSeqDatabase.DBServer.close()=BioSQL.BioSeqDatabase.DBServer-class.html#close"><a title="Bio.File._IndexedSeqFileDict.close
+Bio.File._SQLiteManySeqFilesDict.close
+Bio.SeqIO.SffIO._AddTellHandle.close
+Bio.bgzf.BgzfReader.close
+Bio.bgzf.BgzfWriter.close
+BioSQL.BioSeqDatabase.Adaptor.close
+BioSQL.BioSeqDatabase.DBServer.close" class="py-name" href="#" onclick="return doclink('link-18', 'close', 'link-18');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">fields</tt> </tt>
+</div><a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="_get_entry_dbs"></a><div id="_get_entry_dbs-def"><a name="L63"></a><tt class="py-lineno"> 63</tt> <a class="py-toggle" href="#" id="_get_entry_dbs-toggle" onclick="return toggle('_get_entry_dbs');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#_get_entry_dbs">_get_entry_dbs</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_entry_dbs-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_entry_dbs-expanded"><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-19" class="py-name" targets="Function Bio.TogoWS._get_fields()=Bio.TogoWS-module.html#_get_fields"><a title="Bio.TogoWS._get_fields" class="py-name" href="#" onclick="return doclink('link-19', '_get_fields', 'link-19');">_get_fields</a></tt><tt class="py-op">(</tt><tt id="link-20" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-20', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/entry"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"> </tt>
+<a name="_get_entry_fields"></a><div id="_get_entry_fields-def"><a name="L67"></a><tt class="py-lineno"> 67</tt> <a class="py-toggle" href="#" id="_get_entry_fields-toggle" onclick="return toggle('_get_entry_fields');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#_get_entry_fields">_get_entry_fields</a><tt class="py-op">(</tt><tt class="py-param">db</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_entry_fields-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_entry_fields-expanded"><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-21" class="py-name"><a title="Bio.TogoWS._get_fields" class="py-name" href="#" onclick="return doclink('link-21', '_get_fields', 'link-19');">_get_fields</a></tt><tt class="py-op">(</tt><tt id="link-22" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-22', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/entry/%s?fields"</tt> <tt class="py-op">%</tt> <tt id="link-23" class="py-name" targets="Module Bio.motifs.jaspar.db=Bio.motifs.jaspar.db-module.html"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-23', 'db', 'link-23');">db</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"> </tt>
+<a name="_get_entry_formats"></a><div id="_get_entry_formats-def"><a name="L71"></a><tt class="py-lineno"> 71</tt> <a class="py-toggle" href="#" id="_get_entry_formats-toggle" onclick="return toggle('_get_entry_formats');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#_get_entry_formats">_get_entry_formats</a><tt class="py-op">(</tt><tt class="py-param">db</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_entry_formats-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_entry_formats-expanded"><a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-24" class="py-name"><a title="Bio.TogoWS._get_fields" class="py-name" href="#" onclick="return doclink('link-24', '_get_fields', 'link-19');">_get_fields</a></tt><tt class="py-op">(</tt><tt id="link-25" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-25', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/entry/%s?formats"</tt> <tt class="py-op">%</tt> <tt id="link-26" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-26', 'db', 'link-23');">db</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="_get_convert_formats"></a><div id="_get_convert_formats-def"><a name="L75"></a><tt class="py-lineno"> 75</tt> <a class="py-toggle" href="#" id="_get_convert_formats-toggle" onclick="return toggle('_get_convert_formats');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#_get_convert_formats">_get_convert_formats</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_convert_formats-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_convert_formats-expanded"><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-name">pair</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-27', 'split', 'link-17');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">"."</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">pair</tt> <tt class="py-keyword">in</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">            <tt id="link-28" class="py-name"><a title="Bio.TogoWS._get_fields" class="py-name" href="#" onclick="return doclink('link-28', '_get_fields', 'link-19');">_get_fields</a></tt><tt class="py-op">(</tt><tt id="link-29" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-29', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/convert/"</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"> </tt>
+<a name="entry"></a><div id="entry-def"><a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="entry-toggle" onclick="return toggle('entry');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#entry">entry</a><tt class="py-op">(</tt><tt class="py-param">db</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">field</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="entry-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="entry-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">    <tt class="py-docstring">"""TogoWS fetch entry (returns a handle).</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"><tt class="py-docstring">        - db - database (string), see list below.</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring">        - id - identier (string) or a list of identifiers (either as a list of</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring">          strings or a single string with comma separators).</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">        - format - return data file format (string), options depend on the database</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">          e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring">        - field - specific field from within the database record (string)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring">          e.g. "au" or "authors" for pubmed.</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">    At the time of writing, this includes the following::</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring">        KEGG: compound, drug, enzyme, genes, glycan, orthology, reaction,</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring">              module, pathway</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring">        DDBj: ddbj, dad, pdb</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">        NCBI: nuccore, nucest, nucgss, nucleotide, protein, gene, onim,</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">              homologue, snp, mesh, pubmed</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">        EBI:  embl, uniprot, uniparc, uniref100, uniref90, uniref50</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">    For the current list, please see http://togows.dbcls.jp/entry/</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-docstring">    This function is essentially equivalent to the NCBI Entrez service</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-docstring">    EFetch, available in Biopython as Bio.Entrez.efetch(...), but that</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring">    does not offer field extraction.</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">    <tt class="py-keyword">global</tt> <tt id="link-30" class="py-name"><a title="Bio.TogoWS._entry_db_names" class="py-name" href="#" onclick="return doclink('link-30', '_entry_db_names', 'link-10');">_entry_db_names</a></tt><tt class="py-op">,</tt> <tt id="link-31" class="py-name"><a title="Bio.TogoWS._entry_db_fields" class="py-name" href="#" onclick="return doclink('link-31', '_entry_db_fields', 'link-11');">_entry_db_fields</a></tt><tt class="py-op">,</tt> <tt class="py-name">fetch_db_formats</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-32" class="py-name"><a title="Bio.TogoWS._entry_db_names" class="py-name" href="#" onclick="return doclink('link-32', '_entry_db_names', 'link-10');">_entry_db_names</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt id="link-33" class="py-name"><a title="Bio.TogoWS._entry_db_names" class="py-name" href="#" onclick="return doclink('link-33', '_entry_db_names', 'link-10');">_entry_db_names</a></tt> <tt class="py-op">=</tt> <tt id="link-34" class="py-name" targets="Function Bio.TogoWS._get_entry_dbs()=Bio.TogoWS-module.html#_get_entry_dbs"><a title="Bio.TogoWS._get_entry_dbs" class="py-name" href="#" onclick="return doclink('link-34', '_get_entry_dbs', 'link-34');">_get_entry_dbs</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-35" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-35', 'db', 'link-23');">db</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-36" class="py-name"><a title="Bio.TogoWS._entry_db_names" class="py-name" href="#" onclick="return doclink('link-36', '_entry_db_names', 'link-10');">_entry_db_names</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"TogoWS entry fetch does not officially support "</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">                         <tt class="py-string">"database '%s'."</tt> <tt class="py-op">%</tt> <tt id="link-37" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-37', 'db', 'link-23');">db</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">field</tt><tt class="py-op">:</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">            <tt class="py-name">fields</tt> <tt class="py-op">=</tt> <tt id="link-38" class="py-name"><a title="Bio.TogoWS._entry_db_fields" class="py-name" href="#" onclick="return doclink('link-38', '_entry_db_fields', 'link-11');">_entry_db_fields</a></tt><tt class="py-op">[</tt><tt id="link-39" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-39', 'db', 'link-23');">db</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">KeyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">            <tt class="py-name">fields</tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name" targets="Function Bio.TogoWS._get_entry_fields()=Bio.TogoWS-module.html#_get_entry_fields"><a title="Bio.TogoWS._get_entry_fields" class="py-name" href="#" onclick="return doclink('link-40', '_get_entry_fields', 'link-40');">_get_entry_fields</a></tt><tt class="py-op">(</tt><tt id="link-41" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-41', 'db', 'link-23');">db</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt id="link-42" class="py-name"><a title="Bio.TogoWS._entry_db_fields" class="py-name" href="#" onclick="return doclink('link-42', '_entry_db_fields', 'link-11');">_entry_db_fields</a></tt><tt class="py-op">[</tt><tt id="link-43" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-43', 'db', 'link-23');">db</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">fields</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-44" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-44', 'db', 'link-23');">db</a></tt> <tt class="py-op">==</tt> <tt class="py-string">"pubmed"</tt> <tt class="py-keyword">and</tt> <tt class="py-name">field</tt> <tt class="py-op">==</tt> <tt class="py-string">"ti"</tt> <tt class="py-keyword">and</tt> <tt class="py-string">"title"</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fields</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">            <tt class="py-comment"># Backwards compatibility fix for TogoWS change Nov/Dec 2013</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">            <tt class="py-name">field</tt> <tt class="py-op">=</tt> <tt class="py-string">"title"</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">            <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"TogoWS dropped 'pubmed' field alias 'ti', please use 'title' instead."</tt><tt class="py-op">)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">field</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fields</tt><tt class="py-op">:</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"TogoWS entry fetch does not explicitly support "</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">                             <tt class="py-string">"field '%s' for database '%s'. Only: %s"</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                             <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">field</tt><tt class="py-op">,</tt> <tt id="link-45" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-45', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt class="py-string">", "</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">sorted</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-46" class="py-name" targets="Method Bio.Align.Generic.Alignment.format()=Bio.Align.Generic.Alignment-class.html#format,Method Bio.Motif._Motif.Motif.format()=Bio.Motif._Motif.Motif-class.html#format,Method Bio.Phylo.BaseTree.Tree.format()=Bio.Phylo.BaseTree.Tree-class.html#format,Method Bio.Restriction.Restriction.RestrictionBatch.format()=Bio.Restriction.Restriction.RestrictionBatch-class.html#format,Method Bio.SeqRecord.SeqRecord.format()=Bio.SeqRecord.SeqRecord-class.html#format,Method Bio.motifs.Motif.format()=Bio.motifs.Motif-class.html#format"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-46', 'format', 'link-46');">format</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">            <tt class="py-name">formats</tt> <tt class="py-op">=</tt> <tt id="link-47" class="py-name"><a title="Bio.TogoWS._entry_db_formats" class="py-name" href="#" onclick="return doclink('link-47', '_entry_db_formats', 'link-12');">_entry_db_formats</a></tt><tt class="py-op">[</tt><tt id="link-48" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-48', 'db', 'link-23');">db</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">KeyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">            <tt class="py-name">formats</tt> <tt class="py-op">=</tt> <tt id="link-49" class="py-name" targets="Function Bio.TogoWS._get_entry_formats()=Bio.TogoWS-module.html#_get_entry_formats"><a title="Bio.TogoWS._get_entry_formats" class="py-name" href="#" onclick="return doclink('link-49', '_get_entry_formats', 'link-49');">_get_entry_formats</a></tt><tt class="py-op">(</tt><tt id="link-50" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-50', 'db', 'link-23');">db</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">            <tt id="link-51" class="py-name"><a title="Bio.TogoWS._entry_db_formats" class="py-name" href="#" onclick="return doclink('link-51', '_entry_db_formats', 'link-12');">_entry_db_formats</a></tt><tt class="py-op">[</tt><tt id="link-52" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-52', 'db', 'link-23');">db</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">formats</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-53" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-53', 'format', 'link-46');">format</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">formats</tt><tt class="py-op">:</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"TogoWS entry fetch does not explicitly support "</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">                             <tt class="py-string">"format '%s' for database '%s'. Only: %s"</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">                             <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-54" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-54', 'format', 'link-46');">format</a></tt><tt class="py-op">,</tt> <tt id="link-55" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-55', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt class="py-string">", "</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">sorted</tt><tt class="py-op">(</tt><tt class="py-name">formats</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-56" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-56', 'id', 'link-56');">id</a></tt><tt class="py-op">,</tt> <tt class="py-name">list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt id="link-57" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-57', 'id', 'link-56');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-string">","</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-58" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-58', 'id', 'link-56');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">    <tt class="py-name">url</tt> <tt class="py-op">=</tt> <tt id="link-59" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-59', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/entry/%s/%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-60" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-60', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt class="py-name">_quote</tt><tt class="py-op">(</tt><tt id="link-61" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-61', 'id', 'link-56');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">field</tt><tt class="py-op">:</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">        <tt class="py-name">url</tt> <tt class="py-op">+=</tt> <tt class="py-string">"/"</tt> <tt class="py-op">+</tt> <tt class="py-name">field</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-62" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-62', 'format', 'link-46');">format</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-name">url</tt> <tt class="py-op">+=</tt> <tt class="py-string">"."</tt> <tt class="py-op">+</tt> <tt id="link-63" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-63', 'format', 'link-46');">format</a></tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-64" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-64', '_open', 'link-14');">_open</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"> </tt>
+<a name="search_count"></a><div id="search_count-def"><a name="L148"></a><tt class="py-lineno">148</tt> <a class="py-toggle" href="#" id="search_count-toggle" onclick="return toggle('search_count');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#search_count">search_count</a><tt class="py-op">(</tt><tt class="py-param">db</tt><tt class="py-op">,</tt> <tt class="py-param">query</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="search_count-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="search_count-expanded"><a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">    <tt class="py-docstring">"""TogoWS search count (returns an integer).</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"><tt class="py-docstring">    db - database (string), see http://togows.dbcls.jp/search</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">    query - search term (string)</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring">    You could then use the count to download a large set of search results in</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">    batches using the offset and limit options to Bio.TogoWS.search(). In</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring">    general however the Bio.TogoWS.search_iter() function is simpler to use.</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">    <tt class="py-keyword">global</tt> <tt id="link-65" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-65', '_search_db_names', 'link-9');">_search_db_names</a></tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-66" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-66', '_search_db_names', 'link-9');">_search_db_names</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">        <tt id="link-67" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-67', '_search_db_names', 'link-9');">_search_db_names</a></tt> <tt class="py-op">=</tt> <tt id="link-68" class="py-name"><a title="Bio.TogoWS._get_fields" class="py-name" href="#" onclick="return doclink('link-68', '_get_fields', 'link-19');">_get_fields</a></tt><tt class="py-op">(</tt><tt id="link-69" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-69', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/search"</tt><tt class="py-op">)</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-70" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-70', 'db', 'link-23');">db</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-71" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-71', '_search_db_names', 'link-9');">_search_db_names</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">        <tt class="py-comment"># TODO - Make this a ValueError? Right now despite the HTML website</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">        <tt class="py-comment"># claiming to, the "gene" or "ncbi-gene" don't work and are not listed.</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">        <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"TogoWS search does not officially support database '%s'. "</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                      <tt class="py-string">"See %s/search/ for options."</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-72" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-72', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt id="link-73" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-73', '_BASE_URL', 'link-8');">_BASE_URL</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">    <tt class="py-name">url</tt> <tt class="py-op">=</tt> <tt id="link-74" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-74', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/search/%s/%s/count"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-75" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-75', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt class="py-name">_quote</tt><tt class="py-op">(</tt><tt id="link-76" class="py-name" targets="Method Bio.Blast.NCBIStandalone._HSPConsumer.query()=Bio.Blast.NCBIStandalone._HSPConsumer-class.html#query,Variable Bio.SearchIO._model.hsp.HSP.query=Bio.SearchIO._model.hsp.HSP-class.html#query,Variable Bio.SearchIO._model.hsp.HSPFragment.query=Bio.SearchIO._model.hsp.HSPFragment-class.html#query,Module Bio.SearchIO._model.query=Bio.SearchIO._model.query-module.html"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.query
+Bio.SearchIO._model.hsp.HSP.query
+Bio.SearchIO._model.hsp.HSPFragment.query
+Bio.SearchIO._model.query" class="py-name" href="#" onclick="return doclink('link-76', 'query', 'link-76');">query</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">    <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt id="link-77" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-77', '_open', 'link-14');">_open</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">    <tt id="link-78" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-78', 'data', 'link-78');">data</a></tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-79" class="py-name"><a title="Bio.Affy.CelFile.read
+Bio.AlignIO.read
+Bio.Blast.NCBIXML.read
+Bio.Cluster.read
+Bio.Compass.read
+Bio.Emboss.Primer3.read
+Bio.Emboss.PrimerSearch.read
+Bio.Entrez.Parser.DataHandler.read
+Bio.Entrez.read
+Bio.ExPASy.Enzyme.read
+Bio.ExPASy.Prodoc.read
+Bio.ExPASy.Prosite.read
+Bio.ExPASy.ScanProsite.read
+Bio.File.UndoHandle.read
+Bio.KEGG.KGML.KGML_parser.read
+Bio.Medline.read
+Bio.Motif.Parsers.AlignAce.read
+Bio.Motif.Parsers.MAST.read
+Bio.Motif.Parsers.MEME.read
+Bio.Motif.read
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.read
+Bio.Nexus.Nexus.Nexus.read
+Bio.Phylo.PAML.baseml.read
+Bio.Phylo.PAML.codeml.read
+Bio.Phylo.PAML.yn00.read
+Bio.Phylo.PhyloXMLIO.Parser.read
+Bio.Phylo.PhyloXMLIO.read
+Bio.Phylo._io.read
+Bio.PopGen.GenePop.FileParser.read
+Bio.PopGen.GenePop.LargeFileParser.read
+Bio.PopGen.GenePop.read
+Bio.SearchIO.read
+Bio.SeqIO.SffIO._AddTellHandle.read
+Bio.SeqIO.read
+Bio.Sequencing.Ace.read
+Bio.Sequencing.Phd.read
+Bio.SwissProt.read
+Bio.UniGene.read
+Bio.bgzf.BgzfReader.read
+Bio.motifs.alignace.read
+Bio.motifs.jaspar.read
+Bio.motifs.mast.read
+Bio.motifs.meme.read
+Bio.motifs.read
+Bio.motifs.transfac.read" class="py-name" href="#" onclick="return doclink('link-79', 'read', 'link-15');">read</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">    <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-80" class="py-name"><a title="Bio.File._IndexedSeqFileDict.close
+Bio.File._SQLiteManySeqFilesDict.close
+Bio.SeqIO.SffIO._AddTellHandle.close
+Bio.bgzf.BgzfReader.close
+Bio.bgzf.BgzfWriter.close
+BioSQL.BioSeqDatabase.Adaptor.close
+BioSQL.BioSeqDatabase.DBServer.close" class="py-name" href="#" onclick="return doclink('link-80', 'close', 'link-18');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt id="link-81" class="py-name" targets="Method Bio.Crystal.Chain.count()=Bio.Crystal.Chain-class.html#count,Method Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count()=Bio.NeuralNetwork.Gene.Pattern.PatternRepository-class.html#count,Method Bio.Seq.MutableSeq.count()=Bio.Seq.MutableSeq-class.html#count,Method Bio.Seq.Seq.count()=Bio.Seq.Seq-class.html#count,Method Bio.Seq.UnknownSeq.count()=Bio.Seq.UnknownSeq-class.html#count,Method Bio.motifs.Instances.count()=Bio.motifs.Instances-class.html#count"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-81', 'count', 'link-81');">count</a></tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt id="link-82" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-82', 'data', 'link-78');">data</a></tt><tt class="py-op">.</tt><tt id="link-83" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-83', 'strip', 'link-16');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ValueError</tt><tt class="py-op">:</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Expected an integer from URL %s, got: %r"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">,</tt> <tt id="link-84" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-84', 'data', 'link-78');">data</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-85" class="py-name"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-85', 'count', 'link-81');">count</a></tt> </tt>
+</div><a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="search_iter"></a><div id="search_iter-def"><a name="L178"></a><tt class="py-lineno">178</tt> <a class="py-toggle" href="#" id="search_iter-toggle" onclick="return toggle('search_iter');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#search_iter">search_iter</a><tt class="py-op">(</tt><tt class="py-param">db</tt><tt class="py-op">,</tt> <tt class="py-param">query</tt><tt class="py-op">,</tt> <tt class="py-param">limit</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">batch</tt><tt class="py-op">=</tt><tt class="py-number">100</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="search_iter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="search_iter-expanded"><a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">    <tt class="py-docstring">"""TogoWS search iteratating over the results (generator function).</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"><tt class="py-docstring">        - db - database (string), see http://togows.dbcls.jp/search</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"><tt class="py-docstring">        - query - search term (string)</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"><tt class="py-docstring">        - limit - optional upper bound on number of search results</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"><tt class="py-docstring">        - batch - number of search results to pull back each time talk to</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"><tt class="py-docstring">          TogoWS (currently limited to 100).</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"><tt class="py-docstring">    You would use this function within a for loop, e.g.</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; for id in search_iter("pubmed", "lung+cancer+drug", limit=10):</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"><tt class="py-docstring">    ...     print(id) # maybe fetch data with entry?</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring">    Internally this first calls the Bio.TogoWS.search_count() and then</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring">    uses Bio.TogoWS.search() to get the results in batches.</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">    <tt id="link-86" class="py-name"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-86', 'count', 'link-81');">count</a></tt> <tt class="py-op">=</tt> <tt id="link-87" class="py-name" targets="Function Bio.TogoWS.search_count()=Bio.TogoWS-module.html#search_count"><a title="Bio.TogoWS.search_count" class="py-name" href="#" onclick="return doclink('link-87', 'search_count', 'link-87');">search_count</a></tt><tt class="py-op">(</tt><tt id="link-88" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-88', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt id="link-89" class="py-name"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.query
+Bio.SearchIO._model.hsp.HSP.query
+Bio.SearchIO._model.hsp.HSPFragment.query
+Bio.SearchIO._model.query" class="py-name" href="#" onclick="return doclink('link-89', 'query', 'link-76');">query</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-90" class="py-name"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-90', 'count', 'link-81');">count</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">StopIteration</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">    <tt class="py-comment"># NOTE - We leave it to TogoWS to enforce any upper bound on each</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">    <tt class="py-comment"># batch, they currently return an HTTP 400 Bad Request if above 100.</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">    <tt class="py-name">remain</tt> <tt class="py-op">=</tt> <tt id="link-91" class="py-name"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-91', 'count', 'link-81');">count</a></tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">limit</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">        <tt class="py-name">remain</tt> <tt class="py-op">=</tt> <tt id="link-92" class="py-name" targets="Variable Bio.motifs.matrix.PositionSpecificScoringMatrix.min=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#min"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.min" class="py-name" href="#" onclick="return doclink('link-92', 'min', 'link-92');">min</a></tt><tt class="py-op">(</tt><tt class="py-name">remain</tt><tt class="py-op">,</tt> <tt class="py-name">limit</tt><tt class="py-op">)</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">    <tt class="py-name">offset</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt>  <tt class="py-comment"># They don't use zero based counting</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">    <tt class="py-name">prev_ids</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt>  <tt class="py-comment"># Just cache the last batch for error checking</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">    <tt class="py-keyword">while</tt> <tt class="py-name">remain</tt><tt class="py-op">:</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">        <tt class="py-name">batch</tt> <tt class="py-op">=</tt> <tt id="link-93" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.min" class="py-name" href="#" onclick="return doclink('link-93', 'min', 'link-92');">min</a></tt><tt class="py-op">(</tt><tt class="py-name">batch</tt><tt class="py-op">,</tt> <tt class="py-name">remain</tt><tt class="py-op">)</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">        <tt class="py-comment"># print("%r left, asking for %r" % (remain, batch))</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-name">ids</tt> <tt class="py-op">=</tt> <tt id="link-94" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.search()=Bio.KDTree.KDTree%27.KDTree-class.html#search,Method Bio.PDB.NeighborSearch'.NeighborSearch.search()=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html#search,Method Bio.Phylo.TreeConstruction.NNITreeSearcher.search()=Bio.Phylo.TreeConstruction.NNITreeSearcher-class.html#search,Method Bio.Phylo.TreeConstruction.TreeSearcher.search()=Bio.Phylo.TreeConstruction.TreeSearcher-class.html#search,Class Method Bio.Restriction.Restriction.AbstractCut.search()=Bio.Restriction.Restriction.AbstractCut-class.html#search,Method Bio.Restriction.Restriction.RestrictionBatch.search()=Bio.Restriction.Restriction.RestrictionBatch-class.html#search,Function Bio.SCOP.search()=Bio.SCOP-module.html#search,Function Bio.TogoWS.search()=Bio.TogoWS-module.html#search,Method Bio.motifs.Instances.search()=Bio.motifs.Instances-class.html#search,Method Bio.motifs.matrix.PositionSpecificScoringMatrix.search()=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#search"><a title="Bio.KDTree.KDTree'.KDTree.search
+Bio.PDB.NeighborSearch'.NeighborSearch.search
+Bio.Phylo.TreeConstruction.NNITreeSearcher.search
+Bio.Phylo.TreeConstruction.TreeSearcher.search
+Bio.Restriction.Restriction.AbstractCut.search
+Bio.Restriction.Restriction.RestrictionBatch.search
+Bio.SCOP.search
+Bio.TogoWS.search
+Bio.motifs.Instances.search
+Bio.motifs.matrix.PositionSpecificScoringMatrix.search" class="py-name" href="#" onclick="return doclink('link-94', 'search', 'link-94');">search</a></tt><tt class="py-op">(</tt><tt id="link-95" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-95', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt id="link-96" class="py-name"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.query
+Bio.SearchIO._model.hsp.HSP.query
+Bio.SearchIO._model.hsp.HSPFragment.query
+Bio.SearchIO._model.query" class="py-name" href="#" onclick="return doclink('link-96', 'query', 'link-76');">query</a></tt><tt class="py-op">,</tt> <tt class="py-name">offset</tt><tt class="py-op">,</tt> <tt class="py-name">batch</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-97" class="py-name"><a title="Bio.Affy.CelFile.read
+Bio.AlignIO.read
+Bio.Blast.NCBIXML.read
+Bio.Cluster.read
+Bio.Compass.read
+Bio.Emboss.Primer3.read
+Bio.Emboss.PrimerSearch.read
+Bio.Entrez.Parser.DataHandler.read
+Bio.Entrez.read
+Bio.ExPASy.Enzyme.read
+Bio.ExPASy.Prodoc.read
+Bio.ExPASy.Prosite.read
+Bio.ExPASy.ScanProsite.read
+Bio.File.UndoHandle.read
+Bio.KEGG.KGML.KGML_parser.read
+Bio.Medline.read
+Bio.Motif.Parsers.AlignAce.read
+Bio.Motif.Parsers.MAST.read
+Bio.Motif.Parsers.MEME.read
+Bio.Motif.read
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.read
+Bio.Nexus.Nexus.Nexus.read
+Bio.Phylo.PAML.baseml.read
+Bio.Phylo.PAML.codeml.read
+Bio.Phylo.PAML.yn00.read
+Bio.Phylo.PhyloXMLIO.Parser.read
+Bio.Phylo.PhyloXMLIO.read
+Bio.Phylo._io.read
+Bio.PopGen.GenePop.FileParser.read
+Bio.PopGen.GenePop.LargeFileParser.read
+Bio.PopGen.GenePop.read
+Bio.SearchIO.read
+Bio.SeqIO.SffIO._AddTellHandle.read
+Bio.SeqIO.read
+Bio.Sequencing.Ace.read
+Bio.Sequencing.Phd.read
+Bio.SwissProt.read
+Bio.UniGene.read
+Bio.bgzf.BgzfReader.read
+Bio.motifs.alignace.read
+Bio.motifs.jaspar.read
+Bio.motifs.mast.read
+Bio.motifs.meme.read
+Bio.motifs.read
+Bio.motifs.transfac.read" class="py-name" href="#" onclick="return doclink('link-97', 'read', 'link-15');">read</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-98" class="py-name"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-98', 'strip', 'link-16');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-99" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-99', 'split', 'link-17');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ids</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">batch</tt><tt class="py-op">,</tt> <tt class="py-string">"Got %i, expected %i"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ids</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">batch</tt><tt class="py-op">)</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-comment"># print("offset %i, %s ... %s" % (offset, ids[0], ids[-1]))</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">ids</tt> <tt class="py-op">==</tt> <tt class="py-name">prev_ids</tt><tt class="py-op">:</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">RuntimeError</tt><tt class="py-op">(</tt><tt class="py-string">"Same search results for previous offset"</tt><tt class="py-op">)</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">identifier</tt> <tt class="py-keyword">in</tt> <tt class="py-name">ids</tt><tt class="py-op">:</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">identifier</tt> <tt class="py-keyword">in</tt> <tt class="py-name">prev_ids</tt><tt class="py-op">:</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">                <tt class="py-keyword">raise</tt> <tt class="py-name">RuntimeError</tt><tt class="py-op">(</tt><tt class="py-string">"Result %s was in previous batch"</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">                                   <tt class="py-op">%</tt> <tt class="py-name">identifier</tt><tt class="py-op">)</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">identifier</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">        <tt class="py-name">offset</tt> <tt class="py-op">+=</tt> <tt class="py-name">batch</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">        <tt class="py-name">remain</tt> <tt class="py-op">-=</tt> <tt class="py-name">batch</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-name">prev_ids</tt> <tt class="py-op">=</tt> <tt class="py-name">ids</tt> </tt>
+</div><a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line"> </tt>
+<a name="search"></a><div id="search-def"><a name="L223"></a><tt class="py-lineno">223</tt> <a class="py-toggle" href="#" id="search-toggle" onclick="return toggle('search');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#search">search</a><tt class="py-op">(</tt><tt class="py-param">db</tt><tt class="py-op">,</tt> <tt class="py-param">query</tt><tt class="py-op">,</tt> <tt class="py-param">offset</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">limit</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="search-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="search-expanded"><a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">    <tt class="py-docstring">"""TogoWS search (returns a handle).</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line"><tt class="py-docstring">    This is a low level wrapper for the TogoWS search function, which</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line"><tt class="py-docstring">    can return results in a several formats. In general, the search_iter</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line"><tt class="py-docstring">    function is more suitable for end users.</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line"><tt class="py-docstring">        - db - database (string), see http://togows.dbcls.jp/search/</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line"><tt class="py-docstring">        - query - search term (string)</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"><tt class="py-docstring">        - offset, limit - optional integers specifying which result to start from</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line"><tt class="py-docstring">          (1 based) and the number of results to return.</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line"><tt class="py-docstring">        - format - return data file format (string), e.g. "json", "ttl" (RDF)</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line"><tt class="py-docstring">          By default plain text is returned, one result per line.</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line"><tt class="py-docstring">    At the time of writing, TogoWS applies a default count limit of 100</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line"><tt class="py-docstring">    search results, and this is an upper bound. To access more results,</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line"><tt class="py-docstring">    use the offset argument or the search_iter(...) function.</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line"><tt class="py-docstring">    TogoWS supports a long list of databases, including many from the NCBI</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line"><tt class="py-docstring">    (e.g. "ncbi-pubmed" or "pubmed", "ncbi-genbank" or "genbank", and</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line"><tt class="py-docstring">    "ncbi-taxonomy"), EBI (e.g. "ebi-ebml" or "embl", "ebi-uniprot" or</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line"><tt class="py-docstring">    "uniprot, "ebi-go"), and KEGG (e.g. "kegg-compound" or "compound").</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line"><tt class="py-docstring">    For the current list, see http://togows.dbcls.jp/search/</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line"><tt class="py-docstring">    The NCBI provide the Entrez Search service (ESearch) which is similar,</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line"><tt class="py-docstring">    available in Biopython as the Bio.Entrez.esearch() function.</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line"><tt class="py-docstring">    See also the function Bio.TogoWS.search_count() which returns the number</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line"><tt class="py-docstring">    of matches found, and the Bio.TogoWS.search_iter() function which allows</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line"><tt class="py-docstring">    you to iterate over the search results (taking care of batching for you).</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">    <tt class="py-keyword">global</tt> <tt id="link-100" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-100', '_search_db_names', 'link-9');">_search_db_names</a></tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-101" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-101', '_search_db_names', 'link-9');">_search_db_names</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">        <tt id="link-102" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-102', '_search_db_names', 'link-9');">_search_db_names</a></tt> <tt class="py-op">=</tt> <tt id="link-103" class="py-name"><a title="Bio.TogoWS._get_fields" class="py-name" href="#" onclick="return doclink('link-103', '_get_fields', 'link-19');">_get_fields</a></tt><tt class="py-op">(</tt><tt id="link-104" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-104', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/search"</tt><tt class="py-op">)</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-105" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-105', 'db', 'link-23');">db</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-106" class="py-name"><a title="Bio.TogoWS._search_db_names" class="py-name" href="#" onclick="return doclink('link-106', '_search_db_names', 'link-9');">_search_db_names</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">        <tt class="py-comment"># TODO - Make this a ValueError? Right now despite the HTML website</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">        <tt class="py-comment"># claiming to, the "gene" or "ncbi-gene" don't work and are not listed.</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">        <tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"TogoWS search does not explicitly support database '%s'. "</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">                      <tt class="py-string">"See %s/search/ for options."</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-107" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-107', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt id="link-108" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-108', '_BASE_URL', 'link-8');">_BASE_URL</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">    <tt class="py-name">url</tt> <tt class="py-op">=</tt> <tt id="link-109" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-109', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/search/%s/%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-110" class="py-name"><a title="Bio.motifs.jaspar.db" class="py-name" href="#" onclick="return doclink('link-110', 'db', 'link-23');">db</a></tt><tt class="py-op">,</tt> <tt class="py-name">_quote</tt><tt class="py-op">(</tt><tt id="link-111" class="py-name"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.query
+Bio.SearchIO._model.hsp.HSP.query
+Bio.SearchIO._model.hsp.HSPFragment.query
+Bio.SearchIO._model.query" class="py-name" href="#" onclick="return doclink('link-111', 'query', 'link-76');">query</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">offset</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt class="py-name">limit</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">            <tt class="py-name">offset</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">offset</tt><tt class="py-op">)</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Offset should be an integer (at least one), not %r"</tt> <tt class="py-op">%</tt> <tt class="py-name">offset</tt><tt class="py-op">)</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">            <tt class="py-name">limit</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">limit</tt><tt class="py-op">)</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt><tt class="py-op">:</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Limit should be an integer (at least one), not %r"</tt> <tt class="py-op">%</tt> <tt class="py-name">limit</tt><tt class="py-op">)</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">offset</tt> <tt class="py-op">&lt;=</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Offset should be at least one, not %i"</tt> <tt class="py-op">%</tt> <tt class="py-name">offset</tt><tt class="py-op">)</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">limit</tt> <tt class="py-op">&lt;=</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Count should be at least one, not %i"</tt> <tt class="py-op">%</tt> <tt class="py-name">limit</tt><tt class="py-op">)</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line">        <tt class="py-name">url</tt> <tt class="py-op">+=</tt> <tt class="py-string">"/%i,%i"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">offset</tt><tt class="py-op">,</tt> <tt class="py-name">limit</tt><tt class="py-op">)</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">offset</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">or</tt> <tt class="py-name">limit</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Expect BOTH offset AND limit to be provided (or neither)"</tt><tt class="py-op">)</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-112" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-112', 'format', 'link-46');">format</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">        <tt class="py-name">url</tt> <tt class="py-op">+=</tt> <tt class="py-string">"."</tt> <tt class="py-op">+</tt> <tt id="link-113" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-113', 'format', 'link-46');">format</a></tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line">    <tt class="py-comment"># print(url)</tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-114" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-114', '_open', 'link-14');">_open</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line"> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line"> </tt>
+<a name="convert"></a><div id="convert-def"><a name="L286"></a><tt class="py-lineno">286</tt> <a class="py-toggle" href="#" id="convert-toggle" onclick="return toggle('convert');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#convert">convert</a><tt class="py-op">(</tt><tt class="py-param">data</tt><tt class="py-op">,</tt> <tt class="py-param">in_format</tt><tt class="py-op">,</tt> <tt class="py-param">out_format</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="convert-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="convert-expanded"><a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">    <tt class="py-docstring">"""TogoWS convert (returns a handle).</tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line"><tt class="py-docstring">    data - string or handle containing input record(s)</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"><tt class="py-docstring">    in_format - string describing the input file format (e.g. "genbank")</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line"><tt class="py-docstring">    out_format - string describing the requested output format (e.g. "fasta")</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line"><tt class="py-docstring">    For a list of supported conversions (e.g. "genbank" to "fasta"), see</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line"><tt class="py-docstring">    http://togows.dbcls.jp/convert/</tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"><tt class="py-docstring">    Note that Biopython has built in support for conversion of sequence and</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"><tt class="py-docstring">    alignnent file formats (functions Bio.SeqIO.convert and Bio.AlignIO.convert)</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">    <tt class="py-keyword">global</tt> <tt id="link-115" class="py-name"><a title="Bio.TogoWS._convert_formats" class="py-name" href="#" onclick="return doclink('link-115', '_convert_formats', 'link-13');">_convert_formats</a></tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-116" class="py-name"><a title="Bio.TogoWS._convert_formats" class="py-name" href="#" onclick="return doclink('link-116', '_convert_formats', 'link-13');">_convert_formats</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line">        <tt id="link-117" class="py-name"><a title="Bio.TogoWS._convert_formats" class="py-name" href="#" onclick="return doclink('link-117', '_convert_formats', 'link-13');">_convert_formats</a></tt> <tt class="py-op">=</tt> <tt id="link-118" class="py-name" targets="Function Bio.TogoWS._get_convert_formats()=Bio.TogoWS-module.html#_get_convert_formats"><a title="Bio.TogoWS._get_convert_formats" class="py-name" href="#" onclick="return doclink('link-118', '_get_convert_formats', 'link-118');">_get_convert_formats</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-op">[</tt><tt class="py-name">in_format</tt><tt class="py-op">,</tt> <tt class="py-name">out_format</tt><tt class="py-op">]</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-119" class="py-name"><a title="Bio.TogoWS._convert_formats" class="py-name" href="#" onclick="return doclink('link-119', '_convert_formats', 'link-13');">_convert_formats</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">        <tt class="py-name">msg</tt> <tt class="py-op">=</tt> <tt class="py-string">"\n"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-string">"%s -&gt; %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">pair</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">pair</tt> <tt class="py-keyword">in</tt> <tt id="link-120" class="py-name"><a title="Bio.TogoWS._convert_formats" class="py-name" href="#" onclick="return doclink('link-120', '_convert_formats', 'link-13');">_convert_formats</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Unsupported conversion. Choose from:\n%s"</tt> <tt class="py-op">%</tt> <tt class="py-name">msg</tt><tt class="py-op">)</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line">    <tt class="py-name">url</tt> <tt class="py-op">=</tt> <tt id="link-121" class="py-name"><a title="Bio.TogoWS._BASE_URL" class="py-name" href="#" onclick="return doclink('link-121', '_BASE_URL', 'link-8');">_BASE_URL</a></tt> <tt class="py-op">+</tt> <tt class="py-string">"/convert/%s.%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">in_format</tt><tt class="py-op">,</tt> <tt class="py-name">out_format</tt><tt class="py-op">)</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line">    <tt class="py-comment"># TODO - Should we just accept a string not a handle? What about a filename?</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-122" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-122', 'data', 'link-78');">data</a></tt><tt class="py-op">,</tt> <tt class="py-string">"read"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">        <tt class="py-comment"># Handle</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-123" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-123', '_open', 'link-14');">_open</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-name">post</tt><tt class="py-op">=</tt><tt id="link-124" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-124', 'data', 'link-78');">data</a></tt><tt class="py-op">.</tt><tt id="link-125" class="py-name"><a title="Bio.Affy.CelFile.read
+Bio.AlignIO.read
+Bio.Blast.NCBIXML.read
+Bio.Cluster.read
+Bio.Compass.read
+Bio.Emboss.Primer3.read
+Bio.Emboss.PrimerSearch.read
+Bio.Entrez.Parser.DataHandler.read
+Bio.Entrez.read
+Bio.ExPASy.Enzyme.read
+Bio.ExPASy.Prodoc.read
+Bio.ExPASy.Prosite.read
+Bio.ExPASy.ScanProsite.read
+Bio.File.UndoHandle.read
+Bio.KEGG.KGML.KGML_parser.read
+Bio.Medline.read
+Bio.Motif.Parsers.AlignAce.read
+Bio.Motif.Parsers.MAST.read
+Bio.Motif.Parsers.MEME.read
+Bio.Motif.read
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.read
+Bio.Nexus.Nexus.Nexus.read
+Bio.Phylo.PAML.baseml.read
+Bio.Phylo.PAML.codeml.read
+Bio.Phylo.PAML.yn00.read
+Bio.Phylo.PhyloXMLIO.Parser.read
+Bio.Phylo.PhyloXMLIO.read
+Bio.Phylo._io.read
+Bio.PopGen.GenePop.FileParser.read
+Bio.PopGen.GenePop.LargeFileParser.read
+Bio.PopGen.GenePop.read
+Bio.SearchIO.read
+Bio.SeqIO.SffIO._AddTellHandle.read
+Bio.SeqIO.read
+Bio.Sequencing.Ace.read
+Bio.Sequencing.Phd.read
+Bio.SwissProt.read
+Bio.UniGene.read
+Bio.bgzf.BgzfReader.read
+Bio.motifs.alignace.read
+Bio.motifs.jaspar.read
+Bio.motifs.mast.read
+Bio.motifs.meme.read
+Bio.motifs.read
+Bio.motifs.transfac.read" class="py-name" href="#" onclick="return doclink('link-125', 'read', 'link-15');">read</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line">        <tt class="py-comment"># String</tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-126" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-126', '_open', 'link-14');">_open</a></tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">,</tt> <tt class="py-name">post</tt><tt class="py-op">=</tt><tt id="link-127" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-127', 'data', 'link-78');">data</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line"> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line"> </tt>
+<a name="_open"></a><div id="_open-def"><a name="L315"></a><tt class="py-lineno">315</tt> <a class="py-toggle" href="#" id="_open-toggle" onclick="return toggle('_open');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.TogoWS-module.html#_open">_open</a><tt class="py-op">(</tt><tt class="py-param">url</tt><tt class="py-op">,</tt> <tt class="py-param">post</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_open-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_open-expanded"><a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line">    <tt class="py-docstring">"""Helper function to build the URL and open a handle to it (PRIVATE).</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"><tt class="py-docstring">    Open a handle to TogoWS, will raise an IOError if it encounters an error.</tt> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line"><tt class="py-docstring">    In the absense of clear guidelines, this function enforces a limit of</tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line"><tt class="py-docstring">    "up to three queries per second" to avoid abusing the TogoWS servers.</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line">    <tt class="py-name">delay</tt> <tt class="py-op">=</tt> <tt class="py-number">0.333333333</tt>  <tt class="py-comment"># one third of a second</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">    <tt class="py-name">current</tt> <tt class="py-op">=</tt> <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line">    <tt class="py-name">wait</tt> <tt class="py-op">=</tt> <tt id="link-128" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-128', '_open', 'link-14');">_open</a></tt><tt class="py-op">.</tt><tt class="py-name">previous</tt> <tt class="py-op">+</tt> <tt class="py-name">delay</tt> <tt class="py-op">-</tt> <tt class="py-name">current</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">wait</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">        <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">sleep</tt><tt class="py-op">(</tt><tt class="py-name">wait</tt><tt class="py-op">)</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">        <tt id="link-129" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-129', '_open', 'link-14');">_open</a></tt><tt class="py-op">.</tt><tt class="py-name">previous</tt> <tt class="py-op">=</tt> <tt class="py-name">current</tt> <tt class="py-op">+</tt> <tt class="py-name">wait</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">        <tt id="link-130" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-130', '_open', 'link-14');">_open</a></tt><tt class="py-op">.</tt><tt class="py-name">previous</tt> <tt class="py-op">=</tt> <tt class="py-name">current</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line"> </tt>
+<a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line">    <tt class="py-comment"># print(url)</tt> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">post</tt><tt class="py-op">:</tt> </tt>
+<a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line">        <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">_urlopen</tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">,</tt> <tt id="link-131" class="py-name"><a title="Bio._py3k._as_bytes" class="py-name" href="#" onclick="return doclink('link-131', '_as_bytes', 'link-3');">_as_bytes</a></tt><tt class="py-op">(</tt><tt class="py-name">post</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line">        <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">_urlopen</tt><tt class="py-op">(</tt><tt class="py-name">url</tt><tt class="py-op">)</tt> </tt>
+<a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line"> </tt>
+<a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line">    <tt class="py-comment"># We now trust TogoWS to have set an HTTP error code, that</tt> </tt>
+<a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line">    <tt class="py-comment"># suffices for my current unit tests. Previously we would</tt> </tt>
+<a name="L340"></a><tt class="py-lineno">340</tt>  <tt class="py-line">    <tt class="py-comment"># examine the start of the data returned back.</tt> </tt>
+<a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-132" class="py-name"><a title="Bio._py3k._binary_to_string_handle" class="py-name" href="#" onclick="return doclink('link-132', '_binary_to_string_handle', 'link-2');">_binary_to_string_handle</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line"> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line"><tt id="link-133" class="py-name"><a title="Bio.Entrez._open
+Bio.SCOP._open
+Bio.TogoWS._open" class="py-name" href="#" onclick="return doclink('link-133', '_open', 'link-14');">_open</a></tt><tt class="py-op">.</tt><tt class="py-name">previous</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:27 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

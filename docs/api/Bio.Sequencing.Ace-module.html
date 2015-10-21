@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Sequencing.Ace</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Sequencing-module.html">Package&nbsp;Sequencing</a> ::
+        Module&nbsp;Ace
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Sequencing.Ace-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module Ace</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.Sequencing.Ace-pysrc.html">source&nbsp;code</a></span></p>
+<p>Parser for ACE files output by PHRAP.</p>
+<p>Written by Frank Kauff (<a class="rst-reference external" href="mailto:fkauff&#64;duke.edu" target="_top">fkauff&#64;duke.edu</a>) and
+Cymon J. Cox (<a class="rst-reference external" href="mailto:cymon&#64;duke.edu" target="_top">cymon&#64;duke.edu</a>)</p>
+<p>Usage:</p>
+<p>There are two ways of reading an ace file:</p>
+<ol class="rst-arabic simple">
+<li>The function 'read' reads the whole file at once;</li>
+<li>The function 'parse' reads the file contig after contig.</li>
+</ol>
+<p>First option, parse whole ace file at once:</p>
+<pre class="rst-literal-block">
+from Bio.Sequencing import Ace
+acefilerecord = Ace.read(open('my_ace_file.ace'))
+</pre>
+<dl class="rst-docutils">
+<dt>This gives you:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>acefilerecord.ncontigs (the number of contigs in the ace file)</li>
+<li>acefilerecord.nreads (the number of reads in the ace file)</li>
+<li>acefilerecord.contigs[] (one instance of the Contig class for each contig)</li>
+</ul>
+</dd>
+</dl>
+<p>The Contig class holds the info of the CO tag, CT and WA tags, and all the reads used
+for this contig in a list of instances of the Read class, e.g.:</p>
+<pre class="rst-literal-block">
+contig3 = acefilerecord.contigs[2]
+read4 = contig3.reads[3]
+RD_of_read4 = read4.rd
+DS_of_read4 = read4.ds
+</pre>
+<p>CT, WA, RT tags from the end of the file can appear anywhere are automatically
+sorted into the right place.</p>
+<p>see _RecordConsumer for details.</p>
+<p>The second option is to  iterate over the contigs of an ace file one by one
+in the ususal way:</p>
+<pre class="rst-literal-block">
+from Bio.Sequencing import Ace
+contigs = Ace.parse(open('my_ace_file.ace'))
+for contig in contigs:
+    print(contig.name)
+    ...
+</pre>
+<p>Please note that for memory efficiency, when using the iterator approach, only one
+contig is kept in memory at once.  However, there can be a footer to the ACE file
+containing WA, CT, RT or WR tags which contain additional meta-data on the contigs.
+Because the parser doesn't see this data until the final record, it cannot be added to
+the appropriate records.  Instead these tags will be returned with the last contig record.
+Thus an ace file does not entirerly suit the concept of iterating. If WA, CT, RT, WR tags
+are needed, the 'read' function rather than the 'parse' function might be more appropriate.</p>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.rd-class.html" class="summary-name">rd</a><br />
+      RD (reads), store a read with its name, sequence etc.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.qa-class.html" class="summary-name">qa</a><br />
+      QA (read quality), including which part if any was used as the consensus.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.ds-class.html" class="summary-name">ds</a><br />
+      DS lines, include file name of a read's chromatogram file.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.af-class.html" class="summary-name">af</a><br />
+      AF lines, define the location of the read within the contig.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.bs-class.html" class="summary-name">bs</a><br />
+      BS (base segment), which read was chosen as the consensus at each position.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.rt-class.html" class="summary-name">rt</a><br />
+      RT (transient read tags), generated by crossmatch and phrap.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.ct-class.html" class="summary-name">ct</a><br />
+      CT (consensus tags).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.wa-class.html" class="summary-name">wa</a><br />
+      WA (whole assembly tag), holds the assembly program name, version, etc.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.wr-class.html" class="summary-name">wr</a><br />
+      WR lines.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.Reads-class.html" class="summary-name">Reads</a><br />
+      Holds information about a read supporting an ACE contig.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.Contig-class.html" class="summary-name">Contig</a><br />
+      Holds information about a contig from an ACE record.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Sequencing.Ace.ACEFileRecord-class.html" class="summary-name">ACEFileRecord</a><br />
+      Holds data of an ACE file.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Sequencing.Ace-module.html#parse" class="summary-sig-name">parse</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Iterate of ACE file contig by contig.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Sequencing.Ace-pysrc.html#parse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="read"></a><span class="summary-sig-name">read</span>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Parses the full ACE file in list of contigs.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Sequencing.Ace-pysrc.html#read">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.Sequencing'"><code class="variable-quote">'</code><code class="variable-string">Bio.Sequencing</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="parse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Sequencing.Ace-pysrc.html#parse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate of ACE file contig by contig.</p>
+<p>Argument handle is a file-like object.</p>
+<p>This function returns an iterator that allows you to iterate
+over the ACE file record by record:</p>
+<pre class="rst-literal-block">
+records = parse(handle)
+for record in records:
+    # do something with the record
+</pre>
+<p>where each record is a Contig object.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:28 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

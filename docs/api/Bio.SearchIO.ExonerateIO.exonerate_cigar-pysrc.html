@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO.ExonerateIO.exonerate_cigar</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SearchIO-module.html">Package&nbsp;SearchIO</a> ::
+        <a href="Bio.SearchIO.ExonerateIO-module.html">Package&nbsp;ExonerateIO</a> ::
+        Module&nbsp;exonerate_cigar
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO.ExonerateIO.exonerate_cigar-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.SearchIO.ExonerateIO.exonerate_cigar-module.html">Module Bio.SearchIO.ExonerateIO.exonerate_cigar</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2012 by Wibowo Arindrarto.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Bio.SearchIO parser for Exonerate cigar output format."""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">re</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-1', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Function Bio._py3k._as_bytes()=Bio._py3k-module.html#_as_bytes"><a title="Bio._py3k._as_bytes" class="py-name" href="#" onclick="return doclink('link-2', '_as_bytes', 'link-2');">_as_bytes</a></tt><tt class="py-op">,</tt> <tt id="link-3" class="py-name" targets="Function Bio._py3k._bytes_to_string()=Bio._py3k-module.html#_bytes_to_string"><a title="Bio._py3k._bytes_to_string" class="py-name" href="#" onclick="return doclink('link-3', '_bytes_to_string', 'link-3');">_bytes_to_string</a></tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Module Bio.SearchIO.ExonerateIO._base=Bio.SearchIO.ExonerateIO._base-module.html,Module Bio.SearchIO.HmmerIO._base=Bio.SearchIO.HmmerIO._base-module.html,Module Bio.SearchIO._model._base=Bio.SearchIO._model._base-module.html"><a title="Bio.SearchIO.ExonerateIO._base
+Bio.SearchIO.HmmerIO._base
+Bio.SearchIO._model._base" class="py-name" href="#" onclick="return doclink('link-4', '_base', 'link-4');">_base</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name" targets="Class Bio.SearchIO.ExonerateIO._base._BaseExonerateParser=Bio.SearchIO.ExonerateIO._base._BaseExonerateParser-class.html"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateParser" class="py-name" href="#" onclick="return doclink('link-5', '_BaseExonerateParser', 'link-5');">_BaseExonerateParser</a></tt><tt class="py-op">,</tt> <tt id="link-6" class="py-name" targets="Variable Bio.SearchIO.ExonerateIO._base._STRAND_MAP=Bio.SearchIO.ExonerateIO._base-module.html#_STRAND_MAP"><a title="Bio.SearchIO.ExonerateIO._base._STRAND_MAP" class="py-name" href="#" onclick="return doclink('link-6', '_STRAND_MAP', 'link-6');">_STRAND_MAP</a></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Module Bio.SearchIO.ExonerateIO.exonerate_vulgar=Bio.SearchIO.ExonerateIO.exonerate_vulgar-module.html"><a title="Bio.SearchIO.ExonerateIO.exonerate_vulgar" class="py-name" href="#" onclick="return doclink('link-7', 'exonerate_vulgar', 'link-7');">exonerate_vulgar</a></tt> <tt class="py-keyword">import</tt> <tt id="link-8" class="py-name" targets="Class Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarIndexer=Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarIndexer-class.html"><a title="Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarIndexer" class="py-name" href="#" onclick="return doclink('link-8', 'ExonerateVulgarIndexer', 'link-8');">ExonerateVulgarIndexer</a></tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-name">__all__</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'ExonerateCigarParser'</tt><tt class="py-op">,</tt> <tt class="py-string">'ExonerateCigarIndexer'</tt><tt class="py-op">]</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-comment"># precompile regex</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Variable Bio.SearchIO.ExonerateIO.exonerate_cigar._RE_CIGAR=Bio.SearchIO.ExonerateIO.exonerate_cigar-module.html#_RE_CIGAR"><a title="Bio.SearchIO.ExonerateIO.exonerate_cigar._RE_CIGAR" class="py-name" href="#" onclick="return doclink('link-9', '_RE_CIGAR', 'link-9');">_RE_CIGAR</a></tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt><tt class="py-string">r"""^cigar:\s+</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-string">        (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # query: ID, start, end, strand</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-string">        (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # hit: ID, start, end, strand</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-string">        (\d+)(\s+.*)$                         # score, vulgar components</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-string">        """</tt><tt class="py-op">,</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">VERBOSE</tt><tt class="py-op">)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"> </tt>
+<a name="ExonerateCigarParser"></a><div id="ExonerateCigarParser-def"><a name="L27"></a><tt class="py-lineno"> 27</tt> <a class="py-toggle" href="#" id="ExonerateCigarParser-toggle" onclick="return toggle('ExonerateCigarParser');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser-class.html">ExonerateCigarParser</a><tt class="py-op">(</tt><tt class="py-base-class">_BaseExonerateParser</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ExonerateCigarParser-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ExonerateCigarParser-expanded"><a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parser for Exonerate cigar strings."""</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">    <tt id="link-10" class="py-name" targets="Variable Bio.SearchIO.ExonerateIO._base._BaseExonerateParser._ALN_MARK=Bio.SearchIO.ExonerateIO._base._BaseExonerateParser-class.html#_ALN_MARK,Variable Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser._ALN_MARK=Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser-class.html#_ALN_MARK,Variable Bio.SearchIO.ExonerateIO.exonerate_text.ExonerateTextParser._ALN_MARK=Bio.SearchIO.ExonerateIO.exonerate_text.ExonerateTextParser-class.html#_ALN_MARK,Variable Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarParser._ALN_MARK=Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarParser-class.html#_ALN_MARK"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateParser._ALN_MARK
+Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser._ALN_MARK
+Bio.SearchIO.ExonerateIO.exonerate_text.ExonerateTextParser._ALN_MARK
+Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarParser._ALN_MARK" class="py-name" href="#" onclick="return doclink('link-10', '_ALN_MARK', 'link-10');">_ALN_MARK</a></tt> <tt class="py-op">=</tt> <tt class="py-string">'cigar'</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="ExonerateCigarParser.parse_alignment_block"></a><div id="ExonerateCigarParser.parse_alignment_block-def"><a name="L33"></a><tt class="py-lineno"> 33</tt> <a class="py-toggle" href="#" id="ExonerateCigarParser.parse_alignment_block-toggle" onclick="return toggle('ExonerateCigarParser.parse_alignment_block');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser-class.html#parse_alignment_block">parse_alignment_block</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">header</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ExonerateCigarParser.parse_alignment_block-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ExonerateCigarParser.parse_alignment_block-expanded"><a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-name">qresult</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name" targets="Variable Bio.Wise.dnal.Statistics.header=Bio.Wise.dnal.Statistics-class.html#header"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-11', 'header', 'link-11');">header</a></tt><tt class="py-op">[</tt><tt class="py-string">'qresult'</tt><tt class="py-op">]</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt id="link-12" class="py-name" targets="Module Bio.SearchIO._model.hit=Bio.SearchIO._model.hit-module.html,Variable Bio.SearchIO._model.hsp.HSP.hit=Bio.SearchIO._model.hsp.HSP-class.html#hit,Variable Bio.SearchIO._model.hsp.HSPFragment.hit=Bio.SearchIO._model.hsp.HSPFragment-class.html#hit"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-12', 'hit', 'link-12');">hit</a></tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-13', 'header', 'link-11');">header</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit'</tt><tt class="py-op">]</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt id="link-14" class="py-name" targets="Module Bio.SearchIO._model.hsp=Bio.SearchIO._model.hsp-module.html"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-14', 'hsp', 'link-14');">hsp</a></tt> <tt class="py-op">=</tt> <tt id="link-15" class="py-name"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-15', 'header', 'link-11');">header</a></tt><tt class="py-op">[</tt><tt class="py-string">'hsp'</tt><tt class="py-op">]</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method Bio.SearchIO.ExonerateIO._base._BaseExonerateParser.read_until()=Bio.SearchIO.ExonerateIO._base._BaseExonerateParser-class.html#read_until"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateParser.read_until" class="py-name" href="#" onclick="return doclink('link-16', 'read_until', 'link-16');">read_until</a></tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">line</tt><tt class="py-op">:</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method Bio.Seq.Seq.startswith()=Bio.Seq.Seq-class.html#startswith"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-17', 'startswith', 'link-17');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-string">'cigar'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-name">cigars</tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.search()=Bio.KDTree.KDTree%27.KDTree-class.html#search,Method Bio.PDB.NeighborSearch'.NeighborSearch.search()=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html#search,Method Bio.Phylo.TreeConstruction.NNITreeSearcher.search()=Bio.Phylo.TreeConstruction.NNITreeSearcher-class.html#search,Method Bio.Phylo.TreeConstruction.TreeSearcher.search()=Bio.Phylo.TreeConstruction.TreeSearcher-class.html#search,Class Method Bio.Restriction.Restriction.AbstractCut.search()=Bio.Restriction.Restriction.AbstractCut-class.html#search,Method Bio.Restriction.Restriction.RestrictionBatch.search()=Bio.Restriction.Restriction.RestrictionBatch-class.html#search,Function Bio.SCOP.search()=Bio.SCOP-module.html#search,Function Bio.TogoWS.search()=Bio.TogoWS-module.html#search,Method Bio.motifs.Instances.search()=Bio.motifs.Instances-class.html#search,Method Bio.motifs.matrix.PositionSpecificScoringMatrix.search()=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#search"><a title="Bio.KDTree.KDTree'.KDTree.search
+Bio.PDB.NeighborSearch'.NeighborSearch.search
+Bio.Phylo.TreeConstruction.NNITreeSearcher.search
+Bio.Phylo.TreeConstruction.TreeSearcher.search
+Bio.Restriction.Restriction.AbstractCut.search
+Bio.Restriction.Restriction.RestrictionBatch.search
+Bio.SCOP.search
+Bio.TogoWS.search
+Bio.motifs.Instances.search
+Bio.motifs.matrix.PositionSpecificScoringMatrix.search" class="py-name" href="#" onclick="return doclink('link-18', 'search', 'link-18');">search</a></tt><tt class="py-op">(</tt><tt id="link-19" class="py-name"><a title="Bio.SearchIO.ExonerateIO.exonerate_cigar._RE_CIGAR" class="py-name" href="#" onclick="return doclink('link-19', '_RE_CIGAR', 'link-9');">_RE_CIGAR</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt class="py-comment"># if the file has c4 alignments</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-comment"># check if cigar values match our previously parsed header values</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">has_c4_alignment</tt><tt class="py-op">:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt class="py-name">qresult</tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-20" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-20', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-21" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-21', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-22" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-22', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">4</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-23" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-23', 'hit', 'link-12');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">5</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-24" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-24', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">6</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-25" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-25', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">7</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-26" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-26', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">8</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt id="link-27" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-27', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'score'</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">9</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">            <tt class="py-name">qresult</tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">            <tt id="link-28" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-28', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">            <tt id="link-29" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-29', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">            <tt id="link-30" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-30', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">4</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">            <tt id="link-31" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-31', 'hit', 'link-12');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">5</tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">            <tt id="link-32" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-32', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">6</tt><tt class="py-op">)</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">            <tt id="link-33" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-33', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">7</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">            <tt id="link-34" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-34', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">8</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt id="link-35" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-35', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'score'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">9</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-comment"># adjust strands</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt id="link-36" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-36', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-37" class="py-name"><a title="Bio.SearchIO.ExonerateIO._base._STRAND_MAP" class="py-name" href="#" onclick="return doclink('link-37', '_STRAND_MAP', 'link-6');">_STRAND_MAP</a></tt><tt class="py-op">[</tt><tt id="link-38" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-38', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_strand'</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt id="link-39" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-39', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name"><a title="Bio.SearchIO.ExonerateIO._base._STRAND_MAP" class="py-name" href="#" onclick="return doclink('link-40', '_STRAND_MAP', 'link-6');">_STRAND_MAP</a></tt><tt class="py-op">[</tt><tt id="link-41" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-41', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_strand'</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-comment"># cast coords into ints</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-name">qstart</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt id="link-42" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-42', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">qend</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt id="link-43" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-43', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-name">hstart</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt id="link-44" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-44', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-name">hend</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt id="link-45" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-45', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-comment"># set coords (start &lt;= end)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt id="link-46" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-46', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-47" class="py-name" targets="Variable Bio.motifs.matrix.PositionSpecificScoringMatrix.min=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#min"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.min" class="py-name" href="#" onclick="return doclink('link-47', 'min', 'link-47');">min</a></tt><tt class="py-op">(</tt><tt class="py-name">qstart</tt><tt class="py-op">,</tt> <tt class="py-name">qend</tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt id="link-48" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-48', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-49" class="py-name" targets="Variable Bio.motifs.matrix.PositionSpecificScoringMatrix.max=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#max"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-49', 'max', 'link-49');">max</a></tt><tt class="py-op">(</tt><tt class="py-name">qstart</tt><tt class="py-op">,</tt> <tt class="py-name">qend</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt id="link-50" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-50', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-51" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.min" class="py-name" href="#" onclick="return doclink('link-51', 'min', 'link-47');">min</a></tt><tt class="py-op">(</tt><tt class="py-name">hstart</tt><tt class="py-op">,</tt> <tt class="py-name">hend</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">        <tt id="link-52" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-52', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-53" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-53', 'max', 'link-49');">max</a></tt><tt class="py-op">(</tt><tt class="py-name">hstart</tt><tt class="py-op">,</tt> <tt class="py-name">hend</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-comment"># cast score into int</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt id="link-54" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-54', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'score'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt id="link-55" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-55', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'score'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-comment"># store cigar components</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt id="link-56" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-56', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'cigar_comp'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cigars</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">10</tt><tt class="py-op">)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-comment"># HACK: since we can't really figure out exactly when a</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-comment"># HSP starts or ends, we set the entire alignment as one HSP</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt id="link-57" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-57', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_ranges'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt id="link-58" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-58', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt id="link-59" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-59', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt id="link-60" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-60', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_ranges'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt id="link-61" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-61', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt id="link-62" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-62', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">{</tt><tt class="py-string">'qresult'</tt><tt class="py-op">:</tt> <tt class="py-name">qresult</tt><tt class="py-op">,</tt> <tt class="py-string">'hit'</tt><tt class="py-op">:</tt> <tt id="link-63" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-63', 'hit', 'link-12');">hit</a></tt><tt class="py-op">,</tt> <tt class="py-string">'hsp'</tt><tt class="py-op">:</tt> <tt id="link-64" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-64', 'hsp', 'link-14');">hsp</a></tt><tt class="py-op">}</tt> </tt>
+</div></div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"> </tt>
+<a name="ExonerateCigarIndexer"></a><div id="ExonerateCigarIndexer-def"><a name="L87"></a><tt class="py-lineno"> 87</tt> <a class="py-toggle" href="#" id="ExonerateCigarIndexer-toggle" onclick="return toggle('ExonerateCigarIndexer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarIndexer-class.html">ExonerateCigarIndexer</a><tt class="py-op">(</tt><tt class="py-base-class">ExonerateVulgarIndexer</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ExonerateCigarIndexer-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ExonerateCigarIndexer-expanded"><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">    <tt class="py-docstring">"""Indexer class for exonerate cigar lines."""</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">    <tt id="link-65" class="py-name" targets="Variable Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._parser=Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer-class.html#_parser"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._parser" class="py-name" href="#" onclick="return doclink('link-65', '_parser', 'link-65');">_parser</a></tt> <tt class="py-op">=</tt> <tt id="link-66" class="py-name" targets="Class Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser=Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser-class.html"><a title="Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarParser" class="py-name" href="#" onclick="return doclink('link-66', 'ExonerateCigarParser', 'link-66');">ExonerateCigarParser</a></tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">    <tt id="link-67" class="py-name" targets="Variable Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._query_mark=Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer-class.html#_query_mark,Variable Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarIndexer._query_mark=Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarIndexer-class.html#_query_mark,Variable Bio.SearchIO.ExonerateIO.exonerate_text.ExonerateTextIndexer._query_mark=Bio.SearchIO.ExonerateIO.exonerate_text.ExonerateTextIndexer-class.html#_query_mark,Variable Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarIndexer._query_mark=Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarIndexer-class.html#_query_mark"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._query_mark
+Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarIndexer._query_mark
+Bio.SearchIO.ExonerateIO.exonerate_text.ExonerateTextIndexer._query_mark
+Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarIndexer._query_mark" class="py-name" href="#" onclick="return doclink('link-67', '_query_mark', 'link-67');">_query_mark</a></tt> <tt class="py-op">=</tt> <tt id="link-68" class="py-name"><a title="Bio._py3k._as_bytes" class="py-name" href="#" onclick="return doclink('link-68', '_as_bytes', 'link-2');">_as_bytes</a></tt><tt class="py-op">(</tt><tt class="py-string">'cigar'</tt><tt class="py-op">)</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"> </tt>
+<a name="ExonerateCigarIndexer.get_qresult_id"></a><div id="ExonerateCigarIndexer.get_qresult_id-def"><a name="L94"></a><tt class="py-lineno"> 94</tt> <a class="py-toggle" href="#" id="ExonerateCigarIndexer.get_qresult_id-toggle" onclick="return toggle('ExonerateCigarIndexer.get_qresult_id');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarIndexer-class.html#get_qresult_id">get_qresult_id</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pos</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ExonerateCigarIndexer.get_qresult_id-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ExonerateCigarIndexer.get_qresult_id-expanded"><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns the query ID of the nearest cigar line."""</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name" targets="Method Bio.File.UndoHandle.seek()=Bio.File.UndoHandle-class.html#seek,Method Bio.SeqIO.SffIO._AddTellHandle.seek()=Bio.SeqIO.SffIO._AddTellHandle-class.html#seek,Method Bio.bgzf.BgzfReader.seek()=Bio.bgzf.BgzfReader-class.html#seek"><a title="Bio.File.UndoHandle.seek
+Bio.SeqIO.SffIO._AddTellHandle.seek
+Bio.bgzf.BgzfReader.seek" class="py-name" href="#" onclick="return doclink('link-69', 'seek', 'link-69');">seek</a></tt><tt class="py-op">(</tt><tt class="py-name">pos</tt><tt class="py-op">)</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-comment"># get line, check if it's a vulgar line, and get query ID</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-70" class="py-name" targets="Method Bio.File.UndoHandle.readline()=Bio.File.UndoHandle-class.html#readline,Method Bio.bgzf.BgzfReader.readline()=Bio.bgzf.BgzfReader-class.html#readline"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-70', 'readline', 'link-70');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-71" class="py-name"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-71', 'startswith', 'link-17');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-72" class="py-name"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._query_mark
+Bio.SearchIO.ExonerateIO.exonerate_cigar.ExonerateCigarIndexer._query_mark
+Bio.SearchIO.ExonerateIO.exonerate_text.ExonerateTextIndexer._query_mark
+Bio.SearchIO.ExonerateIO.exonerate_vulgar.ExonerateVulgarIndexer._query_mark" class="py-name" href="#" onclick="return doclink('link-72', '_query_mark', 'link-67');">_query_mark</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">line</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt id="link-73" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-73', 'id', 'link-73');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name"><a title="Bio.KDTree.KDTree'.KDTree.search
+Bio.PDB.NeighborSearch'.NeighborSearch.search
+Bio.Phylo.TreeConstruction.NNITreeSearcher.search
+Bio.Phylo.TreeConstruction.TreeSearcher.search
+Bio.Restriction.Restriction.AbstractCut.search
+Bio.Restriction.Restriction.RestrictionBatch.search
+Bio.SCOP.search
+Bio.TogoWS.search
+Bio.motifs.Instances.search
+Bio.motifs.matrix.PositionSpecificScoringMatrix.search" class="py-name" href="#" onclick="return doclink('link-74', 'search', 'link-18');">search</a></tt><tt class="py-op">(</tt><tt id="link-75" class="py-name"><a title="Bio.SearchIO.ExonerateIO.exonerate_cigar._RE_CIGAR" class="py-name" href="#" onclick="return doclink('link-75', '_RE_CIGAR', 'link-9');">_RE_CIGAR</a></tt><tt class="py-op">,</tt> <tt id="link-76" class="py-name"><a title="Bio._py3k._bytes_to_string" class="py-name" href="#" onclick="return doclink('link-76', '_bytes_to_string', 'link-3');">_bytes_to_string</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-77" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-77', 'id', 'link-73');">id</a></tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-comment"># if not used as a module, run the doctest</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-78" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-78', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-79" class="py-name" targets="Module Bio.Phylo._utils=Bio.Phylo._utils-module.html,Module Bio.SearchIO._utils=Bio.SearchIO._utils-module.html,Module Bio._utils=Bio._utils-module.html"><a title="Bio.Phylo._utils
+Bio.SearchIO._utils
+Bio._utils" class="py-name" href="#" onclick="return doclink('link-79', '_utils', 'link-79');">_utils</a></tt> <tt class="py-keyword">import</tt> <tt id="link-80" class="py-name" targets="Function Bio._utils.run_doctest()=Bio._utils-module.html#run_doctest"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-80', 'run_doctest', 'link-80');">run_doctest</a></tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">    <tt id="link-81" class="py-name"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-81', 'run_doctest', 'link-80');">run_doctest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:39 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

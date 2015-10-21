@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio._utils</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Module&nbsp;_utils
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio._utils-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio._utils-module.html">Module Bio._utils</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2010 by Eric Talevich. All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2012 by Wibowo Arindrarto. All rights reserved.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">"""Common utility functions for various Bio submodules."""</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="iterlen"></a><div id="iterlen-def"><a name="L14"></a><tt class="py-lineno"> 14</tt> <a class="py-toggle" href="#" id="iterlen-toggle" onclick="return toggle('iterlen');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._utils-module.html#iterlen">iterlen</a><tt class="py-op">(</tt><tt class="py-param">items</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="iterlen-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="iterlen-expanded"><a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line">    <tt class="py-docstring">"""Count the number of items in an iterable.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">    If the argument supports len(items), and some iterators do, then</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">    this returns len(items). Otherwise it will scan over the entries</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">    in order to count them.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    Exhausts a generator, but doesn't require creating a full list.</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; iterlen("abcde")</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">    5</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; iterlen(iter("abcde"))</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">    5</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-comment"># e.g. Under Python 2, the xrange iterator defines __len__</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-0" class="py-name" targets="Method Bio.Crystal.Crystal.items()=Bio.Crystal.Crystal-class.html#items,Method Bio.File._IndexedSeqFileDict.items()=Bio.File._IndexedSeqFileDict-class.html#items,Method Bio.Phylo.PhyloXML.Events.items()=Bio.Phylo.PhyloXML.Events-class.html#items,Variable Bio.SearchIO._model.query.QueryResult.items=Bio.SearchIO._model.query.QueryResult-class.html#items,Method Bio._py3k._ordereddict.OrderedDict.items()=Bio._py3k._ordereddict.OrderedDict-class.html#items,Method BioSQL.BioSeqDatabase.BioSeqDatabase.items()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#items,Method BioSQL.BioSeqDatabase.DBServer.items()=BioSQL.BioSeqDatabase.DBServer-class.html#items"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-0', 'items', 'link-0');">items</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">TypeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-1" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-1', 'i', 'link-1');">i</a></tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-2', 'x', 'link-2');">x</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt id="link-3" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-3', 'items', 'link-0');">items</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">            <tt id="link-4" class="py-name" targets="Method Bio.Crystal.Chain.count()=Bio.Crystal.Chain-class.html#count,Method Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count()=Bio.NeuralNetwork.Gene.Pattern.PatternRepository-class.html#count,Method Bio.Seq.MutableSeq.count()=Bio.Seq.MutableSeq-class.html#count,Method Bio.Seq.Seq.count()=Bio.Seq.Seq-class.html#count,Method Bio.Seq.UnknownSeq.count()=Bio.Seq.UnknownSeq-class.html#count,Method Bio.motifs.Instances.count()=Bio.motifs.Instances-class.html#count"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-4', 'count', 'link-4');">count</a></tt> <tt class="py-op">=</tt> <tt id="link-5" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-5', 'i', 'link-1');">i</a></tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-6" class="py-name"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-6', 'count', 'link-4');">count</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"> </tt>
+<a name="read_forward"></a><div id="read_forward-def"><a name="L38"></a><tt class="py-lineno"> 38</tt> <a class="py-toggle" href="#" id="read_forward-toggle" onclick="return toggle('read_forward');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._utils-module.html#read_forward">read_forward</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="read_forward-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="read_forward-expanded"><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">    <tt class="py-docstring">"""Reads through whitespaces, returns the first non-whitespace line."""</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">    <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method Bio.File.UndoHandle.readline()=Bio.File.UndoHandle-class.html#readline,Method Bio.bgzf.BgzfReader.readline()=Bio.bgzf.BgzfReader-class.html#readline"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-7', 'readline', 'link-7');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">        <tt class="py-comment"># if line is empty or line has characters and stripping does not remove</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">        <tt class="py-comment"># them, return the line</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-keyword">not</tt> <tt class="py-name">line</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-op">(</tt><tt class="py-name">line</tt> <tt class="py-keyword">and</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method Bio.Seq.Seq.strip()=Bio.Seq.Seq-class.html#strip"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-8', 'strip', 'link-8');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">line</tt> </tt>
+</div><a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"> </tt>
+<a name="trim_str"></a><div id="trim_str-def"><a name="L48"></a><tt class="py-lineno"> 48</tt> <a class="py-toggle" href="#" id="trim_str-toggle" onclick="return toggle('trim_str');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._utils-module.html#trim_str">trim_str</a><tt class="py-op">(</tt><tt class="py-param">string</tt><tt class="py-op">,</tt> <tt class="py-param">max_len</tt><tt class="py-op">,</tt> <tt class="py-param">concat_char</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="trim_str-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="trim_str-expanded"><a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-docstring">"""Truncates the given string for display."""</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">string</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-name">max_len</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">string</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-name">max_len</tt> <tt class="py-op">-</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">concat_char</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-name">concat_char</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">string</tt> </tt>
+</div><a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"> </tt>
+<a name="getattr_str"></a><div id="getattr_str-def"><a name="L55"></a><tt class="py-lineno"> 55</tt> <a class="py-toggle" href="#" id="getattr_str-toggle" onclick="return toggle('getattr_str');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._utils-module.html#getattr_str">getattr_str</a><tt class="py-op">(</tt><tt class="py-param">obj</tt><tt class="py-op">,</tt> <tt class="py-param">attr</tt><tt class="py-op">,</tt> <tt class="py-param">fmt</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">fallback</tt><tt class="py-op">=</tt><tt class="py-string">'?'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="getattr_str-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="getattr_str-expanded"><a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">    <tt class="py-docstring">"""Returns a string of the given object's attribute, defaulting to the</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring">    fallback value if attribute is not present."""</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">fmt</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">fmt</tt> <tt class="py-op">%</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">fallback</tt> </tt>
+</div><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"> </tt>
+<a name="find_test_dir"></a><div id="find_test_dir-def"><a name="L65"></a><tt class="py-lineno"> 65</tt> <a class="py-toggle" href="#" id="find_test_dir-toggle" onclick="return toggle('find_test_dir');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._utils-module.html#find_test_dir">find_test_dir</a><tt class="py-op">(</tt><tt class="py-param">start_dir</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="find_test_dir-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="find_test_dir-expanded"><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">    <tt class="py-docstring">"""Finds the absolute path of Biopython's Tests directory.</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring">    Arguments:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"><tt class="py-docstring">    start_dir -- Initial directory to begin lookup (default to current dir)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring">    If the directory is not found up the filesystem's root directory, an</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"><tt class="py-docstring">    exception will be raised.</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">start_dir</tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-comment"># no callbacks in function signatures!</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-comment"># defaults to the current directory</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-comment"># (using __file__ would give the installed Biopython)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-name">start_dir</tt> <tt class="py-op">=</tt> <tt class="py-string">"."</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">    <tt class="py-name">target</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">abspath</tt><tt class="py-op">(</tt><tt class="py-name">start_dir</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">    <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">isdir</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">target</tt><tt class="py-op">,</tt> <tt class="py-string">"Bio"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> \ </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-keyword">and</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">isdir</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">target</tt><tt class="py-op">,</tt> <tt class="py-string">"Tests"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">            <tt class="py-comment"># Good, we're in the Biopython root now</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">abspath</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">target</tt><tt class="py-op">,</tt> <tt class="py-string">"Tests"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-comment"># Recurse up the tree</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-comment"># TODO - Test this on Windows</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-name">new</tt><tt class="py-op">,</tt> <tt class="py-name">tmp</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-9', 'split', 'link-9');">split</a></tt><tt class="py-op">(</tt><tt class="py-name">target</tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">target</tt> <tt class="py-op">==</tt> <tt class="py-name">new</tt><tt class="py-op">:</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">            <tt class="py-comment"># Reached root</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">            <tt class="py-keyword">break</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-name">target</tt> <tt class="py-op">=</tt> <tt class="py-name">new</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Not within Biopython source tree: %r"</tt> <tt class="py-op">%</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">abspath</tt><tt class="py-op">(</tt><tt class="py-name">start_dir</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"> </tt>
+<a name="run_doctest"></a><div id="run_doctest-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="run_doctest-toggle" onclick="return toggle('run_doctest');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._utils-module.html#run_doctest">run_doctest</a><tt class="py-op">(</tt><tt class="py-param">target_dir</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="run_doctest-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="run_doctest-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">    <tt class="py-docstring">"""Runs doctest for the importing module."""</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">doctest</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-comment"># default doctest options</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">    <tt class="py-name">default_kwargs</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-string">'optionflags'</tt><tt class="py-op">:</tt> <tt class="py-name">doctest</tt><tt class="py-op">.</tt><tt class="py-name">ELLIPSIS</tt><tt class="py-op">,</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">    <tt class="py-op">}</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">    <tt class="py-name">kwargs</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.update()=Bio.File._IndexedSeqFileDict-class.html#update,Method Bio.Index._InMemoryIndex.update()=Bio.Index._InMemoryIndex-class.html#update,Method Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.update()=Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer-class.html#update,Method Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.update()=Bio.NeuralNetwork.BackPropagation.Layer.InputLayer-class.html#update,Method Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.update()=Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer-class.html#update,Method Bio.SeqRecord._RestrictedDict.update()=Bio.SeqRecord._RestrictedDict-class.html#update,Method Bio._py3k._ordereddict.OrderedDict.update()=Bio._py3k._ordereddict.OrderedDict-class.html#update"><a title="Bio.File._IndexedSeqFileDict.update
+Bio.Index._InMemoryIndex.update
+Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.update
+Bio.SeqRecord._RestrictedDict.update
+Bio._py3k._ordereddict.OrderedDict.update" class="py-name" href="#" onclick="return doclink('link-10', 'update', 'link-10');">update</a></tt><tt class="py-op">(</tt><tt class="py-name">default_kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">    <tt class="py-name">cur_dir</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">abspath</tt><tt class="py-op">(</tt><tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">curdir</tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"Runing doctests..."</tt><tt class="py-op">)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">chdir</tt><tt class="py-op">(</tt><tt id="link-11" class="py-name" targets="Function Bio._utils.find_test_dir()=Bio._utils-module.html#find_test_dir"><a title="Bio._utils.find_test_dir" class="py-name" href="#" onclick="return doclink('link-11', 'find_test_dir', 'link-11');">find_test_dir</a></tt><tt class="py-op">(</tt><tt class="py-name">target_dir</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-name">doctest</tt><tt class="py-op">.</tt><tt class="py-name">testmod</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">    <tt class="py-keyword">finally</tt><tt class="py-op">:</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-comment"># and revert back to initial directory</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">chdir</tt><tt class="py-op">(</tt><tt class="py-name">cur_dir</tt><tt class="py-op">)</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"Done"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">    <tt id="link-12" class="py-name" targets="Function Bio._utils.run_doctest()=Bio._utils-module.html#run_doctest"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-12', 'run_doctest', 'link-12');">run_doctest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:34 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

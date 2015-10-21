@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.AlignIO.StockholmIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.AlignIO-module.html">Package&nbsp;AlignIO</a> ::
+        Module&nbsp;StockholmIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.AlignIO.StockholmIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module StockholmIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.AlignIO.StockholmIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Bio.AlignIO support for &quot;stockholm&quot; format (used in the PFAM database).</p>
+<p>You are expected to use this module via the Bio.AlignIO functions (or the
+Bio.SeqIO functions if you want to work directly with the gapped sequences).</p>
+<p>For example, consider a Stockholm alignment file containing the following:</p>
+<pre class="rst-literal-block">
+# STOCKHOLM 1.0
+#=GC SS_cons       .................&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;...&lt;&lt;&lt;&lt;&lt;&lt;&lt;........&gt;&gt;&gt;&gt;&gt;&gt;&gt;..
+AP001509.1         UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGU
+#=GR AP001509.1 SS -----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;---..&lt;&lt;-&lt;&lt;--------&gt;&gt;-&gt;&gt;..--
+AE007476.1         AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGU
+#=GR AE007476.1 SS -----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;-----&lt;&lt;.&lt;&lt;--------&gt;&gt;.&gt;&gt;----
+
+#=GC SS_cons       ......&lt;&lt;&lt;&lt;&lt;&lt;&lt;.......&gt;&gt;&gt;&gt;&gt;&gt;&gt;..&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;...............
+AP001509.1         CUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+#=GR AP001509.1 SS -------&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;---&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------
+AE007476.1         UUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+#=GR AE007476.1 SS ------.&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;.--&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------
+//
+</pre>
+<p>This is a single multiple sequence alignment, so you would probably load this
+using the Bio.AlignIO.read() function:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>align = AlignIO.read(<span class="py-string">&quot;Stockholm/simple.sth&quot;</span>, <span class="py-string">&quot;stockholm&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">SingleLetterAlphabet() alignment with 2 rows and 104 columns</span>
+<span class="py-output">UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1</span>
+<span class="py-output">AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> align:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">AP001509.1 104</span>
+<span class="py-output">AE007476.1 104</span></pre>
+</blockquote>
+<p>This example file is clearly using RNA, so you might want the alignment object
+(and the SeqRecord objects it holds) to reflect this, rather than simple using
+the default single letter alphabet as shown above.  You can do this with an
+optional argument to the Bio.AlignIO.read() function:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_rna
+<span class="py-prompt">&gt;&gt;&gt; </span>align = AlignIO.read(<span class="py-string">&quot;Stockholm/simple.sth&quot;</span>, <span class="py-string">&quot;stockholm&quot;</span>,
+<span class="py-more">... </span>                     alphabet=generic_rna)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">RNAAlphabet() alignment with 2 rows and 104 columns</span>
+<span class="py-output">UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1</span>
+<span class="py-output">AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1</span></pre>
+</blockquote>
+<p>In addition to the sequences themselves, this example alignment also includes
+some GR lines for the secondary structure of the sequences.  These are
+strings, with one character for each letter in the associated sequence:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> align:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record.id)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record.seq)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">'secondary_structure'</span>])
+<span class="py-output">AP001509.1</span>
+<span class="py-output">UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU</span>
+<span class="py-output">-----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;---..&lt;&lt;-&lt;&lt;--------&gt;&gt;-&gt;&gt;..---------&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;---&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------</span>
+<span class="py-output">AE007476.1</span>
+<span class="py-output">AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU</span>
+<span class="py-output">-----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;-----&lt;&lt;.&lt;&lt;--------&gt;&gt;.&gt;&gt;----------.&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;.--&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------</span></pre>
+</blockquote>
+<p>Any general annotation for each row is recorded in the SeqRecord's annotations
+dictionary.  You can output this alignment in many different file formats
+using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align.format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;AP001509.1</span>
+<span class="py-output">UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A</span>
+<span class="py-output">GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU</span>
+<span class="py-output">&gt;AE007476.1</span>
+<span class="py-output">AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAA</span>
+<span class="py-output">GGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+<p>Most output formats won't be able to hold the annotation possible in a
+Stockholm file:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align.format(<span class="py-string">&quot;stockholm&quot;</span>))
+<span class="py-output"># STOCKHOLM 1.0</span>
+<span class="py-output">#=GF SQ 2</span>
+<span class="py-output">AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU</span>
+<span class="py-output">#=GS AP001509.1 AC AP001509.1</span>
+<span class="py-output">#=GS AP001509.1 DE AP001509.1</span>
+<span class="py-output">#=GR AP001509.1 SS -----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;---..&lt;&lt;-&lt;&lt;--------&gt;&gt;-&gt;&gt;..---------&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;---&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------</span>
+<span class="py-output">AE007476.1 AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU</span>
+<span class="py-output">#=GS AE007476.1 AC AE007476.1</span>
+<span class="py-output">#=GS AE007476.1 DE AE007476.1</span>
+<span class="py-output">#=GR AE007476.1 SS -----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;-----&lt;&lt;.&lt;&lt;--------&gt;&gt;.&gt;&gt;----------.&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;.--&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------</span>
+<span class="py-output">//</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+<p>Note that when writing Stockholm files, AlignIO does not break long sequences
+up and interleave them (as in the input file shown above).  The standard
+allows this simpler layout, and it is more likely to be understood by other
+tools.</p>
+<p>Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
+iterate over the alignment rows as SeqRecord objects - rather than working
+with Alignnment objects. Again, if you want to you can specify this is RNA:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_rna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Stockholm/simple.sth&quot;</span>, <span class="py-string">&quot;stockholm&quot;</span>,
+<span class="py-more">... </span>                          alphabet=generic_rna):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record.id)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record.seq)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">'secondary_structure'</span>])
+<span class="py-output">AP001509.1</span>
+<span class="py-output">UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU</span>
+<span class="py-output">-----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;---..&lt;&lt;-&lt;&lt;--------&gt;&gt;-&gt;&gt;..---------&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;---&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------</span>
+<span class="py-output">AE007476.1</span>
+<span class="py-output">AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU</span>
+<span class="py-output">-----------------&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;-----&lt;&lt;.&lt;&lt;--------&gt;&gt;.&gt;&gt;----------.&lt;&lt;&lt;&lt;&lt;---------&gt;&gt;&gt;&gt;&gt;.--&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;---------------</span></pre>
+</blockquote>
+<p>Remember that if you slice a SeqRecord, the per-letter-annotations like the
+secondary structure string here, are also sliced:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_record = record[10:20]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_record.seq)
+<span class="py-output">AUCGUUUUAC</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_record.letter_annotations[<span class="py-string">'secondary_structure'</span>])
+<span class="py-output">-------&lt;&lt;&lt;</span></pre>
+</blockquote>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO.StockholmIO.StockholmWriter-class.html" class="summary-name">StockholmWriter</a><br />
+      Stockholm/PFAM alignment writer.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO.StockholmIO.StockholmIterator-class.html" class="summary-name">StockholmIterator</a><br />
+      Loads a Stockholm file from PFAM into MultipleSeqAlignment objects.
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.AlignIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.AlignIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:12 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

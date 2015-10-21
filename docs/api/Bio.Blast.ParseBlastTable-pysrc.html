@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Blast.ParseBlastTable</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Blast-module.html">Package&nbsp;Blast</a> ::
+        Module&nbsp;ParseBlastTable
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Blast.ParseBlastTable-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Blast.ParseBlastTable-module.html">Module Bio.Blast.ParseBlastTable</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2003 Iddo Friedberg. All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""A parser for the NCBI blastpgp version 2.2.5 output format. Currently only supports</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">the '-m 9' option, (table w/ annotations).</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">Returns a BlastTableRec instance</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableEntry"></a><div id="BlastTableEntry-def"><a name="L14"></a><tt class="py-lineno"> 14</tt> <a class="py-toggle" href="#" id="BlastTableEntry-toggle" onclick="return toggle('BlastTableEntry');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableEntry-class.html">BlastTableEntry</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableEntry-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="BlastTableEntry-expanded"><a name="BlastTableEntry.__init__"></a><div id="BlastTableEntry.__init__-def"><a name="L15"></a><tt class="py-lineno"> 15</tt> <a class="py-toggle" href="#" id="BlastTableEntry.__init__-toggle" onclick="return toggle('BlastTableEntry.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableEntry-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">in_rec</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableEntry.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableEntry.__init__-expanded"><a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line">        <tt class="py-name">bt_fields</tt> <tt class="py-op">=</tt> <tt class="py-name">in_rec</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-0', 'split', 'link-0');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">qid</tt> <tt class="py-op">=</tt> <tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-1', 'split', 'link-0');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">'|'</tt><tt class="py-op">)</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">sid</tt> <tt class="py-op">=</tt> <tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-2', 'split', 'link-0');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">'|'</tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method Bio.GenBank._FeatureConsumer.pid()=Bio.GenBank._FeatureConsumer-class.html#pid,Method Bio.GenBank._RecordConsumer.pid()=Bio.GenBank._RecordConsumer-class.html#pid"><a title="Bio.GenBank._FeatureConsumer.pid
+Bio.GenBank._RecordConsumer.pid" class="py-name" href="#" onclick="return doclink('link-3', 'pid', 'link-3');">pid</a></tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ali_len</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mis</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">4</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">gaps</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">5</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">q_bounds</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">6</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">7</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">s_bounds</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">8</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">9</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">e_value</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">10</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">bit_score</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">bt_fields</tt><tt class="py-op">[</tt><tt class="py-number">11</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableRec"></a><div id="BlastTableRec-def"><a name="L29"></a><tt class="py-lineno"> 29</tt> <a class="py-toggle" href="#" id="BlastTableRec-toggle" onclick="return toggle('BlastTableRec');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableRec-class.html">BlastTableRec</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableRec-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="BlastTableRec-expanded"><a name="BlastTableRec.__init__"></a><div id="BlastTableRec.__init__-def"><a name="L30"></a><tt class="py-lineno"> 30</tt> <a class="py-toggle" href="#" id="BlastTableRec.__init__-toggle" onclick="return toggle('BlastTableRec.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableRec-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableRec.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableRec.__init__-expanded"><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">program</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method Bio.Blast.NCBIStandalone._HeaderConsumer.version()=Bio.Blast.NCBIStandalone._HeaderConsumer-class.html#version,Function Bio.Cluster.cluster.version()=Bio.Cluster.cluster-module.html#version,Method Bio.GenBank._FeatureConsumer.version()=Bio.GenBank._FeatureConsumer-class.html#version,Method Bio.GenBank._RecordConsumer.version()=Bio.GenBank._RecordConsumer-class.html#version,Variable Bio.motifs.jaspar.Motif.version=Bio.motifs.jaspar.Motif-class.html#version"><a title="Bio.Blast.NCBIStandalone._HeaderConsumer.version
+Bio.Cluster.cluster.version
+Bio.GenBank._FeatureConsumer.version
+Bio.GenBank._RecordConsumer.version
+Bio.motifs.jaspar.Motif.version" class="py-name" href="#" onclick="return doclink('link-4', 'version', 'link-4');">version</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method Bio.GenBank._FeatureConsumer.date()=Bio.GenBank._FeatureConsumer-class.html#date,Method Bio.GenBank._RecordConsumer.date()=Bio.GenBank._RecordConsumer-class.html#date,Method Bio.Phylo.PhyloXMLIO.Parser.date()=Bio.Phylo.PhyloXMLIO.Parser-class.html#date,Method Bio.Phylo.PhyloXMLIO.Writer.date()=Bio.Phylo.PhyloXMLIO.Writer-class.html#date"><a title="Bio.GenBank._FeatureConsumer.date
+Bio.GenBank._RecordConsumer.date
+Bio.Phylo.PhyloXMLIO.Parser.date
+Bio.Phylo.PhyloXMLIO.Writer.date" class="py-name" href="#" onclick="return doclink('link-5', 'date', 'link-5');">date</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">iteration</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method Bio.Blast.NCBIStandalone._HSPConsumer.query()=Bio.Blast.NCBIStandalone._HSPConsumer-class.html#query,Variable Bio.SearchIO._model.hsp.HSP.query=Bio.SearchIO._model.hsp.HSP-class.html#query,Variable Bio.SearchIO._model.hsp.HSPFragment.query=Bio.SearchIO._model.hsp.HSPFragment-class.html#query,Module Bio.SearchIO._model.query=Bio.SearchIO._model.query-module.html"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.query
+Bio.SearchIO._model.hsp.HSP.query
+Bio.SearchIO._model.hsp.HSPFragment.query
+Bio.SearchIO._model.query" class="py-name" href="#" onclick="return doclink('link-6', 'query', 'link-6');">query</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database()=Bio.Blast.NCBIStandalone._DatabaseReportConsumer-class.html#database"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-7', 'database', 'link-7');">database</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">entries</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableRec.add_entry"></a><div id="BlastTableRec.add_entry-def"><a name="L39"></a><tt class="py-lineno"> 39</tt> <a class="py-toggle" href="#" id="BlastTableRec.add_entry-toggle" onclick="return toggle('BlastTableRec.add_entry');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableRec-class.html#add_entry">add_entry</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">entry</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableRec.add_entry-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableRec.add_entry-expanded"><a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">entries</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-8', 'append', 'link-8');">append</a></tt><tt class="py-op">(</tt><tt id="link-9" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Reaction.entry=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#entry,Function Bio.TogoWS.entry()=Bio.TogoWS-module.html#entry"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.entry
+Bio.TogoWS.entry" class="py-name" href="#" onclick="return doclink('link-9', 'entry', 'link-9');">entry</a></tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable Bio.Blast.ParseBlastTable.reader_keywords=Bio.Blast.ParseBlastTable-module.html#reader_keywords"><a title="Bio.Blast.ParseBlastTable.reader_keywords" class="py-name" href="#" onclick="return doclink('link-10', 'reader_keywords', 'link-10');">reader_keywords</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">'BLASTP'</tt><tt class="py-op">:</tt> <tt class="py-string">'version'</tt><tt class="py-op">,</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">                   <tt class="py-string">'Iteration'</tt><tt class="py-op">:</tt> <tt class="py-string">'iteration'</tt><tt class="py-op">,</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">                   <tt class="py-string">'Query'</tt><tt class="py-op">:</tt> <tt class="py-string">'query'</tt><tt class="py-op">,</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">                   <tt class="py-string">'Database'</tt><tt class="py-op">:</tt> <tt class="py-string">'database'</tt><tt class="py-op">,</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">                   <tt class="py-string">'Fields'</tt><tt class="py-op">:</tt> <tt class="py-string">'fields'</tt><tt class="py-op">}</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader"></a><div id="BlastTableReader-def"><a name="L49"></a><tt class="py-lineno"> 49</tt> <a class="py-toggle" href="#" id="BlastTableReader-toggle" onclick="return toggle('BlastTableReader');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html">BlastTableReader</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="BlastTableReader-expanded"><a name="BlastTableReader.__init__"></a><div id="BlastTableReader.__init__-def"><a name="L50"></a><tt class="py-lineno"> 50</tt> <a class="py-toggle" href="#" id="BlastTableReader.__init__-toggle" onclick="return toggle('BlastTableReader.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader.__init__-expanded"><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">        <tt class="py-name">inline</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method Bio.File.UndoHandle.readline()=Bio.File.UndoHandle-class.html#readline,Method Bio.bgzf.BgzfReader.readline()=Bio.bgzf.BgzfReader-class.html#readline"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-11', 'readline', 'link-11');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-comment"># zip forward to start of record</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">inline</tt> <tt class="py-keyword">and</tt> <tt class="py-string">'BLASTP'</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">inline</tt><tt class="py-op">:</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">            <tt class="py-name">inline</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-12', 'readline', 'link-11');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_lookahead</tt> <tt class="py-op">=</tt> <tt class="py-name">inline</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_n</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_in_header</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader.__next__"></a><div id="BlastTableReader.__next__-def"><a name="L60"></a><tt class="py-lineno"> 60</tt> <a class="py-toggle" href="#" id="BlastTableReader.__next__-toggle" onclick="return toggle('BlastTableReader.__next__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#__next__">__next__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader.__next__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader.__next__-expanded"><a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt> <tt class="py-op">=</tt> <tt id="link-13" class="py-name" targets="Class Bio.Blast.ParseBlastTable.BlastTableRec=Bio.Blast.ParseBlastTable.BlastTableRec-class.html"><a title="Bio.Blast.ParseBlastTable.BlastTableRec" class="py-name" href="#" onclick="return doclink('link-13', 'BlastTableRec', 'link-13');">BlastTableRec</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_n</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-name">inline</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_lookahead</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">inline</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">inline</tt><tt class="py-op">:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">inline</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'#'</tt><tt class="py-op">:</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_in_header</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_in_header</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.Blast.ParseBlastTable.BlastTableReader._consume_header()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_consume_header"><a title="Bio.Blast.ParseBlastTable.BlastTableReader._consume_header" class="py-name" href="#" onclick="return doclink('link-14', '_consume_header', 'link-14');">_consume_header</a></tt><tt class="py-op">(</tt><tt class="py-name">inline</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">                    <tt class="py-keyword">break</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.Blast.ParseBlastTable.BlastTableReader._consume_entry()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_consume_entry"><a title="Bio.Blast.ParseBlastTable.BlastTableReader._consume_entry" class="py-name" href="#" onclick="return doclink('link-15', '_consume_entry', 'link-15');">_consume_entry</a></tt><tt class="py-op">(</tt><tt class="py-name">inline</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_in_header</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt class="py-name">inline</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-16', 'readline', 'link-11');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_lookahead</tt> <tt class="py-op">=</tt> <tt class="py-name">inline</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_in_header</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt> </tt>
+</div><a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">version_info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="BlastTableReader.next"></a><div id="BlastTableReader.next-def"><a name="L82"></a><tt class="py-lineno"> 82</tt> <a class="py-toggle" href="#" id="BlastTableReader.next-toggle" onclick="return toggle('BlastTableReader.next');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#next">next</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader.next-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="BlastTableReader.next-expanded"><a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-docstring">"""Python 2 style alias for Python 3 style __next__ method."""</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method Bio.AlignIO.ClustalIO.ClustalIterator.__next__()=Bio.AlignIO.ClustalIO.ClustalIterator-class.html#__next__,Method Bio.AlignIO.EmbossIO.EmbossIterator.__next__()=Bio.AlignIO.EmbossIO.EmbossIterator-class.html#__next__,Method Bio.AlignIO.Interfaces.AlignmentIterator.__next__()=Bio.AlignIO.Interfaces.AlignmentIterator-class.html#__next__,Method Bio.AlignIO.PhylipIO.PhylipIterator.__next__()=Bio.AlignIO.PhylipIO.PhylipIterator-class.html#__next__,Method Bio.AlignIO.PhylipIO.SequentialPhylipIterator.__next__()=Bio.AlignIO.PhylipIO.SequentialPhylipIterator-class.html#__next__,Method Bio.AlignIO.StockholmIO.StockholmIterator.__next__()=Bio.AlignIO.StockholmIO.StockholmIterator-class.html#__next__,Method Bio.Blast.NCBIStandalone.Iterator.__next__()=Bio.Blast.NCBIStandalone.Iterator-class.html#__next__,Method Bio.Blast.ParseBlastTable.BlastTableReader.__next__()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#__next__,Method Bio.DocSQL.IterationCursor.__next__()=Bio.DocSQL.IterationCursor-class.html#__next__,Method Bio.File.UndoHandle.__next__()=Bio.File.UndoHandle-class.html#__next__,Method Bio.GenBank.Iterator.__next__()=Bio.GenBank.Iterator-class.html#__next__,Method Bio.Nexus.Nexus.CharBuffer.__next__()=Bio.Nexus.Nexus.CharBuffer-class.html#__next__,Method Bio.PopGen.GenePop.Controller._FileIterator.__next__()=Bio.PopGen.GenePop.Controller._FileIterator-class.html#__next__,Method Bio.SeqIO.Interfaces.SequenceIterator.__next__()=Bio.SeqIO.Interfaces.SequenceIterator-class.html#__next__,Method Bio.bgzf.BgzfReader.__next__()=Bio.bgzf.BgzfReader-class.html#__next__"><a title="Bio.AlignIO.ClustalIO.ClustalIterator.__next__
+Bio.AlignIO.EmbossIO.EmbossIterator.__next__
+Bio.AlignIO.Interfaces.AlignmentIterator.__next__
+Bio.AlignIO.PhylipIO.PhylipIterator.__next__
+Bio.AlignIO.PhylipIO.SequentialPhylipIterator.__next__
+Bio.AlignIO.StockholmIO.StockholmIterator.__next__
+Bio.Blast.NCBIStandalone.Iterator.__next__
+Bio.Blast.ParseBlastTable.BlastTableReader.__next__
+Bio.DocSQL.IterationCursor.__next__
+Bio.File.UndoHandle.__next__
+Bio.GenBank.Iterator.__next__
+Bio.Nexus.Nexus.CharBuffer.__next__
+Bio.PopGen.GenePop.Controller._FileIterator.__next__
+Bio.SeqIO.Interfaces.SequenceIterator.__next__
+Bio.bgzf.BgzfReader.__next__" class="py-name" href="#" onclick="return doclink('link-17', '__next__', 'link-17');">__next__</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._consume_entry"></a><div id="BlastTableReader._consume_entry-def"><a name="L86"></a><tt class="py-lineno"> 86</tt> <a class="py-toggle" href="#" id="BlastTableReader._consume_entry-toggle" onclick="return toggle('BlastTableReader._consume_entry');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_consume_entry">_consume_entry</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._consume_entry-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._consume_entry-expanded"><a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-name">current_entry</tt> <tt class="py-op">=</tt> <tt id="link-18" class="py-name" targets="Class Bio.Blast.ParseBlastTable.BlastTableEntry=Bio.Blast.ParseBlastTable.BlastTableEntry-class.html"><a title="Bio.Blast.ParseBlastTable.BlastTableEntry" class="py-name" href="#" onclick="return doclink('link-18', 'BlastTableEntry', 'link-18');">BlastTableEntry</a></tt><tt class="py-op">(</tt><tt class="py-name">inline</tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method Bio.Blast.ParseBlastTable.BlastTableRec.add_entry()=Bio.Blast.ParseBlastTable.BlastTableRec-class.html#add_entry,Method Bio.KEGG.KGML.KGML_pathway.Pathway.add_entry()=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#add_entry"><a title="Bio.Blast.ParseBlastTable.BlastTableRec.add_entry
+Bio.KEGG.KGML.KGML_pathway.Pathway.add_entry" class="py-name" href="#" onclick="return doclink('link-19', 'add_entry', 'link-19');">add_entry</a></tt><tt class="py-op">(</tt><tt class="py-name">current_entry</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._consume_header"></a><div id="BlastTableReader._consume_header-def"><a name="L90"></a><tt class="py-lineno"> 90</tt> <a class="py-toggle" href="#" id="BlastTableReader._consume_header-toggle" onclick="return toggle('BlastTableReader._consume_header');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_consume_header">_consume_header</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._consume_header-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._consume_header-expanded"><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">keyword</tt> <tt class="py-keyword">in</tt> <tt id="link-20" class="py-name"><a title="Bio.Blast.ParseBlastTable.reader_keywords" class="py-name" href="#" onclick="return doclink('link-20', 'reader_keywords', 'link-10');">reader_keywords</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">keyword</tt> <tt class="py-keyword">in</tt> <tt class="py-name">inline</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">                <tt class="py-name">in_header</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method Bio.Blast.ParseBlastTable.BlastTableReader._Parse()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_Parse"><a title="Bio.Blast.ParseBlastTable.BlastTableReader._Parse" class="py-name" href="#" onclick="return doclink('link-21', '_Parse', 'link-21');">_Parse</a></tt><tt class="py-op">(</tt><tt class="py-string">'_parse_%s'</tt> <tt class="py-op">%</tt> <tt id="link-22" class="py-name"><a title="Bio.Blast.ParseBlastTable.reader_keywords" class="py-name" href="#" onclick="return doclink('link-22', 'reader_keywords', 'link-10');">reader_keywords</a></tt><tt class="py-op">[</tt><tt class="py-name">keyword</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">inline</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">                <tt class="py-keyword">break</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">in_header</tt> </tt>
+</div><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._parse_version"></a><div id="BlastTableReader._parse_version-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="BlastTableReader._parse_version-toggle" onclick="return toggle('BlastTableReader._parse_version');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_parse_version">_parse_version</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._parse_version-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._parse_version-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-name">program</tt><tt class="py-op">,</tt> <tt id="link-23" class="py-name"><a title="Bio.Blast.NCBIStandalone._HeaderConsumer.version
+Bio.Cluster.cluster.version
+Bio.GenBank._FeatureConsumer.version
+Bio.GenBank._RecordConsumer.version
+Bio.motifs.jaspar.Motif.version" class="py-name" href="#" onclick="return doclink('link-23', 'version', 'link-4');">version</a></tt><tt class="py-op">,</tt> <tt id="link-24" class="py-name"><a title="Bio.GenBank._FeatureConsumer.date
+Bio.GenBank._RecordConsumer.date
+Bio.Phylo.PhyloXMLIO.Parser.date
+Bio.Phylo.PhyloXMLIO.Writer.date" class="py-name" href="#" onclick="return doclink('link-24', 'date', 'link-5');">date</a></tt> <tt class="py-op">=</tt> <tt class="py-name">inline</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-25', 'split', 'link-0');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt><tt class="py-op">.</tt><tt class="py-name">program</tt> <tt class="py-op">=</tt> <tt class="py-name">program</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="Bio.Blast.NCBIStandalone._HeaderConsumer.version
+Bio.Cluster.cluster.version
+Bio.GenBank._FeatureConsumer.version
+Bio.GenBank._RecordConsumer.version
+Bio.motifs.jaspar.Motif.version" class="py-name" href="#" onclick="return doclink('link-26', 'version', 'link-4');">version</a></tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="Bio.Blast.NCBIStandalone._HeaderConsumer.version
+Bio.Cluster.cluster.version
+Bio.GenBank._FeatureConsumer.version
+Bio.GenBank._RecordConsumer.version
+Bio.motifs.jaspar.Motif.version" class="py-name" href="#" onclick="return doclink('link-27', 'version', 'link-4');">version</a></tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="Bio.GenBank._FeatureConsumer.date
+Bio.GenBank._RecordConsumer.date
+Bio.Phylo.PhyloXMLIO.Parser.date
+Bio.Phylo.PhyloXMLIO.Writer.date" class="py-name" href="#" onclick="return doclink('link-28', 'date', 'link-5');">date</a></tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name"><a title="Bio.GenBank._FeatureConsumer.date
+Bio.GenBank._RecordConsumer.date
+Bio.Phylo.PhyloXMLIO.Parser.date
+Bio.Phylo.PhyloXMLIO.Writer.date" class="py-name" href="#" onclick="return doclink('link-29', 'date', 'link-5');">date</a></tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._parse_iteration"></a><div id="BlastTableReader._parse_iteration-def"><a name="L104"></a><tt class="py-lineno">104</tt> <a class="py-toggle" href="#" id="BlastTableReader._parse_iteration-toggle" onclick="return toggle('BlastTableReader._parse_iteration');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_parse_iteration">_parse_iteration</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._parse_iteration-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._parse_iteration-expanded"><a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt><tt class="py-op">.</tt><tt class="py-name">iteration</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">inline</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-30', 'split', 'link-0');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._parse_query"></a><div id="BlastTableReader._parse_query-def"><a name="L108"></a><tt class="py-lineno">108</tt> <a class="py-toggle" href="#" id="BlastTableReader._parse_query-toggle" onclick="return toggle('BlastTableReader._parse_query');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_parse_query">_parse_query</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._parse_query-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._parse_query-expanded"><a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.query
+Bio.SearchIO._model.hsp.HSP.query
+Bio.SearchIO._model.hsp.HSPFragment.query
+Bio.SearchIO._model.query" class="py-name" href="#" onclick="return doclink('link-31', 'query', 'link-6');">query</a></tt> <tt class="py-op">=</tt> <tt class="py-name">inline</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-32', 'split', 'link-0');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._parse_database"></a><div id="BlastTableReader._parse_database-def"><a name="L112"></a><tt class="py-lineno">112</tt> <a class="py-toggle" href="#" id="BlastTableReader._parse_database-toggle" onclick="return toggle('BlastTableReader._parse_database');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_parse_database">_parse_database</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._parse_database-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._parse_database-expanded"><a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">table_record</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="Bio.Blast.NCBIStandalone._DatabaseReportConsumer.database" class="py-name" href="#" onclick="return doclink('link-33', 'database', 'link-7');">database</a></tt> <tt class="py-op">=</tt> <tt class="py-name">inline</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-34', 'split', 'link-0');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._parse_fields"></a><div id="BlastTableReader._parse_fields-def"><a name="L116"></a><tt class="py-lineno">116</tt> <a class="py-toggle" href="#" id="BlastTableReader._parse_fields-toggle" onclick="return toggle('BlastTableReader._parse_fields');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_parse_fields">_parse_fields</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._parse_fields-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._parse_fields-expanded"><a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">0</tt> </tt>
+</div><a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"> </tt>
+<a name="BlastTableReader._Parse"></a><div id="BlastTableReader._Parse-def"><a name="L119"></a><tt class="py-lineno">119</tt> <a class="py-toggle" href="#" id="BlastTableReader._Parse-toggle" onclick="return toggle('BlastTableReader._Parse');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Blast.ParseBlastTable.BlastTableReader-class.html#_Parse">_Parse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">method_name</tt><tt class="py-op">,</tt> <tt class="py-param">inline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BlastTableReader._Parse-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BlastTableReader._Parse-expanded"><a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">method_name</tt><tt class="py-op">)</tt><tt class="py-op">(</tt><tt class="py-name">inline</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:36 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,2197 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO._model.hsp.HSP</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SearchIO-module.html">Package&nbsp;SearchIO</a> ::
+        <a href="Bio.SearchIO._model-module.html" onclick="show_private();">Package&nbsp;_model</a> ::
+        <a href="Bio.SearchIO._model.hsp-module.html" onclick="show_private();">Module&nbsp;hsp</a> ::
+        Class&nbsp;HSP
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO._model.hsp.HSP-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class HSP</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+             object --+        
+                      |        
+<a href="Bio.SearchIO._model._base._BaseSearchObject-class.html" onclick="show_private();">_base._BaseSearchObject</a> --+    
+                          |    
+             <a href="Bio.SearchIO._model._base._BaseHSP-class.html" onclick="show_private();">_base._BaseHSP</a> --+
+                              |
+                             <strong class="uidshort">HSP</strong>
+</pre>
+
+<hr />
+<p>Class representing high-scoring region(s) between query and hit.</p>
+<p>HSP (high-scoring pair) objects are contained by Hit objects (see Hit).
+In most cases, HSP objects store the bulk of the statistics and results
+(e.g. e-value, bitscores, query sequence, etc.) produced by a search
+program.</p>
+<p>Depending on the search output file format, a given HSP will contain one
+or more HSPFragment object(s). Examples of search programs that produce HSP
+with one HSPFragments are BLAST, HMMER, and FASTA. Other programs such as
+BLAT or Exonerate may produce HSPs containing more than one HSPFragment.
+However, their native terminologies may differ: in BLAT these fragments
+are called 'blocks' while in Exonerate they are called exons or NER.</p>
+<p>Here are examples from each type of HSP. The first one comes from a BLAST
+search:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; from Bio import SearchIO
+&gt;&gt;&gt; blast_qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+&gt;&gt;&gt; blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
+&gt;&gt;&gt; blast_hsp
+HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
+&gt;&gt;&gt; print(blast_hsp)
+      Query: 33211 mir_1
+        Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+Query range: [1:61] (1)
+  Hit range: [0:60] (1)
+Quick stats: evalue 1.7e-22; bitscore 109.49
+  Fragments: 1 (60 columns)
+     Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+             ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+</pre>
+<p>For HSPs with a single HSPFragment, you can invoke <tt class="rst-docutils literal">print</tt> on it and see the
+underlying sequence alignment, if it exists. This is not the case for HSPs
+with more than one HSPFragment. Below is an example, using an HSP from a
+BLAT search. Invoking <tt class="rst-docutils literal">print</tt> on these HSPs will instead show a table of the
+HSPFragment objects it contains:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; blat_qresult = SearchIO.read('Blat/mirna.pslx', 'blat-psl', pslx=True)
+&gt;&gt;&gt; blat_hsp = blat_qresult[1][0]       # the first HSP from the second hit
+&gt;&gt;&gt; blat_hsp
+HSP(hit_id='chr11', query_id='blat_1', 2 fragments)
+&gt;&gt;&gt; print(blat_hsp)
+      Query: blat_1 &lt;unknown description&gt;
+        Hit: chr11 &lt;unknown description&gt;
+Query range: [42:67] (-1)
+  Hit range: [59018929:59018955] (1)
+Quick stats: evalue ?; bitscore ?
+  Fragments: ---  --------------  ----------------------  ----------------------
+               #            Span             Query range               Hit range
+             ---  --------------  ----------------------  ----------------------
+               0               6                 [61:67]     [59018929:59018935]
+               1              16                 [42:58]     [59018939:59018955]
+</pre>
+<p>Notice that in HSPs with more than one HSPFragments, the HSP's <tt class="rst-docutils literal">query_range</tt>
+<tt class="rst-docutils literal">hit_range</tt> properties encompasses all fragments it contains.</p>
+<p>You can check whether an HSP has more than one HSPFragments or not using the
+<tt class="rst-docutils literal">is_fragmented</tt> property:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; blast_hsp.is_fragmented
+False
+&gt;&gt;&gt; blat_hsp.is_fragmented
+True
+</pre>
+<p>Since HSP objects are also containers similar to Python lists, you can
+access a single fragment in an HSP using its integer index:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; blat_fragment = blat_hsp[0]
+&gt;&gt;&gt; print(blat_fragment)
+      Query: blat_1 &lt;unknown description&gt;
+        Hit: chr11 &lt;unknown description&gt;
+Query range: [61:67] (-1)
+  Hit range: [59018929:59018935] (1)
+  Fragments: 1 (6 columns)
+     Query - tatagt
+       Hit - tatagt
+</pre>
+<p>This applies to HSPs objects with a single fragment as well:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; blast_fragment = blast_hsp[0]
+&gt;&gt;&gt; print(blast_fragment)
+      Query: 33211 mir_1
+        Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+Query range: [1:61] (1)
+  Hit range: [0:60] (1)
+  Fragments: 1 (60 columns)
+     Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+             ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+</pre>
+<p>Regardless of the search output file format, HSP objects provide the
+properties listed below. These properties always return values in a list,
+due to the HSP object itself being a list-like container. However, for
+HSP objects with a single HSPFragment, shortcut properties that fetches
+the item from the list are also provided.</p>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="31%" />
+<col width="29%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Property</th>
+<th class="rst-head">Shortcut</th>
+<th class="rst-head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>aln_all</td>
+<td>aln</td>
+<td>HSP alignments as
+MultipleSeqAlignment object</td>
+</tr>
+<tr><td>aln_annotation_all</td>
+<td>aln_annotation</td>
+<td>dictionary of annotation(s)
+of all fragments' alignments</td>
+</tr>
+<tr><td>fragments</td>
+<td>fragment</td>
+<td>HSPFragment objects</td>
+</tr>
+<tr><td>hit_all</td>
+<td>hit</td>
+<td>hit sequence as SeqRecord
+objects</td>
+</tr>
+<tr><td>hit_features_all</td>
+<td>hit_features</td>
+<td>SeqFeatures of all hit
+fragments</td>
+</tr>
+<tr><td>hit_start_all</td>
+<td>hit_start*</td>
+<td>start coordinates of the
+hit fragments</td>
+</tr>
+<tr><td>hit_end_all</td>
+<td>hit_end*</td>
+<td>end coordinates of the hit
+fragments</td>
+</tr>
+<tr><td>hit_span_all</td>
+<td>hit_span*</td>
+<td>sizes of each hit fragments</td>
+</tr>
+<tr><td>hit_strand_all</td>
+<td>hit_strand</td>
+<td>strand orientations of the
+hit fragments</td>
+</tr>
+<tr><td>hit_frame_all</td>
+<td>hit_frame</td>
+<td>reading frames of the hit
+fragments</td>
+</tr>
+<tr><td>hit_range_all</td>
+<td>hit_range</td>
+<td>tuples of start and end
+coordinates of each hit
+fragment</td>
+</tr>
+<tr><td>query_all</td>
+<td>query</td>
+<td>query sequence as SeqRecord
+object</td>
+</tr>
+<tr><td>query_features_all</td>
+<td>query_features</td>
+<td>SeqFeatures of all query
+fragments</td>
+</tr>
+<tr><td>query_start_all</td>
+<td>query_start*</td>
+<td>start coordinates of the
+fragments</td>
+</tr>
+<tr><td>query_end_all</td>
+<td>query_end*</td>
+<td>end coordinates of the
+query fragments</td>
+</tr>
+<tr><td>query_span_all</td>
+<td>query_span*</td>
+<td>sizes of each query
+fragments</td>
+</tr>
+<tr><td>query_strand_all</td>
+<td>query_strand</td>
+<td>strand orientations of the
+query fragments</td>
+</tr>
+<tr><td>query_frame_all</td>
+<td>query_frame</td>
+<td>reading frames of the query
+fragments</td>
+</tr>
+<tr><td>query_range_all</td>
+<td>query_range</td>
+<td>tuples of start and end
+coordinates of each query
+fragment</td>
+</tr>
+</tbody>
+</table>
+<p>For all types of HSP objects, the property will return the values in a list.
+Shorcuts are only applicable for HSPs with one fragment. Except the ones
+noted, if they are used on an HSP with more than one fragments, an exception
+will be raised.</p>
+<p>For properties that may be used in HSPs with multiple or single fragments
+(<tt class="rst-docutils literal">*_start</tt>, <tt class="rst-docutils literal">*_end</tt>, and <tt class="rst-docutils literal">*_span</tt> properties), their interpretation depends
+on how many fragment the HSP has:</p>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Property</th>
+<th class="rst-head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>hit_start</td>
+<td>smallest coordinate value of all hit fragments</td>
+</tr>
+<tr><td>hit_end</td>
+<td>largest coordinate value of all hit fragments</td>
+</tr>
+<tr><td>hit_span</td>
+<td>difference between <tt class="rst-docutils literal">hit_start</tt> and <tt class="rst-docutils literal">hit_end</tt></td>
+</tr>
+<tr><td>query_start</td>
+<td>smallest coordinate value of all query fragments</td>
+</tr>
+<tr><td>query_end</td>
+<td>largest coordinate value of all query fragments</td>
+</tr>
+<tr><td>query_span</td>
+<td>difference between <tt class="rst-docutils literal">query_start</tt> and
+<tt class="rst-docutils literal">query_end</tt></td>
+</tr>
+</tbody>
+</table>
+<p>In addition to the objects listed above, HSP objects also provide the
+following properties:</p>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Property</th>
+<th class="rst-head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>aln_span</td>
+<td>total number of residues in all HSPFragment objects</td>
+</tr>
+<tr><td>alphabet</td>
+<td>alphabet used in hit and query SeqRecord objects</td>
+</tr>
+<tr><td>is_fragmented</td>
+<td>boolean, whether there are multiple fragments or not</td>
+</tr>
+<tr><td>hit_id</td>
+<td>ID of the hit sequence</td>
+</tr>
+<tr><td>hit_description</td>
+<td>description of the hit sequence</td>
+</tr>
+<tr><td>hit_inter_ranges</td>
+<td>list of hit sequence coordinates of the regions
+between fragments</td>
+</tr>
+<tr><td>hit_inter_spans</td>
+<td>list of lengths of the regions between hit fragments</td>
+</tr>
+<tr><td>query_id</td>
+<td>ID of the query sequence</td>
+</tr>
+<tr><td>query_description</td>
+<td>description of the query sequence</td>
+</tr>
+<tr><td>query_inter_ranges</td>
+<td>list of query sequence coordinates of the regions
+between fragments</td>
+</tr>
+<tr><td>query_inter_spans</td>
+<td>list of lengths of the regions between query
+fragments</td>
+</tr>
+</tbody>
+</table>
+<table class="rst-docutils footnote" frame="void" id="rst-id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="rst-label">[1]</td><td>may be used in HSPs with multiple fragments</td></tr>
+</tbody>
+</table>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">fragments</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>)</span><br />
+      Initializes an HSP object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      repr(x)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__iter__"></a><span class="summary-sig-name">__iter__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__iter__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__contains__"></a><span class="summary-sig-name">__contains__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">fragment</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__contains__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__len__"></a><span class="summary-sig-name">__len__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__len__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__bool__"></a><span class="summary-sig-name">__bool__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__bool__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__nonzero__"></a><span class="summary-sig-name">__nonzero__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__bool__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">idx</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__setitem__"></a><span class="summary-sig-name">__setitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">idx</span>,
+        <span class="summary-sig-arg">fragments</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__setitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__delitem__"></a><span class="summary-sig-name">__delitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">idx</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__delitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_validate_fragment"></a><span class="summary-sig-name">_validate_fragment</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">fragment</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._validate_fragment">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_aln_span_get"></a><span class="summary-sig-name">_aln_span_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._aln_span_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_coords"></a><span class="summary-sig-name">_get_coords</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">seq_type</span>,
+        <span class="summary-sig-arg">coord_type</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._get_coords">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_hit_start_get"></a><span class="summary-sig-name">_hit_start_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._hit_start_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_query_start_get"></a><span class="summary-sig-name">_query_start_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._query_start_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_hit_end_get"></a><span class="summary-sig-name">_hit_end_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._hit_end_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_query_end_get"></a><span class="summary-sig-name">_query_end_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._query_end_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_hit_span_get"></a><span class="summary-sig-name">_hit_span_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._hit_span_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_query_span_get"></a><span class="summary-sig-name">_query_span_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._query_span_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_hit_range_get"></a><span class="summary-sig-name">_hit_range_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._hit_range_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_query_range_get"></a><span class="summary-sig-name">_query_range_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._query_range_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_inter_ranges_get"></a><span class="summary-sig-name">_inter_ranges_get</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">seq_type</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._inter_ranges_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_hit_inter_ranges_get"></a><span class="summary-sig-name">_hit_inter_ranges_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._hit_inter_ranges_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_query_inter_ranges_get"></a><span class="summary-sig-name">_query_inter_ranges_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._query_inter_ranges_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_inter_spans_get"></a><span class="summary-sig-name">_inter_spans_get</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">seq_type</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._inter_spans_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_hit_inter_spans_get"></a><span class="summary-sig-name">_hit_inter_spans_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._hit_inter_spans_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_query_inter_spans_get"></a><span class="summary-sig-name">_query_inter_spans_get</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP._query_inter_spans_get">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.SearchIO._model._base._BaseHSP-class.html" onclick="show_private();">_base._BaseHSP</a></code></b> (private):
+      <code><a href="Bio.SearchIO._model._base._BaseHSP-class.html#_str_hsp_header" onclick="show_private();">_str_hsp_header</a></code>
+      </p></div>
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.SearchIO._model._base._BaseSearchObject-class.html" onclick="show_private();">_base._BaseSearchObject</a></code></b> (private):
+      <code><a href="Bio.SearchIO._model._base._BaseSearchObject-class.html#_transfer_attrs" onclick="show_private();">_transfer_attrs</a></code>
+      </p></div>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_NON_STICKY_ATTRS"></a><span class="summary-name">_NON_STICKY_ATTRS</span> = <code title="('_items')"><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">_items</code><code class="variable-quote">'</code><code class="variable-group">)</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#aln_span" class="summary-name">aln_span</a><br />
+      Total number of columns in all HSPFragment objects.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_start" class="summary-name">hit_start</a><br />
+      Smallest coordinate value of all hit fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_start" class="summary-name">query_start</a><br />
+      Smallest coordinate value of all query fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_end" class="summary-name">hit_end</a><br />
+      Largest coordinate value of all hit fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_end" class="summary-name">query_end</a><br />
+      Largest coordinate value of all hit fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_span" class="summary-name">hit_span</a><br />
+      The number of hit residues covered by the HSP.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_span" class="summary-name">query_span</a><br />
+      The number of query residues covered by the HSP.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_range" class="summary-name">hit_range</a><br />
+      Tuple of HSP hit start and end coordinates.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_range" class="summary-name">query_range</a><br />
+      Tuple of HSP query start and end coordinates.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_inter_ranges" class="summary-name">hit_inter_ranges</a><br />
+      Hit sequence coordinates of the regions between fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_inter_ranges" class="summary-name">query_inter_ranges</a><br />
+      Query sequence coordinates of the regions between fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_inter_spans" class="summary-name">hit_inter_spans</a><br />
+      Lengths of regions between hit fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_inter_spans" class="summary-name">query_inter_spans</a><br />
+      Lengths of regions between query fragments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#is_fragmented" class="summary-name">is_fragmented</a><br />
+      Whether the HSP has more than one HSPFragment objects
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_description" class="summary-name">hit_description</a><br />
+      Description of the hit sequence
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_description" class="summary-name">query_description</a><br />
+      Description of the query sequence
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_id" class="summary-name">hit_id</a><br />
+      ID of the hit sequence
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_id" class="summary-name">query_id</a><br />
+      ID of the query sequence
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#alphabet" class="summary-name">alphabet</a><br />
+      Alphabet used in hit and query SeqRecord objects
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#fragment" class="summary-name">fragment</a><br />
+      HSPFragment object, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit" class="summary-name">hit</a><br />
+      Hit sequence as a SeqRecord object, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query" class="summary-name">query</a><br />
+      Query sequence as a SeqRecord object, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#aln" class="summary-name">aln</a><br />
+      Alignment of the first fragment as a MultipleSeqAlignment object
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#aln_annotation" class="summary-name">aln_annotation</a><br />
+      Dictionary of annotation(s) of the first fragment's alignment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_features" class="summary-name">hit_features</a><br />
+      Hit sequence features, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_features" class="summary-name">query_features</a><br />
+      Query sequence features, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_strand" class="summary-name">hit_strand</a><br />
+      Hit strand orientation, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_strand" class="summary-name">query_strand</a><br />
+      Query strand orientation, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_frame" class="summary-name">hit_frame</a><br />
+      Hit sequence reading frame, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_frame" class="summary-name">query_frame</a><br />
+      Query sequence reading frame, first fragment
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#fragments" class="summary-name">fragments</a><br />
+      List of all HSPFragment objects
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_all" class="summary-name">hit_all</a><br />
+      List of all fragments' hit sequences as SeqRecord objects
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_all" class="summary-name">query_all</a><br />
+      List of all fragments' query sequences as SeqRecord objects
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#aln_all" class="summary-name">aln_all</a><br />
+      List of all fragments' alignments as MultipleSeqAlignment objects
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#aln_annotation_all" class="summary-name">aln_annotation_all</a><br />
+      Dictionary of annotation(s) of all fragments' alignments
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_features_all" class="summary-name">hit_features_all</a><br />
+      List of all hit sequence features
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_features_all" class="summary-name">query_features_all</a><br />
+      List of all query sequence features
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_strand_all" class="summary-name">hit_strand_all</a><br />
+      List of all fragments' hit sequence strands
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_strand_all" class="summary-name">query_strand_all</a><br />
+      List of all fragments' query sequence strands
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_frame_all" class="summary-name">hit_frame_all</a><br />
+      List of all fragments' hit sequence reading frames
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_frame_all" class="summary-name">query_frame_all</a><br />
+      List of all fragments' query sequence reading frames
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_start_all" class="summary-name">hit_start_all</a><br />
+      List of all fragments' hit start coordinates
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_start_all" class="summary-name">query_start_all</a><br />
+      List of all fragments' query start coordinates
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_end_all" class="summary-name">hit_end_all</a><br />
+      List of all fragments' hit end coordinates
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_end_all" class="summary-name">query_end_all</a><br />
+      List of all fragments' query end coordinates
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_span_all" class="summary-name">hit_span_all</a><br />
+      List of all fragments' hit sequence size
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_span_all" class="summary-name">query_span_all</a><br />
+      List of all fragments' query sequence size
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#hit_range_all" class="summary-name">hit_range_all</a><br />
+      List of all fragments' hit start and end coordinates
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.hsp.HSP-class.html#query_range_all" class="summary-name">query_range_all</a><br />
+      List of all fragments' query start and end coordinates
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">fragments</span>=<span class="sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Initializes an HSP object.</p>
+<p>HSP objects must be initialized with a list containing at least one
+HSPFragment object. If multiple HSPFragment objects are used for
+initialization, they must all have the same <tt class="rst-docutils literal">query_id</tt>,
+<tt class="rst-docutils literal">query_description</tt>, <tt class="rst-docutils literal">hit_id</tt>, <tt class="rst-docutils literal">hit_description</tt>, and alphabet
+properties.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>fragments</code></strong> (iterable yielding HSPFragment) - fragments contained in the HSP object</li>
+    </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__repr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+repr(x)
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.hsp-pysrc.html#HSP.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+str(x)
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="aln_span"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">aln_span</h3>
+  Total number of columns in all HSPFragment objects.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_aln_span_get" class="summary-sig-name" onclick="show_private();">_aln_span_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_start"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_start</h3>
+  Smallest coordinate value of all hit fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_hit_start_get" class="summary-sig-name" onclick="show_private();">_hit_start_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_start"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_start</h3>
+  Smallest coordinate value of all query fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_query_start_get" class="summary-sig-name" onclick="show_private();">_query_start_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_end"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_end</h3>
+  Largest coordinate value of all hit fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_hit_end_get" class="summary-sig-name" onclick="show_private();">_hit_end_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_end"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_end</h3>
+  Largest coordinate value of all hit fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_query_end_get" class="summary-sig-name" onclick="show_private();">_query_end_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_span"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_span</h3>
+  The number of hit residues covered by the HSP.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_hit_span_get" class="summary-sig-name" onclick="show_private();">_hit_span_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_span"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_span</h3>
+  The number of query residues covered by the HSP.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_query_span_get" class="summary-sig-name" onclick="show_private();">_query_span_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_range"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_range</h3>
+  Tuple of HSP hit start and end coordinates.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_hit_range_get" class="summary-sig-name" onclick="show_private();">_hit_range_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_range"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_range</h3>
+  Tuple of HSP query start and end coordinates.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_query_range_get" class="summary-sig-name" onclick="show_private();">_query_range_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_inter_ranges"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_inter_ranges</h3>
+  Hit sequence coordinates of the regions between fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_hit_inter_ranges_get" class="summary-sig-name" onclick="show_private();">_hit_inter_ranges_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_inter_ranges"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_inter_ranges</h3>
+  Query sequence coordinates of the regions between fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_query_inter_ranges_get" class="summary-sig-name" onclick="show_private();">_query_inter_ranges_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_inter_spans"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_inter_spans</h3>
+  Lengths of regions between hit fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_hit_inter_spans_get" class="summary-sig-name" onclick="show_private();">_hit_inter_spans_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_inter_spans"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_inter_spans</h3>
+  Lengths of regions between query fragments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SearchIO._model.hsp.HSP-class.html#_query_inter_spans_get" class="summary-sig-name" onclick="show_private();">_query_inter_spans_get</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="is_fragmented"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">is_fragmented</h3>
+  Whether the HSP has more than one HSPFragment objects
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_description"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_description</h3>
+  Description of the hit sequence
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.setter(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_description"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_description</h3>
+  Description of the query sequence
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.setter(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_id"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_id</h3>
+  ID of the hit sequence
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.setter(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_id"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_id</h3>
+  ID of the query sequence
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.setter(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="alphabet"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">alphabet</h3>
+  Alphabet used in hit and query SeqRecord objects
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.setter(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fragment"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">fragment</h3>
+  HSPFragment object, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit</h3>
+  Hit sequence as a SeqRecord object, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query</h3>
+  Query sequence as a SeqRecord object, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="aln"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">aln</h3>
+  Alignment of the first fragment as a MultipleSeqAlignment object
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="aln_annotation"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">aln_annotation</h3>
+  Dictionary of annotation(s) of the first fragment's alignment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_features"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_features</h3>
+  Hit sequence features, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_features"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_features</h3>
+  Query sequence features, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_strand"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_strand</h3>
+  Hit strand orientation, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_strand"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_strand</h3>
+  Query strand orientation, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_frame"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_frame</h3>
+  Hit sequence reading frame, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_frame"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_frame</h3>
+  Query sequence reading frame, first fragment
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fragments"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">fragments</h3>
+  List of all HSPFragment objects
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_all</h3>
+  List of all fragments' hit sequences as SeqRecord objects
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_all</h3>
+  List of all fragments' query sequences as SeqRecord objects
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="aln_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">aln_all</h3>
+  List of all fragments' alignments as MultipleSeqAlignment objects
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="aln_annotation_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">aln_annotation_all</h3>
+  Dictionary of annotation(s) of all fragments' alignments
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_features_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_features_all</h3>
+  List of all hit sequence features
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_features_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_features_all</h3>
+  List of all query sequence features
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_strand_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_strand_all</h3>
+  List of all fragments' hit sequence strands
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_strand_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_strand_all</h3>
+  List of all fragments' query sequence strands
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_frame_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_frame_all</h3>
+  List of all fragments' hit sequence reading frames
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_frame_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_frame_all</h3>
+  List of all fragments' query sequence reading frames
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_start_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_start_all</h3>
+  List of all fragments' hit start coordinates
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_start_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_start_all</h3>
+  List of all fragments' query start coordinates
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_end_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_end_all</h3>
+  List of all fragments' hit end coordinates
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_end_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_end_all</h3>
+  List of all fragments' query end coordinates
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_span_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_span_all</h3>
+  List of all fragments' hit sequence size
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_span_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_span_all</h3>
+  List of all fragments' query sequence size
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_range_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_range_all</h3>
+  List of all fragments' hit start and end coordinates
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="query_range_all"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">query_range_all</h3>
+  List of all fragments' query start and end coordinates
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:17 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

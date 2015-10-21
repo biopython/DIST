@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Wise.dnal</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Wise-module.html">Package&nbsp;Wise</a> ::
+        Module&nbsp;dnal
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Wise.dnal-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Wise.dnal-module.html">Module Bio.Wise.dnal</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/env python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># Bio.Wise contains modules for running and processing the output of</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># some of the models in the Wise2 package by Ewan Birney available from:</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"># http://www.ebi.ac.uk/Wise2/</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment"># Bio.Wise.psw is for protein Smith-Waterman alignments</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># Bio.Wise.dnal is for Smith-Waterman DNA alignments</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">re</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment"># Importing with leading underscore as not intended to be exposed</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-1', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">getoutput</tt> <tt class="py-keyword">as</tt> <tt class="py-name">_getoutput</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-2', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-3', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">zip</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-4" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-4', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-5', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Method Bio.SearchIO._model.hit.Hit.map()=Bio.SearchIO._model.hit.Hit-class.html#map"><a title="Bio.SearchIO._model.hit.Hit.map" class="py-name" href="#" onclick="return doclink('link-6', 'map', 'link-6');">map</a></tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-7" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-7', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-8" class="py-name" targets="Package Bio.Wise=Bio.Wise-module.html"><a title="Bio.Wise" class="py-name" href="#" onclick="return doclink('link-8', 'Wise', 'link-8');">Wise</a></tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Variable Bio.Wise.dnal._SCORE_MATCH=Bio.Wise.dnal-module.html#_SCORE_MATCH"><a title="Bio.Wise.dnal._SCORE_MATCH" class="py-name" href="#" onclick="return doclink('link-9', '_SCORE_MATCH', 'link-9');">_SCORE_MATCH</a></tt> <tt class="py-op">=</tt> <tt class="py-number">4</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable Bio.Wise.dnal._SCORE_MISMATCH=Bio.Wise.dnal-module.html#_SCORE_MISMATCH"><a title="Bio.Wise.dnal._SCORE_MISMATCH" class="py-name" href="#" onclick="return doclink('link-10', '_SCORE_MISMATCH', 'link-10');">_SCORE_MISMATCH</a></tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt id="link-11" class="py-name" targets="Variable Bio.Wise.dnal._SCORE_GAP_START=Bio.Wise.dnal-module.html#_SCORE_GAP_START"><a title="Bio.Wise.dnal._SCORE_GAP_START" class="py-name" href="#" onclick="return doclink('link-11', '_SCORE_GAP_START', 'link-11');">_SCORE_GAP_START</a></tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">5</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt id="link-12" class="py-name" targets="Variable Bio.Wise.dnal._SCORE_GAP_EXTENSION=Bio.Wise.dnal-module.html#_SCORE_GAP_EXTENSION"><a title="Bio.Wise.dnal._SCORE_GAP_EXTENSION" class="py-name" href="#" onclick="return doclink('link-12', '_SCORE_GAP_EXTENSION', 'link-12');">_SCORE_GAP_EXTENSION</a></tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt id="link-13" class="py-name" targets="Variable Bio.Wise.dnal._CMDLINE_DNAL=Bio.Wise.dnal-module.html#_CMDLINE_DNAL"><a title="Bio.Wise.dnal._CMDLINE_DNAL" class="py-name" href="#" onclick="return doclink('link-13', '_CMDLINE_DNAL', 'link-13');">_CMDLINE_DNAL</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">"dnal"</tt><tt class="py-op">,</tt> <tt class="py-string">"-alb"</tt><tt class="py-op">,</tt> <tt class="py-string">"-nopretty"</tt><tt class="py-op">]</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="_build_dnal_cmdline"></a><div id="_build_dnal_cmdline-def"><a name="L33"></a><tt class="py-lineno"> 33</tt> <a class="py-toggle" href="#" id="_build_dnal_cmdline-toggle" onclick="return toggle('_build_dnal_cmdline');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal-module.html#_build_dnal_cmdline">_build_dnal_cmdline</a><tt class="py-op">(</tt><tt class="py-param">match</tt><tt class="py-op">,</tt> <tt class="py-param">mismatch</tt><tt class="py-op">,</tt> <tt class="py-param">gap</tt><tt class="py-op">,</tt> <tt class="py-param">extension</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_build_dnal_cmdline-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_build_dnal_cmdline-expanded"><a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt id="link-14" class="py-name"><a title="Bio.Wise.dnal._CMDLINE_DNAL" class="py-name" href="#" onclick="return doclink('link-14', '_CMDLINE_DNAL', 'link-13');">_CMDLINE_DNAL</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-name">res</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.extend()=Bio.Align.MultipleSeqAlignment-class.html#extend,Method Bio.SCOP.Raf.SeqMap.extend()=Bio.SCOP.Raf.SeqMap-class.html#extend,Method Bio.Seq.MutableSeq.extend()=Bio.Seq.MutableSeq-class.html#extend"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-15', 'extend', 'link-15');">extend</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-string">"-match"</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-16" class="py-name" targets="Function Bio.triefind.match()=Bio.triefind-module.html#match"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-16', 'match', 'link-16');">match</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">    <tt class="py-name">res</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-17', 'extend', 'link-15');">extend</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-string">"-mis"</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">mismatch</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">    <tt class="py-name">res</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-18', 'extend', 'link-15');">extend</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-string">"-gap"</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-name">gap</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>  <tt class="py-comment"># negative: convert score to penalty</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">    <tt class="py-name">res</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-19', 'extend', 'link-15');">extend</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-string">"-ext"</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt id="link-20" class="py-name" targets="Variable Bio.SeqFeature.AfterPosition.extension=Bio.SeqFeature.AfterPosition-class.html#extension,Variable Bio.SeqFeature.BeforePosition.extension=Bio.SeqFeature.BeforePosition-class.html#extension,Variable Bio.SeqFeature.BetweenPosition.extension=Bio.SeqFeature.BetweenPosition-class.html#extension,Variable Bio.SeqFeature.ExactPosition.extension=Bio.SeqFeature.ExactPosition-class.html#extension,Variable Bio.SeqFeature.OneOfPosition.extension=Bio.SeqFeature.OneOfPosition-class.html#extension,Variable Bio.SeqFeature.UnknownPosition.extension=Bio.SeqFeature.UnknownPosition-class.html#extension,Variable Bio.SeqFeature.WithinPosition.extension=Bio.SeqFeature.WithinPosition-class.html#extension"><a title="Bio.SeqFeature.AfterPosition.extension
+Bio.SeqFeature.BeforePosition.extension
+Bio.SeqFeature.BetweenPosition.extension
+Bio.SeqFeature.ExactPosition.extension
+Bio.SeqFeature.OneOfPosition.extension
+Bio.SeqFeature.UnknownPosition.extension
+Bio.SeqFeature.WithinPosition.extension" class="py-name" href="#" onclick="return doclink('link-20', 'extension', 'link-20');">extension</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>  <tt class="py-comment"># negative: convert score to penalty</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">res</tt> </tt>
+</div><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt id="link-21" class="py-name" targets="Variable Bio.Wise.dnal._CMDLINE_FGREP_COUNT=Bio.Wise.dnal-module.html#_CMDLINE_FGREP_COUNT"><a title="Bio.Wise.dnal._CMDLINE_FGREP_COUNT" class="py-name" href="#" onclick="return doclink('link-21', '_CMDLINE_FGREP_COUNT', 'link-21');">_CMDLINE_FGREP_COUNT</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"fgrep -c '%s' %s"</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"> </tt>
+<a name="_fgrep_count"></a><div id="_fgrep_count-def"><a name="L45"></a><tt class="py-lineno"> 45</tt> <a class="py-toggle" href="#" id="_fgrep_count-toggle" onclick="return toggle('_fgrep_count');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal-module.html#_fgrep_count">_fgrep_count</a><tt class="py-op">(</tt><tt class="py-param">pattern</tt><tt class="py-op">,</tt> <tt class="py-param">file</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_fgrep_count-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_fgrep_count-expanded"><a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">_getoutput</tt><tt class="py-op">(</tt><tt id="link-22" class="py-name"><a title="Bio.Wise.dnal._CMDLINE_FGREP_COUNT" class="py-name" href="#" onclick="return doclink('link-22', '_CMDLINE_FGREP_COUNT', 'link-21');">_CMDLINE_FGREP_COUNT</a></tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">pattern</tt><tt class="py-op">,</tt> <tt class="py-name">file</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt id="link-23" class="py-name" targets="Variable Bio.Wise.dnal._re_alb_line2coords=Bio.Wise.dnal-module.html#_re_alb_line2coords"><a title="Bio.Wise.dnal._re_alb_line2coords" class="py-name" href="#" onclick="return doclink('link-23', '_re_alb_line2coords', 'link-23');">_re_alb_line2coords</a></tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt><tt class="py-string">r"^\[([^:]+):[^\[]+\[([^:]+):"</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"> </tt>
+<a name="_alb_line2coords"></a><div id="_alb_line2coords-def"><a name="L51"></a><tt class="py-lineno"> 51</tt> <a class="py-toggle" href="#" id="_alb_line2coords-toggle" onclick="return toggle('_alb_line2coords');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal-module.html#_alb_line2coords">_alb_line2coords</a><tt class="py-op">(</tt><tt class="py-param">line</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_alb_line2coords-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_alb_line2coords-expanded"><a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">coord</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt>  <tt class="py-comment"># one-based -&gt; zero-based</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">                  <tt class="py-keyword">for</tt> <tt class="py-name">coord</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">                  <tt class="py-keyword">in</tt> <tt id="link-24" class="py-name"><a title="Bio.Wise.dnal._re_alb_line2coords" class="py-name" href="#" onclick="return doclink('link-24', '_re_alb_line2coords', 'link-23');">_re_alb_line2coords</a></tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-25', 'match', 'link-16');">match</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">groups</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="_get_coords"></a><div id="_get_coords-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="_get_coords-toggle" onclick="return toggle('_get_coords');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal-module.html#_get_coords">_get_coords</a><tt class="py-op">(</tt><tt class="py-param">filename</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_coords-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_coords-expanded"><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-name">alb</tt> <tt class="py-op">=</tt> <tt class="py-name">file</tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-name">start_line</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">    <tt class="py-name">end_line</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">alb</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Method Bio.Seq.Seq.startswith()=Bio.Seq.Seq-class.html#startswith"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-26', 'startswith', 'link-26');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-string">"["</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">start_line</tt><tt class="py-op">:</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">                <tt class="py-name">start_line</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt>  <tt class="py-comment"># rstrip not needed</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">                <tt class="py-name">end_line</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">end_line</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt>  <tt class="py-comment"># sequence is too short</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">zip</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt id="link-27" class="py-name"><a title="Bio.SearchIO._model.hit.Hit.map" class="py-name" href="#" onclick="return doclink('link-27', 'map', 'link-6');">map</a></tt><tt class="py-op">(</tt><tt id="link-28" class="py-name" targets="Function Bio.Wise.dnal._alb_line2coords()=Bio.Wise.dnal-module.html#_alb_line2coords"><a title="Bio.Wise.dnal._alb_line2coords" class="py-name" href="#" onclick="return doclink('link-28', '_alb_line2coords', 'link-28');">_alb_line2coords</a></tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-name">start_line</tt><tt class="py-op">,</tt> <tt class="py-name">end_line</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt>  <tt class="py-comment"># returns [(start0, end0), (start1, end1)]</tt> </tt>
+</div><a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"> </tt>
+<a name="Statistics"></a><div id="Statistics-def"><a name="L76"></a><tt class="py-lineno"> 76</tt> <a class="py-toggle" href="#" id="Statistics-toggle" onclick="return toggle('Statistics');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Wise.dnal.Statistics-class.html">Statistics</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Statistics-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Statistics-expanded"><a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-docstring">    Calculate statistics from an ALB report</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="Statistics.__init__"></a><div id="Statistics.__init__-def"><a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="Statistics.__init__-toggle" onclick="return toggle('Statistics.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal.Statistics-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">filename</tt><tt class="py-op">,</tt> <tt class="py-param">match</tt><tt class="py-op">,</tt> <tt class="py-param">mismatch</tt><tt class="py-op">,</tt> <tt class="py-param">gap</tt><tt class="py-op">,</tt> <tt class="py-param">extension</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Statistics.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Statistics.__init__-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Function Bio.Phylo.NeXMLIO.matches()=Bio.Phylo.NeXMLIO-module.html#matches"><a title="Bio.Phylo.NeXMLIO.matches" class="py-name" href="#" onclick="return doclink('link-29', 'matches', 'link-29');">matches</a></tt> <tt class="py-op">=</tt> <tt id="link-30" class="py-name" targets="Function Bio.Wise.dnal._fgrep_count()=Bio.Wise.dnal-module.html#_fgrep_count"><a title="Bio.Wise.dnal._fgrep_count" class="py-name" href="#" onclick="return doclink('link-30', '_fgrep_count', 'link-30');">_fgrep_count</a></tt><tt class="py-op">(</tt><tt class="py-string">'"SEQUENCE" %s'</tt> <tt class="py-op">%</tt> <tt id="link-31" class="py-name"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-31', 'match', 'link-16');">match</a></tt><tt class="py-op">,</tt> <tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mismatches</tt> <tt class="py-op">=</tt> <tt id="link-32" class="py-name"><a title="Bio.Wise.dnal._fgrep_count" class="py-name" href="#" onclick="return doclink('link-32', '_fgrep_count', 'link-30');">_fgrep_count</a></tt><tt class="py-op">(</tt><tt class="py-string">'"SEQUENCE" %s'</tt> <tt class="py-op">%</tt> <tt class="py-name">mismatch</tt><tt class="py-op">,</tt> <tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">gaps</tt> <tt class="py-op">=</tt> <tt id="link-33" class="py-name"><a title="Bio.Wise.dnal._fgrep_count" class="py-name" href="#" onclick="return doclink('link-33', '_fgrep_count', 'link-30');">_fgrep_count</a></tt><tt class="py-op">(</tt><tt class="py-string">'"INSERT" %s'</tt> <tt class="py-op">%</tt> <tt class="py-name">gap</tt><tt class="py-op">,</tt> <tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">gap</tt> <tt class="py-op">==</tt> <tt id="link-34" class="py-name"><a title="Bio.SeqFeature.AfterPosition.extension
+Bio.SeqFeature.BeforePosition.extension
+Bio.SeqFeature.BetweenPosition.extension
+Bio.SeqFeature.ExactPosition.extension
+Bio.SeqFeature.OneOfPosition.extension
+Bio.SeqFeature.UnknownPosition.extension
+Bio.SeqFeature.WithinPosition.extension" class="py-name" href="#" onclick="return doclink('link-34', 'extension', 'link-20');">extension</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">extensions</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">extensions</tt> <tt class="py-op">=</tt> <tt id="link-35" class="py-name"><a title="Bio.Wise.dnal._fgrep_count" class="py-name" href="#" onclick="return doclink('link-35', '_fgrep_count', 'link-30');">_fgrep_count</a></tt><tt class="py-op">(</tt><tt class="py-string">'"INSERT" %s'</tt> <tt class="py-op">%</tt> <tt id="link-36" class="py-name"><a title="Bio.SeqFeature.AfterPosition.extension
+Bio.SeqFeature.BeforePosition.extension
+Bio.SeqFeature.BetweenPosition.extension
+Bio.SeqFeature.ExactPosition.extension
+Bio.SeqFeature.OneOfPosition.extension
+Bio.SeqFeature.UnknownPosition.extension
+Bio.SeqFeature.WithinPosition.extension" class="py-name" href="#" onclick="return doclink('link-36', 'extension', 'link-20');">extension</a></tt><tt class="py-op">,</tt> <tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Method Bio.Blast.NCBIStandalone._HSPConsumer.score()=Bio.Blast.NCBIStandalone._HSPConsumer-class.html#score"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.score" class="py-name" href="#" onclick="return doclink('link-37', 'score', 'link-37');">score</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt id="link-38" class="py-name"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-38', 'match', 'link-16');">match</a></tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="Bio.Phylo.NeXMLIO.matches" class="py-name" href="#" onclick="return doclink('link-39', 'matches', 'link-29');">matches</a></tt> <tt class="py-op">+</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">                      <tt class="py-name">mismatch</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mismatches</tt> <tt class="py-op">+</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">                      <tt class="py-name">gap</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">gaps</tt> <tt class="py-op">+</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">                      <tt id="link-40" class="py-name"><a title="Bio.SeqFeature.AfterPosition.extension
+Bio.SeqFeature.BeforePosition.extension
+Bio.SeqFeature.BetweenPosition.extension
+Bio.SeqFeature.ExactPosition.extension
+Bio.SeqFeature.OneOfPosition.extension
+Bio.SeqFeature.UnknownPosition.extension
+Bio.SeqFeature.WithinPosition.extension" class="py-name" href="#" onclick="return doclink('link-40', 'extension', 'link-20');">extension</a></tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">extensions</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="Bio.Phylo.NeXMLIO.matches" class="py-name" href="#" onclick="return doclink('link-41', 'matches', 'link-29');">matches</a></tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mismatches</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">gaps</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">extensions</tt><tt class="py-op">:</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.coords=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#coords"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.coords" class="py-name" href="#" onclick="return doclink('link-42', 'coords', 'link-42');">coords</a></tt> <tt class="py-op">=</tt> <tt id="link-43" class="py-name" targets="Method Bio.SearchIO._model.hsp.HSP._get_coords()=Bio.SearchIO._model.hsp.HSP-class.html#_get_coords,Function Bio.Wise.dnal._get_coords()=Bio.Wise.dnal-module.html#_get_coords"><a title="Bio.SearchIO._model.hsp.HSP._get_coords
+Bio.Wise.dnal._get_coords" class="py-name" href="#" onclick="return doclink('link-43', '_get_coords', 'link-43');">_get_coords</a></tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.coords" class="py-name" href="#" onclick="return doclink('link-44', 'coords', 'link-42');">coords</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"> </tt>
+<a name="Statistics.identity_fraction"></a><div id="Statistics.identity_fraction-def"><a name="L100"></a><tt class="py-lineno">100</tt> <a class="py-toggle" href="#" id="Statistics.identity_fraction-toggle" onclick="return toggle('Statistics.identity_fraction');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal.Statistics-class.html#identity_fraction">identity_fraction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Statistics.identity_fraction-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Statistics.identity_fraction-expanded"><a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-45" class="py-name"><a title="Bio.Phylo.NeXMLIO.matches" class="py-name" href="#" onclick="return doclink('link-45', 'matches', 'link-29');">matches</a></tt> <tt class="py-op">/</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="Bio.Phylo.NeXMLIO.matches" class="py-name" href="#" onclick="return doclink('link-46', 'matches', 'link-29');">matches</a></tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mismatches</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">    <tt id="link-47" class="py-name" targets="Variable Bio.Wise.dnal.Statistics.header=Bio.Wise.dnal.Statistics-class.html#header"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-47', 'header', 'link-47');">header</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"identity_fraction\tmatches\tmismatches\tgaps\textensions"</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"> </tt>
+<a name="Statistics.__str__"></a><div id="Statistics.__str__-def"><a name="L105"></a><tt class="py-lineno">105</tt> <a class="py-toggle" href="#" id="Statistics.__str__-toggle" onclick="return toggle('Statistics.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal.Statistics-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Statistics.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Statistics.__str__-expanded"><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"\t"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-48" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-48', 'x', 'link-48');">x</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-49" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-49', 'x', 'link-48');">x</a></tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name" targets="Method Bio.Wise.dnal.Statistics.identity_fraction()=Bio.Wise.dnal.Statistics-class.html#identity_fraction"><a title="Bio.Wise.dnal.Statistics.identity_fraction" class="py-name" href="#" onclick="return doclink('link-50', 'identity_fraction', 'link-50');">identity_fraction</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                                          <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="Bio.Phylo.NeXMLIO.matches" class="py-name" href="#" onclick="return doclink('link-51', 'matches', 'link-29');">matches</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mismatches</tt><tt class="py-op">,</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">                                          <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">gaps</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">extensions</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"> </tt>
+<a name="align"></a><div id="align-def"><a name="L111"></a><tt class="py-lineno">111</tt> <a class="py-toggle" href="#" id="align-toggle" onclick="return toggle('align');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal-module.html#align">align</a><tt class="py-op">(</tt><tt class="py-param">pair</tt><tt class="py-op">,</tt> <tt class="py-param">match</tt><tt class="py-op">=</tt><tt id="link-52" class="py-name"><a title="Bio.Wise.dnal._SCORE_MATCH" class="py-name" href="#" onclick="return doclink('link-52', '_SCORE_MATCH', 'link-9');">_SCORE_MATCH</a></tt><tt class="py-op">,</tt> <tt class="py-param">mismatch</tt><tt class="py-op">=</tt><tt id="link-53" class="py-name"><a title="Bio.Wise.dnal._SCORE_MISMATCH" class="py-name" href="#" onclick="return doclink('link-53', '_SCORE_MISMATCH', 'link-10');">_SCORE_MISMATCH</a></tt><tt class="py-op">,</tt> <tt class="py-param">gap</tt><tt class="py-op">=</tt><tt id="link-54" class="py-name"><a title="Bio.Wise.dnal._SCORE_GAP_START" class="py-name" href="#" onclick="return doclink('link-54', '_SCORE_GAP_START', 'link-11');">_SCORE_GAP_START</a></tt><tt class="py-op">,</tt> <tt class="py-param">extension</tt><tt class="py-op">=</tt><tt id="link-55" class="py-name"><a title="Bio.Wise.dnal._SCORE_GAP_EXTENSION" class="py-name" href="#" onclick="return doclink('link-55', '_SCORE_GAP_EXTENSION', 'link-12');">_SCORE_GAP_EXTENSION</a></tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="align-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="align-expanded"><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">    <tt class="py-name">cmdline</tt> <tt class="py-op">=</tt> <tt id="link-56" class="py-name" targets="Function Bio.Wise.dnal._build_dnal_cmdline()=Bio.Wise.dnal-module.html#_build_dnal_cmdline"><a title="Bio.Wise.dnal._build_dnal_cmdline" class="py-name" href="#" onclick="return doclink('link-56', '_build_dnal_cmdline', 'link-56');">_build_dnal_cmdline</a></tt><tt class="py-op">(</tt><tt id="link-57" class="py-name"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-57', 'match', 'link-16');">match</a></tt><tt class="py-op">,</tt> <tt class="py-name">mismatch</tt><tt class="py-op">,</tt> <tt class="py-name">gap</tt><tt class="py-op">,</tt> <tt id="link-58" class="py-name"><a title="Bio.SeqFeature.AfterPosition.extension
+Bio.SeqFeature.BeforePosition.extension
+Bio.SeqFeature.BetweenPosition.extension
+Bio.SeqFeature.ExactPosition.extension
+Bio.SeqFeature.OneOfPosition.extension
+Bio.SeqFeature.UnknownPosition.extension
+Bio.SeqFeature.WithinPosition.extension" class="py-name" href="#" onclick="return doclink('link-58', 'extension', 'link-20');">extension</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">    <tt class="py-name">temp_file</tt> <tt class="py-op">=</tt> <tt id="link-59" class="py-name"><a title="Bio.Wise" class="py-name" href="#" onclick="return doclink('link-59', 'Wise', 'link-8');">Wise</a></tt><tt class="py-op">.</tt><tt id="link-60" class="py-name" targets="Method Bio.Blast.NCBIStandalone._HSPConsumer.align()=Bio.Blast.NCBIStandalone._HSPConsumer-class.html#align,Class Bio.FSSP.fssp_rec.align=Bio.FSSP.fssp_rec.align-class.html,Function Bio.Wise.align()=Bio.Wise-module.html#align,Function Bio.Wise.dnal.align()=Bio.Wise.dnal-module.html#align,Function Bio.Wise.psw.align()=Bio.Wise.psw-module.html#align,Variable Bio.pairwise2.align=Bio.pairwise2-module.html#align"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.align
+Bio.FSSP.fssp_rec.align
+Bio.Wise.align
+Bio.Wise.dnal.align
+Bio.Wise.psw.align
+Bio.pairwise2.align" class="py-name" href="#" onclick="return doclink('link-60', 'align', 'link-60');">align</a></tt><tt class="py-op">(</tt><tt class="py-name">cmdline</tt><tt class="py-op">,</tt> <tt class="py-name">pair</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">keywds</tt><tt class="py-op">)</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-61" class="py-name" targets="Package Bio.Statistics=Bio.Statistics-module.html,Class Bio.Wise.dnal.Statistics=Bio.Wise.dnal.Statistics-class.html"><a title="Bio.Statistics
+Bio.Wise.dnal.Statistics" class="py-name" href="#" onclick="return doclink('link-61', 'Statistics', 'link-61');">Statistics</a></tt><tt class="py-op">(</tt><tt class="py-name">temp_file</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-62', 'name', 'link-62');">name</a></tt><tt class="py-op">,</tt> <tt id="link-63" class="py-name"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-63', 'match', 'link-16');">match</a></tt><tt class="py-op">,</tt> <tt class="py-name">mismatch</tt><tt class="py-op">,</tt> <tt class="py-name">gap</tt><tt class="py-op">,</tt> <tt id="link-64" class="py-name"><a title="Bio.SeqFeature.AfterPosition.extension
+Bio.SeqFeature.BeforePosition.extension
+Bio.SeqFeature.BetweenPosition.extension
+Bio.SeqFeature.ExactPosition.extension
+Bio.SeqFeature.OneOfPosition.extension
+Bio.SeqFeature.UnknownPosition.extension
+Bio.SeqFeature.WithinPosition.extension" class="py-name" href="#" onclick="return doclink('link-64', 'extension', 'link-20');">extension</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">            <tt class="py-name">keywds</tt><tt class="py-op">[</tt><tt class="py-string">'dry_run'</tt><tt class="py-op">]</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">KeyError</tt><tt class="py-op">:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> </tt>
+</div><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="main"></a><div id="main-def"><a name="L124"></a><tt class="py-lineno">124</tt> <a class="py-toggle" href="#" id="main-toggle" onclick="return toggle('main');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal-module.html#main">main</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="main-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="main-expanded"><a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">    <tt class="py-name">stats</tt> <tt class="py-op">=</tt> <tt id="link-65" class="py-name"><a title="Bio.Blast.NCBIStandalone._HSPConsumer.align
+Bio.FSSP.fssp_rec.align
+Bio.Wise.align
+Bio.Wise.dnal.align
+Bio.Wise.psw.align
+Bio.pairwise2.align" class="py-name" href="#" onclick="return doclink('link-65', 'align', 'link-60');">align</a></tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-number">3</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"\n"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-string">"%s: %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">stats</tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">                    <tt class="py-keyword">for</tt> <tt class="py-name">attr</tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-string">"matches"</tt><tt class="py-op">,</tt> <tt class="py-string">"mismatches"</tt><tt class="py-op">,</tt> <tt class="py-string">"gaps"</tt><tt class="py-op">,</tt> <tt class="py-string">"extensions"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"identity_fraction: %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">stats</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name"><a title="Bio.Wise.dnal.Statistics.identity_fraction" class="py-name" href="#" onclick="return doclink('link-66', 'identity_fraction', 'link-50');">identity_fraction</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"coords: %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">stats</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.coords" class="py-name" href="#" onclick="return doclink('link-67', 'coords', 'link-42');">coords</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"> </tt>
+<a name="_test"></a><div id="_test-def"><a name="L133"></a><tt class="py-lineno">133</tt> <a class="py-toggle" href="#" id="_test-toggle" onclick="return toggle('_test');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Wise.dnal-module.html#_test">_test</a><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_test-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_test-expanded"><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">doctest</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">    <tt class="py-name">doctest</tt><tt class="py-op">.</tt><tt class="py-name">testmod</tt><tt class="py-op">(</tt><tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">modules</tt><tt class="py-op">[</tt><tt class="py-name">__name__</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-name">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">keywds</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">__debug__</tt><tt class="py-op">:</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">        <tt id="link-68" class="py-name" targets="Function Bio.Align.Applications._ClustalOmega._test()=Bio.Align.Applications._ClustalOmega-module.html#_test,Function Bio.Align.Applications._Clustalw._test()=Bio.Align.Applications._Clustalw-module.html#_test,Function Bio.Align.Applications._Dialign._test()=Bio.Align.Applications._Dialign-module.html#_test,Function Bio.Align.Applications._MSAProbs._test()=Bio.Align.Applications._MSAProbs-module.html#_test,Function Bio.Align.Applications._Muscle._test()=Bio.Align.Applications._Muscle-module.html#_test,Function Bio.Align.Applications._Prank._test()=Bio.Align.Applications._Prank-module.html#_test,Function Bio.Align.Applications._Probcons._test()=Bio.Align.Applications._Probcons-module.html#_test,Function Bio.Align.Applications._TCoffee._test()=Bio.Align.Applications._TCoffee-module.html#_test,Function Bio.Align.Generic._test()=Bio.Align.Generic-module.html#_test,Function Bio.Application._test()=Bio.Application-module.html#_test,Function Bio.Blast.Applications._test()=Bio.Blast.Applications-module.html#_test,Function Bio.DocSQL._test()=Bio.DocSQL-module.html#_test,Function Bio.Emboss.Applications._test()=Bio.Emboss.Applications-module.html#_test,Function Bio.Entrez._test()=Bio.Entrez-module.html#_test,Function Bio.KDTree.KDTree'._test()=Bio.KDTree.KDTree%27-module.html#_test,Function Bio.PDB.Selection._test()=Bio.PDB.Selection-module.html#_test,Function Bio.Seq._test()=Bio.Seq-module.html#_test,Function Bio.SeqUtils.MeltingTemp._test()=Bio.SeqUtils.MeltingTemp-module.html#_test,Function Bio.SeqUtils._test()=Bio.SeqUtils-module.html#_test,Function Bio.Sequencing.Applications._Novoalign._test()=Bio.Sequencing.Applications._Novoalign-module.html#_test,Function Bio.Sequencing.Applications._bwa._test()=Bio.Sequencing.Applications._bwa-module.html#_test,Function Bio.Sequencing.Applications._samtools._test()=Bio.Sequencing.Applications._samtools-module.html#_test,Function Bio.Statistics.lowess._test()=Bio.Statistics.lowess-module.html#_test,Function Bio.Wise._test()=Bio.Wise-module.html#_test,Function Bio.Wise.dnal._test()=Bio.Wise.dnal-module.html#_test,Function Bio.Wise.psw._test()=Bio.Wise.psw-module.html#_test,Function Bio.motifs.applications._alignace._test()=Bio.motifs.applications._alignace-module.html#_test,Function Bio.motifs.applications._xxmotif._test()=Bio.motifs.applications._xxmotif-module.html#_test,Function Bio.pairwise2._test()=Bio.pairwise2-module.html#_test"><a title="Bio.Align.Applications._ClustalOmega._test
+Bio.Align.Applications._Clustalw._test
+Bio.Align.Applications._Dialign._test
+Bio.Align.Applications._MSAProbs._test
+Bio.Align.Applications._Muscle._test
+Bio.Align.Applications._Prank._test
+Bio.Align.Applications._Probcons._test
+Bio.Align.Applications._TCoffee._test
+Bio.Align.Generic._test
+Bio.Application._test
+Bio.Blast.Applications._test
+Bio.DocSQL._test
+Bio.Emboss.Applications._test
+Bio.Entrez._test
+Bio.KDTree.KDTree'._test
+Bio.PDB.Selection._test
+Bio.Seq._test
+Bio.SeqUtils.MeltingTemp._test
+Bio.SeqUtils._test
+Bio.Sequencing.Applications._Novoalign._test
+Bio.Sequencing.Applications._bwa._test
+Bio.Sequencing.Applications._samtools._test
+Bio.Statistics.lowess._test
+Bio.Wise._test
+Bio.Wise.dnal._test
+Bio.Wise.psw._test
+Bio.motifs.applications._alignace._test
+Bio.motifs.applications._xxmotif._test
+Bio.pairwise2._test" class="py-name" href="#" onclick="return doclink('link-68', '_test', 'link-68');">_test</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">    <tt id="link-69" class="py-name" targets="Function Bio.Wise.dnal.main()=Bio.Wise.dnal-module.html#main,Function Bio.Wise.main()=Bio.Wise-module.html#main,Function Bio.Wise.psw.main()=Bio.Wise.psw-module.html#main"><a title="Bio.Wise.dnal.main
+Bio.Wise.main
+Bio.Wise.psw.main" class="py-name" href="#" onclick="return doclink('link-69', 'main', 'link-69');">main</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:05:00 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

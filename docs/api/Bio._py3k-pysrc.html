@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio._py3k</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;_py3k
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio._py3k-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio._py3k-module.html">Package Bio._py3k</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2010-2013 by Peter Cock.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring">"""Python 3 compatibility tools (PRIVATE).</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">We used to have lines like this under Python 2 in order to use</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">iterator based zip, map and filter (in Python 3 these functions</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">are all iterator based)::</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">    from future_builtins import zip</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">There is no similar option for range yet, other than::</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">    range = xrange</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring">    input = raw_input</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">or::</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">    from __builtin__ import xrange as range</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    from __builtin__ import raw_input as input</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">Under Python 3 these imports need to be removed. Also, deliberate</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">importing of built in functions like open changes from Python 2::</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">    from __builtin__ import open</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">to this under Python 3::</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">    from builtins import open</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">Instead, we can do this under either Python 2 or 3::</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">    from Bio._py3k import open</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">    from Bio._py3k import zip</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">Once we drop support for Python 2, the whole of Bio._py3k will</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">go away.</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">version_info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">&gt;=</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">    <tt class="py-comment"># Code for Python 3</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">builtins</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Function Bio.bgzf.open()=Bio.bgzf-module.html#open"><a title="Bio.bgzf.open" class="py-name" href="#" onclick="return doclink('link-0', 'open', 'link-0');">open</a></tt><tt class="py-op">,</tt> <tt class="py-name">zip</tt><tt class="py-op">,</tt> <tt id="link-1" class="py-name" targets="Method Bio.SearchIO._model.hit.Hit.map()=Bio.SearchIO._model.hit.Hit-class.html#map"><a title="Bio.SearchIO._model.hit.Hit.map" class="py-name" href="#" onclick="return doclink('link-1', 'map', 'link-1');">map</a></tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Function Bio.FSSP.FSSPTools.filter()=Bio.FSSP.FSSPTools-module.html#filter,Method Bio.SearchIO._model.hit.Hit.filter()=Bio.SearchIO._model.hit.Hit-class.html#filter"><a title="Bio.FSSP.FSSPTools.filter
+Bio.SearchIO._model.hit.Hit.filter" class="py-name" href="#" onclick="return doclink('link-2', 'filter', 'link-2');">filter</a></tt><tt class="py-op">,</tt> <tt id="link-3" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-3', 'range', 'link-3');">range</a></tt><tt class="py-op">,</tt> <tt class="py-name">input</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">codecs</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt class="py-comment"># Lots of our Python 2 code uses isinstance(x, basestring)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-comment"># which after 2to3 becomes isinstance(x, str)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-name">basestring</tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">    <tt class="py-name">unicode</tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt id="link-4" class="py-name" targets="Function Bio._py3k._bytes_to_string()=Bio._py3k-module.html#_bytes_to_string"><a title="Bio._py3k._bytes_to_string" class="py-name" href="#" onclick="return doclink('link-4', '_bytes_to_string', 'link-4');">_bytes_to_string</a></tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt id="link-5" class="py-name" targets="Variable Bio.Graphics.ColorSpiral.ColorSpiral.b=Bio.Graphics.ColorSpiral.ColorSpiral-class.html#b"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.b" class="py-name" href="#" onclick="return doclink('link-5', 'b', 'link-5');">b</a></tt><tt class="py-op">:</tt> <tt id="link-6" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.b" class="py-name" href="#" onclick="return doclink('link-6', 'b', 'link-5');">b</a></tt><tt class="py-op">.</tt><tt class="py-name">decode</tt><tt class="py-op">(</tt><tt class="py-op">)</tt>  <tt class="py-comment"># bytes to unicode string</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Function Bio._py3k._string_to_bytes()=Bio._py3k-module.html#_string_to_bytes"><a title="Bio._py3k._string_to_bytes" class="py-name" href="#" onclick="return doclink('link-7', '_string_to_bytes', 'link-7');">_string_to_bytes</a></tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt class="py-name">s</tt><tt class="py-op">:</tt> <tt class="py-name">s</tt><tt class="py-op">.</tt><tt class="py-name">encode</tt><tt class="py-op">(</tt><tt class="py-op">)</tt>  <tt class="py-comment"># unicode string to bytes</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="_bytes_bytearray_to_str"></a><div id="_bytes_bytearray_to_str-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="_bytes_bytearray_to_str-toggle" onclick="return toggle('_bytes_bytearray_to_str');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_bytes_bytearray_to_str">_bytes_bytearray_to_str</a><tt class="py-op">(</tt><tt class="py-param">s</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_bytes_bytearray_to_str-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_bytes_bytearray_to_str-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-docstring">"""If s is bytes or bytearray, convert to a unicode string."""</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">bytes</tt><tt class="py-op">,</tt> <tt class="py-name">bytearray</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">s</tt><tt class="py-op">.</tt><tt class="py-name">decode</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">s</tt> </tt>
+</div><a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="_as_unicode"></a><div id="_as_unicode-def"><a name="L62"></a><tt class="py-lineno"> 62</tt> <a class="py-toggle" href="#" id="_as_unicode-toggle" onclick="return toggle('_as_unicode');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_as_unicode">_as_unicode</a><tt class="py-op">(</tt><tt class="py-param">s</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_as_unicode-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_as_unicode-expanded"><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-docstring">"""Turn byte string or unicode string into a unicode string."""</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">s</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-comment"># Assume it is a bytes string</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-comment"># Note ISO-8859-1 aka Latin-1 preserves first 256 chars</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">codecs</tt><tt class="py-op">.</tt><tt class="py-name">latin_1_decode</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="_as_bytes"></a><div id="_as_bytes-def"><a name="L70"></a><tt class="py-lineno"> 70</tt> <a class="py-toggle" href="#" id="_as_bytes-toggle" onclick="return toggle('_as_bytes');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_as_bytes">_as_bytes</a><tt class="py-op">(</tt><tt class="py-param">s</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_as_bytes-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_as_bytes-expanded"><a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-docstring">"""Turn byte string or unicode string into a bytes string.</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-docstring">        The Python 2 version returns a (byte) string.</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">,</tt> <tt class="py-name">bytes</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">s</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-comment"># Assume it is a unicode string</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-comment"># Note ISO-8859-1 aka Latin-1 preserves first 256 chars</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">codecs</tt><tt class="py-op">.</tt><tt class="py-name">latin_1_encode</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">    <tt class="py-name">_as_string</tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name" targets="Function Bio._py3k._as_unicode()=Bio._py3k-module.html#_as_unicode"><a title="Bio._py3k._as_unicode" class="py-name" href="#" onclick="return doclink('link-8', '_as_unicode', 'link-8');">_as_unicode</a></tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"> </tt>
+<a name="_is_int_or_long"></a><div id="_is_int_or_long-def"><a name="L83"></a><tt class="py-lineno"> 83</tt> <a class="py-toggle" href="#" id="_is_int_or_long-toggle" onclick="return toggle('_is_int_or_long');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_is_int_or_long">_is_int_or_long</a><tt class="py-op">(</tt><tt class="py-param">i</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_is_int_or_long-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_is_int_or_long-expanded"><a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-docstring">"""Check if the value is an integer.</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">        Note there are no longs on Python 3.</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-9" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-9', 'i', 'link-9');">i</a></tt><tt class="py-op">,</tt> <tt class="py-name">int</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">io</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"> </tt>
+<a name="_binary_to_string_handle"></a><div id="_binary_to_string_handle-def"><a name="L92"></a><tt class="py-lineno"> 92</tt> <a class="py-toggle" href="#" id="_binary_to_string_handle-toggle" onclick="return toggle('_binary_to_string_handle');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_binary_to_string_handle">_binary_to_string_handle</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_binary_to_string_handle-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_binary_to_string_handle-expanded"><a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-docstring">"""Treat a binary (bytes) handle like a text (unicode) handle."""</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-comment"># TODO, once drop all of Python 3.0 - 3.3, replace this with just:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-comment">#</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-comment"># return io.TextIOWrapper(io.BufferedReader(handle))</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">        <tt class="py-comment">#</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-comment"># See also http://bugs.python.org/issue5628</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-comment"># and http://bugs.python.org/issue13541</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-comment"># and http://bugs.python.org/issue13464 which should be fixed in Python 3.3</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-comment">#</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-comment"># However, still have problems under Python 3.3.0, e.g.</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-comment">#</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-comment"># $ python3.3 test_SeqIO_online.py</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-comment"># test_nuccore_X52960 (__main__.EntrezTests)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-comment"># Bio.Entrez.efetch('nuccore', id='X52960', ...) ... ERROR</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-comment"># test_nucleotide_6273291 (__main__.EntrezTests)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-comment"># Bio.Entrez.efetch('nucleotide', id='6273291', ...) ... ERROR</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-comment"># test_protein_16130152 (__main__.EntrezTests)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-comment"># Bio.Entrez.efetch('protein', id='16130152', ...) ... ERROR</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-comment"># test_get_sprot_raw (__main__.ExPASyTests)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-comment"># Bio.ExPASy.get_sprot_raw("O23729") ... ok</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-comment"># ..</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-comment"># ValueError: I/O operation on closed file.</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-comment">#</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-keyword">class</tt> <tt class="py-def-name">EvilHandleHack</tt><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">__init__</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">                <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">                    <tt class="py-comment"># If wrapping an online handle, this this is nice to have:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">url</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt class="py-name">url</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">                    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">read</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">length</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">_as_string</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Function Bio.Affy.CelFile.read()=Bio.Affy.CelFile-module.html#read,Function Bio.AlignIO.read()=Bio.AlignIO-module.html#read,Function Bio.Blast.NCBIXML.read()=Bio.Blast.NCBIXML-module.html#read,Function Bio.Cluster.read()=Bio.Cluster-module.html#read,Function Bio.Compass.read()=Bio.Compass-module.html#read,Function Bio.Emboss.Primer3.read()=Bio.Emboss.Primer3-module.html#read,Function Bio.Emboss.PrimerSearch.read()=Bio.Emboss.PrimerSearch-module.html#read,Method Bio.Entrez.Parser.DataHandler.read()=Bio.Entrez.Parser.DataHandler-class.html#read,Function Bio.Entrez.read()=Bio.Entrez-module.html#read,Function Bio.ExPASy.Enzyme.read()=Bio.ExPASy.Enzyme-module.html#read,Function Bio.ExPASy.Prodoc.read()=Bio.ExPASy.Prodoc-module.html#read,Function Bio.ExPASy.Prosite.read()=Bio.ExPASy.Prosite-module.html#read,Function Bio.ExPASy.ScanProsite.read()=Bio.ExPASy.ScanProsite-module.html#read,Method Bio.File.UndoHandle.read()=Bio.File.UndoHandle-class.html#read,Function Bio.KEGG.KGML.KGML_parser.read()=Bio.KEGG.KGML.KGML_parser-module.html#read,Function Bio.Medline.read()=Bio.Medline-module.html#read,Function Bio.Motif.Parsers.AlignAce.read()=Bio.Motif.Parsers.AlignAce-module.html#read,Function Bio.Motif.Parsers.MAST.read()=Bio.Motif.Parsers.MAST-module.html#read,Function Bio.Motif.Parsers.MEME.read()=Bio.Motif.Parsers.MEME-module.html#read,Function Bio.Motif.read()=Bio.Motif-module.html#read,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.read()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#read,Method Bio.Nexus.Nexus.Nexus.read()=Bio.Nexus.Nexus.Nexus-class.html#read,Function Bio.Phylo.PAML.baseml.read()=Bio.Phylo.PAML.baseml-module.html#read,Function Bio.Phylo.PAML.codeml.read()=Bio.Phylo.PAML.codeml-module.html#read,Function Bio.Phylo.PAML.yn00.read()=Bio.Phylo.PAML.yn00-module.html#read,Method Bio.Phylo.PhyloXMLIO.Parser.read()=Bio.Phylo.PhyloXMLIO.Parser-class.html#read,Function Bio.Phylo.PhyloXMLIO.read()=Bio.Phylo.PhyloXMLIO-module.html#read,Function Bio.Phylo._io.read()=Bio.Phylo._io-module.html#read,Function Bio.PopGen.GenePop.FileParser.read()=Bio.PopGen.GenePop.FileParser-module.html#read,Function Bio.PopGen.GenePop.LargeFileParser.read()=Bio.PopGen.GenePop.LargeFileParser-module.html#read,Function Bio.PopGen.GenePop.read()=Bio.PopGen.GenePop-module.html#read,Function Bio.SearchIO.read()=Bio.SearchIO-module.html#read,Method Bio.SeqIO.SffIO._AddTellHandle.read()=Bio.SeqIO.SffIO._AddTellHandle-class.html#read,Function Bio.SeqIO.read()=Bio.SeqIO-module.html#read,Function Bio.Sequencing.Ace.read()=Bio.Sequencing.Ace-module.html#read,Function Bio.Sequencing.Phd.read()=Bio.Sequencing.Phd-module.html#read,Function Bio.SwissProt.read()=Bio.SwissProt-module.html#read,Function Bio.UniGene.read()=Bio.UniGene-module.html#read,Method Bio.bgzf.BgzfReader.read()=Bio.bgzf.BgzfReader-class.html#read,Function Bio.motifs.alignace.read()=Bio.motifs.alignace-module.html#read,Function Bio.motifs.jaspar.read()=Bio.motifs.jaspar-module.html#read,Function Bio.motifs.mast.read()=Bio.motifs.mast-module.html#read,Function Bio.motifs.meme.read()=Bio.motifs.meme-module.html#read,Function Bio.motifs.read()=Bio.motifs-module.html#read,Function Bio.motifs.transfac.read()=Bio.motifs.transfac-module.html#read"><a title="Bio.Affy.CelFile.read
+Bio.AlignIO.read
+Bio.Blast.NCBIXML.read
+Bio.Cluster.read
+Bio.Compass.read
+Bio.Emboss.Primer3.read
+Bio.Emboss.PrimerSearch.read
+Bio.Entrez.Parser.DataHandler.read
+Bio.Entrez.read
+Bio.ExPASy.Enzyme.read
+Bio.ExPASy.Prodoc.read
+Bio.ExPASy.Prosite.read
+Bio.ExPASy.ScanProsite.read
+Bio.File.UndoHandle.read
+Bio.KEGG.KGML.KGML_parser.read
+Bio.Medline.read
+Bio.Motif.Parsers.AlignAce.read
+Bio.Motif.Parsers.MAST.read
+Bio.Motif.Parsers.MEME.read
+Bio.Motif.read
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.read
+Bio.Nexus.Nexus.Nexus.read
+Bio.Phylo.PAML.baseml.read
+Bio.Phylo.PAML.codeml.read
+Bio.Phylo.PAML.yn00.read
+Bio.Phylo.PhyloXMLIO.Parser.read
+Bio.Phylo.PhyloXMLIO.read
+Bio.Phylo._io.read
+Bio.PopGen.GenePop.FileParser.read
+Bio.PopGen.GenePop.LargeFileParser.read
+Bio.PopGen.GenePop.read
+Bio.SearchIO.read
+Bio.SeqIO.SffIO._AddTellHandle.read
+Bio.SeqIO.read
+Bio.Sequencing.Ace.read
+Bio.Sequencing.Phd.read
+Bio.SwissProt.read
+Bio.UniGene.read
+Bio.bgzf.BgzfReader.read
+Bio.motifs.alignace.read
+Bio.motifs.jaspar.read
+Bio.motifs.mast.read
+Bio.motifs.meme.read
+Bio.motifs.read
+Bio.motifs.transfac.read" class="py-name" href="#" onclick="return doclink('link-10', 'read', 'link-10');">read</a></tt><tt class="py-op">(</tt><tt id="link-11" class="py-name" targets="Method Bio.Blast.NCBIStandalone._AlignmentConsumer.length()=Bio.Blast.NCBIStandalone._AlignmentConsumer-class.html#length"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.length" class="py-name" href="#" onclick="return doclink('link-11', 'length', 'link-11');">length</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">readline</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">_as_string</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method Bio.File.UndoHandle.readline()=Bio.File.UndoHandle-class.html#readline,Method Bio.bgzf.BgzfReader.readline()=Bio.bgzf.BgzfReader-class.html#readline"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-12', 'readline', 'link-12');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">__iter__</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">:</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">                    <tt class="py-keyword">yield</tt> <tt class="py-name">_as_string</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">close</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.close()=Bio.File._IndexedSeqFileDict-class.html#close,Method Bio.File._SQLiteManySeqFilesDict.close()=Bio.File._SQLiteManySeqFilesDict-class.html#close,Method Bio.SeqIO.SffIO._AddTellHandle.close()=Bio.SeqIO.SffIO._AddTellHandle-class.html#close,Method Bio.bgzf.BgzfReader.close()=Bio.bgzf.BgzfReader-class.html#close,Method Bio.bgzf.BgzfWriter.close()=Bio.bgzf.BgzfWriter-class.html#close,Method BioSQL.BioSeqDatabase.Adaptor.close()=BioSQL.BioSeqDatabase.Adaptor-class.html#close,Method BioSQL.BioSeqDatabase.DBServer.close()=BioSQL.BioSeqDatabase.DBServer-class.html#close"><a title="Bio.File._IndexedSeqFileDict.close
+Bio.File._SQLiteManySeqFilesDict.close
+Bio.SeqIO.SffIO._AddTellHandle.close
+Bio.bgzf.BgzfReader.close
+Bio.bgzf.BgzfWriter.close
+BioSQL.BioSeqDatabase.Adaptor.close
+BioSQL.BioSeqDatabase.DBServer.close" class="py-name" href="#" onclick="return doclink('link-13', 'close', 'link-13');">close</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">seek</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pos</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.File.UndoHandle.seek()=Bio.File.UndoHandle-class.html#seek,Method Bio.SeqIO.SffIO._AddTellHandle.seek()=Bio.SeqIO.SffIO._AddTellHandle-class.html#seek,Method Bio.bgzf.BgzfReader.seek()=Bio.bgzf.BgzfReader-class.html#seek"><a title="Bio.File.UndoHandle.seek
+Bio.SeqIO.SffIO._AddTellHandle.seek
+Bio.bgzf.BgzfReader.seek" class="py-name" href="#" onclick="return doclink('link-14', 'seek', 'link-14');">seek</a></tt><tt class="py-op">(</tt><tt class="py-name">pos</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">tell</tt><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.File.UndoHandle.tell()=Bio.File.UndoHandle-class.html#tell,Method Bio.SeqIO.SffIO._AddTellHandle.tell()=Bio.SeqIO.SffIO._AddTellHandle-class.html#tell,Method Bio.bgzf.BgzfReader.tell()=Bio.bgzf.BgzfReader-class.html#tell,Method Bio.bgzf.BgzfWriter.tell()=Bio.bgzf.BgzfWriter-class.html#tell"><a title="Bio.File.UndoHandle.tell
+Bio.SeqIO.SffIO._AddTellHandle.tell
+Bio.bgzf.BgzfReader.tell
+Bio.bgzf.BgzfWriter.tell" class="py-name" href="#" onclick="return doclink('link-15', 'tell', 'link-15');">tell</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">EvilHandleHack</tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line"> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">    <tt class="py-comment"># This is to avoid the deprecation warning from open(filename, "rU")</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">    <tt id="link-16" class="py-name" targets="Variable Bio._py3k._universal_read_mode=Bio._py3k-module.html#_universal_read_mode"><a title="Bio._py3k._universal_read_mode" class="py-name" href="#" onclick="return doclink('link-16', '_universal_read_mode', 'link-16');">_universal_read_mode</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"r"</tt>  <tt class="py-comment"># text mode does universal new lines</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">    <tt class="py-comment"># On Python 3, can depend on OrderedDict being present:</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">collections</tt> <tt class="py-keyword">import</tt> <tt id="link-17" class="py-name" targets="Class Bio._py3k._ordereddict.OrderedDict=Bio._py3k._ordereddict.OrderedDict-class.html"><a title="Bio._py3k._ordereddict.OrderedDict" class="py-name" href="#" onclick="return doclink('link-17', 'OrderedDict', 'link-17');">OrderedDict</a></tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">    <tt class="py-comment"># On Python 3, this will be a unicode StringIO</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">io</tt> <tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">    <tt class="py-comment"># On Python 3 urllib, urllib2, and urlparse were merged:</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">request</tt> <tt class="py-keyword">import</tt> <tt class="py-name">urlopen</tt><tt class="py-op">,</tt> <tt class="py-name">Request</tt><tt class="py-op">,</tt> <tt class="py-name">urlretrieve</tt><tt class="py-op">,</tt> <tt class="py-name">urlparse</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Function Bio.AlignIO.parse()=Bio.AlignIO-module.html#parse,Method Bio.Blast.NCBIStandalone.BlastErrorParser.parse()=Bio.Blast.NCBIStandalone.BlastErrorParser-class.html#parse,Method Bio.Blast.NCBIStandalone.BlastParser.parse()=Bio.Blast.NCBIStandalone.BlastParser-class.html#parse,Method Bio.Blast.NCBIStandalone.PSIBlastParser.parse()=Bio.Blast.NCBIStandalone.PSIBlastParser-class.html#parse,Function Bio.Blast.NCBIXML.parse()=Bio.Blast.NCBIXML-module.html#parse,Function Bio.Compass.parse()=Bio.Compass-module.html#parse,Function Bio.Emboss.Primer3.parse()=Bio.Emboss.Primer3-module.html#parse,Method Bio.Entrez.Parser.DataHandler.parse()=Bio.Entrez.Parser.DataHandler-class.html#parse,Function Bio.Entrez.parse()=Bio.Entrez-module.html#parse,Function Bio.ExPASy.Enzyme.parse()=Bio.ExPASy.Enzyme-module.html#parse,Function Bio.ExPASy.Prodoc.parse()=Bio.ExPASy.Prodoc-module.html#parse,Function Bio.ExPASy.Prosite.parse()=Bio.ExPASy.Prosite-module.html#parse,Method Bio.GenBank.FeatureParser.parse()=Bio.GenBank.FeatureParser-class.html#parse,Method Bio.GenBank.RecordParser.parse()=Bio.GenBank.RecordParser-class.html#parse,Method Bio.GenBank.Scanner.InsdcScanner.parse()=Bio.GenBank.Scanner.InsdcScanner-class.html#parse,Function Bio.Geo.parse()=Bio.Geo-module.html#parse,Function Bio.KEGG.Compound.parse()=Bio.KEGG.Compound-module.html#parse,Function Bio.KEGG.Enzyme.parse()=Bio.KEGG.Enzyme-module.html#parse,Method Bio.KEGG.KGML.KGML_parser.KGMLParser.parse()=Bio.KEGG.KGML.KGML_parser.KGMLParser-class.html#parse,Function Bio.KEGG.KGML.KGML_parser.parse()=Bio.KEGG.KGML.KGML_parser-module.html#parse,Function Bio.KEGG.Map.parse()=Bio.KEGG.Map-module.html#parse,Function Bio.Medline.parse()=Bio.Medline-module.html#parse,Function Bio.Motif.parse()=Bio.Motif-module.html#parse,Method Bio.ParserSupport.AbstractParser.parse()=Bio.ParserSupport.AbstractParser-class.html#parse,Method Bio.Phylo.CDAOIO.Parser.parse()=Bio.Phylo.CDAOIO.Parser-class.html#parse,Function Bio.Phylo.CDAOIO.parse()=Bio.Phylo.CDAOIO-module.html#parse,Method Bio.Phylo.NeXMLIO.Parser.parse()=Bio.Phylo.NeXMLIO.Parser-class.html#parse,Function Bio.Phylo.NeXMLIO.parse()=Bio.Phylo.NeXMLIO-module.html#parse,Method Bio.Phylo.NewickIO.Parser.parse()=Bio.Phylo.NewickIO.Parser-class.html#parse,Function Bio.Phylo.NewickIO.parse()=Bio.Phylo.NewickIO-module.html#parse,Function Bio.Phylo.NexusIO.parse()=Bio.Phylo.NexusIO-module.html#parse,Method Bio.Phylo.PhyloXMLIO.Parser.parse()=Bio.Phylo.PhyloXMLIO.Parser-class.html#parse,Function Bio.Phylo.PhyloXMLIO.parse()=Bio.Phylo.PhyloXMLIO-module.html#parse,Function Bio.Phylo._io.parse()=Bio.Phylo._io-module.html#parse,Function Bio.SCOP.Cla.parse()=Bio.SCOP.Cla-module.html#parse,Function Bio.SCOP.Des.parse()=Bio.SCOP.Des-module.html#parse,Function Bio.SCOP.Dom.parse()=Bio.SCOP.Dom-module.html#parse,Function Bio.SCOP.Hie.parse()=Bio.SCOP.Hie-module.html#parse,Function Bio.SCOP.Raf.parse()=Bio.SCOP.Raf-module.html#parse,Function Bio.SearchIO.parse()=Bio.SearchIO-module.html#parse,Method Bio.SeqIO.UniprotIO.Parser.parse()=Bio.SeqIO.UniprotIO.Parser-class.html#parse,Function Bio.SeqIO.parse()=Bio.SeqIO-module.html#parse,Function Bio.Sequencing.Ace.parse()=Bio.Sequencing.Ace-module.html#parse,Function Bio.Sequencing.Phd.parse()=Bio.Sequencing.Phd-module.html#parse,Function Bio.SwissProt.KeyWList.parse()=Bio.SwissProt.KeyWList-module.html#parse,Function Bio.SwissProt.parse()=Bio.SwissProt-module.html#parse,Function Bio.UniGene.parse()=Bio.UniGene-module.html#parse,Function Bio.Wise.psw.parse()=Bio.Wise.psw-module.html#parse,Function Bio.motifs.parse()=Bio.motifs-module.html#parse"><a title="Bio.AlignIO.parse
+Bio.Blast.NCBIStandalone.BlastErrorParser.parse
+Bio.Blast.NCBIStandalone.BlastParser.parse
+Bio.Blast.NCBIStandalone.PSIBlastParser.parse
+Bio.Blast.NCBIXML.parse
+Bio.Compass.parse
+Bio.Emboss.Primer3.parse
+Bio.Entrez.Parser.DataHandler.parse
+Bio.Entrez.parse
+Bio.ExPASy.Enzyme.parse
+Bio.ExPASy.Prodoc.parse
+Bio.ExPASy.Prosite.parse
+Bio.GenBank.FeatureParser.parse
+Bio.GenBank.RecordParser.parse
+Bio.GenBank.Scanner.InsdcScanner.parse
+Bio.Geo.parse
+Bio.KEGG.Compound.parse
+Bio.KEGG.Enzyme.parse
+Bio.KEGG.KGML.KGML_parser.KGMLParser.parse
+Bio.KEGG.KGML.KGML_parser.parse
+Bio.KEGG.Map.parse
+Bio.Medline.parse
+Bio.Motif.parse
+Bio.ParserSupport.AbstractParser.parse
+Bio.Phylo.CDAOIO.Parser.parse
+Bio.Phylo.CDAOIO.parse
+Bio.Phylo.NeXMLIO.Parser.parse
+Bio.Phylo.NeXMLIO.parse
+Bio.Phylo.NewickIO.Parser.parse
+Bio.Phylo.NewickIO.parse
+Bio.Phylo.NexusIO.parse
+Bio.Phylo.PhyloXMLIO.Parser.parse
+Bio.Phylo.PhyloXMLIO.parse
+Bio.Phylo._io.parse
+Bio.SCOP.Cla.parse
+Bio.SCOP.Des.parse
+Bio.SCOP.Dom.parse
+Bio.SCOP.Hie.parse
+Bio.SCOP.Raf.parse
+Bio.SearchIO.parse
+Bio.SeqIO.UniprotIO.Parser.parse
+Bio.SeqIO.parse
+Bio.Sequencing.Ace.parse
+Bio.Sequencing.Phd.parse
+Bio.SwissProt.KeyWList.parse
+Bio.SwissProt.parse
+Bio.UniGene.parse
+Bio.Wise.psw.parse
+Bio.motifs.parse" class="py-name" href="#" onclick="return doclink('link-18', 'parse', 'link-18');">parse</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">urlencode</tt><tt class="py-op">,</tt> <tt class="py-name">quote</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urllib</tt><tt class="py-op">.</tt><tt class="py-name">error</tt> <tt class="py-keyword">import</tt> <tt class="py-name">HTTPError</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">    <tt class="py-comment"># Python 2 code</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">__builtin__</tt> <tt class="py-keyword">import</tt> <tt id="link-19" class="py-name"><a title="Bio.bgzf.open" class="py-name" href="#" onclick="return doclink('link-19', 'open', 'link-0');">open</a></tt><tt class="py-op">,</tt> <tt class="py-name">basestring</tt><tt class="py-op">,</tt> <tt class="py-name">unicode</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">    <tt class="py-comment"># Import Python3 like iterator functions:</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">future_builtins</tt> <tt class="py-keyword">import</tt> <tt class="py-name">zip</tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name"><a title="Bio.SearchIO._model.hit.Hit.map" class="py-name" href="#" onclick="return doclink('link-20', 'map', 'link-1');">map</a></tt><tt class="py-op">,</tt> <tt id="link-21" class="py-name"><a title="Bio.FSSP.FSSPTools.filter
+Bio.SearchIO._model.hit.Hit.filter" class="py-name" href="#" onclick="return doclink('link-21', 'filter', 'link-2');">filter</a></tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">__builtin__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">xrange</tt> <tt class="py-keyword">as</tt> <tt id="link-22" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-22', 'range', 'link-3');">range</a></tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">__builtin__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">raw_input</tt> <tt class="py-keyword">as</tt> <tt class="py-name">input</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">    <tt id="link-23" class="py-name"><a title="Bio._py3k._bytes_to_string" class="py-name" href="#" onclick="return doclink('link-23', '_bytes_to_string', 'link-4');">_bytes_to_string</a></tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt id="link-24" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.b" class="py-name" href="#" onclick="return doclink('link-24', 'b', 'link-5');">b</a></tt><tt class="py-op">:</tt> <tt id="link-25" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.b" class="py-name" href="#" onclick="return doclink('link-25', 'b', 'link-5');">b</a></tt>  <tt class="py-comment"># bytes to string, i.e. do nothing</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">    <tt id="link-26" class="py-name"><a title="Bio._py3k._string_to_bytes" class="py-name" href="#" onclick="return doclink('link-26', '_string_to_bytes', 'link-7');">_string_to_bytes</a></tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt class="py-name">s</tt><tt class="py-op">:</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt>  <tt class="py-comment"># str (or unicode) to bytes string</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"> </tt>
+<a name="_bytes_bytearray_to_str"></a><div id="_bytes_bytearray_to_str-def"><a name="L172"></a><tt class="py-lineno">172</tt> <a class="py-toggle" href="#" id="_bytes_bytearray_to_str-toggle" onclick="return toggle('_bytes_bytearray_to_str');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_bytes_bytearray_to_str">_bytes_bytearray_to_str</a><tt class="py-op">(</tt><tt class="py-param">s</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_bytes_bytearray_to_str-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_bytes_bytearray_to_str-expanded"><a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">        <tt class="py-docstring">"""If s is bytes or bytearray, convert to a string."""</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">bytes</tt><tt class="py-op">,</tt> <tt class="py-name">bytearray</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">s</tt> </tt>
+</div><a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="_as_unicode"></a><div id="_as_unicode-def"><a name="L178"></a><tt class="py-lineno">178</tt> <a class="py-toggle" href="#" id="_as_unicode-toggle" onclick="return toggle('_as_unicode');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_as_unicode">_as_unicode</a><tt class="py-op">(</tt><tt class="py-param">s</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_as_unicode-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_as_unicode-expanded"><a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-docstring">"""Turn a (byte) string or a unicode string into a (byte) string."""</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">        <tt class="py-comment"># Will be changed by 2to3 to "isinstance(s, str)" but doesn't matter:</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">,</tt> <tt class="py-name">unicode</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">s</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">s</tt><tt class="py-op">.</tt><tt class="py-name">decode</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"> </tt>
+<a name="_as_bytes"></a><div id="_as_bytes-def"><a name="L185"></a><tt class="py-lineno">185</tt> <a class="py-toggle" href="#" id="_as_bytes-toggle" onclick="return toggle('_as_bytes');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_as_bytes">_as_bytes</a><tt class="py-op">(</tt><tt class="py-param">s</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_as_bytes-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_as_bytes-expanded"><a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-docstring">"""Turn a (byte) string or a unicode string into a (byte) string."""</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">    <tt class="py-name">_as_string</tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name" targets="Function Bio._py3k._as_bytes()=Bio._py3k-module.html#_as_bytes"><a title="Bio._py3k._as_bytes" class="py-name" href="#" onclick="return doclink('link-27', '_as_bytes', 'link-27');">_as_bytes</a></tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"> </tt>
+<a name="_is_int_or_long"></a><div id="_is_int_or_long-def"><a name="L191"></a><tt class="py-lineno">191</tt> <a class="py-toggle" href="#" id="_is_int_or_long-toggle" onclick="return toggle('_is_int_or_long');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_is_int_or_long">_is_int_or_long</a><tt class="py-op">(</tt><tt class="py-param">i</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_is_int_or_long-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_is_int_or_long-expanded"><a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">        <tt class="py-docstring">"""Check if the value is an integer or long."""</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-28" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-28', 'i', 'link-9');">i</a></tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">int</tt><tt class="py-op">,</tt> <tt id="link-29" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.long()=Bio.Phylo.PhyloXMLIO.Writer-class.html#long"><a title="Bio.Phylo.PhyloXMLIO.Writer.long" class="py-name" href="#" onclick="return doclink('link-29', 'long', 'link-29');">long</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"> </tt>
+<a name="_binary_to_string_handle"></a><div id="_binary_to_string_handle-def"><a name="L195"></a><tt class="py-lineno">195</tt> <a class="py-toggle" href="#" id="_binary_to_string_handle-toggle" onclick="return toggle('_binary_to_string_handle');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#_binary_to_string_handle">_binary_to_string_handle</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_binary_to_string_handle-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_binary_to_string_handle-expanded"><a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">        <tt class="py-docstring">"""Treat a binary handle like a text handle."""</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">handle</tt> </tt>
+</div><a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">    <tt class="py-comment"># This private variable is set to "r" on Python 3 for text</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">    <tt class="py-comment"># mode which include universal readlines mode</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">    <tt id="link-30" class="py-name"><a title="Bio._py3k._universal_read_mode" class="py-name" href="#" onclick="return doclink('link-30', '_universal_read_mode', 'link-16');">_universal_read_mode</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"rU"</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-comment"># Present on Python 2.7</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">        <tt class="py-keyword">from</tt> <tt class="py-name">collections</tt> <tt class="py-keyword">import</tt> <tt id="link-31" class="py-name"><a title="Bio._py3k._ordereddict.OrderedDict" class="py-name" href="#" onclick="return doclink('link-31', 'OrderedDict', 'link-17');">OrderedDict</a></tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">            <tt class="py-comment"># Raymond Hettinger's backport available on PyPI</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">            <tt class="py-keyword">from</tt> <tt class="py-name">ordereddict</tt> <tt class="py-keyword">import</tt> <tt id="link-32" class="py-name"><a title="Bio._py3k._ordereddict.OrderedDict" class="py-name" href="#" onclick="return doclink('link-32', 'OrderedDict', 'link-17');">OrderedDict</a></tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">            <tt class="py-comment"># Use our bundled copy instead</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">            <tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-33" class="py-name" targets="Module Bio._py3k._ordereddict=Bio._py3k._ordereddict-module.html"><a title="Bio._py3k._ordereddict" class="py-name" href="#" onclick="return doclink('link-33', '_ordereddict', 'link-33');">_ordereddict</a></tt> <tt class="py-keyword">import</tt> <tt id="link-34" class="py-name"><a title="Bio._py3k._ordereddict.OrderedDict" class="py-name" href="#" onclick="return doclink('link-34', 'OrderedDict', 'link-17');">OrderedDict</a></tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">    <tt class="py-comment"># On Python 2 this will be a (bytes) string based handle.</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">    <tt class="py-comment"># Note this doesn't work as it is unicode based:</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">    <tt class="py-comment"># from io import StringIO</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">        <tt class="py-keyword">from</tt> <tt class="py-name">cStringIO</tt> <tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-keyword">from</tt> <tt class="py-name">StringIO</tt> <tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">    <tt class="py-comment"># Under urllib.request on Python 3:</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urllib2</tt> <tt class="py-keyword">import</tt> <tt class="py-name">urlopen</tt><tt class="py-op">,</tt> <tt class="py-name">Request</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urllib</tt> <tt class="py-keyword">import</tt> <tt class="py-name">urlretrieve</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urlparse</tt> <tt class="py-keyword">import</tt> <tt class="py-name">urlparse</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line"> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">    <tt class="py-comment"># Under urllib.parse on Python 3:</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urllib</tt> <tt class="py-keyword">import</tt> <tt class="py-name">urlencode</tt><tt class="py-op">,</tt> <tt class="py-name">quote</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line"> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">    <tt class="py-comment"># Under urllib.error on Python 3:</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">urllib2</tt> <tt class="py-keyword">import</tt> <tt class="py-name">HTTPError</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line"> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">platform</tt> <tt class="py-op">==</tt> <tt class="py-string">"win32"</tt><tt class="py-op">:</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">    <tt class="py-comment"># Can't use commands.getoutput on Python 2, Unix only/broken:</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">    <tt class="py-comment"># http://bugs.python.org/issue15073</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">    <tt class="py-comment"># Can't use subprocess.getoutput on Python 3, Unix only/broken:</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">    <tt class="py-comment"># http://bugs.python.org/issue10197</tt> </tt>
+<a name="getoutput"></a><div id="getoutput-def"><a name="L239"></a><tt class="py-lineno">239</tt> <a class="py-toggle" href="#" id="getoutput-toggle" onclick="return toggle('getoutput');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k-module.html#getoutput">getoutput</a><tt class="py-op">(</tt><tt class="py-param">cmd</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="getoutput-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="getoutput-expanded"><a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">        <tt class="py-keyword">import</tt> <tt class="py-name">subprocess</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">        <tt class="py-name">child</tt> <tt class="py-op">=</tt> <tt class="py-name">subprocess</tt><tt class="py-op">.</tt><tt class="py-name">Popen</tt><tt class="py-op">(</tt><tt class="py-name">cmd</tt><tt class="py-op">,</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">                                 <tt class="py-name">stdin</tt><tt class="py-op">=</tt><tt class="py-name">subprocess</tt><tt class="py-op">.</tt><tt class="py-name">PIPE</tt><tt class="py-op">,</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">                                 <tt class="py-name">stdout</tt><tt class="py-op">=</tt><tt class="py-name">subprocess</tt><tt class="py-op">.</tt><tt class="py-name">PIPE</tt><tt class="py-op">,</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">                                 <tt class="py-name">stderr</tt><tt class="py-op">=</tt><tt class="py-name">subprocess</tt><tt class="py-op">.</tt><tt class="py-name">STDOUT</tt><tt class="py-op">,</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">                                 <tt class="py-name">universal_newlines</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">                                 <tt class="py-name">shell</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">        <tt class="py-name">stdout</tt><tt class="py-op">,</tt> <tt class="py-name">stderr</tt> <tt class="py-op">=</tt> <tt class="py-name">child</tt><tt class="py-op">.</tt><tt class="py-name">communicate</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-comment"># Remove trailing \n to match the Unix function,</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">stdout</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name" targets="Method Bio.Seq.Seq.rstrip()=Bio.Seq.Seq-class.html#rstrip"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-35', 'rstrip', 'link-35');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-string">"\n"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line"><tt class="py-keyword">elif</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">version_info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">&gt;=</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">    <tt class="py-comment"># Use subprocess.getoutput on Python 3,</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">subprocess</tt> <tt class="py-keyword">import</tt> <tt class="py-name">getoutput</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line"><tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">    <tt class="py-comment"># Use commands.getoutput on Python 2,</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">commands</tt> <tt class="py-keyword">import</tt> <tt class="py-name">getoutput</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:53 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

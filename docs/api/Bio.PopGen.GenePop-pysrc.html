@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.PopGen.GenePop</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.PopGen-module.html">Package&nbsp;PopGen</a> ::
+        Package&nbsp;GenePop
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.PopGen.GenePop-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.PopGen.GenePop-module.html">Package Bio.PopGen.GenePop</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2007 by Tiago Antao.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">This module provides code to work with GenePop.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">See http://wbiomed.curtin.edu.au/genepop/ , the format is documented</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">here: http://wbiomed.curtin.edu.au/genepop/help_input.html .</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring">Classes:</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">Record           Holds GenePop data.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">Functions:</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring">read             Parses a GenePop record (file) into a Record object.</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">Partially inspired on MedLine Code.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Method Bio.Crystal.Crystal.copy()=Bio.Crystal.Crystal-class.html#copy,Method Bio.File._IndexedSeqFileDict.copy()=Bio.File._IndexedSeqFileDict-class.html#copy,Method Bio.GA.Organism.Organism.copy()=Bio.GA.Organism.Organism-class.html#copy,Method Bio.PDB.Atom.Atom.copy()=Bio.PDB.Atom.Atom-class.html#copy,Method Bio.PDB.Entity.Entity.copy()=Bio.PDB.Entity.Entity-class.html#copy,Method Bio.PDB.Vector'.Vector.copy()=Bio.PDB.Vector%27.Vector-class.html#copy,Method Bio._py3k._ordereddict.OrderedDict.copy()=Bio._py3k._ordereddict.OrderedDict-class.html#copy"><a title="Bio.Crystal.Crystal.copy
+Bio.File._IndexedSeqFileDict.copy
+Bio.GA.Organism.Organism.copy
+Bio.PDB.Atom.Atom.copy
+Bio.PDB.Entity.Entity.copy
+Bio.PDB.Vector'.Vector.copy
+Bio._py3k._ordereddict.OrderedDict.copy" class="py-name" href="#" onclick="return doclink('link-0', 'copy', 'link-0');">copy</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">deepcopy</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"> </tt>
+<a name="get_indiv"></a><div id="get_indiv-def"><a name="L27"></a><tt class="py-lineno"> 27</tt> <a class="py-toggle" href="#" id="get_indiv-toggle" onclick="return toggle('get_indiv');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop-module.html#get_indiv">get_indiv</a><tt class="py-op">(</tt><tt class="py-param">line</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="get_indiv-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="get_indiv-expanded"><a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">int_no_zero</tt><tt class="py-op">(</tt><tt class="py-param">val</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">        <tt class="py-name">v</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">val</tt><tt class="py-op">)</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">v</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">v</tt> </tt>
+</div><a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-name">indiv_name</tt><tt class="py-op">,</tt> <tt class="py-name">marker_line</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-1', 'split', 'link-1');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-name">markers</tt> <tt class="py-op">=</tt> <tt class="py-name">marker_line</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">'\t'</tt><tt class="py-op">,</tt> <tt class="py-string">' '</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-2', 'split', 'link-1');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">' '</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-name">markers</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">marker</tt> <tt class="py-keyword">for</tt> <tt class="py-name">marker</tt> <tt class="py-keyword">in</tt> <tt class="py-name">markers</tt> <tt class="py-keyword">if</tt> <tt class="py-name">marker</tt> <tt class="py-op">!=</tt> <tt class="py-string">''</tt><tt class="py-op">]</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">markers</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-keyword">in</tt> <tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">,</tt> <tt class="py-number">4</tt><tt class="py-op">]</tt><tt class="py-op">:</tt>  <tt class="py-comment"># 2 digits per allele</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-name">marker_len</tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt class="py-name">marker_len</tt> <tt class="py-op">=</tt> <tt class="py-number">3</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-name">allele_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">int_no_zero</tt><tt class="py-op">(</tt><tt class="py-name">marker</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-name">marker_len</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">                       <tt class="py-name">int_no_zero</tt><tt class="py-op">(</tt><tt class="py-name">marker</tt><tt class="py-op">[</tt><tt class="py-name">marker_len</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">                   <tt class="py-keyword">for</tt> <tt class="py-name">marker</tt> <tt class="py-keyword">in</tt> <tt class="py-name">markers</tt><tt class="py-op">]</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ValueError</tt><tt class="py-op">:</tt>  <tt class="py-comment"># Haploid</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-name">allele_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">int_no_zero</tt><tt class="py-op">(</tt><tt class="py-name">marker</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-name">marker_len</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">                   <tt class="py-keyword">for</tt> <tt class="py-name">marker</tt> <tt class="py-keyword">in</tt> <tt class="py-name">markers</tt><tt class="py-op">]</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">indiv_name</tt><tt class="py-op">,</tt> <tt class="py-name">allele_list</tt><tt class="py-op">,</tt> <tt class="py-name">marker_len</tt> </tt>
+</div><a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"> </tt>
+<a name="read"></a><div id="read-def"><a name="L50"></a><tt class="py-lineno"> 50</tt> <a class="py-toggle" href="#" id="read-toggle" onclick="return toggle('read');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop-module.html#read">read</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="read-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="read-expanded"><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parses a handle containing a GenePop file.</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">       handle is a file-like object that contains a GenePop record.</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">    <tt class="py-name">record</tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name" targets="Class Bio.Affy.CelFile.Record=Bio.Affy.CelFile.Record-class.html,Module Bio.Blast.Record=Bio.Blast.Record-module.html,Class Bio.Cluster.Record=Bio.Cluster.Record-class.html,Class Bio.Compass.Record=Bio.Compass.Record-class.html,Class Bio.Emboss.Primer3.Record=Bio.Emboss.Primer3.Record-class.html,Class Bio.ExPASy.Enzyme.Record=Bio.ExPASy.Enzyme.Record-class.html,Class Bio.ExPASy.Prodoc.Record=Bio.ExPASy.Prodoc.Record-class.html,Class Bio.ExPASy.Prosite.Record=Bio.ExPASy.Prosite.Record-class.html,Class Bio.ExPASy.ScanProsite.Record=Bio.ExPASy.ScanProsite.Record-class.html,Module Bio.GenBank.Record=Bio.GenBank.Record-module.html,Class Bio.GenBank.Record.Record=Bio.GenBank.Record.Record-class.html,Module Bio.Geo.Record=Bio.Geo.Record-module.html,Class Bio.Geo.Record.Record=Bio.Geo.Record.Record-class.html,Class Bio.KEGG.Compound.Record=Bio.KEGG.Compound.Record-class.html,Class Bio.KEGG.Enzyme.Record=Bio.KEGG.Enzyme.Record-class.html,Class Bio.Medline.Record=Bio.Medline.Record-class.html,Class Bio.Motif.Parsers.AlignAce.Record=Bio.Motif.Parsers.AlignAce.Record-class.html,Class Bio.Motif.Parsers.MAST.Record=Bio.Motif.Parsers.MAST.Record-class.html,Class Bio.PopGen.FDist.Record=Bio.PopGen.FDist.Record-class.html,Class Bio.PopGen.GenePop.LargeFileParser.Record=Bio.PopGen.GenePop.LargeFileParser.Record-class.html,Class Bio.PopGen.GenePop.Record=Bio.PopGen.GenePop.Record-class.html,Class Bio.SCOP.Cla.Record=Bio.SCOP.Cla.Record-class.html,Class Bio.SCOP.Des.Record=Bio.SCOP.Des.Record-class.html,Class Bio.SCOP.Dom.Record=Bio.SCOP.Dom.Record-class.html,Class Bio.SCOP.Hie.Record=Bio.SCOP.Hie.Record-class.html,Class Bio.Sequencing.Phd.Record=Bio.Sequencing.Phd.Record-class.html,Class Bio.SwissProt.KeyWList.Record=Bio.SwissProt.KeyWList.Record-class.html,Class Bio.SwissProt.Record=Bio.SwissProt.Record-class.html,Class Bio.UniGene.Record=Bio.UniGene.Record-class.html,Class Bio.motifs.alignace.Record=Bio.motifs.alignace.Record-class.html,Class Bio.motifs.jaspar.Record=Bio.motifs.jaspar.Record-class.html,Class Bio.motifs.mast.Record=Bio.motifs.mast.Record-class.html,Class Bio.motifs.meme.Record=Bio.motifs.meme.Record-class.html,Class Bio.motifs.transfac.Record=Bio.motifs.transfac.Record-class.html"><a title="Bio.Affy.CelFile.Record
+Bio.Blast.Record
+Bio.Cluster.Record
+Bio.Compass.Record
+Bio.Emboss.Primer3.Record
+Bio.ExPASy.Enzyme.Record
+Bio.ExPASy.Prodoc.Record
+Bio.ExPASy.Prosite.Record
+Bio.ExPASy.ScanProsite.Record
+Bio.GenBank.Record
+Bio.GenBank.Record.Record
+Bio.Geo.Record
+Bio.Geo.Record.Record
+Bio.KEGG.Compound.Record
+Bio.KEGG.Enzyme.Record
+Bio.Medline.Record
+Bio.Motif.Parsers.AlignAce.Record
+Bio.Motif.Parsers.MAST.Record
+Bio.PopGen.FDist.Record
+Bio.PopGen.GenePop.LargeFileParser.Record
+Bio.PopGen.GenePop.Record
+Bio.SCOP.Cla.Record
+Bio.SCOP.Des.Record
+Bio.SCOP.Dom.Record
+Bio.SCOP.Hie.Record
+Bio.Sequencing.Phd.Record
+Bio.SwissProt.KeyWList.Record
+Bio.SwissProt.Record
+Bio.UniGene.Record
+Bio.motifs.alignace.Record
+Bio.motifs.jaspar.Record
+Bio.motifs.mast.Record
+Bio.motifs.meme.Record
+Bio.motifs.transfac.Record" class="py-name" href="#" onclick="return doclink('link-3', 'Record', 'link-3');">Record</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">    <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">comment_line</tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-4" class="py-name" targets="Method Bio.AlignIO.Interfaces.AlignmentIterator.next()=Bio.AlignIO.Interfaces.AlignmentIterator-class.html#next,Method Bio.Blast.NCBIStandalone.Iterator.next()=Bio.Blast.NCBIStandalone.Iterator-class.html#next,Method Bio.Blast.ParseBlastTable.BlastTableReader.next()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#next,Method Bio.DocSQL.IterationCursor.next()=Bio.DocSQL.IterationCursor-class.html#next,Method Bio.File.UndoHandle.next()=Bio.File.UndoHandle-class.html#next,Method Bio.GenBank.Iterator.next()=Bio.GenBank.Iterator-class.html#next,Method Bio.Nexus.Nexus.CharBuffer.next()=Bio.Nexus.Nexus.CharBuffer-class.html#next,Method Bio.PopGen.GenePop.Controller._FileIterator.next()=Bio.PopGen.GenePop.Controller._FileIterator-class.html#next,Method Bio.SeqIO.Interfaces.SequenceIterator.next()=Bio.SeqIO.Interfaces.SequenceIterator-class.html#next,Method Bio.bgzf.BgzfReader.next()=Bio.bgzf.BgzfReader-class.html#next"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-4', 'next', 'link-4');">next</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method Bio.Seq.Seq.rstrip()=Bio.Seq.Seq-class.html#rstrip"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-5', 'rstrip', 'link-5');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">    <tt class="py-comment"># We can now have one loci per line or all loci in a single line</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-comment"># separated by either space or comma+space...</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">    <tt class="py-comment"># We will remove all commas on loci... that should not be a problem</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-name">sample_loci_line</tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-6" class="py-name"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-6', 'next', 'link-4');">next</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-7', 'rstrip', 'link-5');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">,</tt> <tt class="py-string">''</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">    <tt class="py-name">all_loci</tt> <tt class="py-op">=</tt> <tt class="py-name">sample_loci_line</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-8', 'split', 'link-1');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">' '</tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.extend()=Bio.Align.MultipleSeqAlignment-class.html#extend,Method Bio.SCOP.Raf.SeqMap.extend()=Bio.SCOP.Raf.SeqMap-class.html#extend,Method Bio.Seq.MutableSeq.extend()=Bio.Seq.MutableSeq-class.html#extend"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-9', 'extend', 'link-9');">extend</a></tt><tt class="py-op">(</tt><tt class="py-name">all_loci</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">handle</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-10', 'rstrip', 'link-5');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method Bio.Seq.Seq.upper()=Bio.Seq.Seq-class.html#upper,Method Bio.Seq.UnknownSeq.upper()=Bio.Seq.UnknownSeq-class.html#upper,Method Bio.SeqRecord.SeqRecord.upper()=Bio.SeqRecord.SeqRecord-class.html#upper"><a title="Bio.Seq.Seq.upper
+Bio.Seq.UnknownSeq.upper
+Bio.SeqRecord.SeqRecord.upper" class="py-name" href="#" onclick="return doclink('link-11', 'upper', 'link-11');">upper</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">'POP'</tt><tt class="py-op">:</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">            <tt class="py-keyword">break</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-12', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">'No population data found, file probably not GenePop related'</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-13', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">handle</tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-14', 'rstrip', 'link-5');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="Bio.Seq.Seq.upper
+Bio.Seq.UnknownSeq.upper
+Bio.SeqRecord.SeqRecord.upper" class="py-name" href="#" onclick="return doclink('link-15', 'upper', 'link-11');">upper</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">'POP'</tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-16', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt class="py-name">indiv_name</tt><tt class="py-op">,</tt> <tt class="py-name">allele_list</tt><tt class="py-op">,</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">marker_len</tt> <tt class="py-op">=</tt> <tt id="link-17" class="py-name" targets="Function Bio.PopGen.GenePop.LargeFileParser.get_indiv()=Bio.PopGen.GenePop.LargeFileParser-module.html#get_indiv,Function Bio.PopGen.GenePop.get_indiv()=Bio.PopGen.GenePop-module.html#get_indiv"><a title="Bio.PopGen.GenePop.LargeFileParser.get_indiv
+Bio.PopGen.GenePop.get_indiv" class="py-name" href="#" onclick="return doclink('link-17', 'get_indiv', 'link-17');">get_indiv</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">            <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-18', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">indiv_name</tt><tt class="py-op">,</tt> <tt class="py-name">allele_list</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">    <tt class="py-name">loci</tt> <tt class="py-op">=</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-19" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.pop()=Bio.File._IndexedSeqFileDict-class.html#pop,Method Bio.SearchIO._model.hit.Hit.pop()=Bio.SearchIO._model.hit.Hit-class.html#pop,Method Bio.SearchIO._model.query.QueryResult.pop()=Bio.SearchIO._model.query.QueryResult-class.html#pop,Method Bio.Seq.MutableSeq.pop()=Bio.Seq.MutableSeq-class.html#pop,Method Bio._py3k._ordereddict.OrderedDict.pop()=Bio._py3k._ordereddict.OrderedDict-class.html#pop"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-19', 'pop', 'link-19');">pop</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">:</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-name">record</tt><tt class="py-op">.</tt><tt class="py-name">pop_list</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-20', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt id="link-21" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-21', 'pop', 'link-19');">pop</a></tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">indiv</tt> <tt class="py-keyword">in</tt> <tt id="link-22" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-22', 'pop', 'link-19');">pop</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">mk_i</tt> <tt class="py-keyword">in</tt> <tt id="link-23" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-23', 'range', 'link-23');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">loci</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">                <tt class="py-name">mk_orig</tt> <tt class="py-op">=</tt> <tt class="py-name">indiv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">mk_i</tt><tt class="py-op">]</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">                <tt class="py-name">mk_real</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">al</tt> <tt class="py-keyword">in</tt> <tt class="py-name">mk_orig</tt><tt class="py-op">:</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">al</tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">                        <tt class="py-name">mk_real</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-24', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">                    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">                        <tt class="py-name">mk_real</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-25', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">al</tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">                <tt class="py-name">indiv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-name">mk_i</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">mk_real</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">record</tt> </tt>
+</div><a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"> </tt>
+<a name="Record"></a><div id="Record-def"><a name="L94"></a><tt class="py-lineno"> 94</tt> <a class="py-toggle" href="#" id="Record-toggle" onclick="return toggle('Record');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html">Record</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Record-expanded"><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">    <tt class="py-docstring">"""Holds information from a GenePop record.</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">    Members:</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">        - marker_len         The marker length (2 or 3 digit code per allele).</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring">        - comment_line       Comment line.</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-docstring">        - loci_list          List of loci names.</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-docstring">        - pop_list           List of population names.</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"><tt class="py-docstring">        - populations        List of population data.</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-docstring">    In most genepop files, the population name is not trustable.</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-docstring">    It is strongly recommended that populations are referred by index.</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-docstring">    populations has one element per population. Each element is itself</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-docstring">    a list of individuals, each individual is a pair composed by individual</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"><tt class="py-docstring">    name and a list of alleles (2 per marker or 1 for haploids):</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"><tt class="py-docstring">    Example::</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"><tt class="py-docstring">        [</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-docstring">            [</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-docstring">                ('Ind1', [(1,2),    (3,3), (200,201)],</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-docstring">                ('Ind2', [(2,None), (3,3), (None,None)],</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-docstring">            ],</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"><tt class="py-docstring">            [</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-docstring">                ('Other1', [(1,1),  (4,3), (200,200)],</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-docstring">            ]</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-docstring">        ]</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="Record.__init__"></a><div id="Record.__init__-def"><a name="L128"></a><tt class="py-lineno">128</tt> <a class="py-toggle" href="#" id="Record.__init__-toggle" onclick="return toggle('Record.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.__init__-expanded"><a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">marker_len</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">comment_line</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">pop_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="Record.__str__"></a><div id="Record.__str__-def"><a name="L135"></a><tt class="py-lineno">135</tt> <a class="py-toggle" href="#" id="Record.__str__-toggle" onclick="return toggle('Record.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.__str__-expanded"><a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns (reconstructs) a GenePop textual representation.</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-name">rep</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">comment_line</tt> <tt class="py-op">+</tt> <tt class="py-string">'\n'</tt><tt class="py-op">]</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-name">rep</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-26', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">'\n'</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">'\n'</tt><tt class="py-op">)</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-27" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-27', 'pop', 'link-19');">pop</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">:</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">            <tt class="py-name">rep</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-28', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">'Pop\n'</tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">indiv</tt> <tt class="py-keyword">in</tt> <tt id="link-29" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-29', 'pop', 'link-19');">pop</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">                <tt id="link-30" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-30', 'name', 'link-30');">name</a></tt><tt class="py-op">,</tt> <tt class="py-name">markers</tt> <tt class="py-op">=</tt> <tt class="py-name">indiv</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">                <tt class="py-name">rep</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-31', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt id="link-32" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-32', 'name', 'link-30');">name</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">                <tt class="py-name">rep</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-33', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">)</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">marker</tt> <tt class="py-keyword">in</tt> <tt class="py-name">markers</tt><tt class="py-op">:</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                    <tt class="py-name">rep</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-34', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">' '</tt><tt class="py-op">)</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">                    <tt class="py-keyword">for</tt> <tt class="py-name">al</tt> <tt class="py-keyword">in</tt> <tt class="py-name">marker</tt><tt class="py-op">:</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">al</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                            <tt class="py-name">al</tt> <tt class="py-op">=</tt> <tt class="py-string">'0'</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                        <tt class="py-name">aStr</tt> <tt class="py-op">=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">al</tt><tt class="py-op">)</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                        <tt class="py-keyword">while</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">aStr</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">marker_len</tt><tt class="py-op">:</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                            <tt class="py-name">aStr</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-string">'0'</tt><tt class="py-op">,</tt> <tt class="py-name">aStr</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">                        <tt class="py-name">rep</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-35', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">aStr</tt><tt class="py-op">)</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">                <tt class="py-name">rep</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-36', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">'\n'</tt><tt class="py-op">)</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">""</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">rep</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"> </tt>
+<a name="Record.split_in_pops"></a><div id="Record.split_in_pops-def"><a name="L158"></a><tt class="py-lineno">158</tt> <a class="py-toggle" href="#" id="Record.split_in_pops-toggle" onclick="return toggle('Record.split_in_pops');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html#split_in_pops">split_in_pops</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pop_names</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.split_in_pops-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.split_in_pops-expanded"><a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">        <tt class="py-docstring">"""Splits a GP record in a dictionary with 1 pop per entry.</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"><tt class="py-docstring">            Given a record with n pops and m loci returns a dictionary</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"><tt class="py-docstring">            of records (key pop_name) where each item is a record</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"><tt class="py-docstring">            with a single pop and m loci.</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"><tt class="py-docstring">            Parameters:</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"><tt class="py-docstring">            pop_names - Population names</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">        <tt class="py-name">gp_pops</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-37" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-37', 'i', 'link-37');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-38" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-38', 'range', 'link-23');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt> <tt class="py-op">=</tt> <tt id="link-39" class="py-name"><a title="Bio.Affy.CelFile.Record
+Bio.Blast.Record
+Bio.Cluster.Record
+Bio.Compass.Record
+Bio.Emboss.Primer3.Record
+Bio.ExPASy.Enzyme.Record
+Bio.ExPASy.Prodoc.Record
+Bio.ExPASy.Prosite.Record
+Bio.ExPASy.ScanProsite.Record
+Bio.GenBank.Record
+Bio.GenBank.Record.Record
+Bio.Geo.Record
+Bio.Geo.Record.Record
+Bio.KEGG.Compound.Record
+Bio.KEGG.Enzyme.Record
+Bio.Medline.Record
+Bio.Motif.Parsers.AlignAce.Record
+Bio.Motif.Parsers.MAST.Record
+Bio.PopGen.FDist.Record
+Bio.PopGen.GenePop.LargeFileParser.Record
+Bio.PopGen.GenePop.Record
+Bio.SCOP.Cla.Record
+Bio.SCOP.Des.Record
+Bio.SCOP.Dom.Record
+Bio.SCOP.Hie.Record
+Bio.Sequencing.Phd.Record
+Bio.SwissProt.KeyWList.Record
+Bio.SwissProt.Record
+Bio.UniGene.Record
+Bio.motifs.alignace.Record
+Bio.motifs.jaspar.Record
+Bio.motifs.mast.Record
+Bio.motifs.meme.Record
+Bio.motifs.transfac.Record" class="py-name" href="#" onclick="return doclink('link-39', 'Record', 'link-3');">Record</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">marker_len</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">marker_len</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">comment_line</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">comment_line</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt> <tt class="py-op">=</tt> <tt class="py-name">deepcopy</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">)</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">deepcopy</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">[</tt><tt id="link-40" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-40', 'i', 'link-37');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">            <tt class="py-name">gp_pops</tt><tt class="py-op">[</tt><tt class="py-name">pop_names</tt><tt class="py-op">[</tt><tt id="link-41" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-41', 'i', 'link-37');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">gp_pop</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">gp_pops</tt> </tt>
+</div><a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="Record.split_in_loci"></a><div id="Record.split_in_loci-def"><a name="L178"></a><tt class="py-lineno">178</tt> <a class="py-toggle" href="#" id="Record.split_in_loci-toggle" onclick="return toggle('Record.split_in_loci');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html#split_in_loci">split_in_loci</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">gp</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.split_in_loci-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.split_in_loci-expanded"><a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-docstring">"""Splits a GP record in a dictionary with 1 locus per entry.</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"><tt class="py-docstring">            Given a record with n pops and m loci returns a dictionary</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"><tt class="py-docstring">            of records (key locus name) where each item is a record</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"><tt class="py-docstring">            with a single locus and n pops.</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">        <tt class="py-name">gp_loci</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-42" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-42', 'i', 'link-37');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-43" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-43', 'range', 'link-23');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt> <tt class="py-op">=</tt> <tt id="link-44" class="py-name"><a title="Bio.Affy.CelFile.Record
+Bio.Blast.Record
+Bio.Cluster.Record
+Bio.Compass.Record
+Bio.Emboss.Primer3.Record
+Bio.ExPASy.Enzyme.Record
+Bio.ExPASy.Prodoc.Record
+Bio.ExPASy.Prosite.Record
+Bio.ExPASy.ScanProsite.Record
+Bio.GenBank.Record
+Bio.GenBank.Record.Record
+Bio.Geo.Record
+Bio.Geo.Record.Record
+Bio.KEGG.Compound.Record
+Bio.KEGG.Enzyme.Record
+Bio.Medline.Record
+Bio.Motif.Parsers.AlignAce.Record
+Bio.Motif.Parsers.MAST.Record
+Bio.PopGen.FDist.Record
+Bio.PopGen.GenePop.LargeFileParser.Record
+Bio.PopGen.GenePop.Record
+Bio.SCOP.Cla.Record
+Bio.SCOP.Des.Record
+Bio.SCOP.Dom.Record
+Bio.SCOP.Hie.Record
+Bio.Sequencing.Phd.Record
+Bio.SwissProt.KeyWList.Record
+Bio.SwissProt.Record
+Bio.UniGene.Record
+Bio.motifs.alignace.Record
+Bio.motifs.jaspar.Record
+Bio.motifs.mast.Record
+Bio.motifs.meme.Record
+Bio.motifs.transfac.Record" class="py-name" href="#" onclick="return doclink('link-44', 'Record', 'link-3');">Record</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">marker_len</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">marker_len</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">comment_line</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">comment_line</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">[</tt><tt id="link-45" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-45', 'i', 'link-37');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">]</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">            <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt id="link-46" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-46', 'pop', 'link-19');">pop</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">:</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">                <tt class="py-name">my_pop</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">indiv</tt> <tt class="py-keyword">in</tt> <tt id="link-47" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-47', 'pop', 'link-19');">pop</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">                    <tt class="py-name">my_pop</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-48', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">indiv</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-name">indiv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt id="link-49" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-49', 'i', 'link-37');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">                <tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-50', 'append', 'link-12');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">my_pop</tt><tt class="py-op">)</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">            <tt class="py-name">gp_loci</tt><tt class="py-op">[</tt><tt class="py-name">gp_pop</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">gp_pop</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">gp_loci</tt> </tt>
+</div><a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line"> </tt>
+<a name="Record.remove_population"></a><div id="Record.remove_population-def"><a name="L200"></a><tt class="py-lineno">200</tt> <a class="py-toggle" href="#" id="Record.remove_population-toggle" onclick="return toggle('Record.remove_population');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html#remove_population">remove_population</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pos</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.remove_population-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.remove_population-expanded"><a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">        <tt class="py-docstring">"""Removes a population (by position).</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">        <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">[</tt><tt class="py-name">pos</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"> </tt>
+<a name="Record.remove_locus_by_position"></a><div id="Record.remove_locus_by_position-def"><a name="L205"></a><tt class="py-lineno">205</tt> <a class="py-toggle" href="#" id="Record.remove_locus_by_position-toggle" onclick="return toggle('Record.remove_locus_by_position');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html#remove_locus_by_position">remove_locus_by_position</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pos</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.remove_locus_by_position-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.remove_locus_by_position-expanded"><a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">        <tt class="py-docstring">"""Removes a locus by position.</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">[</tt><tt class="py-name">pos</tt><tt class="py-op">]</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-51" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-51', 'pop', 'link-19');">pop</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">populations</tt><tt class="py-op">:</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">indiv</tt> <tt class="py-keyword">in</tt> <tt id="link-52" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-52', 'pop', 'link-19');">pop</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">                <tt id="link-53" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-53', 'name', 'link-30');">name</a></tt><tt class="py-op">,</tt> <tt class="py-name">loci</tt> <tt class="py-op">=</tt> <tt class="py-name">indiv</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">                <tt class="py-keyword">del</tt> <tt class="py-name">loci</tt><tt class="py-op">[</tt><tt class="py-name">pos</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"> </tt>
+<a name="Record.remove_locus_by_name"></a><div id="Record.remove_locus_by_name-def"><a name="L214"></a><tt class="py-lineno">214</tt> <a class="py-toggle" href="#" id="Record.remove_locus_by_name-toggle" onclick="return toggle('Record.remove_locus_by_name');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PopGen.GenePop.Record-class.html#remove_locus_by_name">remove_locus_by_name</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">name</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.remove_locus_by_name-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.remove_locus_by_name-expanded"><a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt class="py-docstring">"""Removes a locus by name.</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-54" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-54', 'i', 'link-37');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-55" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-55', 'range', 'link-23');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loci_list</tt><tt class="py-op">[</tt><tt id="link-56" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-56', 'i', 'link-37');">i</a></tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt id="link-57" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-57', 'name', 'link-30');">name</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name" targets="Method Bio.PopGen.GenePop.FileParser.FileRecord.remove_locus_by_position()=Bio.PopGen.GenePop.FileParser.FileRecord-class.html#remove_locus_by_position,Method Bio.PopGen.GenePop.Record.remove_locus_by_position()=Bio.PopGen.GenePop.Record-class.html#remove_locus_by_position"><a title="Bio.PopGen.GenePop.FileParser.FileRecord.remove_locus_by_position
+Bio.PopGen.GenePop.Record.remove_locus_by_position" class="py-name" href="#" onclick="return doclink('link-58', 'remove_locus_by_position', 'link-58');">remove_locus_by_position</a></tt><tt class="py-op">(</tt><tt id="link-59" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-59', 'i', 'link-37');">i</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> </tt>
+</div></div><a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">        <tt class="py-comment"># If here than locus not existent... Maybe raise exception?</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt class="py-comment">#   Although it should be Ok... Just a boolean return, maybe?</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:41 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

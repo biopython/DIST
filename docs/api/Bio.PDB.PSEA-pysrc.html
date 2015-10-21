@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.PDB.PSEA</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.PDB-module.html">Package&nbsp;PDB</a> ::
+        Module&nbsp;PSEA
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.PDB.PSEA-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.PDB.PSEA-module.html">Module Bio.PDB.PSEA</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2006, Thomas Hamelryck (thamelry@binf.ku.dk)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Wrappers for PSEA, a program for secondary structure assignment.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">See this citation for P-SEA, PMID: 9183534</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">Labesse G, Colloc'h N, Pothier J, Mornon J-P:  P-SEA: a new efficient</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">assignment of secondary structure from C_alpha.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring">Comput Appl Biosci 1997 , 13:291-295</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.PDB=Bio.PDB-module.html"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-1', 'PDB', 'link-1');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module Bio.PDB.Polypeptide=Bio.PDB.Polypeptide-module.html,Class Bio.PDB.Polypeptide.Polypeptide=Bio.PDB.Polypeptide.Polypeptide-class.html"><a title="Bio.PDB.Polypeptide
+Bio.PDB.Polypeptide.Polypeptide" class="py-name" href="#" onclick="return doclink('link-2', 'Polypeptide', 'link-2');">Polypeptide</a></tt> <tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Function Bio.PDB.Polypeptide.is_aa()=Bio.PDB.Polypeptide-module.html#is_aa"><a title="Bio.PDB.Polypeptide.is_aa" class="py-name" href="#" onclick="return doclink('link-3', 'is_aa', 'link-3');">is_aa</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="run_psea"></a><div id="run_psea-def"><a name="L22"></a><tt class="py-lineno"> 22</tt> <a class="py-toggle" href="#" id="run_psea-toggle" onclick="return toggle('run_psea');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PSEA-module.html#run_psea">run_psea</a><tt class="py-op">(</tt><tt class="py-param">fname</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="run_psea-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="run_psea-expanded"><a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt class="py-docstring">"""Run PSEA and return output filename.</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">    Note that this assumes the P-SEA binary is called "psea" and that it is</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">    on the path.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">    Note that P-SEA will write an output file in the current directory using</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    the input filename with extension ".sea".</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">    Note that P-SEA will write output to the terminal while run.</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">system</tt><tt class="py-op">(</tt><tt class="py-string">"psea "</tt> <tt class="py-op">+</tt> <tt class="py-name">fname</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-name">last</tt> <tt class="py-op">=</tt> <tt class="py-name">fname</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-4', 'split', 'link-4');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">"/"</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-name">base</tt> <tt class="py-op">=</tt> <tt class="py-name">last</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-5', 'split', 'link-4');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">"."</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">base</tt> <tt class="py-op">+</tt> <tt class="py-string">".sea"</tt> </tt>
+</div><a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="psea"></a><div id="psea-def"><a name="L39"></a><tt class="py-lineno"> 39</tt> <a class="py-toggle" href="#" id="psea-toggle" onclick="return toggle('psea');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PSEA-module.html#psea">psea</a><tt class="py-op">(</tt><tt class="py-param">pname</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="psea-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="psea-expanded"><a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parse PSEA output file."""</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">    <tt class="py-name">fname</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name" targets="Function Bio.PDB.PSEA.run_psea()=Bio.PDB.PSEA-module.html#run_psea"><a title="Bio.PDB.PSEA.run_psea" class="py-name" href="#" onclick="return doclink('link-6', 'run_psea', 'link-6');">run_psea</a></tt><tt class="py-op">(</tt><tt class="py-name">pname</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.start=Bio.SeqFeature.CompoundLocation-class.html#start,Variable Bio.SeqFeature.FeatureLocation.start=Bio.SeqFeature.FeatureLocation-class.html#start"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-7', 'start', 'link-7');">start</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">    <tt class="py-name">ss</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">    <tt class="py-keyword">with</tt> <tt id="link-8" class="py-name" targets="Function Bio.bgzf.open()=Bio.bgzf-module.html#open"><a title="Bio.bgzf.open" class="py-name" href="#" onclick="return doclink('link-8', 'open', 'link-8');">open</a></tt><tt class="py-op">(</tt><tt class="py-name">fname</tt><tt class="py-op">,</tt> <tt class="py-string">'r'</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">fp</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-name">fp</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method Bio.File.UndoHandle.readlines()=Bio.File.UndoHandle-class.html#readlines"><a title="Bio.File.UndoHandle.readlines" class="py-name" href="#" onclick="return doclink('link-9', 'readlines', 'link-9');">readlines</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">l</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-number">6</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">"&gt;p-sea"</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">                <tt id="link-10" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-10', 'start', 'link-7');">start</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">                <tt class="py-keyword">continue</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-11" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-11', 'start', 'link-7');">start</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">                <tt class="py-keyword">continue</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">l</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">"\n"</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">                <tt class="py-keyword">break</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">            <tt class="py-name">ss</tt> <tt class="py-op">=</tt> <tt class="py-name">ss</tt> <tt class="py-op">+</tt> <tt class="py-name">l</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">ss</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="psea2HEC"></a><div id="psea2HEC-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="psea2HEC-toggle" onclick="return toggle('psea2HEC');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PSEA-module.html#psea2HEC">psea2HEC</a><tt class="py-op">(</tt><tt class="py-param">pseq</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="psea2HEC-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="psea2HEC-expanded"><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-docstring">"""Translate PSEA secondary structure string into HEC."""</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">    <tt id="link-12" class="py-name" targets="Variable Bio.SeqRecord.SeqRecord.seq=Bio.SeqRecord.SeqRecord-class.html#seq,Variable BioSQL.BioSeq.DBSeqRecord.seq=BioSQL.BioSeq.DBSeqRecord-class.html#seq"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-12', 'seq', 'link-12');">seq</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">ss</tt> <tt class="py-keyword">in</tt> <tt class="py-name">pseq</tt><tt class="py-op">:</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">ss</tt> <tt class="py-op">==</tt> <tt class="py-string">"a"</tt><tt class="py-op">:</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">            <tt class="py-name">n</tt> <tt class="py-op">=</tt> <tt class="py-string">"H"</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">ss</tt> <tt class="py-op">==</tt> <tt class="py-string">"b"</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-name">n</tt> <tt class="py-op">=</tt> <tt class="py-string">"E"</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">ss</tt> <tt class="py-op">==</tt> <tt class="py-string">"c"</tt><tt class="py-op">:</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">            <tt class="py-name">n</tt> <tt class="py-op">=</tt> <tt class="py-string">"C"</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt id="link-13" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-13', 'seq', 'link-12');">seq</a></tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-14', 'append', 'link-14');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">n</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-15" class="py-name"><a title="Bio.SeqRecord.SeqRecord.seq
+BioSQL.BioSeq.DBSeqRecord.seq" class="py-name" href="#" onclick="return doclink('link-15', 'seq', 'link-12');">seq</a></tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"> </tt>
+<a name="annotate"></a><div id="annotate-def"><a name="L71"></a><tt class="py-lineno"> 71</tt> <a class="py-toggle" href="#" id="annotate-toggle" onclick="return toggle('annotate');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PSEA-module.html#annotate">annotate</a><tt class="py-op">(</tt><tt class="py-param">m</tt><tt class="py-op">,</tt> <tt class="py-param">ss_seq</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="annotate-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="annotate-expanded"><a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt class="py-docstring">"""Apply seconardary structure information to residues in model."""</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">    <tt class="py-name">c</tt> <tt class="py-op">=</tt> <tt class="py-name">m</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method Bio.PDB.Entity.Entity.get_list()=Bio.PDB.Entity.Entity-class.html#get_list"><a title="Bio.PDB.Entity.Entity.get_list" class="py-name" href="#" onclick="return doclink('link-16', 'get_list', 'link-16');">get_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt class="py-name">all</tt> <tt class="py-op">=</tt> <tt class="py-name">c</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="Bio.PDB.Entity.Entity.get_list" class="py-name" href="#" onclick="return doclink('link-17', 'get_list', 'link-16');">get_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-name">residues</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">    <tt class="py-comment"># Now remove HOH etc.</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">res</tt> <tt class="py-keyword">in</tt> <tt class="py-name">all</tt><tt class="py-op">:</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-18" class="py-name"><a title="Bio.PDB.Polypeptide.is_aa" class="py-name" href="#" onclick="return doclink('link-18', 'is_aa', 'link-3');">is_aa</a></tt><tt class="py-op">(</tt><tt class="py-name">res</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-name">residues</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-19', 'append', 'link-14');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">res</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">    <tt class="py-name">L</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">residues</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-op">(</tt><tt class="py-name">L</tt> <tt class="py-op">==</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ss_seq</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Length mismatch %i %i"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">L</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ss_seq</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-20" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-20', 'i', 'link-20');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-21" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-21', 'range', 'link-21');">range</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-name">L</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">residues</tt><tt class="py-op">[</tt><tt id="link-22" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-22', 'i', 'link-20');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">xtra</tt><tt class="py-op">[</tt><tt class="py-string">"SS_PSEA"</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">ss_seq</tt><tt class="py-op">[</tt><tt id="link-23" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-23', 'i', 'link-20');">i</a></tt><tt class="py-op">]</tt> </tt>
+</div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">    <tt class="py-comment"># os.system("rm "+fname)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"> </tt>
+<a name="PSEA"></a><div id="PSEA-def"><a name="L88"></a><tt class="py-lineno"> 88</tt> <a class="py-toggle" href="#" id="PSEA-toggle" onclick="return toggle('PSEA');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.PSEA.PSEA-class.html">PSEA</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PSEA-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="PSEA-expanded"><a name="PSEA.__init__"></a><div id="PSEA.__init__-def"><a name="L89"></a><tt class="py-lineno"> 89</tt> <a class="py-toggle" href="#" id="PSEA.__init__-toggle" onclick="return toggle('PSEA.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PSEA.PSEA-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">model</tt><tt class="py-op">,</tt> <tt class="py-param">filename</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PSEA.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PSEA.__init__-expanded"><a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-name">ss_seq</tt> <tt class="py-op">=</tt> <tt id="link-24" class="py-name" targets="Function Bio.PDB.PSEA.psea()=Bio.PDB.PSEA-module.html#psea"><a title="Bio.PDB.PSEA.psea" class="py-name" href="#" onclick="return doclink('link-24', 'psea', 'link-24');">psea</a></tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">ss_seq</tt> <tt class="py-op">=</tt> <tt id="link-25" class="py-name" targets="Function Bio.PDB.PSEA.psea2HEC()=Bio.PDB.PSEA-module.html#psea2HEC"><a title="Bio.PDB.PSEA.psea2HEC" class="py-name" href="#" onclick="return doclink('link-25', 'psea2HEC', 'link-25');">psea2HEC</a></tt><tt class="py-op">(</tt><tt class="py-name">ss_seq</tt><tt class="py-op">)</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt id="link-26" class="py-name" targets="Function Bio.PDB.PSEA.annotate()=Bio.PDB.PSEA-module.html#annotate"><a title="Bio.PDB.PSEA.annotate" class="py-name" href="#" onclick="return doclink('link-26', 'annotate', 'link-26');">annotate</a></tt><tt class="py-op">(</tt><tt class="py-name">model</tt><tt class="py-op">,</tt> <tt class="py-name">ss_seq</tt><tt class="py-op">)</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ss_seq</tt> <tt class="py-op">=</tt> <tt class="py-name">ss_seq</tt> </tt>
+</div><a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"> </tt>
+<a name="PSEA.get_seq"></a><div id="PSEA.get_seq-def"><a name="L95"></a><tt class="py-lineno"> 95</tt> <a class="py-toggle" href="#" id="PSEA.get_seq-toggle" onclick="return toggle('PSEA.get_seq');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.PSEA.PSEA-class.html#get_seq">get_seq</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PSEA.get_seq-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="PSEA.get_seq-expanded"><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">        Return secondary structure string.</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ss_seq</tt> </tt>
+</div></div><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-27" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-27', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-28', 'PDB', 'link-1');">PDB</a></tt> <tt class="py-keyword">import</tt> <tt id="link-29" class="py-name" targets="Class Bio.PDB.PDBParser'.PDBParser=Bio.PDB.PDBParser%27.PDBParser-class.html"><a title="Bio.PDB.PDBParser'.PDBParser" class="py-name" href="#" onclick="return doclink('link-29', 'PDBParser', 'link-29');">PDBParser</a></tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">    <tt class="py-comment"># Parse PDB file</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">    <tt class="py-name">p</tt> <tt class="py-op">=</tt> <tt id="link-30" class="py-name"><a title="Bio.PDB.PDBParser'.PDBParser" class="py-name" href="#" onclick="return doclink('link-30', 'PDBParser', 'link-29');">PDBParser</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">    <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt class="py-name">p</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Method Bio.PDB.MMCIFParser'.MMCIFParser.get_structure()=Bio.PDB.MMCIFParser%27.MMCIFParser-class.html#get_structure,Method Bio.PDB.PDBParser'.PDBParser.get_structure()=Bio.PDB.PDBParser%27.PDBParser-class.html#get_structure,Method Bio.PDB.StructureBuilder.StructureBuilder.get_structure()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#get_structure"><a title="Bio.PDB.MMCIFParser'.MMCIFParser.get_structure
+Bio.PDB.PDBParser'.PDBParser.get_structure
+Bio.PDB.StructureBuilder.StructureBuilder.get_structure" class="py-name" href="#" onclick="return doclink('link-31', 'get_structure', 'link-31');">get_structure</a></tt><tt class="py-op">(</tt><tt class="py-string">'X'</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">    <tt class="py-comment"># Annotate structure with PSEA sceondary structure info</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">    <tt id="link-32" class="py-name" targets="Module Bio.PDB.PSEA=Bio.PDB.PSEA-module.html,Class Bio.PDB.PSEA.PSEA=Bio.PDB.PSEA.PSEA-class.html"><a title="Bio.PDB.PSEA
+Bio.PDB.PSEA.PSEA" class="py-name" href="#" onclick="return doclink('link-32', 'PSEA', 'link-32');">PSEA</a></tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:44 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

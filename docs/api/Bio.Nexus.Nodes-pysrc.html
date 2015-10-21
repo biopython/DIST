@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Nexus.Nodes</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Nexus-module.html">Package&nbsp;Nexus</a> ::
+        Module&nbsp;Nodes
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Nexus.Nodes-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Nexus.Nodes-module.html">Module Bio.Nexus.Nodes</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2005-2008 by Frank Kauff &amp; Cymon J. Cox. All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license. Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># Nodes.py</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># Provides functionality of a linked list.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"># Each node has one (or none) predecessor, and an arbitrary number of successors.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment"># Nodes can store arbitrary data in a NodeData class.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment"># Subclassed by Nexus.Trees to store phylogenetic trees.</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment"># Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="ChainException"></a><div id="ChainException-def"><a name="L18"></a><tt class="py-lineno"> 18</tt> <a class="py-toggle" href="#" id="ChainException-toggle" onclick="return toggle('ChainException');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.ChainException-class.html">ChainException</a><tt class="py-op">(</tt><tt class="py-base-class">Exception</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ChainException-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ChainException-expanded"><a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="NodeException"></a><div id="NodeException-def"><a name="L22"></a><tt class="py-lineno"> 22</tt> <a class="py-toggle" href="#" id="NodeException-toggle" onclick="return toggle('NodeException');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.NodeException-class.html">NodeException</a><tt class="py-op">(</tt><tt class="py-base-class">Exception</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="NodeException-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="NodeException-expanded"><a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="Chain"></a><div id="Chain-def"><a name="L26"></a><tt class="py-lineno"> 26</tt> <a class="py-toggle" href="#" id="Chain-toggle" onclick="return toggle('Chain');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html">Chain</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Chain-expanded"><a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">    <tt class="py-docstring">"""Stores a list of nodes that are linked together."""</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"> </tt>
+<a name="Chain.__init__"></a><div id="Chain.__init__-def"><a name="L29"></a><tt class="py-lineno"> 29</tt> <a class="py-toggle" href="#" id="Chain.__init__-toggle" onclick="return toggle('Chain.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.__init__-expanded"><a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">        <tt class="py-docstring">"""Initiates a node chain."""</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-0', 'id', 'link-0');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt> </tt>
+</div><a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"> </tt>
+<a name="Chain._get_id"></a><div id="Chain._get_id-def"><a name="L34"></a><tt class="py-lineno"> 34</tt> <a class="py-toggle" href="#" id="Chain._get_id-toggle" onclick="return toggle('Chain._get_id');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#_get_id">_get_id</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain._get_id-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain._get_id-expanded"><a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-docstring">"""Gets a new id for a node in the chain."""</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-1', 'id', 'link-0');">id</a></tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-2', 'id', 'link-0');">id</a></tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="Chain.all_ids"></a><div id="Chain.all_ids-def"><a name="L39"></a><tt class="py-lineno"> 39</tt> <a class="py-toggle" href="#" id="Chain.all_ids-toggle" onclick="return toggle('Chain.all_ids');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#all_ids">all_ids</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.all_ids-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.all_ids-expanded"><a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-docstring">"""Return a list of all node ids."""</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method Bio.Crystal.Crystal.keys()=Bio.Crystal.Crystal-class.html#keys,Method Bio.File._IndexedSeqFileDict.keys()=Bio.File._IndexedSeqFileDict-class.html#keys,Method Bio.File._SQLiteManySeqFilesDict.keys()=Bio.File._SQLiteManySeqFilesDict-class.html#keys,Method Bio.PDB.AbstractPropertyMap.AbstractPropertyMap.keys()=Bio.PDB.AbstractPropertyMap.AbstractPropertyMap-class.html#keys,Method Bio.Phylo.PhyloXML.Events.keys()=Bio.Phylo.PhyloXML.Events-class.html#keys,Method Bio._py3k._ordereddict.OrderedDict.keys()=Bio._py3k._ordereddict.OrderedDict-class.html#keys,Method BioSQL.BioSeqDatabase.BioSeqDatabase.keys()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#keys,Method BioSQL.BioSeqDatabase.DBServer.keys()=BioSQL.BioSeqDatabase.DBServer-class.html#keys"><a title="Bio.Crystal.Crystal.keys
+Bio.File._IndexedSeqFileDict.keys
+Bio.File._SQLiteManySeqFilesDict.keys
+Bio.PDB.AbstractPropertyMap.AbstractPropertyMap.keys
+Bio.Phylo.PhyloXML.Events.keys
+Bio._py3k._ordereddict.OrderedDict.keys
+BioSQL.BioSeqDatabase.BioSeqDatabase.keys
+BioSQL.BioSeqDatabase.DBServer.keys" class="py-name" href="#" onclick="return doclink('link-3', 'keys', 'link-3');">keys</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"> </tt>
+<a name="Chain.add"></a><div id="Chain.add-def"><a name="L43"></a><tt class="py-lineno"> 43</tt> <a class="py-toggle" href="#" id="Chain.add-toggle" onclick="return toggle('Chain.add');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#add">add</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">node</tt><tt class="py-op">,</tt> <tt class="py-param">prev</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.add-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.add-expanded"><a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-docstring">"""Attaches node to another."""</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">prev</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt class="py-name">prev</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">:</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-4" class="py-name" targets="Class Bio.Nexus.Nodes.ChainException=Bio.Nexus.Nodes.ChainException-class.html"><a title="Bio.Nexus.Nodes.ChainException" class="py-name" href="#" onclick="return doclink('link-4', 'ChainException', 'link-4');">ChainException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Unknown predecessor: '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">prev</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">            <tt id="link-5" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-5', 'id', 'link-0');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method Bio.Nexus.Nodes.Chain._get_id()=Bio.Nexus.Nodes.Chain-class.html#_get_id,Method Bio.SearchIO.BlastIO.blast_tab.BlastTabParser._get_id()=Bio.SearchIO.BlastIO.blast_tab.BlastTabParser-class.html#_get_id"><a title="Bio.Nexus.Nodes.Chain._get_id
+Bio.SearchIO.BlastIO.blast_tab.BlastTabParser._get_id" class="py-name" href="#" onclick="return doclink('link-6', '_get_id', 'link-6');">_get_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">            <tt id="link-7" class="py-name" targets="Method Bio.Nexus.Trees.Tree.node()=Bio.Nexus.Trees.Tree-class.html#node"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-7', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method Bio.Nexus.Nodes.Node.set_id()=Bio.Nexus.Nodes.Node-class.html#set_id"><a title="Bio.Nexus.Nodes.Node.set_id" class="py-name" href="#" onclick="return doclink('link-8', 'set_id', 'link-8');">set_id</a></tt><tt class="py-op">(</tt><tt id="link-9" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-9', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">            <tt id="link-10" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-10', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method Bio.Nexus.Nodes.Node.set_prev()=Bio.Nexus.Nodes.Node-class.html#set_prev"><a title="Bio.Nexus.Nodes.Node.set_prev" class="py-name" href="#" onclick="return doclink('link-11', 'set_prev', 'link-11');">set_prev</a></tt><tt class="py-op">(</tt><tt class="py-name">prev</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">prev</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">prev</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method Bio.Nexus.Nodes.Node.add_succ()=Bio.Nexus.Nodes.Node-class.html#add_succ"><a title="Bio.Nexus.Nodes.Node.add_succ" class="py-name" href="#" onclick="return doclink('link-12', 'add_succ', 'link-12');">add_succ</a></tt><tt class="py-op">(</tt><tt id="link-13" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-13', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-14" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-14', 'id', 'link-0');">id</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-15" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-15', 'node', 'link-7');">node</a></tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-16" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-16', 'id', 'link-0');">id</a></tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="Chain.collapse"></a><div id="Chain.collapse-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="Chain.collapse-toggle" onclick="return toggle('Chain.collapse');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#collapse">collapse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.collapse-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.collapse-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-docstring">"""Deletes node from chain and relinks successors to predecessor."""</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-17" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-17', 'id', 'link-0');">id</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-18" class="py-name"><a title="Bio.Nexus.Nodes.ChainException" class="py-name" href="#" onclick="return doclink('link-18', 'ChainException', 'link-4');">ChainException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Unknown ID: '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-19" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-19', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-name">prev_id</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-20" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-20', 'id', 'link-0');">id</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method Bio.Nexus.Nodes.Node.get_prev()=Bio.Nexus.Nodes.Node-class.html#get_prev"><a title="Bio.Nexus.Nodes.Node.get_prev" class="py-name" href="#" onclick="return doclink('link-21', 'get_prev', 'link-21');">get_prev</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">prev_id</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method Bio.Nexus.Nodes.Node.remove_succ()=Bio.Nexus.Nodes.Node-class.html#remove_succ"><a title="Bio.Nexus.Nodes.Node.remove_succ" class="py-name" href="#" onclick="return doclink('link-22', 'remove_succ', 'link-22');">remove_succ</a></tt><tt class="py-op">(</tt><tt id="link-23" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-23', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-name">succ_ids</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-24" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-24', 'id', 'link-0');">id</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method Bio.Nexus.Nodes.Node.get_succ()=Bio.Nexus.Nodes.Node-class.html#get_succ"><a title="Bio.Nexus.Nodes.Node.get_succ" class="py-name" href="#" onclick="return doclink('link-25', 'get_succ', 'link-25');">get_succ</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-26" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-26', 'i', 'link-26');">i</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">succ_ids</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-27" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-27', 'i', 'link-26');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="Bio.Nexus.Nodes.Node.set_prev" class="py-name" href="#" onclick="return doclink('link-28', 'set_prev', 'link-11');">set_prev</a></tt><tt class="py-op">(</tt><tt class="py-name">prev_id</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">prev_id</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="Bio.Nexus.Nodes.Node.add_succ" class="py-name" href="#" onclick="return doclink('link-29', 'add_succ', 'link-12');">add_succ</a></tt><tt class="py-op">(</tt><tt class="py-name">succ_ids</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt id="link-30" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-30', 'node', 'link-7');">node</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-31" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-31', 'id', 'link-0');">id</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name" targets="Method Bio.Nexus.Nodes.Chain.kill()=Bio.Nexus.Nodes.Chain-class.html#kill"><a title="Bio.Nexus.Nodes.Chain.kill" class="py-name" href="#" onclick="return doclink('link-32', 'kill', 'link-32');">kill</a></tt><tt class="py-op">(</tt><tt id="link-33" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-33', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-34" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-34', 'node', 'link-7');">node</a></tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="Chain.kill"></a><div id="Chain.kill-def"><a name="L70"></a><tt class="py-lineno"> 70</tt> <a class="py-toggle" href="#" id="Chain.kill-toggle" onclick="return toggle('Chain.kill');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#kill">kill</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.kill-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.kill-expanded"><a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-docstring">"""Kills a node from chain without caring to what it is connected."""</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-35" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-35', 'id', 'link-0');">id</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-36" class="py-name"><a title="Bio.Nexus.Nodes.ChainException" class="py-name" href="#" onclick="return doclink('link-36', 'ChainException', 'link-4');">ChainException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Unknown ID: '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-37" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-37', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">            <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-38" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-38', 'id', 'link-0');">id</a></tt><tt class="py-op">]</tt> </tt>
+</div><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"> </tt>
+<a name="Chain.unlink"></a><div id="Chain.unlink-def"><a name="L77"></a><tt class="py-lineno"> 77</tt> <a class="py-toggle" href="#" id="Chain.unlink-toggle" onclick="return toggle('Chain.unlink');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#unlink">unlink</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.unlink-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.unlink-expanded"><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-docstring">"""Disconnects node from his predecessor."""</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-39" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-39', 'id', 'link-0');">id</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">:</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-40" class="py-name"><a title="Bio.Nexus.Nodes.ChainException" class="py-name" href="#" onclick="return doclink('link-40', 'ChainException', 'link-4');">ChainException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Unknown ID: '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-41" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-41', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-name">prev_id</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-42" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-42', 'id', 'link-0');">id</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">prev</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">prev_id</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">prev_id</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.pop()=Bio.File._IndexedSeqFileDict-class.html#pop,Method Bio.SearchIO._model.hit.Hit.pop()=Bio.SearchIO._model.hit.Hit-class.html#pop,Method Bio.SearchIO._model.query.QueryResult.pop()=Bio.SearchIO._model.query.QueryResult-class.html#pop,Method Bio.Seq.MutableSeq.pop()=Bio.Seq.MutableSeq-class.html#pop,Method Bio._py3k._ordereddict.OrderedDict.pop()=Bio._py3k._ordereddict.OrderedDict-class.html#pop"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-43', 'pop', 'link-43');">pop</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">prev_id</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name" targets="Method Bio.Crystal.Chain.index()=Bio.Crystal.Chain-class.html#index,Method Bio.SCOP.Raf.SeqMap.index()=Bio.SCOP.Raf.SeqMap-class.html#index,Method Bio.SearchIO._model.hit.Hit.index()=Bio.SearchIO._model.hit.Hit-class.html#index,Method Bio.SearchIO._model.query.QueryResult.index()=Bio.SearchIO._model.query.QueryResult-class.html#index,Function Bio.SearchIO.index()=Bio.SearchIO-module.html#index,Method Bio.Seq.MutableSeq.index()=Bio.Seq.MutableSeq-class.html#index,Function Bio.SeqIO.index()=Bio.SeqIO-module.html#index"><a title="Bio.Crystal.Chain.index
+Bio.SCOP.Raf.SeqMap.index
+Bio.SearchIO._model.hit.Hit.index
+Bio.SearchIO._model.query.QueryResult.index
+Bio.SearchIO.index
+Bio.Seq.MutableSeq.index
+Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-44', 'index', 'link-44');">index</a></tt><tt class="py-op">(</tt><tt id="link-45" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-45', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-46" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-46', 'id', 'link-0');">id</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">prev</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">prev_id</tt> </tt>
+</div><a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"> </tt>
+<a name="Chain.link"></a><div id="Chain.link-def"><a name="L88"></a><tt class="py-lineno"> 88</tt> <a class="py-toggle" href="#" id="Chain.link-toggle" onclick="return toggle('Chain.link');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#link">link</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">parent</tt><tt class="py-op">,</tt> <tt class="py-param">child</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.link-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.link-expanded"><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-docstring">"""Connects son to parent."""</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">child</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">:</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-47" class="py-name"><a title="Bio.Nexus.Nodes.ChainException" class="py-name" href="#" onclick="return doclink('link-47', 'ChainException', 'link-4');">ChainException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Unknown ID: '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">child</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">parent</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-48" class="py-name"><a title="Bio.Nexus.Nodes.ChainException" class="py-name" href="#" onclick="return doclink('link-48', 'ChainException', 'link-4');">ChainException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Unknown ID: '</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">parent</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name" targets="Method Bio.Nexus.Nodes.Chain.unlink()=Bio.Nexus.Nodes.Chain-class.html#unlink"><a title="Bio.Nexus.Nodes.Chain.unlink" class="py-name" href="#" onclick="return doclink('link-49', 'unlink', 'link-49');">unlink</a></tt><tt class="py-op">(</tt><tt class="py-name">child</tt><tt class="py-op">)</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">parent</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-50', 'append', 'link-50');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">child</tt><tt class="py-op">)</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">child</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="Bio.Nexus.Nodes.Node.set_prev" class="py-name" href="#" onclick="return doclink('link-51', 'set_prev', 'link-11');">set_prev</a></tt><tt class="py-op">(</tt><tt class="py-name">parent</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"> </tt>
+<a name="Chain.is_parent_of"></a><div id="Chain.is_parent_of-def"><a name="L99"></a><tt class="py-lineno"> 99</tt> <a class="py-toggle" href="#" id="Chain.is_parent_of-toggle" onclick="return toggle('Chain.is_parent_of');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#is_parent_of">is_parent_of</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">parent</tt><tt class="py-op">,</tt> <tt class="py-param">grandchild</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.is_parent_of-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.is_parent_of-expanded"><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-docstring">"""Check if grandchild is a subnode of parent."""</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">grandchild</tt> <tt class="py-op">==</tt> <tt class="py-name">parent</tt> <tt class="py-keyword">or</tt> <tt class="py-name">grandchild</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">parent</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="Bio.Nexus.Nodes.Node.get_succ" class="py-name" href="#" onclick="return doclink('link-52', 'get_succ', 'link-25');">get_succ</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">sn</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt class="py-name">parent</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="Bio.Nexus.Nodes.Node.get_succ" class="py-name" href="#" onclick="return doclink('link-53', 'get_succ', 'link-25');">get_succ</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name" targets="Method Bio.Nexus.Nodes.Chain.is_parent_of()=Bio.Nexus.Nodes.Chain-class.html#is_parent_of,Method Bio.Phylo.BaseTree.TreeMixin.is_parent_of()=Bio.Phylo.BaseTree.TreeMixin-class.html#is_parent_of"><a title="Bio.Nexus.Nodes.Chain.is_parent_of
+Bio.Phylo.BaseTree.TreeMixin.is_parent_of" class="py-name" href="#" onclick="return doclink('link-54', 'is_parent_of', 'link-54');">is_parent_of</a></tt><tt class="py-op">(</tt><tt class="py-name">sn</tt><tt class="py-op">,</tt> <tt class="py-name">grandchild</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt>
+<a name="Chain.trace"></a><div id="Chain.trace-def"><a name="L110"></a><tt class="py-lineno">110</tt> <a class="py-toggle" href="#" id="Chain.trace-toggle" onclick="return toggle('Chain.trace');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Chain-class.html#trace">trace</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">start</tt><tt class="py-op">,</tt> <tt class="py-param">finish</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Chain.trace-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Chain.trace-expanded"><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a list of all node_ids between two nodes (excluding start, including end)."""</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-55" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.start=Bio.SeqFeature.CompoundLocation-class.html#start,Variable Bio.SeqFeature.FeatureLocation.start=Bio.SeqFeature.FeatureLocation-class.html#start"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-55', 'start', 'link-55');">start</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt> <tt class="py-keyword">or</tt> <tt class="py-name">finish</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">:</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-56" class="py-name" targets="Class Bio.Nexus.Nodes.NodeException=Bio.Nexus.Nodes.NodeException-class.html"><a title="Bio.Nexus.Nodes.NodeException" class="py-name" href="#" onclick="return doclink('link-56', 'NodeException', 'link-56');">NodeException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Unknown node.'</tt><tt class="py-op">)</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name"><a title="Bio.Nexus.Nodes.Chain.is_parent_of
+Bio.Phylo.BaseTree.TreeMixin.is_parent_of" class="py-name" href="#" onclick="return doclink('link-57', 'is_parent_of', 'link-54');">is_parent_of</a></tt><tt class="py-op">(</tt><tt id="link-58" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-58', 'start', 'link-55');">start</a></tt><tt class="py-op">,</tt> <tt class="py-name">finish</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt id="link-59" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-59', 'start', 'link-55');">start</a></tt> <tt class="py-op">==</tt> <tt class="py-name">finish</tt><tt class="py-op">:</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">sn</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">chain</tt><tt class="py-op">[</tt><tt id="link-60" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-60', 'start', 'link-55');">start</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-61" class="py-name"><a title="Bio.Nexus.Nodes.Node.get_succ" class="py-name" href="#" onclick="return doclink('link-61', 'get_succ', 'link-25');">get_succ</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="Bio.Nexus.Nodes.Chain.is_parent_of
+Bio.Phylo.BaseTree.TreeMixin.is_parent_of" class="py-name" href="#" onclick="return doclink('link-62', 'is_parent_of', 'link-54');">is_parent_of</a></tt><tt class="py-op">(</tt><tt class="py-name">sn</tt><tt class="py-op">,</tt> <tt class="py-name">finish</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-name">sn</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name" targets="Method Bio.Nexus.Nodes.Chain.trace()=Bio.Nexus.Nodes.Chain-class.html#trace,Method Bio.Phylo.BaseTree.TreeMixin.trace()=Bio.Phylo.BaseTree.TreeMixin-class.html#trace"><a title="Bio.Nexus.Nodes.Chain.trace
+Bio.Phylo.BaseTree.TreeMixin.trace" class="py-name" href="#" onclick="return doclink('link-63', 'trace', 'link-63');">trace</a></tt><tt class="py-op">(</tt><tt class="py-name">sn</tt><tt class="py-op">,</tt> <tt class="py-name">finish</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"> </tt>
+<a name="Node"></a><div id="Node-def"><a name="L121"></a><tt class="py-lineno">121</tt> <a class="py-toggle" href="#" id="Node-toggle" onclick="return toggle('Node');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html">Node</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Node-expanded"><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">    <tt class="py-docstring">"""A single node."""</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"> </tt>
+<a name="Node.__init__"></a><div id="Node.__init__-def"><a name="L124"></a><tt class="py-lineno">124</tt> <a class="py-toggle" href="#" id="Node.__init__-toggle" onclick="return toggle('Node.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.__init__-expanded"><a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt class="py-docstring">"""Represents a node with one predecessor and multiple successors."""</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-64" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-64', 'id', 'link-0');">id</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-65" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-65', 'data', 'link-65');">data</a></tt> <tt class="py-op">=</tt> <tt id="link-66" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-66', 'data', 'link-65');">data</a></tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">prev</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"> </tt>
+<a name="Node.set_id"></a><div id="Node.set_id-def"><a name="L131"></a><tt class="py-lineno">131</tt> <a class="py-toggle" href="#" id="Node.set_id-toggle" onclick="return toggle('Node.set_id');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#set_id">set_id</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.set_id-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.set_id-expanded"><a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-docstring">"""Sets the id of a node, if not set yet."""</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-67" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-67', 'id', 'link-0');">id</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-68" class="py-name"><a title="Bio.Nexus.Nodes.NodeException" class="py-name" href="#" onclick="return doclink('link-68', 'NodeException', 'link-56');">NodeException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Node id cannot be changed.'</tt><tt class="py-op">)</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-69" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-69', 'id', 'link-0');">id</a></tt> <tt class="py-op">=</tt> <tt id="link-70" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-70', 'id', 'link-0');">id</a></tt> </tt>
+</div><a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line"> </tt>
+<a name="Node.get_id"></a><div id="Node.get_id-def"><a name="L137"></a><tt class="py-lineno">137</tt> <a class="py-toggle" href="#" id="Node.get_id-toggle" onclick="return toggle('Node.get_id');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#get_id">get_id</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.get_id-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.get_id-expanded"><a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns the node's id."""</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-71" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-71', 'id', 'link-0');">id</a></tt> </tt>
+</div><a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"> </tt>
+<a name="Node.get_succ"></a><div id="Node.get_succ-def"><a name="L141"></a><tt class="py-lineno">141</tt> <a class="py-toggle" href="#" id="Node.get_succ-toggle" onclick="return toggle('Node.get_succ');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#get_succ">get_succ</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.get_succ-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.get_succ-expanded"><a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a list of the node's successors."""</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt> </tt>
+</div><a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line"> </tt>
+<a name="Node.get_prev"></a><div id="Node.get_prev-def"><a name="L145"></a><tt class="py-lineno">145</tt> <a class="py-toggle" href="#" id="Node.get_prev-toggle" onclick="return toggle('Node.get_prev');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#get_prev">get_prev</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.get_prev-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.get_prev-expanded"><a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns the id of the node's predecessor."""</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">prev</tt> </tt>
+</div><a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"> </tt>
+<a name="Node.add_succ"></a><div id="Node.add_succ-def"><a name="L149"></a><tt class="py-lineno">149</tt> <a class="py-toggle" href="#" id="Node.add_succ-toggle" onclick="return toggle('Node.add_succ');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#add_succ">add_succ</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.add_succ-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.add_succ-expanded"><a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">        <tt class="py-docstring">"""Adds a node id to the node's successors."""</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-72" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-72', 'id', 'link-0');">id</a></tt><tt class="py-op">,</tt> <tt id="link-73" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.type()=Bio.Phylo.PhyloXMLIO.Writer-class.html#type"><a title="Bio.Phylo.PhyloXMLIO.Writer.type" class="py-name" href="#" onclick="return doclink('link-73', 'type', 'link-73');">type</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.extend()=Bio.Align.MultipleSeqAlignment-class.html#extend,Method Bio.SCOP.Raf.SeqMap.extend()=Bio.SCOP.Raf.SeqMap-class.html#extend,Method Bio.Seq.MutableSeq.extend()=Bio.Seq.MutableSeq-class.html#extend"><a title="Bio.Align.MultipleSeqAlignment.extend
+Bio.SCOP.Raf.SeqMap.extend
+Bio.Seq.MutableSeq.extend" class="py-name" href="#" onclick="return doclink('link-74', 'extend', 'link-74');">extend</a></tt><tt class="py-op">(</tt><tt id="link-75" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-75', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt><tt class="py-op">.</tt><tt id="link-76" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-76', 'append', 'link-50');">append</a></tt><tt class="py-op">(</tt><tt id="link-77" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-77', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"> </tt>
+<a name="Node.remove_succ"></a><div id="Node.remove_succ-def"><a name="L156"></a><tt class="py-lineno">156</tt> <a class="py-toggle" href="#" id="Node.remove_succ-toggle" onclick="return toggle('Node.remove_succ');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#remove_succ">remove_succ</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.remove_succ-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.remove_succ-expanded"><a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line">        <tt class="py-docstring">"""Removes a node id from the node's successors."""</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name" targets="Method Bio.Crystal.Chain.remove()=Bio.Crystal.Chain-class.html#remove,Method Bio.Graphics.BasicChromosome._ChromosomeComponent.remove()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#remove,Method Bio.Restriction.Restriction.RestrictionBatch.remove()=Bio.Restriction.Restriction.RestrictionBatch-class.html#remove,Method Bio.Seq.MutableSeq.remove()=Bio.Seq.MutableSeq-class.html#remove,Method BioSQL.Loader.DatabaseRemover.remove()=BioSQL.Loader.DatabaseRemover-class.html#remove"><a title="Bio.Crystal.Chain.remove
+Bio.Graphics.BasicChromosome._ChromosomeComponent.remove
+Bio.Restriction.Restriction.RestrictionBatch.remove
+Bio.Seq.MutableSeq.remove
+BioSQL.Loader.DatabaseRemover.remove" class="py-name" href="#" onclick="return doclink('link-78', 'remove', 'link-78');">remove</a></tt><tt class="py-op">(</tt><tt id="link-79" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-79', 'id', 'link-0');">id</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"> </tt>
+<a name="Node.set_succ"></a><div id="Node.set_succ-def"><a name="L160"></a><tt class="py-lineno">160</tt> <a class="py-toggle" href="#" id="Node.set_succ-toggle" onclick="return toggle('Node.set_succ');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#set_succ">set_succ</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">new_succ</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.set_succ-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.set_succ-expanded"><a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">        <tt class="py-docstring">"""Sets the node's successors."""</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">new_succ</tt><tt class="py-op">,</tt> <tt id="link-80" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.type" class="py-name" href="#" onclick="return doclink('link-80', 'type', 'link-73');">type</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-81" class="py-name"><a title="Bio.Nexus.Nodes.NodeException" class="py-name" href="#" onclick="return doclink('link-81', 'NodeException', 'link-56');">NodeException</a></tt><tt class="py-op">(</tt><tt class="py-string">'Node successor must be of list type.'</tt><tt class="py-op">)</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">succ</tt> <tt class="py-op">=</tt> <tt class="py-name">new_succ</tt> </tt>
+</div><a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"> </tt>
+<a name="Node.set_prev"></a><div id="Node.set_prev-def"><a name="L166"></a><tt class="py-lineno">166</tt> <a class="py-toggle" href="#" id="Node.set_prev-toggle" onclick="return toggle('Node.set_prev');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#set_prev">set_prev</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.set_prev-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.set_prev-expanded"><a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">        <tt class="py-docstring">"""Sets the node's predecessor."""</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">prev</tt> <tt class="py-op">=</tt> <tt id="link-82" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-82', 'id', 'link-0');">id</a></tt> </tt>
+</div><a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"> </tt>
+<a name="Node.get_data"></a><div id="Node.get_data-def"><a name="L170"></a><tt class="py-lineno">170</tt> <a class="py-toggle" href="#" id="Node.get_data-toggle" onclick="return toggle('Node.get_data');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#get_data">get_data</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.get_data-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.get_data-expanded"><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a node's data."""</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-83" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-83', 'data', 'link-65');">data</a></tt> </tt>
+</div><a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"> </tt>
+<a name="Node.set_data"></a><div id="Node.set_data-def"><a name="L174"></a><tt class="py-lineno">174</tt> <a class="py-toggle" href="#" id="Node.set_data-toggle" onclick="return toggle('Node.set_data');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Nexus.Nodes.Node-class.html#set_data">set_data</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Node.set_data-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Node.set_data-expanded"><a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">        <tt class="py-docstring">"""Sets a node's data."""</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-84" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-84', 'data', 'link-65');">data</a></tt> <tt class="py-op">=</tt> <tt id="link-85" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-85', 'data', 'link-65');">data</a></tt> </tt>
+</div></div><a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:46 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

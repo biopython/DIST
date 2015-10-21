@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Phylo.NewickIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Phylo-module.html">Package&nbsp;Phylo</a> ::
+        Module&nbsp;NewickIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Phylo.NewickIO-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Phylo.NewickIO-module.html">Module Bio.Phylo.NewickIO</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Based on Bio.Nexus, copyright 2005-2008 by Frank Kauff &amp; Cymon J. Cox.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># All rights reserved.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># license. Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">"""I/O function wrappers for the Newick file format.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">See: http://evolution.genetics.washington.edu/phylip/newick_doc.html</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">re</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-1', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-2', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Package Bio.Phylo=Bio.Phylo-module.html"><a title="Bio.Phylo" class="py-name" href="#" onclick="return doclink('link-3', 'Phylo', 'link-3');">Phylo</a></tt> <tt class="py-keyword">import</tt> <tt id="link-4" class="py-name" targets="Module Bio.Phylo.Newick=Bio.Phylo.Newick-module.html"><a title="Bio.Phylo.Newick" class="py-name" href="#" onclick="return doclink('link-4', 'Newick', 'link-4');">Newick</a></tt> </tt>
+<a name="NewickError"></a><div id="NewickError-def"><a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt> <a class="py-toggle" href="#" id="NewickError-toggle" onclick="return toggle('NewickError');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.NewickError-class.html">NewickError</a><tt class="py-op">(</tt><tt class="py-base-class">Exception</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="NewickError-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="NewickError-expanded"><a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">    <tt class="py-docstring">"""Exception raised when Newick object construction cannot continue."""</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt id="link-5" class="py-name" targets="Variable Bio.Phylo.NewickIO.tokens=Bio.Phylo.NewickIO-module.html#tokens"><a title="Bio.Phylo.NewickIO.tokens" class="py-name" href="#" onclick="return doclink('link-5', 'tokens', 'link-5');">tokens</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\("</tt><tt class="py-op">,</tt>                                  <tt class="py-string">'open parens'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\)"</tt><tt class="py-op">,</tt>                                  <tt class="py-string">'close parens'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"[^\s\(\)\[\]\'\:\;\,]+"</tt><tt class="py-op">,</tt>              <tt class="py-string">'unquoted node label'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\:[0-9]*\.?[0-9]+([eE][+-]?[0-9]+)?"</tt><tt class="py-op">,</tt> <tt class="py-string">'edge length'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\,"</tt><tt class="py-op">,</tt>                                  <tt class="py-string">'comma'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\[(\\.|[^\]])*\]"</tt><tt class="py-op">,</tt>                    <tt class="py-string">'comment'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\'(\\.|[^\'])*\'"</tt><tt class="py-op">,</tt>                    <tt class="py-string">'quoted node label'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\;"</tt><tt class="py-op">,</tt>                                  <tt class="py-string">'semicolon'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-op">(</tt><tt class="py-string">r"\n"</tt><tt class="py-op">,</tt>                                  <tt class="py-string">'newline'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-op">]</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt id="link-6" class="py-name" targets="Variable Bio.Phylo.NewickIO.tokenizer=Bio.Phylo.NewickIO-module.html#tokenizer"><a title="Bio.Phylo.NewickIO.tokenizer" class="py-name" href="#" onclick="return doclink('link-6', 'tokenizer', 'link-6');">tokenizer</a></tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt><tt class="py-string">'(%s)'</tt> <tt class="py-op">%</tt> <tt class="py-string">'|'</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">token</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-keyword">for</tt> <tt class="py-name">token</tt> <tt class="py-keyword">in</tt> <tt id="link-7" class="py-name"><a title="Bio.Phylo.NewickIO.tokens" class="py-name" href="#" onclick="return doclink('link-7', 'tokens', 'link-5');">tokens</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt id="link-8" class="py-name" targets="Variable Bio.Phylo.NewickIO.token_dict=Bio.Phylo.NewickIO-module.html#token_dict"><a title="Bio.Phylo.NewickIO.token_dict" class="py-name" href="#" onclick="return doclink('link-8', 'token_dict', 'link-8');">token_dict</a></tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt id="link-9" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-9', 'name', 'link-9');">name</a></tt><tt class="py-op">,</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt><tt class="py-name">token</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-op">(</tt><tt class="py-name">token</tt><tt class="py-op">,</tt> <tt id="link-10" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-10', 'name', 'link-9');">name</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">in</tt> <tt id="link-11" class="py-name"><a title="Bio.Phylo.NewickIO.tokens" class="py-name" href="#" onclick="return doclink('link-11', 'tokens', 'link-5');">tokens</a></tt><tt class="py-op">)</tt> </tt>
+<a name="parse"></a><div id="parse-def"><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-comment"># ---------------------------------------------------------</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-comment"># Public API</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt> <a class="py-toggle" href="#" id="parse-toggle" onclick="return toggle('parse');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO-module.html#parse">parse</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="parse-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="parse-expanded"><a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">    <tt class="py-docstring">"""Iterate over the trees in a Newick file handle.</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    :returns: generator of Bio.Phylo.Newick.Tree objects.</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-12" class="py-name" targets="Module Bio.Entrez.Parser=Bio.Entrez.Parser-module.html,Class Bio.ExPASy.ScanProsite.Parser=Bio.ExPASy.ScanProsite.Parser-class.html,Class Bio.Phylo.CDAOIO.Parser=Bio.Phylo.CDAOIO.Parser-class.html,Class Bio.Phylo.NeXMLIO.Parser=Bio.Phylo.NeXMLIO.Parser-class.html,Class Bio.Phylo.NewickIO.Parser=Bio.Phylo.NewickIO.Parser-class.html,Class Bio.Phylo.PhyloXMLIO.Parser=Bio.Phylo.PhyloXMLIO.Parser-class.html,Class Bio.SeqIO.UniprotIO.Parser=Bio.SeqIO.UniprotIO.Parser-class.html"><a title="Bio.Entrez.Parser
+Bio.ExPASy.ScanProsite.Parser
+Bio.Phylo.CDAOIO.Parser
+Bio.Phylo.NeXMLIO.Parser
+Bio.Phylo.NewickIO.Parser
+Bio.Phylo.PhyloXMLIO.Parser
+Bio.SeqIO.UniprotIO.Parser" class="py-name" href="#" onclick="return doclink('link-12', 'Parser', 'link-12');">Parser</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Function Bio.AlignIO.parse()=Bio.AlignIO-module.html#parse,Method Bio.Blast.NCBIStandalone.BlastErrorParser.parse()=Bio.Blast.NCBIStandalone.BlastErrorParser-class.html#parse,Method Bio.Blast.NCBIStandalone.BlastParser.parse()=Bio.Blast.NCBIStandalone.BlastParser-class.html#parse,Method Bio.Blast.NCBIStandalone.PSIBlastParser.parse()=Bio.Blast.NCBIStandalone.PSIBlastParser-class.html#parse,Function Bio.Blast.NCBIXML.parse()=Bio.Blast.NCBIXML-module.html#parse,Function Bio.Compass.parse()=Bio.Compass-module.html#parse,Function Bio.Emboss.Primer3.parse()=Bio.Emboss.Primer3-module.html#parse,Method Bio.Entrez.Parser.DataHandler.parse()=Bio.Entrez.Parser.DataHandler-class.html#parse,Function Bio.Entrez.parse()=Bio.Entrez-module.html#parse,Function Bio.ExPASy.Enzyme.parse()=Bio.ExPASy.Enzyme-module.html#parse,Function Bio.ExPASy.Prodoc.parse()=Bio.ExPASy.Prodoc-module.html#parse,Function Bio.ExPASy.Prosite.parse()=Bio.ExPASy.Prosite-module.html#parse,Method Bio.GenBank.FeatureParser.parse()=Bio.GenBank.FeatureParser-class.html#parse,Method Bio.GenBank.RecordParser.parse()=Bio.GenBank.RecordParser-class.html#parse,Method Bio.GenBank.Scanner.InsdcScanner.parse()=Bio.GenBank.Scanner.InsdcScanner-class.html#parse,Function Bio.Geo.parse()=Bio.Geo-module.html#parse,Function Bio.KEGG.Compound.parse()=Bio.KEGG.Compound-module.html#parse,Function Bio.KEGG.Enzyme.parse()=Bio.KEGG.Enzyme-module.html#parse,Method Bio.KEGG.KGML.KGML_parser.KGMLParser.parse()=Bio.KEGG.KGML.KGML_parser.KGMLParser-class.html#parse,Function Bio.KEGG.KGML.KGML_parser.parse()=Bio.KEGG.KGML.KGML_parser-module.html#parse,Function Bio.KEGG.Map.parse()=Bio.KEGG.Map-module.html#parse,Function Bio.Medline.parse()=Bio.Medline-module.html#parse,Function Bio.Motif.parse()=Bio.Motif-module.html#parse,Method Bio.ParserSupport.AbstractParser.parse()=Bio.ParserSupport.AbstractParser-class.html#parse,Method Bio.Phylo.CDAOIO.Parser.parse()=Bio.Phylo.CDAOIO.Parser-class.html#parse,Function Bio.Phylo.CDAOIO.parse()=Bio.Phylo.CDAOIO-module.html#parse,Method Bio.Phylo.NeXMLIO.Parser.parse()=Bio.Phylo.NeXMLIO.Parser-class.html#parse,Function Bio.Phylo.NeXMLIO.parse()=Bio.Phylo.NeXMLIO-module.html#parse,Method Bio.Phylo.NewickIO.Parser.parse()=Bio.Phylo.NewickIO.Parser-class.html#parse,Function Bio.Phylo.NewickIO.parse()=Bio.Phylo.NewickIO-module.html#parse,Function Bio.Phylo.NexusIO.parse()=Bio.Phylo.NexusIO-module.html#parse,Method Bio.Phylo.PhyloXMLIO.Parser.parse()=Bio.Phylo.PhyloXMLIO.Parser-class.html#parse,Function Bio.Phylo.PhyloXMLIO.parse()=Bio.Phylo.PhyloXMLIO-module.html#parse,Function Bio.Phylo._io.parse()=Bio.Phylo._io-module.html#parse,Function Bio.SCOP.Cla.parse()=Bio.SCOP.Cla-module.html#parse,Function Bio.SCOP.Des.parse()=Bio.SCOP.Des-module.html#parse,Function Bio.SCOP.Dom.parse()=Bio.SCOP.Dom-module.html#parse,Function Bio.SCOP.Hie.parse()=Bio.SCOP.Hie-module.html#parse,Function Bio.SCOP.Raf.parse()=Bio.SCOP.Raf-module.html#parse,Function Bio.SearchIO.parse()=Bio.SearchIO-module.html#parse,Method Bio.SeqIO.UniprotIO.Parser.parse()=Bio.SeqIO.UniprotIO.Parser-class.html#parse,Function Bio.SeqIO.parse()=Bio.SeqIO-module.html#parse,Function Bio.Sequencing.Ace.parse()=Bio.Sequencing.Ace-module.html#parse,Function Bio.Sequencing.Phd.parse()=Bio.Sequencing.Phd-module.html#parse,Function Bio.SwissProt.KeyWList.parse()=Bio.SwissProt.KeyWList-module.html#parse,Function Bio.SwissProt.parse()=Bio.SwissProt-module.html#parse,Function Bio.UniGene.parse()=Bio.UniGene-module.html#parse,Function Bio.Wise.psw.parse()=Bio.Wise.psw-module.html#parse,Function Bio.motifs.parse()=Bio.motifs-module.html#parse"><a title="Bio.AlignIO.parse
+Bio.Blast.NCBIStandalone.BlastErrorParser.parse
+Bio.Blast.NCBIStandalone.BlastParser.parse
+Bio.Blast.NCBIStandalone.PSIBlastParser.parse
+Bio.Blast.NCBIXML.parse
+Bio.Compass.parse
+Bio.Emboss.Primer3.parse
+Bio.Entrez.Parser.DataHandler.parse
+Bio.Entrez.parse
+Bio.ExPASy.Enzyme.parse
+Bio.ExPASy.Prodoc.parse
+Bio.ExPASy.Prosite.parse
+Bio.GenBank.FeatureParser.parse
+Bio.GenBank.RecordParser.parse
+Bio.GenBank.Scanner.InsdcScanner.parse
+Bio.Geo.parse
+Bio.KEGG.Compound.parse
+Bio.KEGG.Enzyme.parse
+Bio.KEGG.KGML.KGML_parser.KGMLParser.parse
+Bio.KEGG.KGML.KGML_parser.parse
+Bio.KEGG.Map.parse
+Bio.Medline.parse
+Bio.Motif.parse
+Bio.ParserSupport.AbstractParser.parse
+Bio.Phylo.CDAOIO.Parser.parse
+Bio.Phylo.CDAOIO.parse
+Bio.Phylo.NeXMLIO.Parser.parse
+Bio.Phylo.NeXMLIO.parse
+Bio.Phylo.NewickIO.Parser.parse
+Bio.Phylo.NewickIO.parse
+Bio.Phylo.NexusIO.parse
+Bio.Phylo.PhyloXMLIO.Parser.parse
+Bio.Phylo.PhyloXMLIO.parse
+Bio.Phylo._io.parse
+Bio.SCOP.Cla.parse
+Bio.SCOP.Des.parse
+Bio.SCOP.Dom.parse
+Bio.SCOP.Hie.parse
+Bio.SCOP.Raf.parse
+Bio.SearchIO.parse
+Bio.SeqIO.UniprotIO.Parser.parse
+Bio.SeqIO.parse
+Bio.Sequencing.Ace.parse
+Bio.Sequencing.Phd.parse
+Bio.SwissProt.KeyWList.parse
+Bio.SwissProt.parse
+Bio.UniGene.parse
+Bio.Wise.psw.parse
+Bio.motifs.parse" class="py-name" href="#" onclick="return doclink('link-13', 'parse', 'link-13');">parse</a></tt><tt class="py-op">(</tt><tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"> </tt>
+<a name="write"></a><div id="write-def"><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt> <a class="py-toggle" href="#" id="write-toggle" onclick="return toggle('write');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO-module.html#write">write</a><tt class="py-op">(</tt><tt class="py-param">trees</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">,</tt> <tt class="py-param">plain</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="write-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="write-expanded"><a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">    <tt class="py-docstring">"""Write a trees in Newick format to the given file handle.</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    :returns: number of trees written.</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-14" class="py-name" targets="Class Bio.Phylo.CDAOIO.Writer=Bio.Phylo.CDAOIO.Writer-class.html,Class Bio.Phylo.NeXMLIO.Writer=Bio.Phylo.NeXMLIO.Writer-class.html,Class Bio.Phylo.NewickIO.Writer=Bio.Phylo.NewickIO.Writer-class.html,Class Bio.Phylo.PhyloXMLIO.Writer=Bio.Phylo.PhyloXMLIO.Writer-class.html"><a title="Bio.Phylo.CDAOIO.Writer
+Bio.Phylo.NeXMLIO.Writer
+Bio.Phylo.NewickIO.Writer
+Bio.Phylo.PhyloXMLIO.Writer" class="py-name" href="#" onclick="return doclink('link-14', 'Writer', 'link-14');">Writer</a></tt><tt class="py-op">(</tt><tt class="py-name">trees</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-15', 'write', 'link-15');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">,</tt> <tt class="py-name">plain</tt><tt class="py-op">=</tt><tt class="py-name">plain</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"> </tt>
+<a name="_parse_confidence"></a><div id="_parse_confidence-def"><a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-comment"># ---------------------------------------------------------</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-comment"># Input</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt> <a class="py-toggle" href="#" id="_parse_confidence-toggle" onclick="return toggle('_parse_confidence');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO-module.html#_parse_confidence">_parse_confidence</a><tt class="py-op">(</tt><tt class="py-param">text</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_parse_confidence-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_parse_confidence-expanded"><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">text</tt><tt class="py-op">.</tt><tt class="py-name">isdigit</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">text</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-comment"># NB: Could make this more consistent by treating as a percentage</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-comment"># return int(text) / 100.</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">text</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-comment"># NB: This should be in [0.0, 1.0], but who knows what people will do</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-comment"># assert 0 &lt;= current_clade.confidence &lt;= 1</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">ValueError</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="_format_comment"></a><div id="_format_comment-def"><a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt> <a class="py-toggle" href="#" id="_format_comment-toggle" onclick="return toggle('_format_comment');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO-module.html#_format_comment">_format_comment</a><tt class="py-op">(</tt><tt class="py-param">text</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_format_comment-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_format_comment-expanded"><a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-string">'[%s]'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">text</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">'['</tt><tt class="py-op">,</tt> <tt class="py-string">'\\['</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">']'</tt><tt class="py-op">,</tt> <tt class="py-string">'\\]'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="_get_comment"></a><div id="_get_comment-def"><a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="_get_comment-toggle" onclick="return toggle('_get_comment');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO-module.html#_get_comment">_get_comment</a><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_get_comment-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_comment-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-16" class="py-name" targets="Variable Bio.Phylo.BaseTree.Tree.clade=Bio.Phylo.BaseTree.Tree-class.html#clade,Method Bio.Phylo.PhyloXMLIO.Writer.clade()=Bio.Phylo.PhyloXMLIO.Writer-class.html#clade"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-16', 'clade', 'link-16');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-string">'comment'</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt id="link-17" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-17', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.GenBank._FeatureConsumer.comment()=Bio.GenBank._FeatureConsumer-class.html#comment,Method Bio.GenBank._RecordConsumer.comment()=Bio.GenBank._RecordConsumer-class.html#comment"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-18', 'comment', 'link-18');">comment</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-19" class="py-name" targets="Function Bio.Phylo.NewickIO._format_comment()=Bio.Phylo.NewickIO-module.html#_format_comment"><a title="Bio.Phylo.NewickIO._format_comment" class="py-name" href="#" onclick="return doclink('link-19', '_format_comment', 'link-19');">_format_comment</a></tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-20" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-20', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-21', 'comment', 'link-18');">comment</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">''</tt> </tt>
+</div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="Parser"></a><div id="Parser-def"><a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt> <a class="py-toggle" href="#" id="Parser-toggle" onclick="return toggle('Parser');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Parser-class.html">Parser</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Parser-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Parser-expanded"><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parse a Newick tree given a file handle.</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">    Based on the parser in `Bio.Nexus.Trees`.</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="Parser.__init__"></a><div id="Parser.__init__-def"><a name="L93"></a><tt class="py-lineno"> 93</tt> <a class="py-toggle" href="#" id="Parser.__init__-toggle" onclick="return toggle('Parser.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Parser-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Parser.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Parser.__init__-expanded"><a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt> </tt>
+</div><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">classmethod</tt> </tt>
+<a name="Parser.from_string"></a><div id="Parser.from_string-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="Parser.from_string-toggle" onclick="return toggle('Parser.from_string');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Parser-class.html#from_string">from_string</a><tt class="py-op">(</tt><tt class="py-param">cls</tt><tt class="py-op">,</tt> <tt class="py-param">treetext</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Parser.from_string-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Parser.from_string-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">StringIO</tt><tt class="py-op">(</tt><tt class="py-name">treetext</tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">cls</tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="Parser.parse"></a><div id="Parser.parse-def"><a name="L101"></a><tt class="py-lineno">101</tt> <a class="py-toggle" href="#" id="Parser.parse-toggle" onclick="return toggle('Parser.parse');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Parser-class.html#parse">parse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">values_are_confidence</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">comments_are_confidence</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">rooted</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Parser.parse-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Parser.parse-expanded"><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-docstring">"""Parse the text stream this object was initialized with."""</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">values_are_confidence</tt> <tt class="py-op">=</tt> <tt class="py-name">values_are_confidence</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">comments_are_confidence</tt> <tt class="py-op">=</tt> <tt class="py-name">comments_are_confidence</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rooted</tt> <tt class="py-op">=</tt> <tt class="py-name">rooted</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-name">buf</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-name">unicodeChecked</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-name">unicodeLines</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-string">"\xef"</tt><tt class="py-op">,</tt> <tt class="py-string">"\xff"</tt><tt class="py-op">,</tt> <tt class="py-string">"\xfe"</tt><tt class="py-op">,</tt> <tt class="py-string">"\x00"</tt><tt class="py-op">)</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt><tt class="py-op">:</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">unicodeChecked</tt><tt class="py-op">:</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">                <tt class="py-comment"># check for unicode byte order marks on first line only,</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">                <tt class="py-comment"># these lead to parsing errors (on Python 2)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method Bio.Seq.Seq.startswith()=Bio.Seq.Seq-class.html#startswith"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-22', 'startswith', 'link-22');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-name">unicodeLines</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">                    <tt class="py-keyword">raise</tt> <tt id="link-23" class="py-name" targets="Class Bio.Phylo.NewickIO.NewickError=Bio.Phylo.NewickIO.NewickError-class.html"><a title="Bio.Phylo.NewickIO.NewickError" class="py-name" href="#" onclick="return doclink('link-23', 'NewickError', 'link-23');">NewickError</a></tt><tt class="py-op">(</tt><tt class="py-string">"The file or stream you attempted to parse includes "</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">                                      <tt class="py-string">"unicode byte order marks.  You must convert it to "</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">                                      <tt class="py-string">"ASCII before it can be parsed."</tt><tt class="py-op">)</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">                <tt class="py-name">unicodeChecked</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">            <tt class="py-name">buf</tt> <tt class="py-op">+=</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Method Bio.Seq.Seq.rstrip()=Bio.Seq.Seq-class.html#rstrip"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-24', 'rstrip', 'link-24');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">buf</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method Bio.Seq.Seq.endswith()=Bio.Seq.Seq-class.html#endswith"><a title="Bio.Seq.Seq.endswith" class="py-name" href="#" onclick="return doclink('link-25', 'endswith', 'link-25');">endswith</a></tt><tt class="py-op">(</tt><tt class="py-string">';'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">                <tt class="py-keyword">yield</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Method Bio.Phylo.NewickIO.Parser._parse_tree()=Bio.Phylo.NewickIO.Parser-class.html#_parse_tree"><a title="Bio.Phylo.NewickIO.Parser._parse_tree" class="py-name" href="#" onclick="return doclink('link-26', '_parse_tree', 'link-26');">_parse_tree</a></tt><tt class="py-op">(</tt><tt class="py-name">buf</tt><tt class="py-op">)</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">                <tt class="py-name">buf</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">buf</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">            <tt class="py-comment"># Last tree is missing a terminal ';' character -- that's OK</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="Bio.Phylo.NewickIO.Parser._parse_tree" class="py-name" href="#" onclick="return doclink('link-27', '_parse_tree', 'link-26');">_parse_tree</a></tt><tt class="py-op">(</tt><tt class="py-name">buf</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"> </tt>
+<a name="Parser._parse_tree"></a><div id="Parser._parse_tree-def"><a name="L126"></a><tt class="py-lineno">126</tt> <a class="py-toggle" href="#" id="Parser._parse_tree-toggle" onclick="return toggle('Parser._parse_tree');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Parser-class.html#_parse_tree">_parse_tree</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">text</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Parser._parse_tree-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Parser._parse_tree-expanded"><a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">        <tt class="py-docstring">"""Parses the text representation into an Tree object."""</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt id="link-28" class="py-name"><a title="Bio.Phylo.NewickIO.tokens" class="py-name" href="#" onclick="return doclink('link-28', 'tokens', 'link-5');">tokens</a></tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Method Bio.Restriction.Restriction.FormattedSeq.finditer()=Bio.Restriction.Restriction.FormattedSeq-class.html#finditer"><a title="Bio.Restriction.Restriction.FormattedSeq.finditer" class="py-name" href="#" onclick="return doclink('link-29', 'finditer', 'link-29');">finditer</a></tt><tt class="py-op">(</tt><tt id="link-30" class="py-name"><a title="Bio.Phylo.NewickIO.tokenizer" class="py-name" href="#" onclick="return doclink('link-30', 'tokenizer', 'link-6');">tokenizer</a></tt><tt class="py-op">,</tt> <tt class="py-name">text</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Method Bio.Seq.Seq.strip()=Bio.Seq.Seq-class.html#strip"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-31', 'strip', 'link-31');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt id="link-32" class="py-name" targets="Method Bio.Phylo.CDAOIO.Parser.new_clade()=Bio.Phylo.CDAOIO.Parser-class.html#new_clade,Method Bio.Phylo.NewickIO.Parser.new_clade()=Bio.Phylo.NewickIO.Parser-class.html#new_clade"><a title="Bio.Phylo.CDAOIO.Parser.new_clade
+Bio.Phylo.NewickIO.Parser.new_clade" class="py-name" href="#" onclick="return doclink('link-32', 'new_clade', 'link-32');">new_clade</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="Bio.Phylo.CDAOIO.Parser.new_clade
+Bio.Phylo.NewickIO.Parser.new_clade" class="py-name" href="#" onclick="return doclink('link-33', 'new_clade', 'link-32');">new_clade</a></tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-name">root_clade</tt> <tt class="py-op">=</tt> <tt id="link-34" class="py-name"><a title="Bio.Phylo.CDAOIO.Parser.new_clade
+Bio.Phylo.NewickIO.Parser.new_clade" class="py-name" href="#" onclick="return doclink('link-34', 'new_clade', 'link-32');">new_clade</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-name">current_clade</tt> <tt class="py-op">=</tt> <tt class="py-name">root_clade</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-name">entering_branch_length</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-name">lp_count</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-name">rp_count</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-35" class="py-name" targets="Function Bio.triefind.match()=Bio.triefind-module.html#match"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-35', 'match', 'link-35');">match</a></tt> <tt class="py-keyword">in</tt> <tt id="link-36" class="py-name"><a title="Bio.Phylo.NewickIO.tokens" class="py-name" href="#" onclick="return doclink('link-36', 'tokens', 'link-5');">tokens</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-name">token</tt> <tt class="py-op">=</tt> <tt id="link-37" class="py-name"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-37', 'match', 'link-35');">match</a></tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">token</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-38', 'startswith', 'link-22');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-string">"'"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">                <tt class="py-comment"># quoted label; add characters to clade name</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">                <tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-39', 'name', 'link-9');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">token</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line"> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">token</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-40', 'startswith', 'link-22');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-string">'['</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                <tt class="py-comment"># comment</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                <tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-41', 'comment', 'link-18');">comment</a></tt> <tt class="py-op">=</tt> <tt class="py-name">token</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">comments_are_confidence</tt><tt class="py-op">:</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                    <tt class="py-comment"># Try to use this comment as a numeric support value</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                    <tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name" targets="Variable Bio.Phylo.PhyloXML.Clade.confidence=Bio.Phylo.PhyloXML.Clade-class.html#confidence,Variable Bio.Phylo.PhyloXML.Phylogeny.confidence=Bio.Phylo.PhyloXML.Phylogeny-class.html#confidence,Method Bio.Phylo.PhyloXMLIO.Parser.confidence()=Bio.Phylo.PhyloXMLIO.Parser-class.html#confidence,Method Bio.Phylo.PhyloXMLIO.Writer.confidence()=Bio.Phylo.PhyloXMLIO.Writer-class.html#confidence"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-42', 'confidence', 'link-42');">confidence</a></tt> <tt class="py-op">=</tt> <tt id="link-43" class="py-name" targets="Function Bio.Phylo.NewickIO._parse_confidence()=Bio.Phylo.NewickIO-module.html#_parse_confidence"><a title="Bio.Phylo.NewickIO._parse_confidence" class="py-name" href="#" onclick="return doclink('link-43', '_parse_confidence', 'link-43');">_parse_confidence</a></tt><tt class="py-op">(</tt><tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-44', 'comment', 'link-18');">comment</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">token</tt> <tt class="py-op">==</tt> <tt class="py-string">'('</tt><tt class="py-op">:</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">                <tt class="py-comment"># start a new clade, which is a child of the current clade</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">                <tt class="py-name">current_clade</tt> <tt class="py-op">=</tt> <tt id="link-45" class="py-name"><a title="Bio.Phylo.CDAOIO.Parser.new_clade
+Bio.Phylo.NewickIO.Parser.new_clade" class="py-name" href="#" onclick="return doclink('link-45', 'new_clade', 'link-32');">new_clade</a></tt><tt class="py-op">(</tt><tt class="py-name">current_clade</tt><tt class="py-op">)</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line">                <tt class="py-name">entering_branch_length</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">                <tt class="py-name">lp_count</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">token</tt> <tt class="py-op">==</tt> <tt class="py-string">','</tt><tt class="py-op">:</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">                <tt class="py-comment"># if the current clade is the root, then the external parentheses</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">                <tt class="py-comment"># are missing and a new root should be created</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">current_clade</tt> <tt class="py-keyword">is</tt> <tt class="py-name">root_clade</tt><tt class="py-op">:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">                    <tt class="py-name">root_clade</tt> <tt class="py-op">=</tt> <tt id="link-46" class="py-name"><a title="Bio.Phylo.CDAOIO.Parser.new_clade
+Bio.Phylo.NewickIO.Parser.new_clade" class="py-name" href="#" onclick="return doclink('link-46', 'new_clade', 'link-32');">new_clade</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">                    <tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt class="py-name">parent</tt> <tt class="py-op">=</tt> <tt class="py-name">root_clade</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">                <tt class="py-comment"># start a new child clade at the same level as the current clade</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">                <tt class="py-name">parent</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name" targets="Method Bio.Phylo.CDAOIO.Writer.process_clade()=Bio.Phylo.CDAOIO.Writer-class.html#process_clade,Method Bio.Phylo.NewickIO.Parser.process_clade()=Bio.Phylo.NewickIO.Parser-class.html#process_clade"><a title="Bio.Phylo.CDAOIO.Writer.process_clade
+Bio.Phylo.NewickIO.Parser.process_clade" class="py-name" href="#" onclick="return doclink('link-47', 'process_clade', 'link-47');">process_clade</a></tt><tt class="py-op">(</tt><tt class="py-name">current_clade</tt><tt class="py-op">)</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">                <tt class="py-name">current_clade</tt> <tt class="py-op">=</tt> <tt id="link-48" class="py-name"><a title="Bio.Phylo.CDAOIO.Parser.new_clade
+Bio.Phylo.NewickIO.Parser.new_clade" class="py-name" href="#" onclick="return doclink('link-48', 'new_clade', 'link-32');">new_clade</a></tt><tt class="py-op">(</tt><tt class="py-name">parent</tt><tt class="py-op">)</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">                <tt class="py-name">entering_branch_length</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">token</tt> <tt class="py-op">==</tt> <tt class="py-string">')'</tt><tt class="py-op">:</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">                <tt class="py-comment"># done adding children for this parent clade</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">                <tt class="py-name">parent</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name"><a title="Bio.Phylo.CDAOIO.Writer.process_clade
+Bio.Phylo.NewickIO.Parser.process_clade" class="py-name" href="#" onclick="return doclink('link-49', 'process_clade', 'link-47');">process_clade</a></tt><tt class="py-op">(</tt><tt class="py-name">current_clade</tt><tt class="py-op">)</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">parent</tt><tt class="py-op">:</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">                    <tt class="py-keyword">raise</tt> <tt id="link-50" class="py-name"><a title="Bio.Phylo.NewickIO.NewickError" class="py-name" href="#" onclick="return doclink('link-50', 'NewickError', 'link-23');">NewickError</a></tt><tt class="py-op">(</tt><tt class="py-string">'Parenthesis mismatch.'</tt><tt class="py-op">)</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">                <tt class="py-name">current_clade</tt> <tt class="py-op">=</tt> <tt class="py-name">parent</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">                <tt class="py-name">entering_branch_length</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">                <tt class="py-name">rp_count</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">token</tt> <tt class="py-op">==</tt> <tt class="py-string">';'</tt><tt class="py-op">:</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">                <tt class="py-keyword">break</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">token</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-51', 'startswith', 'link-22');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-string">':'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">                <tt class="py-comment"># branch length or confidence</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">                <tt id="link-52" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.value()=Bio.Phylo.PhyloXMLIO.Writer-class.html#value"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-52', 'value', 'link-52');">value</a></tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">token</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">values_are_confidence</tt><tt class="py-op">:</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">                    <tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-53', 'confidence', 'link-42');">confidence</a></tt> <tt class="py-op">=</tt> <tt id="link-54" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-54', 'value', 'link-52');">value</a></tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">                    <tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.branch_length()=Bio.Phylo.PhyloXMLIO.Writer-class.html#branch_length"><a title="Bio.Phylo.PhyloXMLIO.Writer.branch_length" class="py-name" href="#" onclick="return doclink('link-55', 'branch_length', 'link-55');">branch_length</a></tt> <tt class="py-op">=</tt> <tt id="link-56" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-56', 'value', 'link-52');">value</a></tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">token</tt> <tt class="py-op">==</tt> <tt class="py-string">'\n'</tt><tt class="py-op">:</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">                <tt class="py-keyword">pass</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">                <tt class="py-comment"># unquoted node label</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">                <tt class="py-name">current_clade</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-57', 'name', 'link-9');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">token</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">lp_count</tt> <tt class="py-op">==</tt> <tt class="py-name">rp_count</tt><tt class="py-op">:</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-58" class="py-name"><a title="Bio.Phylo.NewickIO.NewickError" class="py-name" href="#" onclick="return doclink('link-58', 'NewickError', 'link-23');">NewickError</a></tt><tt class="py-op">(</tt><tt class="py-string">'Number of open/close parentheses do not match.'</tt><tt class="py-op">)</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt class="py-comment"># if ; token broke out of for loop, there should be no remaining tokens</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">            <tt class="py-name">next_token</tt> <tt class="py-op">=</tt> <tt id="link-59" class="py-name" targets="Method Bio.AlignIO.Interfaces.AlignmentIterator.next()=Bio.AlignIO.Interfaces.AlignmentIterator-class.html#next,Method Bio.Blast.NCBIStandalone.Iterator.next()=Bio.Blast.NCBIStandalone.Iterator-class.html#next,Method Bio.Blast.ParseBlastTable.BlastTableReader.next()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#next,Method Bio.DocSQL.IterationCursor.next()=Bio.DocSQL.IterationCursor-class.html#next,Method Bio.File.UndoHandle.next()=Bio.File.UndoHandle-class.html#next,Method Bio.GenBank.Iterator.next()=Bio.GenBank.Iterator-class.html#next,Method Bio.Nexus.Nexus.CharBuffer.next()=Bio.Nexus.Nexus.CharBuffer-class.html#next,Method Bio.PopGen.GenePop.Controller._FileIterator.next()=Bio.PopGen.GenePop.Controller._FileIterator-class.html#next,Method Bio.SeqIO.Interfaces.SequenceIterator.next()=Bio.SeqIO.Interfaces.SequenceIterator-class.html#next,Method Bio.bgzf.BgzfReader.next()=Bio.bgzf.BgzfReader-class.html#next"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-59', 'next', 'link-59');">next</a></tt><tt class="py-op">(</tt><tt id="link-60" class="py-name"><a title="Bio.Phylo.NewickIO.tokens" class="py-name" href="#" onclick="return doclink('link-60', 'tokens', 'link-5');">tokens</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-61" class="py-name"><a title="Bio.Phylo.NewickIO.NewickError" class="py-name" href="#" onclick="return doclink('link-61', 'NewickError', 'link-23');">NewickError</a></tt><tt class="py-op">(</tt><tt class="py-string">'Text after semicolon in Newick tree: %s'</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line">                              <tt class="py-op">%</tt> <tt class="py-name">next_token</tt><tt class="py-op">.</tt><tt class="py-name">group</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">StopIteration</tt><tt class="py-op">:</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">            <tt class="py-keyword">pass</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-62" class="py-name"><a title="Bio.Phylo.CDAOIO.Writer.process_clade
+Bio.Phylo.NewickIO.Parser.process_clade" class="py-name" href="#" onclick="return doclink('link-62', 'process_clade', 'link-47');">process_clade</a></tt><tt class="py-op">(</tt><tt class="py-name">current_clade</tt><tt class="py-op">)</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="Bio.Phylo.CDAOIO.Writer.process_clade
+Bio.Phylo.NewickIO.Parser.process_clade" class="py-name" href="#" onclick="return doclink('link-63', 'process_clade', 'link-47');">process_clade</a></tt><tt class="py-op">(</tt><tt class="py-name">root_clade</tt><tt class="py-op">)</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-64" class="py-name"><a title="Bio.Phylo.Newick" class="py-name" href="#" onclick="return doclink('link-64', 'Newick', 'link-4');">Newick</a></tt><tt class="py-op">.</tt><tt id="link-65" class="py-name" targets="Class Bio.Nexus.Trees.Tree=Bio.Nexus.Trees.Tree-class.html,Class Bio.Phylo.BaseTree.Tree=Bio.Phylo.BaseTree.Tree-class.html,Class Bio.Phylo.CDAO.Tree=Bio.Phylo.CDAO.Tree-class.html,Class Bio.Phylo.NeXML.Tree=Bio.Phylo.NeXML.Tree-class.html,Class Bio.Phylo.Newick.Tree=Bio.Phylo.Newick.Tree-class.html"><a title="Bio.Nexus.Trees.Tree
+Bio.Phylo.BaseTree.Tree
+Bio.Phylo.CDAO.Tree
+Bio.Phylo.NeXML.Tree
+Bio.Phylo.Newick.Tree" class="py-name" href="#" onclick="return doclink('link-65', 'Tree', 'link-65');">Tree</a></tt><tt class="py-op">(</tt><tt id="link-66" class="py-name" targets="Variable Bio.Phylo.BaseTree.Clade.root=Bio.Phylo.BaseTree.Clade-class.html#root,Variable Bio.Phylo._cdao_owl.root=Bio.Phylo._cdao_owl-module.html#root"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-66', 'root', 'link-66');">root</a></tt><tt class="py-op">=</tt><tt class="py-name">root_clade</tt><tt class="py-op">,</tt> <tt class="py-name">rooted</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rooted</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line"> </tt>
+<a name="Parser.new_clade"></a><div id="Parser.new_clade-def"><a name="L211"></a><tt class="py-lineno">211</tt> <a class="py-toggle" href="#" id="Parser.new_clade-toggle" onclick="return toggle('Parser.new_clade');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Parser-class.html#new_clade">new_clade</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">parent</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Parser.new_clade-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Parser.new_clade-expanded"><a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a new Newick.Clade, optionally with a temporary reference</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"><tt class="py-docstring">        to its parent clade."""</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">        <tt id="link-67" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-67', 'clade', 'link-16');">clade</a></tt> <tt class="py-op">=</tt> <tt id="link-68" class="py-name"><a title="Bio.Phylo.Newick" class="py-name" href="#" onclick="return doclink('link-68', 'Newick', 'link-4');">Newick</a></tt><tt class="py-op">.</tt><tt id="link-69" class="py-name" targets="Class Bio.Phylo.BaseTree.Clade=Bio.Phylo.BaseTree.Clade-class.html,Class Bio.Phylo.CDAO.Clade=Bio.Phylo.CDAO.Clade-class.html,Class Bio.Phylo.NeXML.Clade=Bio.Phylo.NeXML.Clade-class.html,Class Bio.Phylo.Newick.Clade=Bio.Phylo.Newick.Clade-class.html,Class Bio.Phylo.PhyloXML.Clade=Bio.Phylo.PhyloXML.Clade-class.html"><a title="Bio.Phylo.BaseTree.Clade
+Bio.Phylo.CDAO.Clade
+Bio.Phylo.NeXML.Clade
+Bio.Phylo.Newick.Clade
+Bio.Phylo.PhyloXML.Clade" class="py-name" href="#" onclick="return doclink('link-69', 'Clade', 'link-69');">Clade</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">parent</tt><tt class="py-op">:</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">            <tt id="link-70" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-70', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">parent</tt> <tt class="py-op">=</tt> <tt class="py-name">parent</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-71" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-71', 'clade', 'link-16');">clade</a></tt> </tt>
+</div><a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"> </tt>
+<a name="Parser.process_clade"></a><div id="Parser.process_clade-def"><a name="L219"></a><tt class="py-lineno">219</tt> <a class="py-toggle" href="#" id="Parser.process_clade-toggle" onclick="return toggle('Parser.process_clade');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Parser-class.html#process_clade">process_clade</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Parser.process_clade-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Parser.process_clade-expanded"><a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">        <tt class="py-docstring">"""Final processing of a parsed clade. Removes the node's parent and</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"><tt class="py-docstring">        returns it."""</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-op">(</tt><tt id="link-72" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-72', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-73" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-73', 'name', 'link-9');">name</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-keyword">not</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">values_are_confidence</tt> <tt class="py-keyword">or</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">comments_are_confidence</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt id="link-74" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-74', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-75" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-75', 'confidence', 'link-42');">confidence</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt id="link-76" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-76', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">            <tt id="link-77" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-77', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-78" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-78', 'confidence', 'link-42');">confidence</a></tt> <tt class="py-op">=</tt> <tt id="link-79" class="py-name"><a title="Bio.Phylo.NewickIO._parse_confidence" class="py-name" href="#" onclick="return doclink('link-79', '_parse_confidence', 'link-43');">_parse_confidence</a></tt><tt class="py-op">(</tt><tt id="link-80" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-80', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-81" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-81', 'name', 'link-9');">name</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-82" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-82', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-83" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-83', 'confidence', 'link-42');">confidence</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">                <tt id="link-84" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-84', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-85" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-85', 'name', 'link-9');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line"> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-86" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-86', 'clade', 'link-16');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-string">'parent'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">            <tt class="py-name">parent</tt> <tt class="py-op">=</tt> <tt id="link-87" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-87', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">parent</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">            <tt class="py-name">parent</tt><tt class="py-op">.</tt><tt class="py-name">clades</tt><tt class="py-op">.</tt><tt id="link-88" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-88', 'append', 'link-88');">append</a></tt><tt class="py-op">(</tt><tt id="link-89" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-89', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">            <tt class="py-keyword">del</tt> <tt id="link-90" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-90', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt class="py-name">parent</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">parent</tt> </tt>
+</div></div><a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line"> </tt>
+<a name="Writer"></a><div id="Writer-def"><a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line"> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line"><tt class="py-comment"># ---------------------------------------------------------</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line"><tt class="py-comment"># Output</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line"> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt> <a class="py-toggle" href="#" id="Writer-toggle" onclick="return toggle('Writer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Writer-class.html">Writer</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Writer-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Writer-expanded"><a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">    <tt class="py-docstring">"""Based on the writer in Bio.Nexus.Trees (str, to_string)."""</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line"> </tt>
+<a name="Writer.__init__"></a><div id="Writer.__init__-def"><a name="L243"></a><tt class="py-lineno">243</tt> <a class="py-toggle" href="#" id="Writer.__init__-toggle" onclick="return toggle('Writer.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Writer-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">trees</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Writer.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Writer.__init__-expanded"><a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">trees</tt> <tt class="py-op">=</tt> <tt class="py-name">trees</tt> </tt>
+</div><a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line"> </tt>
+<a name="Writer.write"></a><div id="Writer.write-def"><a name="L246"></a><tt class="py-lineno">246</tt> <a class="py-toggle" href="#" id="Writer.write-toggle" onclick="return toggle('Writer.write');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Writer-class.html#write">write</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Writer.write-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Writer.write-expanded"><a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">        <tt class="py-docstring">"""Write this instance's trees to a file handle."""</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt id="link-91" class="py-name" targets="Method Bio.Crystal.Chain.count()=Bio.Crystal.Chain-class.html#count,Method Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count()=Bio.NeuralNetwork.Gene.Pattern.PatternRepository-class.html#count,Method Bio.Seq.MutableSeq.count()=Bio.Seq.MutableSeq-class.html#count,Method Bio.Seq.Seq.count()=Bio.Seq.Seq-class.html#count,Method Bio.Seq.UnknownSeq.count()=Bio.Seq.UnknownSeq-class.html#count,Method Bio.motifs.Instances.count()=Bio.motifs.Instances-class.html#count"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-91', 'count', 'link-91');">count</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">treestr</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-92" class="py-name" targets="Method Bio.Phylo.NewickIO.Writer.to_strings()=Bio.Phylo.NewickIO.Writer-class.html#to_strings"><a title="Bio.Phylo.NewickIO.Writer.to_strings" class="py-name" href="#" onclick="return doclink('link-92', 'to_strings', 'link-92');">to_strings</a></tt><tt class="py-op">(</tt><tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">            <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-93" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-93', 'write', 'link-15');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">treestr</tt> <tt class="py-op">+</tt> <tt class="py-string">'\n'</tt><tt class="py-op">)</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">            <tt id="link-94" class="py-name"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-94', 'count', 'link-91');">count</a></tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-95" class="py-name"><a title="Bio.Crystal.Chain.count
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.count
+Bio.Seq.MutableSeq.count
+Bio.Seq.Seq.count
+Bio.Seq.UnknownSeq.count
+Bio.motifs.Instances.count" class="py-name" href="#" onclick="return doclink('link-95', 'count', 'link-91');">count</a></tt> </tt>
+</div><a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line"> </tt>
+<a name="Writer.to_strings"></a><div id="Writer.to_strings-def"><a name="L254"></a><tt class="py-lineno">254</tt> <a class="py-toggle" href="#" id="Writer.to_strings-toggle" onclick="return toggle('Writer.to_strings');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Writer-class.html#to_strings">to_strings</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">confidence_as_branch_length</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">                   <tt class="py-param">branch_length_only</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">plain</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">                   <tt class="py-param">plain_newick</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-param">ladderize</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">max_confidence</tt><tt class="py-op">=</tt><tt class="py-number">1.0</tt><tt class="py-op">,</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">                   <tt class="py-param">format_confidence</tt><tt class="py-op">=</tt><tt class="py-string">'%1.2f'</tt><tt class="py-op">,</tt> <tt class="py-param">format_branch_length</tt><tt class="py-op">=</tt><tt class="py-string">'%1.5f'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Writer.to_strings-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Writer.to_strings-expanded"><a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">        <tt class="py-docstring">"""Return an iterable of PAUP-compatible tree lines."""</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">        <tt class="py-comment"># If there's a conflict in the arguments, we override plain=True</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">confidence_as_branch_length</tt> <tt class="py-keyword">or</tt> <tt class="py-name">branch_length_only</tt><tt class="py-op">:</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">            <tt class="py-name">plain</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">        <tt class="py-name">make_info_string</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-96" class="py-name" targets="Method Bio.Phylo.NewickIO.Writer._info_factory()=Bio.Phylo.NewickIO.Writer-class.html#_info_factory"><a title="Bio.Phylo.NewickIO.Writer._info_factory" class="py-name" href="#" onclick="return doclink('link-96', '_info_factory', 'link-96');">_info_factory</a></tt><tt class="py-op">(</tt><tt class="py-name">plain</tt><tt class="py-op">,</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">                                              <tt class="py-name">confidence_as_branch_length</tt><tt class="py-op">,</tt> <tt class="py-name">branch_length_only</tt><tt class="py-op">,</tt> <tt class="py-name">max_confidence</tt><tt class="py-op">,</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">                                              <tt class="py-name">format_confidence</tt><tt class="py-op">,</tt> <tt class="py-name">format_branch_length</tt><tt class="py-op">)</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line"> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">newickize</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">            <tt class="py-docstring">"""Convert a node tree to a Newick tree string, recursively."""</tt> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">            <tt class="py-name">label</tt> <tt class="py-op">=</tt> <tt id="link-97" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-97', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-98" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-98', 'name', 'link-9');">name</a></tt> <tt class="py-keyword">or</tt> <tt class="py-string">''</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">label</tt><tt class="py-op">:</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">                <tt class="py-name">unquoted_label</tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt id="link-99" class="py-name"><a title="Bio.triefind.match" class="py-name" href="#" onclick="return doclink('link-99', 'match', 'link-35');">match</a></tt><tt class="py-op">(</tt><tt id="link-100" class="py-name"><a title="Bio.Phylo.NewickIO.token_dict" class="py-name" href="#" onclick="return doclink('link-100', 'token_dict', 'link-8');">token_dict</a></tt><tt class="py-op">[</tt><tt class="py-string">'unquoted node label'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">label</tt><tt class="py-op">)</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-keyword">not</tt> <tt class="py-name">unquoted_label</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> <tt class="py-op">(</tt><tt class="py-name">unquoted_label</tt><tt class="py-op">.</tt><tt id="link-101" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.end=Bio.SeqFeature.CompoundLocation-class.html#end,Variable Bio.SeqFeature.FeatureLocation.end=Bio.SeqFeature.FeatureLocation-class.html#end"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-101', 'end', 'link-101');">end</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">label</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">                    <tt class="py-name">label</tt> <tt class="py-op">=</tt> <tt class="py-string">"'%s'"</tt> <tt class="py-op">%</tt> <tt class="py-name">label</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">                        <tt class="py-string">'\\'</tt><tt class="py-op">,</tt> <tt class="py-string">'\\\\'</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">replace</tt><tt class="py-op">(</tt><tt class="py-string">"'"</tt><tt class="py-op">,</tt> <tt class="py-string">"\\'"</tt><tt class="py-op">)</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line"> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-102" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-102', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-103" class="py-name" targets="Method Bio.Nexus.Trees.Tree.is_terminal()=Bio.Nexus.Trees.Tree-class.html#is_terminal,Method Bio.Phylo.BaseTree.Clade.is_terminal()=Bio.Phylo.BaseTree.Clade-class.html#is_terminal,Method Bio.Phylo.BaseTree.Tree.is_terminal()=Bio.Phylo.BaseTree.Tree-class.html#is_terminal"><a title="Bio.Nexus.Trees.Tree.is_terminal
+Bio.Phylo.BaseTree.Clade.is_terminal
+Bio.Phylo.BaseTree.Tree.is_terminal" class="py-name" href="#" onclick="return doclink('link-103', 'is_terminal', 'link-103');">is_terminal</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>    <tt class="py-comment"># terminal</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">label</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line">                        <tt class="py-op">+</tt> <tt class="py-name">make_info_string</tt><tt class="py-op">(</tt><tt id="link-104" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-104', 'clade', 'link-16');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-name">terminal</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">                <tt class="py-name">subtrees</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">newickize</tt><tt class="py-op">(</tt><tt class="py-name">sub</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">sub</tt> <tt class="py-keyword">in</tt> <tt id="link-105" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-105', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">'(%s)%s'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-string">','</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">subtrees</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">                                   <tt class="py-name">label</tt> <tt class="py-op">+</tt> <tt class="py-name">make_info_string</tt><tt class="py-op">(</tt><tt id="link-106" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-106', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line"> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">        <tt class="py-comment"># Convert each tree to a string</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">tree</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">trees</tt><tt class="py-op">:</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-107" class="py-name" targets="Method Bio.Phylo.BaseTree.TreeMixin.ladderize()=Bio.Phylo.BaseTree.TreeMixin-class.html#ladderize"><a title="Bio.Phylo.BaseTree.TreeMixin.ladderize" class="py-name" href="#" onclick="return doclink('link-107', 'ladderize', 'link-107');">ladderize</a></tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-string">'left'</tt><tt class="py-op">,</tt> <tt class="py-string">'LEFT'</tt><tt class="py-op">,</tt> <tt class="py-string">'right'</tt><tt class="py-op">,</tt> <tt class="py-string">'RIGHT'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line">                <tt class="py-comment"># Nexus compatibility shim, kind of</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">                <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-108" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.ladderize" class="py-name" href="#" onclick="return doclink('link-108', 'ladderize', 'link-107');">ladderize</a></tt><tt class="py-op">(</tt><tt id="link-109" class="py-name" targets="Method Bio.Pathway.Reaction.reverse()=Bio.Pathway.Reaction-class.html#reverse,Method Bio.Seq.MutableSeq.reverse()=Bio.Seq.MutableSeq-class.html#reverse"><a title="Bio.Pathway.Reaction.reverse
+Bio.Seq.MutableSeq.reverse" class="py-name" href="#" onclick="return doclink('link-109', 'reverse', 'link-109');">reverse</a></tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt id="link-110" class="py-name"><a title="Bio.Phylo.BaseTree.TreeMixin.ladderize" class="py-name" href="#" onclick="return doclink('link-110', 'ladderize', 'link-107');">ladderize</a></tt> <tt class="py-keyword">in</tt> <tt class="py-op">(</tt><tt class="py-string">'right'</tt><tt class="py-op">,</tt> <tt class="py-string">'RIGHT'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">            <tt class="py-name">rawtree</tt> <tt class="py-op">=</tt> <tt class="py-name">newickize</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-111" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-111', 'root', 'link-66');">root</a></tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">';'</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">plain_newick</tt><tt class="py-op">:</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line">                <tt class="py-keyword">yield</tt> <tt class="py-name">rawtree</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">                <tt class="py-keyword">continue</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">            <tt class="py-comment"># Nexus-style (?) notation before the raw Newick tree</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line">            <tt class="py-name">treeline</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'tree'</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt id="link-112" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-112', 'name', 'link-9');">name</a></tt> <tt class="py-keyword">or</tt> <tt class="py-string">'a_tree'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'='</tt><tt class="py-op">]</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt class="py-name">weight</tt> <tt class="py-op">!=</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line">                <tt class="py-name">treeline</tt><tt class="py-op">.</tt><tt id="link-113" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-113', 'append', 'link-88');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">'[&amp;W%s]'</tt> <tt class="py-op">%</tt> <tt id="link-114" class="py-name" targets="Method Bio.Blast.NCBIStandalone._BlastConsumer.round()=Bio.Blast.NCBIStandalone._BlastConsumer-class.html#round,Method Bio.Blast.NCBIStandalone._DescriptionConsumer.round()=Bio.Blast.NCBIStandalone._DescriptionConsumer-class.html#round"><a title="Bio.Blast.NCBIStandalone._BlastConsumer.round
+Bio.Blast.NCBIStandalone._DescriptionConsumer.round" class="py-name" href="#" onclick="return doclink('link-114', 'round', 'link-114');">round</a></tt><tt class="py-op">(</tt><tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">tree</tt><tt class="py-op">.</tt><tt class="py-name">weight</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">tree</tt><tt class="py-op">.</tt><tt class="py-name">rooted</tt><tt class="py-op">:</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line">                <tt class="py-name">treeline</tt><tt class="py-op">.</tt><tt id="link-115" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-115', 'append', 'link-88');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">'[&amp;R]'</tt><tt class="py-op">)</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line">            <tt class="py-name">treeline</tt><tt class="py-op">.</tt><tt id="link-116" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-116', 'append', 'link-88');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">rawtree</tt><tt class="py-op">)</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-string">' '</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">treeline</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line"> </tt>
+<a name="Writer._info_factory"></a><div id="Writer._info_factory-def"><a name="L301"></a><tt class="py-lineno">301</tt> <a class="py-toggle" href="#" id="Writer._info_factory-toggle" onclick="return toggle('Writer._info_factory');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NewickIO.Writer-class.html#_info_factory">_info_factory</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">plain</tt><tt class="py-op">,</tt> <tt class="py-param">confidence_as_branch_length</tt><tt class="py-op">,</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line">                      <tt class="py-param">branch_length_only</tt><tt class="py-op">,</tt> <tt class="py-param">max_confidence</tt><tt class="py-op">,</tt> <tt class="py-param">format_confidence</tt><tt class="py-op">,</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">                      <tt class="py-param">format_branch_length</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Writer._info_factory-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Writer._info_factory-expanded"><a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">        <tt class="py-docstring">"""Return a function that creates a nicely formatted node tag."""</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">plain</tt><tt class="py-op">:</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line">            <tt class="py-comment"># Plain tree only. That's easy.</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">make_info_string</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">,</tt> <tt class="py-param">terminal</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt id="link-117" class="py-name" targets="Function Bio.Phylo.NewickIO._get_comment()=Bio.Phylo.NewickIO-module.html#_get_comment"><a title="Bio.Phylo.NewickIO._get_comment" class="py-name" href="#" onclick="return doclink('link-117', '_get_comment', 'link-117');">_get_comment</a></tt><tt class="py-op">(</tt><tt id="link-118" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-118', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line"> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">confidence_as_branch_length</tt><tt class="py-op">:</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line">            <tt class="py-comment"># Support as branchlengths (eg. PAUP), ignore actual branchlengths</tt> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">make_info_string</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">,</tt> <tt class="py-param">terminal</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">terminal</tt><tt class="py-op">:</tt> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line">                    <tt class="py-comment"># terminal branches have 100% support</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">format_confidence</tt> <tt class="py-op">%</tt> <tt class="py-name">max_confidence</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt id="link-119" class="py-name"><a title="Bio.Phylo.NewickIO._get_comment" class="py-name" href="#" onclick="return doclink('link-119', '_get_comment', 'link-117');">_get_comment</a></tt><tt class="py-op">(</tt><tt id="link-120" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-120', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">format_confidence</tt> <tt class="py-op">%</tt> <tt id="link-121" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-121', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-122" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-122', 'confidence', 'link-42');">confidence</a></tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt id="link-123" class="py-name"><a title="Bio.Phylo.NewickIO._get_comment" class="py-name" href="#" onclick="return doclink('link-123', '_get_comment', 'link-117');">_get_comment</a></tt><tt class="py-op">(</tt><tt id="link-124" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-124', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">branch_length_only</tt><tt class="py-op">:</tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line">            <tt class="py-comment"># write only branchlengths, ignore support</tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">make_info_string</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">,</tt> <tt class="py-param">terminal</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">format_branch_length</tt> <tt class="py-op">%</tt> <tt id="link-125" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-125', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-126" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.branch_length" class="py-name" href="#" onclick="return doclink('link-126', 'branch_length', 'link-55');">branch_length</a></tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt id="link-127" class="py-name"><a title="Bio.Phylo.NewickIO._get_comment" class="py-name" href="#" onclick="return doclink('link-127', '_get_comment', 'link-117');">_get_comment</a></tt><tt class="py-op">(</tt><tt id="link-128" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-128', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line"> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line">            <tt class="py-comment"># write support and branchlengths (e.g. .con tree of mrbayes)</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line">            <tt class="py-keyword">def</tt> <tt class="py-def-name">make_info_string</tt><tt class="py-op">(</tt><tt class="py-param">clade</tt><tt class="py-op">,</tt> <tt class="py-param">terminal</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">terminal</tt> <tt class="py-keyword">or</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">                        <tt class="py-keyword">not</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt id="link-129" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-129', 'clade', 'link-16');">clade</a></tt><tt class="py-op">,</tt> <tt class="py-string">'confidence'</tt><tt class="py-op">)</tt> <tt class="py-keyword">or</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">                        <tt id="link-130" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-130', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-131" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-131', 'confidence', 'link-42');">confidence</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">format_branch_length</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line">                            <tt class="py-op">)</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-132" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-132', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-133" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.branch_length" class="py-name" href="#" onclick="return doclink('link-133', 'branch_length', 'link-55');">branch_length</a></tt> <tt class="py-keyword">or</tt> <tt class="py-number">0.0</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt id="link-134" class="py-name"><a title="Bio.Phylo.NewickIO._get_comment" class="py-name" href="#" onclick="return doclink('link-134', '_get_comment', 'link-117');">_get_comment</a></tt><tt class="py-op">(</tt><tt id="link-135" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-135', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">format_confidence</tt> <tt class="py-op">+</tt> <tt class="py-string">':'</tt> <tt class="py-op">+</tt> <tt class="py-name">format_branch_length</tt> </tt>
+<a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line">                            <tt class="py-op">)</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-136" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-136', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-137" class="py-name"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-137', 'confidence', 'link-42');">confidence</a></tt><tt class="py-op">,</tt> <tt id="link-138" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-138', 'clade', 'link-16');">clade</a></tt><tt class="py-op">.</tt><tt id="link-139" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.branch_length" class="py-name" href="#" onclick="return doclink('link-139', 'branch_length', 'link-55');">branch_length</a></tt> <tt class="py-keyword">or</tt> <tt class="py-number">0.0</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt id="link-140" class="py-name"><a title="Bio.Phylo.NewickIO._get_comment" class="py-name" href="#" onclick="return doclink('link-140', '_get_comment', 'link-117');">_get_comment</a></tt><tt class="py-op">(</tt><tt id="link-141" class="py-name"><a title="Bio.Phylo.BaseTree.Tree.clade
+Bio.Phylo.PhyloXMLIO.Writer.clade" class="py-name" href="#" onclick="return doclink('link-141', 'clade', 'link-16');">clade</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line"> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">make_info_string</tt> </tt>
+</div></div><a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:41 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

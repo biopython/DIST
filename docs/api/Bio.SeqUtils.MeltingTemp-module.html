@@ -1,0 +1,1531 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SeqUtils.MeltingTemp</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SeqUtils-module.html">Package&nbsp;SeqUtils</a> ::
+        Module&nbsp;MeltingTemp
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SeqUtils.MeltingTemp-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module MeltingTemp</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html">source&nbsp;code</a></span></p>
+<p>Calculate the melting temperature of nucleotide sequences.</p>
+<p>This module contains three different methods to calculate the melting
+temperature of oligonucleotides:</p>
+<ol class="rst-arabic simple">
+<li>Tm_Wallace: 'Rule of thumb'</li>
+<li>Tm_GC: Empirical formulas based on GC content. Salt and mismatch corrections
+can be included.</li>
+<li>Tm_NN: Calculation based on nearest neighbor thermodynamics. Several tables
+for DNA/DNA, DNA/RNA and RNA/RNA hybridizations are included.
+Correction for mismatches, dangling ends, salt concentration and other
+additives are available.</li>
+</ol>
+<p>Tm_staluc is the 'old' NN calculation and is kept for compatibility. It is,
+however, recommended to use Tm_NN instead, since Tm_staluc may be depreceated
+in the future. Also, Tm_NN has much more options. Using Tm_staluc and Tm_NN
+with default parameters gives (essentially) the same results.</p>
+<dl class="rst-docutils">
+<dt>General parameters for most Tm methods:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>seq -- A Biopython sequence object or a string.</li>
+<li>check -- Checks if the sequence is valid for the given method (default=True).
+In general, whitespaces and non-base characters are removed and
+characters are converted to uppercase. RNA will be backtranscribed.</li>
+<li>strict - Do not allow base characters or neighbor duplex keys (e.g. 'AT/NA').
+that could not or not unambigiously be evaluated for the respective
+method (default=True). Note that W (= A or T) and S (= C or G) are
+not ambiguous for Tm_Wallace and Tm_GC. If 'False', average values
+(if applicable) will be used.</li>
+</ul>
+</dd>
+</dl>
+<p>This module is not able to detect self-complementary and it will not use
+alignment tools to align an oligonucleotide sequence to its target sequence.
+Thus it can not detect dangling-ends and mismatches by itself (don't even think
+about bulbs and loops). These parameters have to be handed over to the
+respective method.</p>
+<dl class="rst-docutils">
+<dt>Other public methods of this module:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>make_table     : To create a table with thermodynamic data.</li>
+<li>salt_correction: To adjust Tm to a given salt concentration by different
+formulas. This method is called from Tm_GC and Tm_NN but may
+also be accessed 'manually'. It returns a correction term, not
+a corrected Tm!</li>
+<li>chem_correction: To adjust Tm regarding the chemical additives DMSO and
+formaldehyde. The method returns a corrected Tm. Chemical
+correction is not an integral part of the Tm methods and must
+be called additionally.</li>
+</ul>
+</dd>
+</dl>
+<p>Examples:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> MeltingTemp <span class="py-keyword">as</span> mt
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span>mystring = <span class="py-string">'CGTTCCAAAGATGTGGGCATGAGCTTAC'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>myseq = Seq(mystring)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_Wallace(mystring))
+<span class="py-output">84.00</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_Wallace(myseq))
+<span class="py-output">84.00</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_GC(myseq))
+<span class="py-output">58.73</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(myseq))
+<span class="py-output">60.32</span></pre>
+</blockquote>
+<p>Tm_NN with default values gives same result as 'old' Tm_staluc. However, values
+differ for RNA, since Tm_staluc had some errors for RNA calculation. These
+errors have been fixed in this version.</p>
+<p>New Tm_NN can do slightly more:
+Using different thermodynamic tables, e.g. from Breslauer '86 or Sugimoto '96:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(myseq, nn_table=mt.DNA_NN1))  <span class="py-comment"># Breslauer '86</span>
+<span class="py-output">72.19</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(myseq, nn_table=mt.DNA_NN2))  <span class="py-comment"># Sugimoto '96</span>
+<span class="py-output">65.47</span></pre>
+</blockquote>
+<p>Several types of salc correction (for Tm_NN and Tm_GC):</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> i <span class="py-keyword">in</span> range(1, 8):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Type: %d, Tm: %0.2f&quot;</span> % (i, Tm_NN(myseq, saltcorr=i)))
+<span class="py-more">...</span>
+<span class="py-output">Type: 1, Tm: 54.27</span>
+<span class="py-output">Type: 2, Tm: 54.02</span>
+<span class="py-output">Type: 3, Tm: 59.60</span>
+<span class="py-output">Type: 4, Tm: 60.64</span>
+<span class="py-output">Type: 5, Tm: 60.32</span>
+<span class="py-output">Type: 6, Tm: 59.78</span>
+<span class="py-output">Type: 7, Tm: 59.78</span></pre>
+</blockquote>
+<p>Correction for other monovalent cations (K+, Tris), Mg2+ and dNTPs according
+to von Ahsen et al. (2001) or Owczarzy et al. (2008) (for Tm_NN and Tm_GC):</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(myseq, Na=50, Tris=10))
+<span class="py-output">60.79</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5))
+<span class="py-output">67.39</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5, saltcorr=7))
+<span class="py-output">66.81</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(myseq, Na=50, Tris=10, Mg=1.5, dNTPs=0.6,
+<span class="py-more">... </span>                         saltcorr=7))
+<span class="py-output">66.04</span></pre>
+</blockquote>
+<p>Dangling ends and mismatches, e.g.:</p>
+<pre class="rst-literal-block">
+Oligo:     CGTTCCaAAGATGTGGGCATGAGCTTAC         CGTTCCaAAGATGTGGGCATGAGCTTAC
+           ::::::X:::::::::::::::::::::   or    ::::::X:::::::::::::::::::::
+Template:  GCAAGGcTTCTACACCCGTACTCGAATG        TGCAAGGcTTCTACACCCGTACTCGAATGC
+</pre>
+<p>Here:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(<span class="py-string">'CGTTCCAAAGATGTGGGCATGAGCTTAC'</span>))
+<span class="py-output">60.32</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(<span class="py-string">'CGTTCCAAAGATGTGGGCATGAGCTTAC'</span>,
+<span class="py-more">... </span>                   c_seq=<span class="py-string">'GCAAGGCTTCTACACCCGTACTCGAATG'</span>))
+<span class="py-output">55.39</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(<span class="py-string">'CGTTCCAAAGATGTGGGCATGAGCTTAC'</span>, shift=1,
+<span class="py-more">... </span>                  c_seq=<span class="py-string">'TGCAAGGCTTCTACACCCGTACTCGAATGC'</span>))
+<span class="py-output">55.69</span></pre>
+</blockquote>
+<p>Make your own tables, or update/extend existing tables. E.g., add values for
+locked nucleotides. Here, 'locked A' (and its complement) should be represented
+by '1':</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>mytable = mt.make_table(oldtable=mt.DNA_NN3,
+<span class="py-more">... </span>                        <span class="py-builtin">values</span>={<span class="py-string">'A1/T1'</span>:(-6.608, -17.235),
+<span class="py-more">... </span>                        <span class="py-string">'1A/1T'</span>:(-6.893, -15.923)})
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(<span class="py-string">'CGTTCCAAAGATGTGGGCATGAGCTTAC'</span>))
+<span class="py-output">60.32</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.Tm_NN(<span class="py-string">'CGTTCCA1AGATGTGGGCATGAGCTTAC'</span>,
+<span class="py-more">... </span>                          nn_table=mytable, check=False))
+<span class="py-more">... </span><span class="py-comment"># 'check' must be False, otherwise '1' would be discarded</span>
+<span class="py-output">62.53</span></pre>
+</blockquote>
+
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#make_table" class="summary-sig-name">make_table</a>(<span class="summary-sig-arg">oldtable</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">values</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return a table with thermodynamic parameters (as dictionary).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#make_table">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#_check" class="summary-sig-name" onclick="show_private();">_check</a>(<span class="summary-sig-arg">seq</span>,
+        <span class="summary-sig-arg">method</span>)</span><br />
+      Return a sequence which fullfils the requirements of the given method (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#_check">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#salt_correction" class="summary-sig-name">salt_correction</a>(<span class="summary-sig-arg">Na</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">K</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">Tris</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">Mg</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">dNTPs</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">method</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">seq</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Calculate a term to correct Tm for salt ions.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#salt_correction">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#chem_correction" class="summary-sig-name">chem_correction</a>(<span class="summary-sig-arg">Tm</span>,
+        <span class="summary-sig-arg">DMSO</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">fmd</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">DMSOfactor</span>=<span class="summary-sig-default">0.75</span>,
+        <span class="summary-sig-arg">fmdfactor</span>=<span class="summary-sig-default">0.65</span>,
+        <span class="summary-sig-arg">fmdmethod</span>=<span class="summary-sig-default">1</span>,
+        <span class="summary-sig-arg">GC</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Correct a given Tm for DMSO and formamide.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#chem_correction">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#Tm_Wallace" class="summary-sig-name">Tm_Wallace</a>(<span class="summary-sig-arg">seq</span>,
+        <span class="summary-sig-arg">check</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">strict</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Calculate and return the Tm using the 'Wallace rule'.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_Wallace">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#Tm_GC" class="summary-sig-name">Tm_GC</a>(<span class="summary-sig-arg">seq</span>,
+        <span class="summary-sig-arg">check</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">strict</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">valueset</span>=<span class="summary-sig-default">7</span>,
+        <span class="summary-sig-arg">userset</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">Na</span>=<span class="summary-sig-default">50</span>,
+        <span class="summary-sig-arg">K</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">Tris</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">Mg</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">dNTPs</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">saltcorr</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">mismatch</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Return the Tm using empirical formulas based on GC content.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_GC">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#Tm_NN" class="summary-sig-name">Tm_NN</a>(<span class="summary-sig-arg">seq</span>,
+        <span class="summary-sig-arg">check</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">strict</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">c_seq</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">shift</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">nn_table</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.9<code class="variable-op">, </code>-22.2<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.2<code class="variable-op">, </code>-20.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.<code class="variable-ellipsis">...</code></span>,
+        <span class="summary-sig-arg">tmm_table</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string"> CC/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-2.1<code class="variable-op">, </code>-5.1<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string"> GG/CA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-4.6<code class="variable-op">, </code>-11.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-3<code class="variable-ellipsis">...</code></span>,
+        <span class="summary-sig-arg">imm_table</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>1.2<code class="variable-op">, </code>1.7<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>2.3<code class="variable-op">, </code>4.6<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.6<code class="variable-op">, </code>-2.<code class="variable-ellipsis">...</code></span>,
+        <span class="summary-sig-arg">de_table</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">.A/AT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.7<code class="variable-op">, </code>-0.8<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">.A/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>4.4<code class="variable-op">, </code>14.9<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">.A/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-1.6<code class="variable-op">, </code><code class="variable-ellipsis">...</code></span>,
+        <span class="summary-sig-arg">dnac1</span>=<span class="summary-sig-default">25</span>,
+        <span class="summary-sig-arg">dnac2</span>=<span class="summary-sig-default">25</span>,
+        <span class="summary-sig-arg">selfcomp</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">Na</span>=<span class="summary-sig-default">50</span>,
+        <span class="summary-sig-arg">K</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">Tris</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">Mg</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">dNTPs</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">saltcorr</span>=<span class="summary-sig-default">5</span>)</span><br />
+      Return the Tm using nearest neighbor thermodynamics.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_NN">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqUtils.MeltingTemp-module.html#Tm_staluc" class="summary-sig-name">Tm_staluc</a>(<span class="summary-sig-arg">s</span>,
+        <span class="summary-sig-arg">dnac</span>=<span class="summary-sig-default">50</span>,
+        <span class="summary-sig-arg">saltc</span>=<span class="summary-sig-default">50</span>,
+        <span class="summary-sig-arg">rna</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Returns DNA/DNA tm using nearest neighbor thermodynamics (OBSOLETE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_staluc">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_test"></a><span class="summary-sig-name">_test</span>()</span><br />
+      Run the module's doctests (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#_test">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#DNA_NN1" class="summary-name">DNA_NN1</a> = <code title="{'AA/TT': (-9.1, -24.0),
+ 'AT/TA': (-8.6, -23.9),
+ 'CA/GT': (-5.8, -12.9),
+ 'CG/GC': (-11.9, -27.8),
+ 'CT/GA': (-7.8, -20.8),
+ 'GA/CT': (-5.6, -13.5),
+ 'GC/CG': (-11.1, -26.7),
+ 'GG/CC': (-11.0, -26.6),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.1<code class="variable-op">, </code>-24.0<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.6<code class="variable-op">, </code>-23.9<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">CA</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#DNA_NN2" class="summary-name">DNA_NN2</a> = <code title="{'AA/TT': (-8.0, -21.9),
+ 'AT/TA': (-5.6, -15.2),
+ 'CA/GT': (-8.2, -21.0),
+ 'CG/GC': (-11.8, -29.0),
+ 'CT/GA': (-6.6, -16.4),
+ 'GA/CT': (-8.8, -23.5),
+ 'GC/CG': (-10.5, -26.4),
+ 'GG/CC': (-10.9, -28.4),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.0<code class="variable-op">, </code>-21.9<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.6<code class="variable-op">, </code>-15.2<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">CA</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#DNA_NN3" class="summary-name">DNA_NN3</a> = <code title="{'AA/TT': (-7.9, -22.2),
+ 'AT/TA': (-7.2, -20.4),
+ 'CA/GT': (-8.5, -22.7),
+ 'CG/GC': (-10.6, -27.2),
+ 'CT/GA': (-7.8, -21.0),
+ 'GA/CT': (-8.2, -22.2),
+ 'GC/CG': (-9.8, -24.4),
+ 'GG/CC': (-8.0, -19.9),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.9<code class="variable-op">, </code>-22.2<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.2<code class="variable-op">, </code>-20.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">CA</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#DNA_NN4" class="summary-name">DNA_NN4</a> = <code title="{'AA/TT': (-7.6, -21.3),
+ 'AT/TA': (-7.2, -20.4),
+ 'CA/GT': (-8.5, -22.7),
+ 'CG/GC': (-10.6, -27.2),
+ 'CT/GA': (-7.8, -21.0),
+ 'GA/CT': (-8.2, -22.2),
+ 'GC/CG': (-9.8, -24.4),
+ 'GG/CC': (-8.0, -19.0),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.6<code class="variable-op">, </code>-21.3<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.2<code class="variable-op">, </code>-20.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">CA</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#RNA_NN1" class="summary-name">RNA_NN1</a> = <code title="{'AA/TT': (-6.6, -18.4),
+ 'AT/TA': (-5.7, -15.5),
+ 'CA/GT': (-10.5, -27.8),
+ 'CG/GC': (-8.0, -19.4),
+ 'CT/GA': (-7.6, -19.2),
+ 'GA/CT': (-13.3, -35.5),
+ 'GC/CG': (-14.2, -34.9),
+ 'GG/CC': (-12.2, -29.7),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-6.6<code class="variable-op">, </code>-18.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.7<code class="variable-op">, </code>-15.5<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">CA</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#RNA_NN2" class="summary-name">RNA_NN2</a> = <code title="{'AA/TT': (-6.82, -19.0),
+ 'AT/TA': (-9.38, -26.7),
+ 'CA/GT': (-10.44, -26.9),
+ 'CG/GC': (-10.64, -26.7),
+ 'CT/GA': (-10.48, -27.1),
+ 'GA/CT': (-12.44, -32.5),
+ 'GC/CG': (-14.88, -36.9),
+ 'GG/CC': (-13.39, -32.7),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-6.82<code class="variable-op">, </code>-19.0<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.38<code class="variable-op">, </code>-26.7<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#RNA_NN3" class="summary-name">RNA_NN3</a> = <code title="{'AA/TT': (-7.09, -19.8),
+ 'AG/TT': (-3.96, -11.6),
+ 'AT/TA': (-9.11, -25.8),
+ 'AT/TG': (-7.39, -21.0),
+ 'CA/GT': (-11.03, -28.8),
+ 'CG/GC': (-10.88, -27.4),
+ 'CG/GT': (-5.56, -13.9),
+ 'CT/GA': (-10.9, -28.5),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.09<code class="variable-op">, </code>-19.8<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AG/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-3.96<code class="variable-op">, </code>-11.6<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#R_DNA_NN1" class="summary-name">R_DNA_NN1</a> = <code title="{'AA': (-11.5, -36.4),
+ 'AC': (-7.8, -21.6),
+ 'AG': (-7.0, -19.7),
+ 'AT': (-8.3, -23.9),
+ 'CA': (-10.4, -28.4),
+ 'CC': (-12.8, -31.9),
+ 'CG': (-16.3, -47.1),
+ 'CT': (-9.1, -23.5),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-11.5<code class="variable-op">, </code>-36.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.8<code class="variable-op">, </code>-21.6<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#DNA_IMM1" class="summary-name">DNA_IMM1</a> = <code title="{'AA/TA': (1.2, 1.7),
+ 'AA/TC': (2.3, 4.6),
+ 'AA/TG': (-0.6, -2.3),
+ 'AA/TI': (-0.7, -2.6),
+ 'AC/TA': (5.3, 14.6),
+ 'AC/TC': (0.0, -4.4),
+ 'AC/TI': (-8.8, -25.4),
+ 'AC/TT': (0.7, 0.2),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>1.2<code class="variable-op">, </code>1.7<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>2.3<code class="variable-op">, </code>4.6<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TG</code><code class="variable-quote">'</code><code class="variable-op">:</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#DNA_TMM1" class="summary-name">DNA_TMM1</a> = <code title="{' CC/GC': (-2.1, -5.1),
+ ' GG/CA': (-4.6, -11.4),
+ 'AA/TA': (-3.1, -7.8),
+ 'AA/TC': (-1.6, -4.0),
+ 'AA/TG': (-1.9, -4.4),
+ 'AC/TA': (-1.8, -3.8),
+ 'AC/TC': (-0.1, 0.5),
+ 'AC/TT': (-0.9, -1.7),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string"> CC/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-2.1<code class="variable-op">, </code>-5.1<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string"> GG/CA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-4.6<code class="variable-op">, </code>-11.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#DNA_DE1" class="summary-name">DNA_DE1</a> = <code title="{'.A/AT': (-0.7, -0.8),
+ '.A/CT': (4.4, 14.9),
+ '.A/GT': (-1.6, -3.6),
+ '.A/TT': (2.9, 10.4),
+ '.C/AG': (-2.1, -3.9),
+ '.C/CG': (-0.2, -0.1),
+ '.C/GG': (-3.9, -11.2),
+ '.C/TG': (-4.4, -13.1),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">.A/AT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.7<code class="variable-op">, </code>-0.8<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">.A/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>4.4<code class="variable-op">, </code>14.9<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">.A/GT</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqUtils.MeltingTemp-module.html#RNA_DE1" class="summary-name">RNA_DE1</a> = <code title="{'A./TA': (-0.5, -0.6),
+ 'A./TC': (6.9, 22.6),
+ 'A./TG': (0.6, 2.6),
+ 'A./TT': (0.6, 2.6),
+ 'AA/T.': (-4.9, -13.2),
+ 'AC/T.': (-0.9, -1.3),
+ 'AG/T.': (-5.5, -15.1),
+ 'AT/T.': (-2.3, -5.5),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">A./TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.5<code class="variable-op">, </code>-0.6<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">A./TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>6.9<code class="variable-op">, </code>22.6<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">A./TG</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.SeqUtils'"><code class="variable-quote">'</code><code class="variable-string">Bio.SeqUtils</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="make_table"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_table</span>(<span class="sig-arg">oldtable</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">values</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#make_table">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a table with thermodynamic parameters (as dictionary).</p>
+<p>Parameters:
+oldtable: An existing dictionary with thermodynamic parameters.
+values: A dictionary with new or updated values.</p>
+<p>E.g., to replace the initiation parameters in the Sugimoto '96 dataset with
+the initiation parameters from Allawi &amp; SantaLucia '97:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils.MeltingTemp <span class="py-keyword">import</span> make_table, DNA_NN2
+<span class="py-prompt">&gt;&gt;&gt; </span>table = DNA_NN2                               <span class="py-comment"># Sugimoto '96</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>table[<span class="py-string">'init_A/T'</span>]
+<span class="py-output">(0, 0)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>newtable = make_table(oldtable=DNA_NN2, <span class="py-builtin">values</span>={<span class="py-string">'init'</span>: (0, 0),
+<span class="py-more">... </span>                      <span class="py-string">'init_A/T'</span>: (2.3, 4.1),
+<span class="py-more">... </span>                      <span class="py-string">'init_G/C'</span>: (0.1, -2.8)})
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.1f, %0.1f&quot;</span> % newtable[<span class="py-string">'init_A/T'</span>])
+<span class="py-output">2.3, 4.1</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_check"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_check</span>(<span class="sig-arg">seq</span>,
+        <span class="sig-arg">method</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#_check">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a sequence which fullfils the requirements of the given method (PRIVATE).</p>
+<p>All Tm methods in this package require the sequence in uppercase format.
+Most methods make use of the length of the sequence (directly or
+indirectly), which can only be expressed as len(seq) if the sequence does
+not contain whitespaces and other non-base characters. RNA sequences are
+backtranscribed to DNA. This method is private.</p>
+<p>Arguments:
+seq: The sequence as given by the user (passed as string).
+method: Tm_Wallace, Tm_GC or Tm_NN.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> MeltingTemp <span class="py-keyword">as</span> mt
+<span class="py-prompt">&gt;&gt;&gt; </span>mt._check(<span class="py-string">'10 ACGTTGCAAG tccatggtac'</span>, <span class="py-string">'Tm_NN'</span>)
+<span class="py-output">'ACGTTGCAAGTCCATGGTAC'</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="salt_correction"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">salt_correction</span>(<span class="sig-arg">Na</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">K</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">Tris</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">Mg</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">dNTPs</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">method</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">seq</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#salt_correction">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate a term to correct Tm for salt ions.</p>
+<p>Depending on the Tm calculation, the term will correct Tm or entropy. To
+calculate corrected Tm values, different operations need to be applied:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>methods 1-4: Tm(new) = Tm(old) + corr</li>
+<li>method 5: deltaH(new) = deltaH(old) + corr</li>
+<li>methods 6+7: Tm(new) = 1/(1/Tm(old) + corr)</li>
+</ul>
+</blockquote>
+<dl class="rst-docutils">
+<dt>Parameters:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>Na, K, Tris, Mg, dNTPS: Millimolar concentration of respective ion. To have
+a simple 'salt correction', just pass Na. If any of K, Tris, Mg and
+dNTPS is non-zero, a 'sodium-equivalent' concentration is calculated
+according to von Ahsen et al. (2001, Clin Chem 47: 1956-1961):
+[Na_eq] = [Na+] + [K+] + [Tris]/2 + 120*([Mg2+] - [dNTPs])^0.5
+If [dNTPs] &gt;= [Mg2+]: [Na_eq] = [Na+] + [K+] + [Tris]/2</li>
+<li>method: Which method to be applied. Methods 1-4 correct Tm, method 5
+corrects deltaS, methods 6 and 7 correct 1/Tm. The methods are:<ol class="rst-arabic">
+<li>16.6 x log[Na+]
+(Schildkraut &amp; Lifson (1965), Biopolymers 3: 195-208)</li>
+<li>16.6 x log([Na+]/(1.0 + 0.7*[Na+]))
+(Wetmur (1991), Crit Rev Biochem Mol Biol 126: 227-259)</li>
+<li>12.5 x log(Na+]
+(SantaLucia et al. (1996), Biochemistry 35: 3555-3562</li>
+<li>11.7 x log[Na+]
+(SantaLucia (1998), Proc Natl Acad Sci USA 95: 1460-1465</li>
+<li>Correction for deltaS: 0.368 x (N-1) x ln[Na+]
+(SantaLucia (1998), Proc Natl Acad Sci USA 95: 1460-1465)</li>
+<li>(4.29(%GC)-3.95)x1e-5 x ln[Na+] + 9.40e-6 x ln[Na+]^2
+(Owczarzy et al. (2004), Biochemistry 43: 3537-3554)</li>
+<li>Complex formula with decision tree and 7 empirical constants.
+Mg2+ is corrected for dNTPs binding (if present)
+(Owczarzy et al. (2008), Biochemistry 47: 5336-5353)</li>
+</ol>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Examples:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> MeltingTemp <span class="py-keyword">as</span> mt
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.salt_correction(Na=50, method=1))
+<span class="py-output">-21.60</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.salt_correction(Na=50, method=2))
+<span class="py-output">-21.85</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.salt_correction(Na=100, Tris=20, method=2))
+<span class="py-output">-16.45</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.salt_correction(Na=100, Tris=20, Mg=1.5,
+<span class="py-more">... </span>                                   method=2))
+<span class="py-output">-10.99</span></pre>
+</blockquote>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="chem_correction"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">chem_correction</span>(<span class="sig-arg">Tm</span>,
+        <span class="sig-arg">DMSO</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">fmd</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">DMSOfactor</span>=<span class="sig-default">0.75</span>,
+        <span class="sig-arg">fmdfactor</span>=<span class="sig-default">0.65</span>,
+        <span class="sig-arg">fmdmethod</span>=<span class="sig-default">1</span>,
+        <span class="sig-arg">GC</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#chem_correction">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Correct a given Tm for DMSO and formamide.</p>
+<p>Please note that these corrections are +/- rough approximations.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last">
+<li><p class="rst-first">Tm: Melting temperature.</p>
+</li>
+<li><p class="rst-first">DMSO: Percent DMSO.</p>
+</li>
+<li><p class="rst-first">fmd: Formamide concentration in %(fmdmethod=1) or in molar (fmdmethod=2).</p>
+</li>
+<li><p class="rst-first">DMSOfactor: How much should Tm decreases per percent DMSO. Default=0.65
+(von Ahsen et al. 2001). Other published values are 0.5, 0.6 and 0.675.</p>
+</li>
+<li><p class="rst-first">fmdfactor: How much should Tm decrease per percent formamide. Default=0.65.
+Several papers report factors between 0.6 and 0.72.</p>
+</li>
+<li><p class="rst-first">fmdmethod:</p>
+<blockquote>
+<ol class="rst-arabic simple">
+<li>Tm = Tm - factor(%formamide) (Default)</li>
+<li>Tm = Tm + (0.453(f(GC)) - 2.88) x [formamide]</li>
+</ol>
+</blockquote>
+<p>Here f(GC) is fraction of GC.
+Note (again) that in fmdmethod=1 formamide concentration is given in %,
+while in fmdmethod=2 it is given in molar.</p>
+</li>
+<li><p class="rst-first">GC: GC content in percent.</p>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Examples:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> MeltingTemp <span class="py-keyword">as</span> mt
+<span class="py-prompt">&gt;&gt;&gt; </span>mt.chem_correction(70)
+<span class="py-output">70</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.chem_correction(70, DMSO=3))
+<span class="py-output">67.75</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.chem_correction(70, fmd=5))
+<span class="py-output">66.75</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">'%0.2f'</span> % mt.chem_correction(70, fmdmethod=2, fmd=1.25,
+<span class="py-more">... </span>                                   GC=50))
+<span class="py-output">66.68</span></pre>
+</blockquote>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="Tm_Wallace"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">Tm_Wallace</span>(<span class="sig-arg">seq</span>,
+        <span class="sig-arg">check</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">strict</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_Wallace">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Calculate and return the Tm using the 'Wallace rule'.</p>
+<p>Tm = 4 degC * (G + C) + 2 degC * (A+T)</p>
+<p>The Wallace rule (Thein &amp; Wallace 1986, in Human genetic diseases: a
+practical approach, 33-50) is often used as rule of thumb for approximate
+Tm calculations for primers of 14 to 20 nt length.</p>
+<p>Non-DNA characters (e.g., E, F, J, !, 1, etc) are ignored by this method.</p>
+<p>Examples:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> MeltingTemp <span class="py-keyword">as</span> mt
+<span class="py-prompt">&gt;&gt;&gt; </span>mt.Tm_Wallace(<span class="py-string">'ACGTTGCAATGCCGTA'</span>)
+<span class="py-output">48.0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>mt.Tm_Wallace(<span class="py-string">'ACGT TGCA ATGC CGTA'</span>)
+<span class="py-output">48.0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>mt.Tm_Wallace(<span class="py-string">'1ACGT2TGCA3ATGC4CGTA'</span>)
+<span class="py-output">48.0</span></pre>
+</blockquote>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="Tm_GC"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">Tm_GC</span>(<span class="sig-arg">seq</span>,
+        <span class="sig-arg">check</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">strict</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">valueset</span>=<span class="sig-default">7</span>,
+        <span class="sig-arg">userset</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">Na</span>=<span class="sig-default">50</span>,
+        <span class="sig-arg">K</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">Tris</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">Mg</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">dNTPs</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">saltcorr</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">mismatch</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_GC">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the Tm using empirical formulas based on GC content.</p>
+<p>General format: Tm = A + B(%GC) - C/N + salt correction - D(%mismatch)</p>
+<p>A, B, C, D: empirical constants, N: primer length
+D (amount of decrease in Tm per % mismatch) is often 1, but sometimes other
+values have been used (0.6-1.5). Use 'X' to indicate the mismatch position
+in the sequence. Note that this mismatch correction is a rough estimate.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> MeltingTemp <span class="py-keyword">as</span> mt
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % mt.Tm_GC(<span class="py-string">'CTGCTGATXGCACGAGGTTATGG'</span>, valueset=2))
+<span class="py-output">69.20</span></pre>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last">
+<li><p class="rst-first">valueset: A few often cited variants are included:</p>
+<blockquote>
+<ol class="rst-arabic simple">
+<li>Tm = 69.3 + 0.41(%GC) - 650/N
+(Marmur &amp; Doty 1962, J Mol Biol 5: 109-118; Chester &amp; Marshak 1993),
+Anal Biochem 209: 284-290)</li>
+<li>Tm = 81.5 + 0.41(%GC) - 675/N - %mismatch
+'QuikChange' formula. Recommended (by the manufacturer) for the design
+of primers for QuikChange mutagenesis.</li>
+<li>Tm = 81.5 + 0.41(%GC) - 675/N + 16.6 x log[Na+]
+(Marmur &amp; Doty 1962, J Mol Biol 5: 109-118; Schildkraut &amp; Lifson 1965,
+Biopolymers 3: 195-208)</li>
+<li>Tm = 81.5 + 0.41(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+(Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). This is the
+standard formula in approximative mode of MELTING 4.3.</li>
+<li>Tm = 78 + 0.7(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+(Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA.</li>
+<li>Tm = 67 + 0.8(%GC) - 500/N + 16.6 x log([Na+]/(1.0 + 0.7 x [Na+])) - %mismatch
+(Wetmur 1991, Crit Rev Biochem Mol Biol 126: 227-259). For RNA/DNA
+hybrids.</li>
+<li>Tm = 81.5 + 0.41(%GC) - 600/N + 16.6 x log[Na+]
+Used by Primer3Plus to calculate the product Tm. Default set.</li>
+<li>Tm = 77.1 + 0.41(%GC) - 528/N + 11.7 x log[Na+]
+(von Ahsen et al. 2001, Clin Chem 47: 1956-1961). Recommended 'as a
+tradeoff between accuracy and ease of use'.</li>
+</ol>
+</blockquote>
+</li>
+<li><p class="rst-first">userset: Tuple of four values for A, B, C, and D. Usersets override
+valuesets.</p>
+</li>
+<li><p class="rst-first">Na, K, Tris, Mg, dNTPs: Concentration of the respective ions [mM]. If any
+of K, Tris, Mg and dNTPS is non-zero, a 'sodium-equivalent'
+concentration is calculated and used for salt correction (von Ahsen et
+al., 2001).</p>
+</li>
+<li><p class="rst-first">saltcorr: Type of salt correction (see method salt_correction). Default=5.
+0 or None means no salt correction.</p>
+</li>
+<li><p class="rst-first">mismatch: If 'True' (default) every 'X' in the sequence is counted as
+mismatch.</p>
+</li>
+</ul>
+</dd>
+</dl>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="Tm_NN"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">Tm_NN</span>(<span class="sig-arg">seq</span>,
+        <span class="sig-arg">check</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">strict</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">c_seq</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">shift</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">nn_table</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.9<code class="variable-op">, </code>-22.2<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.2<code class="variable-op">, </code>-20.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.<code class="variable-ellipsis">...</code></span>,
+        <span class="sig-arg">tmm_table</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string"> CC/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-2.1<code class="variable-op">, </code>-5.1<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string"> GG/CA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-4.6<code class="variable-op">, </code>-11.4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-3<code class="variable-ellipsis">...</code></span>,
+        <span class="sig-arg">imm_table</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>1.2<code class="variable-op">, </code>1.7<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>2.3<code class="variable-op">, </code>4.6<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">AA/TG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.6<code class="variable-op">, </code>-2.<code class="variable-ellipsis">...</code></span>,
+        <span class="sig-arg">de_table</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">.A/AT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.7<code class="variable-op">, </code>-0.8<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">.A/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>4.4<code class="variable-op">, </code>14.9<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">.A/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-1.6<code class="variable-op">, </code><code class="variable-ellipsis">...</code></span>,
+        <span class="sig-arg">dnac1</span>=<span class="sig-default">25</span>,
+        <span class="sig-arg">dnac2</span>=<span class="sig-default">25</span>,
+        <span class="sig-arg">selfcomp</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">Na</span>=<span class="sig-default">50</span>,
+        <span class="sig-arg">K</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">Tris</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">Mg</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">dNTPs</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">saltcorr</span>=<span class="sig-default">5</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_NN">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the Tm using nearest neighbor thermodynamics.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last">
+<li><p class="rst-first">seq: The primer/probe sequence as string or Biopython sequence object. For
+RNA/DNA hybridizations seq must be the RNA sequence.</p>
+</li>
+<li><p class="rst-first">c_seq: Complementary sequence. The sequence of the template/target in
+3'-&gt;5' direction. c_seq is necessary for mismatch correction and
+dangling-ends correction. Both corrections will automatically be
+applied if mismatches or dangling ends are present. Default=None.</p>
+</li>
+<li><p class="rst-first">shift: Shift of the primer/probe sequence on the template/target sequence,
+e.g.:</p>
+<pre class="rst-literal-block">
+                   shift=0       shift=1        shift= -1
+Primer (seq):      5' ATGC...    5'  ATGC...    5' ATGC...
+Template (c_seq):  3' TACG...    3' CTACG...    3'  ACG...
+</pre>
+<p>The shift parameter is necessary to align seq and c_seq if they have
+different lengths or if they should have dangling ends. Default=0</p>
+</li>
+<li><p class="rst-first">table: Thermodynamic NN values, eight tables are implemented:
+For DNA/DNA hybridizations:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>DNA_NN1: values from Breslauer et al. (1986)</li>
+<li>DNA_NN2: values from Sugimoto et al. (1996)</li>
+<li>DNA_NN3: values from Allawi &amp; SantaLucia (1997) (default)</li>
+<li>DNA_NN4: values from SantaLucia &amp; Hicks (2004)</li>
+</ul>
+</blockquote>
+<p>For RNA/RNA hybridizations:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>RNA_NN1: values from Freier et al. (1986)</li>
+<li>RNA_NN2: values from Xia et al. (1998)</li>
+<li>RNA_NN3: valuse from Chen et al. (2012)</li>
+</ul>
+</blockquote>
+<p>For RNA/DNA hybridizations:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>R_DNA_NN1: values from Sugimoto et al. (1995)</li>
+</ul>
+</blockquote>
+<p>Use the module's maketable method to make a new table or to update one
+one of the implemented tables.</p>
+</li>
+<li><p class="rst-first">tmm_table: Thermodynamic values for terminal mismatches. Default: DNA_TMM1
+(SantaLucia &amp; Peyret, 2001)</p>
+</li>
+<li><p class="rst-first">imm_table: Thermodynamic values for internal mismatches, may include
+insosine mismatches. Default: DNA_IMM1 (Allawi &amp; SantaLucia, 1997-1998;
+Peyret et al., 1999; Watkins &amp; SantaLucia, 2005)</p>
+</li>
+<li><p class="rst-first">de_table: Thermodynamic values for dangling ends:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>DNA_DE1: for DNA. Values from Bommarito et al. (2000). Default</li>
+<li>RNA_DE1: for RNA. Values from Turner &amp; Mathews (2010)</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="rst-first">dnac1: Concentration of the higher concentrated strand [nM]. Typically this
+will be the primer (for PCR) or the probe. Default=25.</p>
+</li>
+<li><p class="rst-first">dnac2: Concentration of the lower concentrated strand [nM]. In PCR this is
+the template strand which concentration is typically very low and may
+be ignored (dnac2=0). In oligo/oligo hybridization experiments, dnac1
+equals dnac1. Default=25.
+MELTING and Primer3Plus use k = [Oligo(Total)]/4 by default. To mimic
+this behaviour, you have to divide [Oligo(Total)] by 2 and assign this
+concentration to dnac1 and dnac2. E.g., Total oligo concentration of
+50 nM in Primer3Plus means dnac1=25, dnac2=25.</p>
+</li>
+<li><p class="rst-first">selfcomp: Is the sequence self-complementary? Default=False. If 'True' the
+primer is thought binding to itself, thus dnac2 is not considered.</p>
+</li>
+<li><p class="rst-first">Na, K, Tris, Mg, dNTPs: See method 'Tm_GC' for details. Defaults: Na=50,
+K=0, Tris=0, Mg=0, dNTPs=0.</p>
+</li>
+<li><p class="rst-first">saltcorr: See method 'Tm_GC'. Default=5. 0 means no salt correction.</p>
+</li>
+</ul>
+</dd>
+</dl>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="Tm_staluc"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">Tm_staluc</span>(<span class="sig-arg">s</span>,
+        <span class="sig-arg">dnac</span>=<span class="sig-default">50</span>,
+        <span class="sig-arg">saltc</span>=<span class="sig-default">50</span>,
+        <span class="sig-arg">rna</span>=<span class="sig-default">0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqUtils.MeltingTemp-pysrc.html#Tm_staluc">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns DNA/DNA tm using nearest neighbor thermodynamics (OBSOLETE).</p>
+<p>This method may be depreceated in the future. Use Tm_NN instead. Tm_NN
+with default values gives the same result as Tm_staluc.</p>
+<p>s is the sequence as string or Seq object
+dnac is DNA concentration [nM]
+saltc is salt concentration [mM].
+rna=0 is for DNA/DNA (default), use 1 for RNA/RNA hybridisation.</p>
+<p>For DNA/DNA, see Allawi &amp; SantaLucia (1997), Biochemistry 36: 10581-10594
+For RNA/RNA, see Xia et al (1998), Biochemistry 37: 14719-14735</p>
+<p>Example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % Tm_staluc(<span class="py-string">'CAGTCAGTACGTACGTGTACTGCCGTA'</span>))
+<span class="py-output">59.87</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % Tm_staluc(<span class="py-string">'CAGTCAGTACGTACGTGTACTGCCGTA'</span>, rna=True))
+<span class="py-output">77.90</span></pre>
+<p>You can also use a Seq object instead of a string,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_nucleotide
+<span class="py-prompt">&gt;&gt;&gt; </span>s = Seq(<span class="py-string">'CAGTCAGTACGTACGTGTACTGCCGTA'</span>, generic_nucleotide)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % Tm_staluc(s))
+<span class="py-output">59.87</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % Tm_staluc(s, rna=True))
+<span class="py-output">77.90</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="DNA_NN1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">DNA_NN1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.1<code class="variable-op">, </code>-24.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.6<code class="variable-op">, </code>-23.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.8<code class="variable-op">, </code>-12.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-11.9<code class="variable-op">, </code>-27.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT/GA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.8<code class="variable-op">, </code>-20.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GA/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.6<code class="variable-op">, </code>-13.5<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GC/CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-11.1<code class="variable-op">, </code>-26.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GG/CC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-11.0<code class="variable-op">, </code>-26.6<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="DNA_NN2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">DNA_NN2</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.0<code class="variable-op">, </code>-21.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.6<code class="variable-op">, </code>-15.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.2<code class="variable-op">, </code>-21.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-11.8<code class="variable-op">, </code>-29.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT/GA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-6.6<code class="variable-op">, </code>-16.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GA/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.8<code class="variable-op">, </code>-23.5<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GC/CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.5<code class="variable-op">, </code>-26.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GG/CC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.9<code class="variable-op">, </code>-28.4<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="DNA_NN3"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">DNA_NN3</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.9<code class="variable-op">, </code>-22.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.2<code class="variable-op">, </code>-20.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.5<code class="variable-op">, </code>-22.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.6<code class="variable-op">, </code>-27.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT/GA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.8<code class="variable-op">, </code>-21.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GA/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.2<code class="variable-op">, </code>-22.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GC/CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.8<code class="variable-op">, </code>-24.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GG/CC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.0<code class="variable-op">, </code>-19.9<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="DNA_NN4"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">DNA_NN4</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.6<code class="variable-op">, </code>-21.3<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.2<code class="variable-op">, </code>-20.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.5<code class="variable-op">, </code>-22.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.6<code class="variable-op">, </code>-27.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT/GA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.8<code class="variable-op">, </code>-21.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GA/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.2<code class="variable-op">, </code>-22.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GC/CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.8<code class="variable-op">, </code>-24.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GG/CC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.0<code class="variable-op">, </code>-19.0<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="RNA_NN1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">RNA_NN1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-6.6<code class="variable-op">, </code>-18.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.7<code class="variable-op">, </code>-15.5<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.5<code class="variable-op">, </code>-27.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.0<code class="variable-op">, </code>-19.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT/GA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.6<code class="variable-op">, </code>-19.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GA/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-13.3<code class="variable-op">, </code>-35.5<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GC/CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-14.2<code class="variable-op">, </code>-34.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GG/CC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-12.2<code class="variable-op">, </code>-29.7<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="RNA_NN2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">RNA_NN2</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-6.82<code class="variable-op">, </code>-19.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.38<code class="variable-op">, </code>-26.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.44<code class="variable-op">, </code>-26.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.64<code class="variable-op">, </code>-26.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT/GA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.48<code class="variable-op">, </code>-27.1<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GA/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-12.44<code class="variable-op">, </code>-32.5<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GC/CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-14.88<code class="variable-op">, </code>-36.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">GG/CC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-13.39<code class="variable-op">, </code>-32.7<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="RNA_NN3"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">RNA_NN3</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.09<code class="variable-op">, </code>-19.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AG/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-3.96<code class="variable-op">, </code>-11.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.11<code class="variable-op">, </code>-25.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/TG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.39<code class="variable-op">, </code>-21.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-11.03<code class="variable-op">, </code>-28.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.88<code class="variable-op">, </code>-27.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.56<code class="variable-op">, </code>-13.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT/GA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.9<code class="variable-op">, </code>-28.5<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="R_DNA_NN1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">R_DNA_NN1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-11.5<code class="variable-op">, </code>-36.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.8<code class="variable-op">, </code>-21.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-7.0<code class="variable-op">, </code>-19.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.3<code class="variable-op">, </code>-23.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-10.4<code class="variable-op">, </code>-28.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-12.8<code class="variable-op">, </code>-31.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-16.3<code class="variable-op">, </code>-47.1<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-9.1<code class="variable-op">, </code>-23.5<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="DNA_IMM1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">DNA_IMM1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">AA/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>1.2<code class="variable-op">, </code>1.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AA/TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>2.3<code class="variable-op">, </code>4.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AA/TG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.6<code class="variable-op">, </code>-2.3<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AA/TI</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.7<code class="variable-op">, </code>-2.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>5.3<code class="variable-op">, </code>14.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>0.0<code class="variable-op">, </code>-4.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/TI</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-8.8<code class="variable-op">, </code>-25.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>0.7<code class="variable-op">, </code>0.2<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="DNA_TMM1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">DNA_TMM1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string"> CC/GC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-2.1<code class="variable-op">, </code>-5.1<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string"> GG/CA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-4.6<code class="variable-op">, </code>-11.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AA/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-3.1<code class="variable-op">, </code>-7.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AA/TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-1.6<code class="variable-op">, </code>-4.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AA/TG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-1.9<code class="variable-op">, </code>-4.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-1.8<code class="variable-op">, </code>-3.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.1<code class="variable-op">, </code>0.5<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.9<code class="variable-op">, </code>-1.7<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="DNA_DE1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">DNA_DE1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">.A/AT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.7<code class="variable-op">, </code>-0.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">.A/CT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>4.4<code class="variable-op">, </code>14.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">.A/GT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-1.6<code class="variable-op">, </code>-3.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">.A/TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>2.9<code class="variable-op">, </code>10.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">.C/AG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-2.1<code class="variable-op">, </code>-3.9<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">.C/CG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.2<code class="variable-op">, </code>-0.1<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">.C/GG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-3.9<code class="variable-op">, </code>-11.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">.C/TG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-4.4<code class="variable-op">, </code>-13.1<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="RNA_DE1"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">RNA_DE1</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">A./TA</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.5<code class="variable-op">, </code>-0.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">A./TC</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>6.9<code class="variable-op">, </code>22.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">A./TG</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>0.6<code class="variable-op">, </code>2.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">A./TT</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>0.6<code class="variable-op">, </code>2.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AA/T.</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-4.9<code class="variable-op">, </code>-13.2<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AC/T.</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-0.9<code class="variable-op">, </code>-1.3<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AG/T.</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-5.5<code class="variable-op">, </code>-15.1<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">AT/T.</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code>-2.3<code class="variable-op">, </code>-5.5<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:28 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

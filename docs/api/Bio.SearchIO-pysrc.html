@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;SearchIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.SearchIO-module.html">Package Bio.SearchIO</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2012 by Wibowo Arindrarto.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Biopython interface for sequence search program outputs.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">The SearchIO submodule provides parsers, indexers, and writers for outputs from</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">various sequence search programs. It provides an API similar to SeqIO and</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">AlignIO, with the following main functions: `parse`, `read`, `to_dict`, `index`,</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">`index_db`, `write`, and `convert`.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">SearchIO parses a search output file's contents into a hierarchy of four nested</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">objects: QueryResult, Hit, HSP, and HSPFragment. Each of them models a part of</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">the search output file:</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">    - QueryResult represents a search query. This is the main object returned</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">      by the input functions and it contains all other objects.</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">    - Hit represents a database hit,</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">    - HSP represents high-scoring alignment region(s) in the hit,</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    - HSPFragment represents a contiguous alignment within the HSP</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">In addition to the four objects above, SearchIO is also tightly integrated with</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">the SeqRecord objects (see SeqIO) and MultipleSeqAlignment objects (see</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">AlignIO). SeqRecord objects are used to store the actual matching hit and query</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">sequences, while MultipleSeqAlignment objects stores the alignment between them.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">A detailed description of these objects' features and their example usages are</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">available in their respective documentations.</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">Input</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">=====</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">The main function for parsing search output files is Bio.SearchIO.parse(...).</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">This function parses a given search output file and returns a generator object</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">that yields one QueryResult object per iteration.</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">`parse` takes two arguments: 1) a file handle or a filename of the input file</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">(the search output file) and 2) the format name.</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; for qresult in SearchIO.parse('Blast/mirna.xml', 'blast-xml'):</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">    ...     print("%s %s" % (qresult.id, qresult.description))</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">    33211 mir_1</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">    33212 mir_2</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    33213 mir_3</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">SearchIO also provides the Bio.SearchIO.read(...) function, which is intended</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">for use on search output files containing only one query. `read` returns one</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">QueryResult object and will raise an exception if the source file contains more</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">than one queries:</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; print("%s %s" % (qresult.id, qresult.description))</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring">    gi|11464971:4-101 pleckstrin [Mus musculus]</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; SearchIO.read('Blast/mirna.xml', 'blast-xml')</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    Traceback (most recent call last):</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">    ValueError: ...</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">For accessing search results of large output files, you may use the indexing</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring">functions Bio.SearchIO.index(...) or Bio.SearchIO.index_db(...). They have a</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">similar interface to their counterparts in SeqIO and AlignIO, with the addition</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring">of optional, format-specific keyword arguments.</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-docstring">Output</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring">======</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"><tt class="py-docstring">SearchIO has writing support for several formats, accessible from the</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-docstring">Bio.SearchIO.write(...) function. This function returns a tuple of four</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring">numbers: the number of QueryResult, Hit, HSP, and HSPFragment written::</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">    qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"><tt class="py-docstring">    SearchIO.write(qresults, 'results.tab', 'blast-tab')</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-docstring">    &lt;stdout&gt; (3, 239, 277, 277)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring">Note that different writers may require different attribute values of the</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">SearchIO objects. This limits the scope of writable search results to search</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring">results possessing the required attributes.</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring">For example, the writer for HMMER domain table output requires</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring">the conditional e-value attribute from each HSP object, among others. If you</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">try to write to the HMMER domain table format and your HSPs do not have this</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">attribute, an exception will be raised.</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">Conversion</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"><tt class="py-docstring">==========</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring">SearchIO provides a shortcut function Bio.SearchIO.convert(...) to convert a</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring">given file into another format. Under the hood, `convert` simply parses a given</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring">output file and writes it to another using the `parse` and `write` functions.</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">Note that the same restrictions found in Bio.SearchIO.write(...) applies to the</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">convert function as well.</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">Conventions</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring">===========</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-docstring">The main goal of creating SearchIO is to have a common, easy to use interface</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-docstring">across different search output files. As such, we have also created some</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring">conventions / standards for SearchIO that extend beyond the common object model.</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-docstring">These conventions apply to all files parsed by SearchIO, regardless of their</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-docstring">individual formats.</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"><tt class="py-docstring">Python-style sequence coordinates</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-docstring">---------------------------------</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-docstring">When storing sequence coordinates (start and end values), SearchIO uses</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-docstring">the Python-style slice convention: zero-based and half-open intervals. For</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-docstring">example, if in a BLAST XML output file the start and end coordinates of an</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"><tt class="py-docstring">HSP are 10 and 28, they would become 9 and 28 in SearchIO. The start</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"><tt class="py-docstring">coordinate becomes 9 because Python indices start from zero, while the end</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"><tt class="py-docstring">coordinate remains 28 as Python slices omit the last item in an interval.</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-docstring">Beside giving you the benefits of standardization, this convention also</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-docstring">makes the coordinates usable for slicing sequences. For example, given a</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-docstring">full query sequence and the start and end coordinates of an HSP, one can</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-docstring">use the coordinates to extract part of the query sequence that results in</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"><tt class="py-docstring">the database hit.</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-docstring">When these objects are written to an output file using</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-docstring">SearchIO.write(...), the coordinate values are restored to their</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"><tt class="py-docstring">respective format's convention. Using the example above, if the HSP would</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"><tt class="py-docstring">be written to an XML file, the start and end coordinates would become 10</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line"><tt class="py-docstring">and 28 again.</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"><tt class="py-docstring">Sequence coordinate order</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"><tt class="py-docstring">-------------------------</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"><tt class="py-docstring">Some search output format reverses the start and end coordinate sequences</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"><tt class="py-docstring">according to the sequence's strand. For example, in BLAST plain text</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"><tt class="py-docstring">format if the matching strand lies in the minus orientation, then the</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line"><tt class="py-docstring">start coordinate will always be bigger than the end coordinate.</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"><tt class="py-docstring">In SearchIO, start coordinates are always smaller than the end</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line"><tt class="py-docstring">coordinates, regardless of their originating strand. This ensures</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"><tt class="py-docstring">consistency when using the coordinates to slice full sequences.</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"><tt class="py-docstring">Note that this coordinate order convention is only enforced in the</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"><tt class="py-docstring">HSPFragment level. If an HSP object has several HSPFragment objects, each</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line"><tt class="py-docstring">individual fragment will conform to this convention. But the order of the</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line"><tt class="py-docstring">fragments within the HSP object follows what the search output file uses.</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"><tt class="py-docstring">Similar to the coordinate style convention, the start and end coordinates'</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"><tt class="py-docstring">order are restored to their respective formats when the objects are</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"><tt class="py-docstring">written using Bio.SearchIO.write(...).</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"><tt class="py-docstring">Frames and strand values</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">------------------------</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring">SearchIO only allows -1, 0, 1 and None as strand values. For frames, the</tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">only allowed values are integers from -3 to 3 (inclusive) and None. Both</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring">of these are standard Biopython conventions.</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"><tt class="py-docstring">Supported Formats</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-docstring">=================</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"><tt class="py-docstring">Below is a list of search program output formats supported by SearchIO.</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"><tt class="py-docstring">Support for parsing, indexing, and writing:</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"><tt class="py-docstring"> - blast-tab        - BLAST+ tabular output. Both variants without comments</tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"><tt class="py-docstring">                      (-m 6 flag) and with comments (-m 7 flag) are supported.</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line"><tt class="py-docstring"> - blast-xml        - BLAST+ XML output.</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"><tt class="py-docstring"> - blat-psl         - The default output of BLAT (PSL format). Variants with or</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"><tt class="py-docstring">                      without header are both supported. PSLX (PSL + sequences)</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line"><tt class="py-docstring">                      is also supported.</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"><tt class="py-docstring"> - hmmer3-tab       - HMMER3 table output.</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"><tt class="py-docstring"> - hmmer3-domtab    - HMMER3 domain table output. When using this format, the</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"><tt class="py-docstring">                      program name has to be specified. For example, for parsing</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-docstring">                      hmmscan output, the name would be 'hmmscan-domtab'.</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring">Support for parsing and indexing:</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line"><tt class="py-docstring"> - exonerate-text   - Exonerate plain text output.</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line"><tt class="py-docstring"> - exonerate-vulgar - Exonerate vulgar line.</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"><tt class="py-docstring"> - exonerate-cigar  - Exonerate cigar line.</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"><tt class="py-docstring"> - fasta-m10        - Bill Pearson's FASTA -m 10 output.</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"><tt class="py-docstring"> - hmmer3-text      - HMMER3 regular text output format. Supported HMMER3</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"><tt class="py-docstring">                      subprograms are hmmscan, hmmsearch, and phmmer.</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"><tt class="py-docstring"> - hmmer2-text      - HMMER2 regular text output format. Supported HMMER2</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"><tt class="py-docstring">                      subprograms are hmmpfam, hmmsearch.</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"><tt class="py-docstring">Support for parsing:</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"><tt class="py-docstring"> - blast-text       - BLAST+ plain text output.</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"><tt class="py-docstring">Each of these formats have different keyword arguments available for use with</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring">the main SearchIO functions. More details and examples are available in each</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring">of the format's documentation.</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line"> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-1', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">basestring</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line"> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-2', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Class Bio.BiopythonExperimentalWarning=Bio.BiopythonExperimentalWarning-class.html"><a title="Bio.BiopythonExperimentalWarning" class="py-name" href="#" onclick="return doclink('link-3', 'BiopythonExperimentalWarning', 'link-3');">BiopythonExperimentalWarning</a></tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-4" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-4', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Module Bio.File=Bio.File-module.html"><a title="Bio.File" class="py-name" href="#" onclick="return doclink('link-5', 'File', 'link-5');">File</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Function Bio.File.as_handle()=Bio.File-module.html#as_handle"><a title="Bio.File.as_handle" class="py-name" href="#" onclick="return doclink('link-6', 'as_handle', 'link-6');">as_handle</a></tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-7" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-7', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Package Bio.SearchIO=Bio.SearchIO-module.html"><a title="Bio.SearchIO" class="py-name" href="#" onclick="return doclink('link-8', 'SearchIO', 'link-8');">SearchIO</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Package Bio.SearchIO._model=Bio.SearchIO._model-module.html"><a title="Bio.SearchIO._model" class="py-name" href="#" onclick="return doclink('link-9', '_model', 'link-9');">_model</a></tt> <tt class="py-keyword">import</tt> <tt id="link-10" class="py-name" targets="Class Bio.SearchIO._model.query.QueryResult=Bio.SearchIO._model.query.QueryResult-class.html"><a title="Bio.SearchIO._model.query.QueryResult" class="py-name" href="#" onclick="return doclink('link-10', 'QueryResult', 'link-10');">QueryResult</a></tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name" targets="Class Bio.SearchIO._model.hit.Hit=Bio.SearchIO._model.hit.Hit-class.html"><a title="Bio.SearchIO._model.hit.Hit" class="py-name" href="#" onclick="return doclink('link-11', 'Hit', 'link-11');">Hit</a></tt><tt class="py-op">,</tt> <tt id="link-12" class="py-name" targets="Class Bio.Blast.Record.HSP=Bio.Blast.Record.HSP-class.html,Class Bio.SearchIO._model.hsp.HSP=Bio.SearchIO._model.hsp.HSP-class.html"><a title="Bio.Blast.Record.HSP
+Bio.SearchIO._model.hsp.HSP" class="py-name" href="#" onclick="return doclink('link-12', 'HSP', 'link-12');">HSP</a></tt><tt class="py-op">,</tt> <tt id="link-13" class="py-name" targets="Class Bio.SearchIO._model.hsp.HSPFragment=Bio.SearchIO._model.hsp.HSPFragment-class.html"><a title="Bio.SearchIO._model.hsp.HSPFragment" class="py-name" href="#" onclick="return doclink('link-13', 'HSPFragment', 'link-13');">HSPFragment</a></tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-14" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-14', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="Bio.SearchIO" class="py-name" href="#" onclick="return doclink('link-15', 'SearchIO', 'link-8');">SearchIO</a></tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Module Bio.Phylo._utils=Bio.Phylo._utils-module.html,Module Bio.SearchIO._utils=Bio.SearchIO._utils-module.html,Module Bio._utils=Bio._utils-module.html"><a title="Bio.Phylo._utils
+Bio.SearchIO._utils
+Bio._utils" class="py-name" href="#" onclick="return doclink('link-16', '_utils', 'link-16');">_utils</a></tt> <tt class="py-keyword">import</tt> <tt id="link-17" class="py-name" targets="Function Bio.SearchIO._utils.get_processor()=Bio.SearchIO._utils-module.html#get_processor"><a title="Bio.SearchIO._utils.get_processor" class="py-name" href="#" onclick="return doclink('link-17', 'get_processor', 'link-17');">get_processor</a></tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line"> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line"> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"><tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">'Bio.SearchIO is an experimental submodule which may undergo '</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-string">'significant changes prior to its future official release.'</tt><tt class="py-op">,</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">        <tt id="link-18" class="py-name"><a title="Bio.BiopythonExperimentalWarning" class="py-name" href="#" onclick="return doclink('link-18', 'BiopythonExperimentalWarning', 'link-3');">BiopythonExperimentalWarning</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line"> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line"> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line"><tt class="py-name">__all__</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'read'</tt><tt class="py-op">,</tt> <tt class="py-string">'parse'</tt><tt class="py-op">,</tt> <tt class="py-string">'to_dict'</tt><tt class="py-op">,</tt> <tt class="py-string">'index'</tt><tt class="py-op">,</tt> <tt class="py-string">'index_db'</tt><tt class="py-op">,</tt> <tt class="py-string">'write'</tt><tt class="py-op">,</tt> <tt class="py-string">'convert'</tt><tt class="py-op">]</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line"> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line"> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"><tt class="py-comment"># dictionary of supported formats for parse() and read()</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line"><tt id="link-19" class="py-name" targets="Variable Bio.SearchIO._ITERATOR_MAP=Bio.SearchIO-module.html#_ITERATOR_MAP"><a title="Bio.SearchIO._ITERATOR_MAP" class="py-name" href="#" onclick="return doclink('link-19', '_ITERATOR_MAP', 'link-19');">_ITERATOR_MAP</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">        <tt class="py-string">'blast-tab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlastIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlastTabParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt class="py-string">'blast-text'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlastIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlastTextParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">        <tt class="py-string">'blast-xml'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlastIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlastXmlParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">        <tt class="py-string">'blat-psl'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlatIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlatPslParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">        <tt class="py-string">'exonerate-cigar'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'ExonerateIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'ExonerateCigarParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">        <tt class="py-string">'exonerate-text'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'ExonerateIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'ExonerateTextParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">        <tt class="py-string">'exonerate-vulgar'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'ExonerateIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'ExonerateVulgarParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">        <tt class="py-string">'fasta-m10'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'FastaIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'FastaM10Parser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">        <tt class="py-string">'hmmer2-text'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer2TextParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">        <tt class="py-string">'hmmer3-text'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3TextParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">        <tt class="py-string">'hmmer3-tab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3TabParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">        <tt class="py-comment"># for hmmer3-domtab, the specific program is part of the format name</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">        <tt class="py-comment"># as we need it distinguish hit / target coordinates</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">        <tt class="py-string">'hmmscan3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmhitParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">        <tt class="py-string">'hmmsearch3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmqueryParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">        <tt class="py-string">'phmmer3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmqueryParser'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line"><tt class="py-op">}</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line"> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line"><tt class="py-comment"># dictionary of supported formats for index()</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line"><tt id="link-20" class="py-name" targets="Variable Bio.SearchIO._INDEXER_MAP=Bio.SearchIO-module.html#_INDEXER_MAP"><a title="Bio.SearchIO._INDEXER_MAP" class="py-name" href="#" onclick="return doclink('link-20', '_INDEXER_MAP', 'link-20');">_INDEXER_MAP</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">        <tt class="py-string">'blast-tab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlastIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlastTabIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">        <tt class="py-string">'blast-xml'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlastIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlastXmlIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">        <tt class="py-string">'blat-psl'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlatIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlatPslIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-string">'exonerate-cigar'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'ExonerateIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'ExonerateCigarIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-string">'exonerate-text'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'ExonerateIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'ExonerateTextIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">        <tt class="py-string">'exonerate-vulgar'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'ExonerateIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'ExonerateVulgarIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">        <tt class="py-string">'fasta-m10'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'FastaIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'FastaM10Indexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-string">'hmmer2-text'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer2TextIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">        <tt class="py-string">'hmmer3-text'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3TextIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">        <tt class="py-string">'hmmer3-tab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3TabIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">        <tt class="py-string">'hmmscan3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmhitIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">        <tt class="py-string">'hmmsearch3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmqueryIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">        <tt class="py-string">'phmmer3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmqueryIndexer'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line"><tt class="py-op">}</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line"> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"><tt class="py-comment"># dictionary of supported formats for write()</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line"><tt id="link-21" class="py-name" targets="Variable Bio.SearchIO._WRITER_MAP=Bio.SearchIO-module.html#_WRITER_MAP"><a title="Bio.SearchIO._WRITER_MAP" class="py-name" href="#" onclick="return doclink('link-21', '_WRITER_MAP', 'link-21');">_WRITER_MAP</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">        <tt class="py-string">'blast-tab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlastIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlastTabWriter'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">        <tt class="py-string">'blast-xml'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlastIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlastXmlWriter'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">        <tt class="py-string">'blat-psl'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'BlatIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'BlatPslWriter'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">        <tt class="py-string">'hmmer3-tab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3TabWriter'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">        <tt class="py-string">'hmmscan3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmhitWriter'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">        <tt class="py-string">'hmmsearch3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmqueryWriter'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line">        <tt class="py-string">'phmmer3-domtab'</tt><tt class="py-op">:</tt> <tt class="py-op">(</tt><tt class="py-string">'HmmerIO'</tt><tt class="py-op">,</tt> <tt class="py-string">'Hmmer3DomtabHmmqueryWriter'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line"><tt class="py-op">}</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line"> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line"> </tt>
+<a name="parse"></a><div id="parse-def"><a name="L268"></a><tt class="py-lineno">268</tt> <a class="py-toggle" href="#" id="parse-toggle" onclick="return toggle('parse');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO-module.html#parse">parse</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="parse-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="parse-expanded"><a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">    <tt class="py-docstring">"""Turns a search output file into a generator that yields QueryResult</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line"><tt class="py-docstring">    objects.</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line"><tt class="py-docstring">     - handle - Handle to the file, or the filename as a string.</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line"><tt class="py-docstring">     - format - Lower case string denoting one of the supported formats.</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line"><tt class="py-docstring">     - kwargs - Format-specific keyword arguments.</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line"><tt class="py-docstring">    This function is used to iterate over each query in a given search output</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line"><tt class="py-docstring">    file:</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresults</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line"><tt class="py-docstring">    &lt;generator object ...&gt;</tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; for qresult in qresults:</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line"><tt class="py-docstring">    ...     print("Search %s has %i hits" % (qresult.id, len(qresult)))</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line"><tt class="py-docstring">    Search 33211 has 100 hits</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line"><tt class="py-docstring">    Search 33212 has 44 hits</tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line"><tt class="py-docstring">    Search 33213 has 95 hits</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"><tt class="py-docstring">    Depending on the file format, `parse` may also accept additional keyword</tt> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line"><tt class="py-docstring">    argument(s) that modifies the behavior of the format parser. Here is a</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line"><tt class="py-docstring">    simple example, where the keyword argument enables parsing of a commented</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line"><tt class="py-docstring">    BLAST tabular output file:</tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; for qresult in SearchIO.parse('Blast/mirna.tab', 'blast-tab', comments=True):</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"><tt class="py-docstring">    ...     print("Search %s has %i hits" % (qresult.id, len(qresult)))</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line"><tt class="py-docstring">    Search 33211 has 100 hits</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line"><tt class="py-docstring">    Search 33212 has 44 hits</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line"><tt class="py-docstring">    Search 33213 has 95 hits</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">    <tt class="py-comment"># get the iterator object and do error checking</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line">    <tt class="py-name">iterator</tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="Bio.SearchIO._utils.get_processor" class="py-name" href="#" onclick="return doclink('link-22', 'get_processor', 'link-17');">get_processor</a></tt><tt class="py-op">(</tt><tt id="link-23" class="py-name" targets="Method Bio.Align.Generic.Alignment.format()=Bio.Align.Generic.Alignment-class.html#format,Method Bio.Motif._Motif.Motif.format()=Bio.Motif._Motif.Motif-class.html#format,Method Bio.Phylo.BaseTree.Tree.format()=Bio.Phylo.BaseTree.Tree-class.html#format,Method Bio.Restriction.Restriction.RestrictionBatch.format()=Bio.Restriction.Restriction.RestrictionBatch-class.html#format,Method Bio.SeqRecord.SeqRecord.format()=Bio.SeqRecord.SeqRecord-class.html#format,Method Bio.motifs.Motif.format()=Bio.motifs.Motif-class.html#format"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-23', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> <tt id="link-24" class="py-name"><a title="Bio.SearchIO._ITERATOR_MAP" class="py-name" href="#" onclick="return doclink('link-24', '_ITERATOR_MAP', 'link-19');">_ITERATOR_MAP</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line"> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line">    <tt class="py-comment"># HACK: force BLAST XML decoding to use utf-8</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">    <tt class="py-name">handle_kwargs</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-25" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-25', 'format', 'link-23');">format</a></tt> <tt class="py-op">==</tt> <tt class="py-string">'blast-xml'</tt> <tt class="py-keyword">and</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">version_info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line">        <tt class="py-name">handle_kwargs</tt><tt class="py-op">[</tt><tt class="py-string">'encoding'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">'utf-8'</tt> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line"> </tt>
+<a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line">    <tt class="py-comment"># and start iterating</tt> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line">    <tt class="py-keyword">with</tt> <tt id="link-26" class="py-name"><a title="Bio.File.as_handle" class="py-name" href="#" onclick="return doclink('link-26', 'as_handle', 'link-6');">as_handle</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">,</tt> <tt class="py-string">'rU'</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">handle_kwargs</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">source_file</tt><tt class="py-op">:</tt> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line">        <tt class="py-name">generator</tt> <tt class="py-op">=</tt> <tt class="py-name">iterator</tt><tt class="py-op">(</tt><tt class="py-name">source_file</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line"> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">qresult</tt> <tt class="py-keyword">in</tt> <tt class="py-name">generator</tt><tt class="py-op">:</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">qresult</tt> </tt>
+</div><a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line"> </tt>
+<a name="read"></a><div id="read-def"><a name="L320"></a><tt class="py-lineno">320</tt> <a class="py-toggle" href="#" id="read-toggle" onclick="return toggle('read');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO-module.html#read">read</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="read-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="read-expanded"><a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line">    <tt class="py-docstring">"""Turns a search output file containing one query into a single QueryResult.</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line"><tt class="py-docstring">     - handle - Handle to the file, or the filename as a string.</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line"><tt class="py-docstring">     - format - Lower case string denoting one of the supported formats.</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line"><tt class="py-docstring">     - kwargs - Format-specific keyword arguments.</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line"><tt class="py-docstring">    `read` is used for parsing search output files containing exactly one query:</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; print("%s %s" % (qresult.id, qresult.description))</tt> </tt>
+<a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line"><tt class="py-docstring">    gi|11464971:4-101 pleckstrin [Mus musculus]</tt> </tt>
+<a name="L334"></a><tt class="py-lineno">334</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line"><tt class="py-docstring">    If the given handle has no results, an exception will be raised:</tt> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresult = SearchIO.read('Blast/tab_2226_tblastn_002.txt', 'blast-tab')</tt> </tt>
+<a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line"><tt class="py-docstring">    Traceback (most recent call last):</tt> </tt>
+<a name="L340"></a><tt class="py-lineno">340</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line"><tt class="py-docstring">    ValueError: No query results found in handle</tt> </tt>
+<a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line"><tt class="py-docstring">    Similarly, if the given handle has more than one results, an exception will</tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line"><tt class="py-docstring">    also be raised:</tt> </tt>
+<a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresult = SearchIO.read('Blast/tab_2226_tblastn_001.txt', 'blast-tab')</tt> </tt>
+<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line"><tt class="py-docstring">    Traceback (most recent call last):</tt> </tt>
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line"><tt class="py-docstring">    ...</tt> </tt>
+<a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line"><tt class="py-docstring">    ValueError: More than one query results found in handle</tt> </tt>
+<a name="L351"></a><tt class="py-lineno">351</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L352"></a><tt class="py-lineno">352</tt>  <tt class="py-line"><tt class="py-docstring">    Like `parse`, `read` may also accept keyword argument(s) depending on the</tt> </tt>
+<a name="L353"></a><tt class="py-lineno">353</tt>  <tt class="py-line"><tt class="py-docstring">    search output file format.</tt> </tt>
+<a name="L354"></a><tt class="py-lineno">354</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L355"></a><tt class="py-lineno">355</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L356"></a><tt class="py-lineno">356</tt>  <tt class="py-line">    <tt class="py-name">generator</tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name" targets="Function Bio.AlignIO.parse()=Bio.AlignIO-module.html#parse,Method Bio.Blast.NCBIStandalone.BlastErrorParser.parse()=Bio.Blast.NCBIStandalone.BlastErrorParser-class.html#parse,Method Bio.Blast.NCBIStandalone.BlastParser.parse()=Bio.Blast.NCBIStandalone.BlastParser-class.html#parse,Method Bio.Blast.NCBIStandalone.PSIBlastParser.parse()=Bio.Blast.NCBIStandalone.PSIBlastParser-class.html#parse,Function Bio.Blast.NCBIXML.parse()=Bio.Blast.NCBIXML-module.html#parse,Function Bio.Compass.parse()=Bio.Compass-module.html#parse,Function Bio.Emboss.Primer3.parse()=Bio.Emboss.Primer3-module.html#parse,Method Bio.Entrez.Parser.DataHandler.parse()=Bio.Entrez.Parser.DataHandler-class.html#parse,Function Bio.Entrez.parse()=Bio.Entrez-module.html#parse,Function Bio.ExPASy.Enzyme.parse()=Bio.ExPASy.Enzyme-module.html#parse,Function Bio.ExPASy.Prodoc.parse()=Bio.ExPASy.Prodoc-module.html#parse,Function Bio.ExPASy.Prosite.parse()=Bio.ExPASy.Prosite-module.html#parse,Method Bio.GenBank.FeatureParser.parse()=Bio.GenBank.FeatureParser-class.html#parse,Method Bio.GenBank.RecordParser.parse()=Bio.GenBank.RecordParser-class.html#parse,Method Bio.GenBank.Scanner.InsdcScanner.parse()=Bio.GenBank.Scanner.InsdcScanner-class.html#parse,Function Bio.Geo.parse()=Bio.Geo-module.html#parse,Function Bio.KEGG.Compound.parse()=Bio.KEGG.Compound-module.html#parse,Function Bio.KEGG.Enzyme.parse()=Bio.KEGG.Enzyme-module.html#parse,Method Bio.KEGG.KGML.KGML_parser.KGMLParser.parse()=Bio.KEGG.KGML.KGML_parser.KGMLParser-class.html#parse,Function Bio.KEGG.KGML.KGML_parser.parse()=Bio.KEGG.KGML.KGML_parser-module.html#parse,Function Bio.KEGG.Map.parse()=Bio.KEGG.Map-module.html#parse,Function Bio.Medline.parse()=Bio.Medline-module.html#parse,Function Bio.Motif.parse()=Bio.Motif-module.html#parse,Method Bio.ParserSupport.AbstractParser.parse()=Bio.ParserSupport.AbstractParser-class.html#parse,Method Bio.Phylo.CDAOIO.Parser.parse()=Bio.Phylo.CDAOIO.Parser-class.html#parse,Function Bio.Phylo.CDAOIO.parse()=Bio.Phylo.CDAOIO-module.html#parse,Method Bio.Phylo.NeXMLIO.Parser.parse()=Bio.Phylo.NeXMLIO.Parser-class.html#parse,Function Bio.Phylo.NeXMLIO.parse()=Bio.Phylo.NeXMLIO-module.html#parse,Method Bio.Phylo.NewickIO.Parser.parse()=Bio.Phylo.NewickIO.Parser-class.html#parse,Function Bio.Phylo.NewickIO.parse()=Bio.Phylo.NewickIO-module.html#parse,Function Bio.Phylo.NexusIO.parse()=Bio.Phylo.NexusIO-module.html#parse,Method Bio.Phylo.PhyloXMLIO.Parser.parse()=Bio.Phylo.PhyloXMLIO.Parser-class.html#parse,Function Bio.Phylo.PhyloXMLIO.parse()=Bio.Phylo.PhyloXMLIO-module.html#parse,Function Bio.Phylo._io.parse()=Bio.Phylo._io-module.html#parse,Function Bio.SCOP.Cla.parse()=Bio.SCOP.Cla-module.html#parse,Function Bio.SCOP.Des.parse()=Bio.SCOP.Des-module.html#parse,Function Bio.SCOP.Dom.parse()=Bio.SCOP.Dom-module.html#parse,Function Bio.SCOP.Hie.parse()=Bio.SCOP.Hie-module.html#parse,Function Bio.SCOP.Raf.parse()=Bio.SCOP.Raf-module.html#parse,Function Bio.SearchIO.parse()=Bio.SearchIO-module.html#parse,Method Bio.SeqIO.UniprotIO.Parser.parse()=Bio.SeqIO.UniprotIO.Parser-class.html#parse,Function Bio.SeqIO.parse()=Bio.SeqIO-module.html#parse,Function Bio.Sequencing.Ace.parse()=Bio.Sequencing.Ace-module.html#parse,Function Bio.Sequencing.Phd.parse()=Bio.Sequencing.Phd-module.html#parse,Function Bio.SwissProt.KeyWList.parse()=Bio.SwissProt.KeyWList-module.html#parse,Function Bio.SwissProt.parse()=Bio.SwissProt-module.html#parse,Function Bio.UniGene.parse()=Bio.UniGene-module.html#parse,Function Bio.Wise.psw.parse()=Bio.Wise.psw-module.html#parse,Function Bio.motifs.parse()=Bio.motifs-module.html#parse"><a title="Bio.AlignIO.parse
+Bio.Blast.NCBIStandalone.BlastErrorParser.parse
+Bio.Blast.NCBIStandalone.BlastParser.parse
+Bio.Blast.NCBIStandalone.PSIBlastParser.parse
+Bio.Blast.NCBIXML.parse
+Bio.Compass.parse
+Bio.Emboss.Primer3.parse
+Bio.Entrez.Parser.DataHandler.parse
+Bio.Entrez.parse
+Bio.ExPASy.Enzyme.parse
+Bio.ExPASy.Prodoc.parse
+Bio.ExPASy.Prosite.parse
+Bio.GenBank.FeatureParser.parse
+Bio.GenBank.RecordParser.parse
+Bio.GenBank.Scanner.InsdcScanner.parse
+Bio.Geo.parse
+Bio.KEGG.Compound.parse
+Bio.KEGG.Enzyme.parse
+Bio.KEGG.KGML.KGML_parser.KGMLParser.parse
+Bio.KEGG.KGML.KGML_parser.parse
+Bio.KEGG.Map.parse
+Bio.Medline.parse
+Bio.Motif.parse
+Bio.ParserSupport.AbstractParser.parse
+Bio.Phylo.CDAOIO.Parser.parse
+Bio.Phylo.CDAOIO.parse
+Bio.Phylo.NeXMLIO.Parser.parse
+Bio.Phylo.NeXMLIO.parse
+Bio.Phylo.NewickIO.Parser.parse
+Bio.Phylo.NewickIO.parse
+Bio.Phylo.NexusIO.parse
+Bio.Phylo.PhyloXMLIO.Parser.parse
+Bio.Phylo.PhyloXMLIO.parse
+Bio.Phylo._io.parse
+Bio.SCOP.Cla.parse
+Bio.SCOP.Des.parse
+Bio.SCOP.Dom.parse
+Bio.SCOP.Hie.parse
+Bio.SCOP.Raf.parse
+Bio.SearchIO.parse
+Bio.SeqIO.UniprotIO.Parser.parse
+Bio.SeqIO.parse
+Bio.Sequencing.Ace.parse
+Bio.Sequencing.Phd.parse
+Bio.SwissProt.KeyWList.parse
+Bio.SwissProt.parse
+Bio.UniGene.parse
+Bio.Wise.psw.parse
+Bio.motifs.parse" class="py-name" href="#" onclick="return doclink('link-27', 'parse', 'link-27');">parse</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">,</tt> <tt id="link-28" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-28', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L357"></a><tt class="py-lineno">357</tt>  <tt class="py-line"> </tt>
+<a name="L358"></a><tt class="py-lineno">358</tt>  <tt class="py-line">    <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L359"></a><tt class="py-lineno">359</tt>  <tt class="py-line">        <tt class="py-name">first</tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name" targets="Method Bio.AlignIO.Interfaces.AlignmentIterator.next()=Bio.AlignIO.Interfaces.AlignmentIterator-class.html#next,Method Bio.Blast.NCBIStandalone.Iterator.next()=Bio.Blast.NCBIStandalone.Iterator-class.html#next,Method Bio.Blast.ParseBlastTable.BlastTableReader.next()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#next,Method Bio.DocSQL.IterationCursor.next()=Bio.DocSQL.IterationCursor-class.html#next,Method Bio.File.UndoHandle.next()=Bio.File.UndoHandle-class.html#next,Method Bio.GenBank.Iterator.next()=Bio.GenBank.Iterator-class.html#next,Method Bio.Nexus.Nexus.CharBuffer.next()=Bio.Nexus.Nexus.CharBuffer-class.html#next,Method Bio.PopGen.GenePop.Controller._FileIterator.next()=Bio.PopGen.GenePop.Controller._FileIterator-class.html#next,Method Bio.SeqIO.Interfaces.SequenceIterator.next()=Bio.SeqIO.Interfaces.SequenceIterator-class.html#next,Method Bio.bgzf.BgzfReader.next()=Bio.bgzf.BgzfReader-class.html#next"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-29', 'next', 'link-29');">next</a></tt><tt class="py-op">(</tt><tt class="py-name">generator</tt><tt class="py-op">)</tt> </tt>
+<a name="L360"></a><tt class="py-lineno">360</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt> <tt class="py-name">StopIteration</tt><tt class="py-op">:</tt> </tt>
+<a name="L361"></a><tt class="py-lineno">361</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"No query results found in handle"</tt><tt class="py-op">)</tt> </tt>
+<a name="L362"></a><tt class="py-lineno">362</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L363"></a><tt class="py-lineno">363</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L364"></a><tt class="py-lineno">364</tt>  <tt class="py-line">            <tt class="py-name">second</tt> <tt class="py-op">=</tt> <tt id="link-30" class="py-name"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-30', 'next', 'link-29');">next</a></tt><tt class="py-op">(</tt><tt class="py-name">generator</tt><tt class="py-op">)</tt> </tt>
+<a name="L365"></a><tt class="py-lineno">365</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">StopIteration</tt><tt class="py-op">:</tt> </tt>
+<a name="L366"></a><tt class="py-lineno">366</tt>  <tt class="py-line">            <tt class="py-name">second</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L367"></a><tt class="py-lineno">367</tt>  <tt class="py-line"> </tt>
+<a name="L368"></a><tt class="py-lineno">368</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">second</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L369"></a><tt class="py-lineno">369</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"More than one query results found in handle"</tt><tt class="py-op">)</tt> </tt>
+<a name="L370"></a><tt class="py-lineno">370</tt>  <tt class="py-line"> </tt>
+<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">first</tt> </tt>
+</div><a name="L372"></a><tt class="py-lineno">372</tt>  <tt class="py-line"> </tt>
+<a name="L373"></a><tt class="py-lineno">373</tt>  <tt class="py-line"> </tt>
+<a name="to_dict"></a><div id="to_dict-def"><a name="L374"></a><tt class="py-lineno">374</tt> <a class="py-toggle" href="#" id="to_dict-toggle" onclick="return toggle('to_dict');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO-module.html#to_dict">to_dict</a><tt class="py-op">(</tt><tt class="py-param">qresults</tt><tt class="py-op">,</tt> <tt class="py-param">key_function</tt><tt class="py-op">=</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">rec</tt><tt class="py-op">:</tt> <tt class="py-name">rec</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-31', 'id', 'link-31');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="to_dict-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="to_dict-expanded"><a name="L375"></a><tt class="py-lineno">375</tt>  <tt class="py-line">    <tt class="py-docstring">"""Turns a QueryResult iterator or list into a dictionary.</tt> </tt>
+<a name="L376"></a><tt class="py-lineno">376</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L377"></a><tt class="py-lineno">377</tt>  <tt class="py-line"><tt class="py-docstring">     - qresults     - Iterable returning QueryResult objects.</tt> </tt>
+<a name="L378"></a><tt class="py-lineno">378</tt>  <tt class="py-line"><tt class="py-docstring">     - key_function - Optional callback function which when given a</tt> </tt>
+<a name="L379"></a><tt class="py-lineno">379</tt>  <tt class="py-line"><tt class="py-docstring">                      QueryResult object should return a unique key for the</tt> </tt>
+<a name="L380"></a><tt class="py-lineno">380</tt>  <tt class="py-line"><tt class="py-docstring">                      dictionary.</tt> </tt>
+<a name="L381"></a><tt class="py-lineno">381</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L382"></a><tt class="py-lineno">382</tt>  <tt class="py-line"><tt class="py-docstring">    This function enables access of QueryResult objects from a single search</tt> </tt>
+<a name="L383"></a><tt class="py-lineno">383</tt>  <tt class="py-line"><tt class="py-docstring">    output file using its identifier.</tt> </tt>
+<a name="L384"></a><tt class="py-lineno">384</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L385"></a><tt class="py-lineno">385</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L386"></a><tt class="py-lineno">386</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')</tt> </tt>
+<a name="L387"></a><tt class="py-lineno">387</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_dict = SearchIO.to_dict(qresults)</tt> </tt>
+<a name="L388"></a><tt class="py-lineno">388</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; sorted(search_dict)</tt> </tt>
+<a name="L389"></a><tt class="py-lineno">389</tt>  <tt class="py-line"><tt class="py-docstring">    ['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']</tt> </tt>
+<a name="L390"></a><tt class="py-lineno">390</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_dict['gi|156630997:105-1160']</tt> </tt>
+<a name="L391"></a><tt class="py-lineno">391</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult(id='gi|156630997:105-1160', 5 hits)</tt> </tt>
+<a name="L392"></a><tt class="py-lineno">392</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L393"></a><tt class="py-lineno">393</tt>  <tt class="py-line"><tt class="py-docstring">    By default, the dictionary key is the QueryResult's string ID. This may be</tt> </tt>
+<a name="L394"></a><tt class="py-lineno">394</tt>  <tt class="py-line"><tt class="py-docstring">    changed by supplying a callback function that returns the desired identifier.</tt> </tt>
+<a name="L395"></a><tt class="py-lineno">395</tt>  <tt class="py-line"><tt class="py-docstring">    Here is an example using a function that removes the 'gi|' part in the</tt> </tt>
+<a name="L396"></a><tt class="py-lineno">396</tt>  <tt class="py-line"><tt class="py-docstring">    beginning of the QueryResult ID.</tt> </tt>
+<a name="L397"></a><tt class="py-lineno">397</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L398"></a><tt class="py-lineno">398</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L399"></a><tt class="py-lineno">399</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')</tt> </tt>
+<a name="L400"></a><tt class="py-lineno">400</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; key_func = lambda qresult: qresult.id.split('|')[1]</tt> </tt>
+<a name="L401"></a><tt class="py-lineno">401</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_dict = SearchIO.to_dict(qresults, key_func)</tt> </tt>
+<a name="L402"></a><tt class="py-lineno">402</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; sorted(search_dict)</tt> </tt>
+<a name="L403"></a><tt class="py-lineno">403</tt>  <tt class="py-line"><tt class="py-docstring">    ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']</tt> </tt>
+<a name="L404"></a><tt class="py-lineno">404</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_dict['156630997:105-1160']</tt> </tt>
+<a name="L405"></a><tt class="py-lineno">405</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult(id='gi|156630997:105-1160', 5 hits)</tt> </tt>
+<a name="L406"></a><tt class="py-lineno">406</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L407"></a><tt class="py-lineno">407</tt>  <tt class="py-line"><tt class="py-docstring">    Note that the callback function does not change the QueryResult's ID value.</tt> </tt>
+<a name="L408"></a><tt class="py-lineno">408</tt>  <tt class="py-line"><tt class="py-docstring">    It only changes the key value used to retrieve the associated QueryResult.</tt> </tt>
+<a name="L409"></a><tt class="py-lineno">409</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L410"></a><tt class="py-lineno">410</tt>  <tt class="py-line"><tt class="py-docstring">    As this function loads all QueryResult objects into memory, it may be</tt> </tt>
+<a name="L411"></a><tt class="py-lineno">411</tt>  <tt class="py-line"><tt class="py-docstring">    unsuitable for dealing with files containing many queries. In that case, it</tt> </tt>
+<a name="L412"></a><tt class="py-lineno">412</tt>  <tt class="py-line"><tt class="py-docstring">    is recommended that you use either `index` or `index_db`.</tt> </tt>
+<a name="L413"></a><tt class="py-lineno">413</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L414"></a><tt class="py-lineno">414</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L415"></a><tt class="py-lineno">415</tt>  <tt class="py-line">    <tt class="py-name">qdict</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L416"></a><tt class="py-lineno">416</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">qresult</tt> <tt class="py-keyword">in</tt> <tt class="py-name">qresults</tt><tt class="py-op">:</tt> </tt>
+<a name="L417"></a><tt class="py-lineno">417</tt>  <tt class="py-line">        <tt class="py-name">key</tt> <tt class="py-op">=</tt> <tt class="py-name">key_function</tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">)</tt> </tt>
+<a name="L418"></a><tt class="py-lineno">418</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">key</tt> <tt class="py-keyword">in</tt> <tt class="py-name">qdict</tt><tt class="py-op">:</tt> </tt>
+<a name="L419"></a><tt class="py-lineno">419</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Duplicate key %r"</tt> <tt class="py-op">%</tt> <tt class="py-name">key</tt><tt class="py-op">)</tt> </tt>
+<a name="L420"></a><tt class="py-lineno">420</tt>  <tt class="py-line">        <tt class="py-name">qdict</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">qresult</tt> </tt>
+<a name="L421"></a><tt class="py-lineno">421</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">qdict</tt> </tt>
+</div><a name="L422"></a><tt class="py-lineno">422</tt>  <tt class="py-line"> </tt>
+<a name="L423"></a><tt class="py-lineno">423</tt>  <tt class="py-line"> </tt>
+<a name="index"></a><div id="index-def"><a name="L424"></a><tt class="py-lineno">424</tt> <a class="py-toggle" href="#" id="index-toggle" onclick="return toggle('index');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO-module.html#index">index</a><tt class="py-op">(</tt><tt class="py-param">filename</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">key_function</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="index-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="index-expanded"><a name="L425"></a><tt class="py-lineno">425</tt>  <tt class="py-line">    <tt class="py-docstring">"""Indexes a search output file and returns a dictionary-like object.</tt> </tt>
+<a name="L426"></a><tt class="py-lineno">426</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L427"></a><tt class="py-lineno">427</tt>  <tt class="py-line"><tt class="py-docstring">     - filename     - string giving name of file to be indexed</tt> </tt>
+<a name="L428"></a><tt class="py-lineno">428</tt>  <tt class="py-line"><tt class="py-docstring">     - format       - Lower case string denoting one of the supported formats.</tt> </tt>
+<a name="L429"></a><tt class="py-lineno">429</tt>  <tt class="py-line"><tt class="py-docstring">     - key_function - Optional callback function which when given a</tt> </tt>
+<a name="L430"></a><tt class="py-lineno">430</tt>  <tt class="py-line"><tt class="py-docstring">                      QueryResult should return a unique key for the dictionary.</tt> </tt>
+<a name="L431"></a><tt class="py-lineno">431</tt>  <tt class="py-line"><tt class="py-docstring">     - kwargs       - Format-specific keyword arguments.</tt> </tt>
+<a name="L432"></a><tt class="py-lineno">432</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L433"></a><tt class="py-lineno">433</tt>  <tt class="py-line"><tt class="py-docstring">    Index returns a pseudo-dictionary object with QueryResult objects as its</tt> </tt>
+<a name="L434"></a><tt class="py-lineno">434</tt>  <tt class="py-line"><tt class="py-docstring">    values and a string identifier as its keys. The function is mainly useful</tt> </tt>
+<a name="L435"></a><tt class="py-lineno">435</tt>  <tt class="py-line"><tt class="py-docstring">    for dealing with large search output files, as it enables access to any</tt> </tt>
+<a name="L436"></a><tt class="py-lineno">436</tt>  <tt class="py-line"><tt class="py-docstring">    given QueryResult object much faster than using parse or read.</tt> </tt>
+<a name="L437"></a><tt class="py-lineno">437</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L438"></a><tt class="py-lineno">438</tt>  <tt class="py-line"><tt class="py-docstring">    Index works by storing in-memory the start locations of all queries in a</tt> </tt>
+<a name="L439"></a><tt class="py-lineno">439</tt>  <tt class="py-line"><tt class="py-docstring">    file. When a user requested access to the query, this function will jump</tt> </tt>
+<a name="L440"></a><tt class="py-lineno">440</tt>  <tt class="py-line"><tt class="py-docstring">    to its start position, parse the whole query, and return it as a</tt> </tt>
+<a name="L441"></a><tt class="py-lineno">441</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult object:</tt> </tt>
+<a name="L442"></a><tt class="py-lineno">442</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L443"></a><tt class="py-lineno">443</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L444"></a><tt class="py-lineno">444</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml')</tt> </tt>
+<a name="L445"></a><tt class="py-lineno">445</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx</tt> </tt>
+<a name="L446"></a><tt class="py-lineno">446</tt>  <tt class="py-line"><tt class="py-docstring">    SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=None)</tt> </tt>
+<a name="L447"></a><tt class="py-lineno">447</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; sorted(search_idx)</tt> </tt>
+<a name="L448"></a><tt class="py-lineno">448</tt>  <tt class="py-line"><tt class="py-docstring">    ['gi|156630997:105-1160', 'gi|195230749:301-1383', ..., 'gi|53729353:216-1313']</tt> </tt>
+<a name="L449"></a><tt class="py-lineno">449</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx['gi|195230749:301-1383']</tt> </tt>
+<a name="L450"></a><tt class="py-lineno">450</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult(id='gi|195230749:301-1383', 5 hits)</tt> </tt>
+<a name="L451"></a><tt class="py-lineno">451</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx.close()</tt> </tt>
+<a name="L452"></a><tt class="py-lineno">452</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L453"></a><tt class="py-lineno">453</tt>  <tt class="py-line"><tt class="py-docstring">    If the file is BGZF compressed, this is detected automatically. Ordinary</tt> </tt>
+<a name="L454"></a><tt class="py-lineno">454</tt>  <tt class="py-line"><tt class="py-docstring">    GZIP files are not supported:</tt> </tt>
+<a name="L455"></a><tt class="py-lineno">455</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L456"></a><tt class="py-lineno">456</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L457"></a><tt class="py-lineno">457</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx = SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml')</tt> </tt>
+<a name="L458"></a><tt class="py-lineno">458</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx</tt> </tt>
+<a name="L459"></a><tt class="py-lineno">459</tt>  <tt class="py-line"><tt class="py-docstring">    SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml', key_function=None)</tt> </tt>
+<a name="L460"></a><tt class="py-lineno">460</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx['gi|195230749:301-1383']</tt> </tt>
+<a name="L461"></a><tt class="py-lineno">461</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult(id='gi|195230749:301-1383', 5 hits)</tt> </tt>
+<a name="L462"></a><tt class="py-lineno">462</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx.close()</tt> </tt>
+<a name="L463"></a><tt class="py-lineno">463</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L464"></a><tt class="py-lineno">464</tt>  <tt class="py-line"><tt class="py-docstring">    You can supply a custom callback function to alter the default identifier</tt> </tt>
+<a name="L465"></a><tt class="py-lineno">465</tt>  <tt class="py-line"><tt class="py-docstring">    string. This function should accept as its input the QueryResult ID string</tt> </tt>
+<a name="L466"></a><tt class="py-lineno">466</tt>  <tt class="py-line"><tt class="py-docstring">    and return a modified version of it.</tt> </tt>
+<a name="L467"></a><tt class="py-lineno">467</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L468"></a><tt class="py-lineno">468</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L469"></a><tt class="py-lineno">469</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; key_func = lambda id: id.split('|')[1]</tt> </tt>
+<a name="L470"></a><tt class="py-lineno">470</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml', key_func)</tt> </tt>
+<a name="L471"></a><tt class="py-lineno">471</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx</tt> </tt>
+<a name="L472"></a><tt class="py-lineno">472</tt>  <tt class="py-line"><tt class="py-docstring">    SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=&lt;function &lt;lambda&gt; at ...&gt;)</tt> </tt>
+<a name="L473"></a><tt class="py-lineno">473</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; sorted(search_idx)</tt> </tt>
+<a name="L474"></a><tt class="py-lineno">474</tt>  <tt class="py-line"><tt class="py-docstring">    ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']</tt> </tt>
+<a name="L475"></a><tt class="py-lineno">475</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx['156630997:105-1160']</tt> </tt>
+<a name="L476"></a><tt class="py-lineno">476</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult(id='gi|156630997:105-1160', 5 hits)</tt> </tt>
+<a name="L477"></a><tt class="py-lineno">477</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; search_idx.close()</tt> </tt>
+<a name="L478"></a><tt class="py-lineno">478</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L479"></a><tt class="py-lineno">479</tt>  <tt class="py-line"><tt class="py-docstring">    Note that the callback function does not change the QueryResult's ID value.</tt> </tt>
+<a name="L480"></a><tt class="py-lineno">480</tt>  <tt class="py-line"><tt class="py-docstring">    It only changes the key value used to retrieve the associated QueryResult.</tt> </tt>
+<a name="L481"></a><tt class="py-lineno">481</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L482"></a><tt class="py-lineno">482</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L483"></a><tt class="py-lineno">483</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">,</tt> <tt class="py-name">basestring</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L484"></a><tt class="py-lineno">484</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">"Need a filename (not a handle)"</tt><tt class="py-op">)</tt> </tt>
+<a name="L485"></a><tt class="py-lineno">485</tt>  <tt class="py-line"> </tt>
+<a name="L486"></a><tt class="py-lineno">486</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-32" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-32', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="Bio.File" class="py-name" href="#" onclick="return doclink('link-33', 'File', 'link-5');">File</a></tt> <tt class="py-keyword">import</tt> <tt id="link-34" class="py-name" targets="Class Bio.File._IndexedSeqFileDict=Bio.File._IndexedSeqFileDict-class.html"><a title="Bio.File._IndexedSeqFileDict" class="py-name" href="#" onclick="return doclink('link-34', '_IndexedSeqFileDict', 'link-34');">_IndexedSeqFileDict</a></tt> </tt>
+<a name="L487"></a><tt class="py-lineno">487</tt>  <tt class="py-line">    <tt class="py-name">proxy_class</tt> <tt class="py-op">=</tt> <tt id="link-35" class="py-name"><a title="Bio.SearchIO._utils.get_processor" class="py-name" href="#" onclick="return doclink('link-35', 'get_processor', 'link-17');">get_processor</a></tt><tt class="py-op">(</tt><tt id="link-36" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-36', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> <tt id="link-37" class="py-name"><a title="Bio.SearchIO._INDEXER_MAP" class="py-name" href="#" onclick="return doclink('link-37', '_INDEXER_MAP', 'link-20');">_INDEXER_MAP</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L488"></a><tt class="py-lineno">488</tt>  <tt class="py-line">    <tt class="py-name">repr</tt> <tt class="py-op">=</tt> <tt class="py-string">"SearchIO.index(%r, %r, key_function=%r)"</tt> \ </tt>
+<a name="L489"></a><tt class="py-lineno">489</tt>  <tt class="py-line">        <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">,</tt> <tt id="link-38" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-38', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> <tt class="py-name">key_function</tt><tt class="py-op">)</tt> </tt>
+<a name="L490"></a><tt class="py-lineno">490</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-39" class="py-name"><a title="Bio.File._IndexedSeqFileDict" class="py-name" href="#" onclick="return doclink('link-39', '_IndexedSeqFileDict', 'link-34');">_IndexedSeqFileDict</a></tt><tt class="py-op">(</tt><tt class="py-name">proxy_class</tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L491"></a><tt class="py-lineno">491</tt>  <tt class="py-line">                               <tt class="py-name">key_function</tt><tt class="py-op">,</tt> <tt class="py-name">repr</tt><tt class="py-op">,</tt> <tt class="py-string">"QueryResult"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L492"></a><tt class="py-lineno">492</tt>  <tt class="py-line"> </tt>
+<a name="L493"></a><tt class="py-lineno">493</tt>  <tt class="py-line"> </tt>
+<a name="index_db"></a><div id="index_db-def"><a name="L494"></a><tt class="py-lineno">494</tt> <a class="py-toggle" href="#" id="index_db-toggle" onclick="return toggle('index_db');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO-module.html#index_db">index_db</a><tt class="py-op">(</tt><tt class="py-param">index_filename</tt><tt class="py-op">,</tt> <tt class="py-param">filenames</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L495"></a><tt class="py-lineno">495</tt>  <tt class="py-line">        <tt class="py-param">key_function</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="index_db-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="index_db-expanded"><a name="L496"></a><tt class="py-lineno">496</tt>  <tt class="py-line">    <tt class="py-docstring">"""Indexes several search output files into an SQLite database.</tt> </tt>
+<a name="L497"></a><tt class="py-lineno">497</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L498"></a><tt class="py-lineno">498</tt>  <tt class="py-line"><tt class="py-docstring">     - index_filename - The SQLite filename.</tt> </tt>
+<a name="L499"></a><tt class="py-lineno">499</tt>  <tt class="py-line"><tt class="py-docstring">     - filenames    - List of strings specifying file(s) to be indexed, or when</tt> </tt>
+<a name="L500"></a><tt class="py-lineno">500</tt>  <tt class="py-line"><tt class="py-docstring">                      indexing a single file this can be given as a string.</tt> </tt>
+<a name="L501"></a><tt class="py-lineno">501</tt>  <tt class="py-line"><tt class="py-docstring">                      (optional if reloading an existing index, but must match)</tt> </tt>
+<a name="L502"></a><tt class="py-lineno">502</tt>  <tt class="py-line"><tt class="py-docstring">     - format       - Lower case string denoting one of the supported formats.</tt> </tt>
+<a name="L503"></a><tt class="py-lineno">503</tt>  <tt class="py-line"><tt class="py-docstring">                      (optional if reloading an existing index, but must match)</tt> </tt>
+<a name="L504"></a><tt class="py-lineno">504</tt>  <tt class="py-line"><tt class="py-docstring">     - key_function - Optional callback function which when given a</tt> </tt>
+<a name="L505"></a><tt class="py-lineno">505</tt>  <tt class="py-line"><tt class="py-docstring">                      QueryResult identifier string should return a unique</tt> </tt>
+<a name="L506"></a><tt class="py-lineno">506</tt>  <tt class="py-line"><tt class="py-docstring">                      key for the dictionary.</tt> </tt>
+<a name="L507"></a><tt class="py-lineno">507</tt>  <tt class="py-line"><tt class="py-docstring">     - kwargs       - Format-specific keyword arguments.</tt> </tt>
+<a name="L508"></a><tt class="py-lineno">508</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L509"></a><tt class="py-lineno">509</tt>  <tt class="py-line"><tt class="py-docstring">    The `index_db` function is similar to `index` in that it indexes the start</tt> </tt>
+<a name="L510"></a><tt class="py-lineno">510</tt>  <tt class="py-line"><tt class="py-docstring">    position of all queries from search output files. The main difference is</tt> </tt>
+<a name="L511"></a><tt class="py-lineno">511</tt>  <tt class="py-line"><tt class="py-docstring">    instead of storing these indices in-memory, they are written to disk as an</tt> </tt>
+<a name="L512"></a><tt class="py-lineno">512</tt>  <tt class="py-line"><tt class="py-docstring">    SQLite database file. This allows the indices to persist between Python</tt> </tt>
+<a name="L513"></a><tt class="py-lineno">513</tt>  <tt class="py-line"><tt class="py-docstring">    sessions. This enables access to any queries in the file without any</tt> </tt>
+<a name="L514"></a><tt class="py-lineno">514</tt>  <tt class="py-line"><tt class="py-docstring">    indexing overhead, provided it has been indexed at least once.</tt> </tt>
+<a name="L515"></a><tt class="py-lineno">515</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L516"></a><tt class="py-lineno">516</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L517"></a><tt class="py-lineno">517</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; idx_filename = ":memory:" # Use a real filename, this is in RAM only!</tt> </tt>
+<a name="L518"></a><tt class="py-lineno">518</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; db_idx = SearchIO.index_db(idx_filename, 'Blast/mirna.xml', 'blast-xml')</tt> </tt>
+<a name="L519"></a><tt class="py-lineno">519</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; sorted(db_idx)</tt> </tt>
+<a name="L520"></a><tt class="py-lineno">520</tt>  <tt class="py-line"><tt class="py-docstring">    ['33211', '33212', '33213']</tt> </tt>
+<a name="L521"></a><tt class="py-lineno">521</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; db_idx['33212']</tt> </tt>
+<a name="L522"></a><tt class="py-lineno">522</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult(id='33212', 44 hits)</tt> </tt>
+<a name="L523"></a><tt class="py-lineno">523</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; db_idx.close()</tt> </tt>
+<a name="L524"></a><tt class="py-lineno">524</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L525"></a><tt class="py-lineno">525</tt>  <tt class="py-line"><tt class="py-docstring">    `index_db` can also index multiple files and store them in the same</tt> </tt>
+<a name="L526"></a><tt class="py-lineno">526</tt>  <tt class="py-line"><tt class="py-docstring">    database, making it easier to group multiple search files and access them</tt> </tt>
+<a name="L527"></a><tt class="py-lineno">527</tt>  <tt class="py-line"><tt class="py-docstring">    from a single interface.</tt> </tt>
+<a name="L528"></a><tt class="py-lineno">528</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L529"></a><tt class="py-lineno">529</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio import SearchIO</tt> </tt>
+<a name="L530"></a><tt class="py-lineno">530</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; idx_filename = ":memory:" # Use a real filename, this is in RAM only!</tt> </tt>
+<a name="L531"></a><tt class="py-lineno">531</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; files = ['Blast/mirna.xml', 'Blast/wnts.xml']</tt> </tt>
+<a name="L532"></a><tt class="py-lineno">532</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; db_idx = SearchIO.index_db(idx_filename, files, 'blast-xml')</tt> </tt>
+<a name="L533"></a><tt class="py-lineno">533</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; sorted(db_idx)</tt> </tt>
+<a name="L534"></a><tt class="py-lineno">534</tt>  <tt class="py-line"><tt class="py-docstring">    ['33211', '33212', '33213', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']</tt> </tt>
+<a name="L535"></a><tt class="py-lineno">535</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; db_idx['33212']</tt> </tt>
+<a name="L536"></a><tt class="py-lineno">536</tt>  <tt class="py-line"><tt class="py-docstring">    QueryResult(id='33212', 44 hits)</tt> </tt>
+<a name="L537"></a><tt class="py-lineno">537</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; db_idx.close()</tt> </tt>
+<a name="L538"></a><tt class="py-lineno">538</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L539"></a><tt class="py-lineno">539</tt>  <tt class="py-line"><tt class="py-docstring">    One common example where this is helpful is if you had a large set of</tt> </tt>
+<a name="L540"></a><tt class="py-lineno">540</tt>  <tt class="py-line"><tt class="py-docstring">    query sequences (say ten thousand) which you split into ten query files</tt> </tt>
+<a name="L541"></a><tt class="py-lineno">541</tt>  <tt class="py-line"><tt class="py-docstring">    of one thousand sequences each in order to run as ten separate BLAST jobs</tt> </tt>
+<a name="L542"></a><tt class="py-lineno">542</tt>  <tt class="py-line"><tt class="py-docstring">    on a cluster. You could use `index_db` to index the ten BLAST output</tt> </tt>
+<a name="L543"></a><tt class="py-lineno">543</tt>  <tt class="py-line"><tt class="py-docstring">    files together for seamless access to all the results as one dictionary.</tt> </tt>
+<a name="L544"></a><tt class="py-lineno">544</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L545"></a><tt class="py-lineno">545</tt>  <tt class="py-line"><tt class="py-docstring">    Note that ':memory:' rather than an index filename tells SQLite to hold</tt> </tt>
+<a name="L546"></a><tt class="py-lineno">546</tt>  <tt class="py-line"><tt class="py-docstring">    the index database in memory. This is useful for quick tests, but using</tt> </tt>
+<a name="L547"></a><tt class="py-lineno">547</tt>  <tt class="py-line"><tt class="py-docstring">    the Bio.SearchIO.index(...) function instead would use less memory.</tt> </tt>
+<a name="L548"></a><tt class="py-lineno">548</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L549"></a><tt class="py-lineno">549</tt>  <tt class="py-line"><tt class="py-docstring">    BGZF compressed files are supported, and detected automatically. Ordinary</tt> </tt>
+<a name="L550"></a><tt class="py-lineno">550</tt>  <tt class="py-line"><tt class="py-docstring">    GZIP compressed files are not supported.</tt> </tt>
+<a name="L551"></a><tt class="py-lineno">551</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L552"></a><tt class="py-lineno">552</tt>  <tt class="py-line"><tt class="py-docstring">    See also Bio.SearchIO.index(), Bio.SearchIO.to_dict(), and the Python module</tt> </tt>
+<a name="L553"></a><tt class="py-lineno">553</tt>  <tt class="py-line"><tt class="py-docstring">    glob which is useful for building lists of files.</tt> </tt>
+<a name="L554"></a><tt class="py-lineno">554</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L555"></a><tt class="py-lineno">555</tt>  <tt class="py-line">    <tt class="py-comment"># cast filenames to list if it's a string</tt> </tt>
+<a name="L556"></a><tt class="py-lineno">556</tt>  <tt class="py-line">    <tt class="py-comment"># (can we check if it's a string or a generator?)</tt> </tt>
+<a name="L557"></a><tt class="py-lineno">557</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">filenames</tt><tt class="py-op">,</tt> <tt class="py-name">basestring</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L558"></a><tt class="py-lineno">558</tt>  <tt class="py-line">        <tt class="py-name">filenames</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">filenames</tt><tt class="py-op">]</tt> </tt>
+<a name="L559"></a><tt class="py-lineno">559</tt>  <tt class="py-line"> </tt>
+<a name="L560"></a><tt class="py-lineno">560</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-40" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-40', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="Bio.File" class="py-name" href="#" onclick="return doclink('link-41', 'File', 'link-5');">File</a></tt> <tt class="py-keyword">import</tt> <tt id="link-42" class="py-name" targets="Class Bio.File._SQLiteManySeqFilesDict=Bio.File._SQLiteManySeqFilesDict-class.html"><a title="Bio.File._SQLiteManySeqFilesDict" class="py-name" href="#" onclick="return doclink('link-42', '_SQLiteManySeqFilesDict', 'link-42');">_SQLiteManySeqFilesDict</a></tt> </tt>
+<a name="L561"></a><tt class="py-lineno">561</tt>  <tt class="py-line">    <tt class="py-name">repr</tt> <tt class="py-op">=</tt> <tt class="py-string">"SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)"</tt> \ </tt>
+<a name="L562"></a><tt class="py-lineno">562</tt>  <tt class="py-line">               <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">index_filename</tt><tt class="py-op">,</tt> <tt class="py-name">filenames</tt><tt class="py-op">,</tt> <tt id="link-43" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-43', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> <tt class="py-name">key_function</tt><tt class="py-op">)</tt> </tt>
+<a name="L563"></a><tt class="py-lineno">563</tt>  <tt class="py-line"> </tt>
+<a name="L564"></a><tt class="py-lineno">564</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">proxy_factory</tt><tt class="py-op">(</tt><tt class="py-param">format</tt><tt class="py-op">,</tt> <tt class="py-param">filename</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L565"></a><tt class="py-lineno">565</tt>  <tt class="py-line">        <tt class="py-docstring">"""Given a filename returns proxy object, else boolean if format OK."""</tt> </tt>
+<a name="L566"></a><tt class="py-lineno">566</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">filename</tt><tt class="py-op">:</tt> </tt>
+<a name="L567"></a><tt class="py-lineno">567</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt id="link-44" class="py-name"><a title="Bio.SearchIO._utils.get_processor" class="py-name" href="#" onclick="return doclink('link-44', 'get_processor', 'link-17');">get_processor</a></tt><tt class="py-op">(</tt><tt id="link-45" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-45', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> <tt id="link-46" class="py-name"><a title="Bio.SearchIO._INDEXER_MAP" class="py-name" href="#" onclick="return doclink('link-46', '_INDEXER_MAP', 'link-20');">_INDEXER_MAP</a></tt><tt class="py-op">)</tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L568"></a><tt class="py-lineno">568</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L569"></a><tt class="py-lineno">569</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt id="link-47" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-47', 'format', 'link-23');">format</a></tt> <tt class="py-keyword">in</tt> <tt id="link-48" class="py-name"><a title="Bio.SearchIO._INDEXER_MAP" class="py-name" href="#" onclick="return doclink('link-48', '_INDEXER_MAP', 'link-20');">_INDEXER_MAP</a></tt> </tt>
+</div><a name="L570"></a><tt class="py-lineno">570</tt>  <tt class="py-line"> </tt>
+<a name="L571"></a><tt class="py-lineno">571</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-49" class="py-name"><a title="Bio.File._SQLiteManySeqFilesDict" class="py-name" href="#" onclick="return doclink('link-49', '_SQLiteManySeqFilesDict', 'link-42');">_SQLiteManySeqFilesDict</a></tt><tt class="py-op">(</tt><tt class="py-name">index_filename</tt><tt class="py-op">,</tt> <tt class="py-name">filenames</tt><tt class="py-op">,</tt> </tt>
+<a name="L572"></a><tt class="py-lineno">572</tt>  <tt class="py-line">                                   <tt class="py-name">proxy_factory</tt><tt class="py-op">,</tt> <tt id="link-50" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-50', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L573"></a><tt class="py-lineno">573</tt>  <tt class="py-line">                                   <tt class="py-name">key_function</tt><tt class="py-op">,</tt> <tt class="py-name">repr</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L574"></a><tt class="py-lineno">574</tt>  <tt class="py-line"> </tt>
+<a name="L575"></a><tt class="py-lineno">575</tt>  <tt class="py-line"> </tt>
+<a name="write"></a><div id="write-def"><a name="L576"></a><tt class="py-lineno">576</tt> <a class="py-toggle" href="#" id="write-toggle" onclick="return toggle('write');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO-module.html#write">write</a><tt class="py-op">(</tt><tt class="py-param">qresults</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">,</tt> <tt class="py-param">format</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="write-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="write-expanded"><a name="L577"></a><tt class="py-lineno">577</tt>  <tt class="py-line">    <tt class="py-docstring">"""Writes QueryResult objects to a file in the given format.</tt> </tt>
+<a name="L578"></a><tt class="py-lineno">578</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L579"></a><tt class="py-lineno">579</tt>  <tt class="py-line"><tt class="py-docstring">     - qresults - An iterator returning QueryResult objects or a single</tt> </tt>
+<a name="L580"></a><tt class="py-lineno">580</tt>  <tt class="py-line"><tt class="py-docstring">                  QueryResult object.</tt> </tt>
+<a name="L581"></a><tt class="py-lineno">581</tt>  <tt class="py-line"><tt class="py-docstring">     - handle   - Handle to the file, or the filename as a string.</tt> </tt>
+<a name="L582"></a><tt class="py-lineno">582</tt>  <tt class="py-line"><tt class="py-docstring">     - format   - Lower case string denoting one of the supported formats.</tt> </tt>
+<a name="L583"></a><tt class="py-lineno">583</tt>  <tt class="py-line"><tt class="py-docstring">     - kwargs   - Format-specific keyword arguments.</tt> </tt>
+<a name="L584"></a><tt class="py-lineno">584</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L585"></a><tt class="py-lineno">585</tt>  <tt class="py-line"><tt class="py-docstring">    The `write` function writes QueryResult object(s) into the given output</tt> </tt>
+<a name="L586"></a><tt class="py-lineno">586</tt>  <tt class="py-line"><tt class="py-docstring">    handle / filename. You can supply it with a single QueryResult object or an</tt> </tt>
+<a name="L587"></a><tt class="py-lineno">587</tt>  <tt class="py-line"><tt class="py-docstring">    iterable returning one or more QueryResult objects. In both cases, the</tt> </tt>
+<a name="L588"></a><tt class="py-lineno">588</tt>  <tt class="py-line"><tt class="py-docstring">    function will return a tuple of four values: the number of QueryResult, Hit,</tt> </tt>
+<a name="L589"></a><tt class="py-lineno">589</tt>  <tt class="py-line"><tt class="py-docstring">    HSP, and HSPFragment objects it writes to the output file::</tt> </tt>
+<a name="L590"></a><tt class="py-lineno">590</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L591"></a><tt class="py-lineno">591</tt>  <tt class="py-line"><tt class="py-docstring">        from Bio import SearchIO</tt> </tt>
+<a name="L592"></a><tt class="py-lineno">592</tt>  <tt class="py-line"><tt class="py-docstring">        qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')</tt> </tt>
+<a name="L593"></a><tt class="py-lineno">593</tt>  <tt class="py-line"><tt class="py-docstring">        SearchIO.write(qresults, 'results.tab', 'blast-tab')</tt> </tt>
+<a name="L594"></a><tt class="py-lineno">594</tt>  <tt class="py-line"><tt class="py-docstring">        &lt;stdout&gt; (3, 239, 277, 277)</tt> </tt>
+<a name="L595"></a><tt class="py-lineno">595</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L596"></a><tt class="py-lineno">596</tt>  <tt class="py-line"><tt class="py-docstring">    The output of different formats may be adjusted using the format-specific</tt> </tt>
+<a name="L597"></a><tt class="py-lineno">597</tt>  <tt class="py-line"><tt class="py-docstring">    keyword arguments. Here is an example that writes BLAT PSL output file with</tt> </tt>
+<a name="L598"></a><tt class="py-lineno">598</tt>  <tt class="py-line"><tt class="py-docstring">    a header::</tt> </tt>
+<a name="L599"></a><tt class="py-lineno">599</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L600"></a><tt class="py-lineno">600</tt>  <tt class="py-line"><tt class="py-docstring">        from Bio import SearchIO</tt> </tt>
+<a name="L601"></a><tt class="py-lineno">601</tt>  <tt class="py-line"><tt class="py-docstring">        qresults = SearchIO.parse('Blat/psl_34_001.psl', 'blat-psl')</tt> </tt>
+<a name="L602"></a><tt class="py-lineno">602</tt>  <tt class="py-line"><tt class="py-docstring">        SearchIO.write(qresults, 'results.tab', 'blat-psl', header=True)</tt> </tt>
+<a name="L603"></a><tt class="py-lineno">603</tt>  <tt class="py-line"><tt class="py-docstring">        &lt;stdout&gt; (2, 13, 22, 26)</tt> </tt>
+<a name="L604"></a><tt class="py-lineno">604</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L605"></a><tt class="py-lineno">605</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L606"></a><tt class="py-lineno">606</tt>  <tt class="py-line">    <tt class="py-comment"># turn qresults into an iterator if it's a single QueryResult object</tt> </tt>
+<a name="L607"></a><tt class="py-lineno">607</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">qresults</tt><tt class="py-op">,</tt> <tt id="link-51" class="py-name"><a title="Bio.SearchIO._model.query.QueryResult" class="py-name" href="#" onclick="return doclink('link-51', 'QueryResult', 'link-10');">QueryResult</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L608"></a><tt class="py-lineno">608</tt>  <tt class="py-line">        <tt class="py-name">qresults</tt> <tt class="py-op">=</tt> <tt class="py-name">iter</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">qresults</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L609"></a><tt class="py-lineno">609</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L610"></a><tt class="py-lineno">610</tt>  <tt class="py-line">        <tt class="py-name">qresults</tt> <tt class="py-op">=</tt> <tt class="py-name">iter</tt><tt class="py-op">(</tt><tt class="py-name">qresults</tt><tt class="py-op">)</tt> </tt>
+<a name="L611"></a><tt class="py-lineno">611</tt>  <tt class="py-line"> </tt>
+<a name="L612"></a><tt class="py-lineno">612</tt>  <tt class="py-line">    <tt class="py-comment"># get the writer object and do error checking</tt> </tt>
+<a name="L613"></a><tt class="py-lineno">613</tt>  <tt class="py-line">    <tt class="py-name">writer_class</tt> <tt class="py-op">=</tt> <tt id="link-52" class="py-name"><a title="Bio.SearchIO._utils.get_processor" class="py-name" href="#" onclick="return doclink('link-52', 'get_processor', 'link-17');">get_processor</a></tt><tt class="py-op">(</tt><tt id="link-53" class="py-name"><a title="Bio.Align.Generic.Alignment.format
+Bio.Motif._Motif.Motif.format
+Bio.Phylo.BaseTree.Tree.format
+Bio.Restriction.Restriction.RestrictionBatch.format
+Bio.SeqRecord.SeqRecord.format
+Bio.motifs.Motif.format" class="py-name" href="#" onclick="return doclink('link-53', 'format', 'link-23');">format</a></tt><tt class="py-op">,</tt> <tt id="link-54" class="py-name"><a title="Bio.SearchIO._WRITER_MAP" class="py-name" href="#" onclick="return doclink('link-54', '_WRITER_MAP', 'link-21');">_WRITER_MAP</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L614"></a><tt class="py-lineno">614</tt>  <tt class="py-line"> </tt>
+<a name="L615"></a><tt class="py-lineno">615</tt>  <tt class="py-line">    <tt class="py-comment"># write to the handle</tt> </tt>
+<a name="L616"></a><tt class="py-lineno">616</tt>  <tt class="py-line">    <tt class="py-keyword">with</tt> <tt id="link-55" class="py-name"><a title="Bio.File.as_handle" class="py-name" href="#" onclick="return doclink('link-55', 'as_handle', 'link-6');">as_handle</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">,</tt> <tt class="py-string">'w'</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">target_file</tt><tt class="py-op">:</tt> </tt>
+<a name="L617"></a><tt class="py-lineno">617</tt>  <tt class="py-line">        <tt class="py-name">writer</tt> <tt class="py-op">=</tt> <tt class="py-name">writer_class</tt><tt class="py-op">(</tt><tt class="py-name">target_file</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L618"></a><tt class="py-lineno">618</tt>  <tt class="py-line">        <tt class="py-comment"># count how many qresults, hits, and hsps</tt> </tt>
+<a name="L619"></a><tt class="py-lineno">619</tt>  <tt class="py-line">        <tt class="py-name">qresult_count</tt><tt class="py-op">,</tt> <tt class="py-name">hit_count</tt><tt class="py-op">,</tt> <tt class="py-name">hsp_count</tt><tt class="py-op">,</tt> <tt class="py-name">frag_count</tt> <tt class="py-op">=</tt> \ </tt>
+<a name="L620"></a><tt class="py-lineno">620</tt>  <tt class="py-line">                <tt class="py-name">writer</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name" targets="Method Bio.AlignIO.Interfaces.AlignmentWriter.write_file()=Bio.AlignIO.Interfaces.AlignmentWriter-class.html#write_file,Method Bio.AlignIO.Interfaces.SequentialAlignmentWriter.write_file()=Bio.AlignIO.Interfaces.SequentialAlignmentWriter-class.html#write_file,Method Bio.AlignIO.NexusIO.NexusWriter.write_file()=Bio.AlignIO.NexusIO.NexusWriter-class.html#write_file,Method Bio.SearchIO.BlastIO.blast_tab.BlastTabWriter.write_file()=Bio.SearchIO.BlastIO.blast_tab.BlastTabWriter-class.html#write_file,Method Bio.SearchIO.BlastIO.blast_xml.BlastXmlWriter.write_file()=Bio.SearchIO.BlastIO.blast_xml.BlastXmlWriter-class.html#write_file,Method Bio.SearchIO.BlatIO.BlatPslWriter.write_file()=Bio.SearchIO.BlatIO.BlatPslWriter-class.html#write_file,Method Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.write_file()=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#write_file,Method Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter.write_file()=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter-class.html#write_file,Method Bio.SeqIO.Interfaces.SequenceWriter.write_file()=Bio.SeqIO.Interfaces.SequenceWriter-class.html#write_file,Method Bio.SeqIO.Interfaces.SequentialSequenceWriter.write_file()=Bio.SeqIO.Interfaces.SequentialSequenceWriter-class.html#write_file,Method Bio.SeqIO.SffIO.SffWriter.write_file()=Bio.SeqIO.SffIO.SffWriter-class.html#write_file"><a title="Bio.AlignIO.Interfaces.AlignmentWriter.write_file
+Bio.AlignIO.Interfaces.SequentialAlignmentWriter.write_file
+Bio.AlignIO.NexusIO.NexusWriter.write_file
+Bio.SearchIO.BlastIO.blast_tab.BlastTabWriter.write_file
+Bio.SearchIO.BlastIO.blast_xml.BlastXmlWriter.write_file
+Bio.SearchIO.BlatIO.BlatPslWriter.write_file
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.write_file
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter.write_file
+Bio.SeqIO.Interfaces.SequenceWriter.write_file
+Bio.SeqIO.Interfaces.SequentialSequenceWriter.write_file
+Bio.SeqIO.SffIO.SffWriter.write_file" class="py-name" href="#" onclick="return doclink('link-56', 'write_file', 'link-56');">write_file</a></tt><tt class="py-op">(</tt><tt class="py-name">qresults</tt><tt class="py-op">)</tt> </tt>
+<a name="L621"></a><tt class="py-lineno">621</tt>  <tt class="py-line"> </tt>
+<a name="L622"></a><tt class="py-lineno">622</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">qresult_count</tt><tt class="py-op">,</tt> <tt class="py-name">hit_count</tt><tt class="py-op">,</tt> <tt class="py-name">hsp_count</tt><tt class="py-op">,</tt> <tt class="py-name">frag_count</tt> </tt>
+</div><a name="L623"></a><tt class="py-lineno">623</tt>  <tt class="py-line"> </tt>
+<a name="L624"></a><tt class="py-lineno">624</tt>  <tt class="py-line"> </tt>
+<a name="convert"></a><div id="convert-def"><a name="L625"></a><tt class="py-lineno">625</tt> <a class="py-toggle" href="#" id="convert-toggle" onclick="return toggle('convert');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO-module.html#convert">convert</a><tt class="py-op">(</tt><tt class="py-param">in_file</tt><tt class="py-op">,</tt> <tt class="py-param">in_format</tt><tt class="py-op">,</tt> <tt class="py-param">out_file</tt><tt class="py-op">,</tt> <tt class="py-param">out_format</tt><tt class="py-op">,</tt> <tt class="py-param">in_kwargs</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L626"></a><tt class="py-lineno">626</tt>  <tt class="py-line">        <tt class="py-param">out_kwargs</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="convert-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="convert-expanded"><a name="L627"></a><tt class="py-lineno">627</tt>  <tt class="py-line">    <tt class="py-docstring">"""Convert between two search output formats, return number of records.</tt> </tt>
+<a name="L628"></a><tt class="py-lineno">628</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L629"></a><tt class="py-lineno">629</tt>  <tt class="py-line"><tt class="py-docstring">     - in_file    - Handle to the input file, or the filename as string.</tt> </tt>
+<a name="L630"></a><tt class="py-lineno">630</tt>  <tt class="py-line"><tt class="py-docstring">     - in_format  - Lower case string denoting the format of the input file.</tt> </tt>
+<a name="L631"></a><tt class="py-lineno">631</tt>  <tt class="py-line"><tt class="py-docstring">     - out_file   - Handle to the output file, or the filename as string.</tt> </tt>
+<a name="L632"></a><tt class="py-lineno">632</tt>  <tt class="py-line"><tt class="py-docstring">     - out_format - Lower case string denoting the format of the output file.</tt> </tt>
+<a name="L633"></a><tt class="py-lineno">633</tt>  <tt class="py-line"><tt class="py-docstring">     - in_kwargs  - Dictionary of keyword arguments for the input function.</tt> </tt>
+<a name="L634"></a><tt class="py-lineno">634</tt>  <tt class="py-line"><tt class="py-docstring">     - out_kwargs - Dictionary of keyword arguments for the output function.</tt> </tt>
+<a name="L635"></a><tt class="py-lineno">635</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L636"></a><tt class="py-lineno">636</tt>  <tt class="py-line"><tt class="py-docstring">    The convert function is a shortcut function for `parse` and `write`. It has</tt> </tt>
+<a name="L637"></a><tt class="py-lineno">637</tt>  <tt class="py-line"><tt class="py-docstring">    the same return type as `write`. Format-specific arguments may be passed to</tt> </tt>
+<a name="L638"></a><tt class="py-lineno">638</tt>  <tt class="py-line"><tt class="py-docstring">    the convert function, but only as dictionaries.</tt> </tt>
+<a name="L639"></a><tt class="py-lineno">639</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L640"></a><tt class="py-lineno">640</tt>  <tt class="py-line"><tt class="py-docstring">    Here is an example of using `convert` to convert from a BLAST+ XML file</tt> </tt>
+<a name="L641"></a><tt class="py-lineno">641</tt>  <tt class="py-line"><tt class="py-docstring">    into a tabular file with comments::</tt> </tt>
+<a name="L642"></a><tt class="py-lineno">642</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L643"></a><tt class="py-lineno">643</tt>  <tt class="py-line"><tt class="py-docstring">        from Bio import SearchIO</tt> </tt>
+<a name="L644"></a><tt class="py-lineno">644</tt>  <tt class="py-line"><tt class="py-docstring">        in_file = 'Blast/mirna.xml'</tt> </tt>
+<a name="L645"></a><tt class="py-lineno">645</tt>  <tt class="py-line"><tt class="py-docstring">        in_fmt = 'blast-xml'</tt> </tt>
+<a name="L646"></a><tt class="py-lineno">646</tt>  <tt class="py-line"><tt class="py-docstring">        out_file = 'results.tab'</tt> </tt>
+<a name="L647"></a><tt class="py-lineno">647</tt>  <tt class="py-line"><tt class="py-docstring">        out_fmt = 'blast-tab'</tt> </tt>
+<a name="L648"></a><tt class="py-lineno">648</tt>  <tt class="py-line"><tt class="py-docstring">        out_kwarg = {'comments': True}</tt> </tt>
+<a name="L649"></a><tt class="py-lineno">649</tt>  <tt class="py-line"><tt class="py-docstring">        SearchIO.convert(in_file, in_fmt, out_file, out_fmt, out_kwargs=out_kwarg)</tt> </tt>
+<a name="L650"></a><tt class="py-lineno">650</tt>  <tt class="py-line"><tt class="py-docstring">        &lt;stdout&gt; (3, 239, 277, 277)</tt> </tt>
+<a name="L651"></a><tt class="py-lineno">651</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L652"></a><tt class="py-lineno">652</tt>  <tt class="py-line"><tt class="py-docstring">    Given that different search output file provide different statistics and</tt> </tt>
+<a name="L653"></a><tt class="py-lineno">653</tt>  <tt class="py-line"><tt class="py-docstring">    different level of details, the convert function is limited only to</tt> </tt>
+<a name="L654"></a><tt class="py-lineno">654</tt>  <tt class="py-line"><tt class="py-docstring">    converting formats that have the same statistics and for conversion to</tt> </tt>
+<a name="L655"></a><tt class="py-lineno">655</tt>  <tt class="py-line"><tt class="py-docstring">    formats with the same level of detail, or less.</tt> </tt>
+<a name="L656"></a><tt class="py-lineno">656</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L657"></a><tt class="py-lineno">657</tt>  <tt class="py-line"><tt class="py-docstring">    For example, converting from a BLAST+ XML output to a HMMER table file</tt> </tt>
+<a name="L658"></a><tt class="py-lineno">658</tt>  <tt class="py-line"><tt class="py-docstring">    is not possible, as these are two search programs with different kinds of</tt> </tt>
+<a name="L659"></a><tt class="py-lineno">659</tt>  <tt class="py-line"><tt class="py-docstring">    statistics. In theory, you may provide the necessary values required by the</tt> </tt>
+<a name="L660"></a><tt class="py-lineno">660</tt>  <tt class="py-line"><tt class="py-docstring">    HMMER table file (e.g. conditional e-values, envelope coordinates, etc).</tt> </tt>
+<a name="L661"></a><tt class="py-lineno">661</tt>  <tt class="py-line"><tt class="py-docstring">    However, these values are likely to hold little meaning as they are not true</tt> </tt>
+<a name="L662"></a><tt class="py-lineno">662</tt>  <tt class="py-line"><tt class="py-docstring">    HMMER-computed values.</tt> </tt>
+<a name="L663"></a><tt class="py-lineno">663</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L664"></a><tt class="py-lineno">664</tt>  <tt class="py-line"><tt class="py-docstring">    Another example is converting from BLAST+ XML to BLAST+ tabular file. This</tt> </tt>
+<a name="L665"></a><tt class="py-lineno">665</tt>  <tt class="py-line"><tt class="py-docstring">    is possible, as BLAST+ XML provide all the values necessary to create a</tt> </tt>
+<a name="L666"></a><tt class="py-lineno">666</tt>  <tt class="py-line"><tt class="py-docstring">    BLAST+ tabular file. However, the reverse conversion may not be possible.</tt> </tt>
+<a name="L667"></a><tt class="py-lineno">667</tt>  <tt class="py-line"><tt class="py-docstring">    There are more details covered in the XML file that are not found in a</tt> </tt>
+<a name="L668"></a><tt class="py-lineno">668</tt>  <tt class="py-line"><tt class="py-docstring">    tabular file (e.g. the lambda and kappa values)</tt> </tt>
+<a name="L669"></a><tt class="py-lineno">669</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L670"></a><tt class="py-lineno">670</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L671"></a><tt class="py-lineno">671</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">in_kwargs</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L672"></a><tt class="py-lineno">672</tt>  <tt class="py-line">        <tt class="py-name">in_kwargs</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L673"></a><tt class="py-lineno">673</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">out_kwargs</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L674"></a><tt class="py-lineno">674</tt>  <tt class="py-line">        <tt class="py-name">out_kwargs</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L675"></a><tt class="py-lineno">675</tt>  <tt class="py-line"> </tt>
+<a name="L676"></a><tt class="py-lineno">676</tt>  <tt class="py-line">    <tt class="py-name">qresults</tt> <tt class="py-op">=</tt> <tt id="link-57" class="py-name"><a title="Bio.AlignIO.parse
+Bio.Blast.NCBIStandalone.BlastErrorParser.parse
+Bio.Blast.NCBIStandalone.BlastParser.parse
+Bio.Blast.NCBIStandalone.PSIBlastParser.parse
+Bio.Blast.NCBIXML.parse
+Bio.Compass.parse
+Bio.Emboss.Primer3.parse
+Bio.Entrez.Parser.DataHandler.parse
+Bio.Entrez.parse
+Bio.ExPASy.Enzyme.parse
+Bio.ExPASy.Prodoc.parse
+Bio.ExPASy.Prosite.parse
+Bio.GenBank.FeatureParser.parse
+Bio.GenBank.RecordParser.parse
+Bio.GenBank.Scanner.InsdcScanner.parse
+Bio.Geo.parse
+Bio.KEGG.Compound.parse
+Bio.KEGG.Enzyme.parse
+Bio.KEGG.KGML.KGML_parser.KGMLParser.parse
+Bio.KEGG.KGML.KGML_parser.parse
+Bio.KEGG.Map.parse
+Bio.Medline.parse
+Bio.Motif.parse
+Bio.ParserSupport.AbstractParser.parse
+Bio.Phylo.CDAOIO.Parser.parse
+Bio.Phylo.CDAOIO.parse
+Bio.Phylo.NeXMLIO.Parser.parse
+Bio.Phylo.NeXMLIO.parse
+Bio.Phylo.NewickIO.Parser.parse
+Bio.Phylo.NewickIO.parse
+Bio.Phylo.NexusIO.parse
+Bio.Phylo.PhyloXMLIO.Parser.parse
+Bio.Phylo.PhyloXMLIO.parse
+Bio.Phylo._io.parse
+Bio.SCOP.Cla.parse
+Bio.SCOP.Des.parse
+Bio.SCOP.Dom.parse
+Bio.SCOP.Hie.parse
+Bio.SCOP.Raf.parse
+Bio.SearchIO.parse
+Bio.SeqIO.UniprotIO.Parser.parse
+Bio.SeqIO.parse
+Bio.Sequencing.Ace.parse
+Bio.Sequencing.Phd.parse
+Bio.SwissProt.KeyWList.parse
+Bio.SwissProt.parse
+Bio.UniGene.parse
+Bio.Wise.psw.parse
+Bio.motifs.parse" class="py-name" href="#" onclick="return doclink('link-57', 'parse', 'link-27');">parse</a></tt><tt class="py-op">(</tt><tt class="py-name">in_file</tt><tt class="py-op">,</tt> <tt class="py-name">in_format</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">in_kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L677"></a><tt class="py-lineno">677</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt id="link-58" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-58', 'write', 'link-58');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">qresults</tt><tt class="py-op">,</tt> <tt class="py-name">out_file</tt><tt class="py-op">,</tt> <tt class="py-name">out_format</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">out_kwargs</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L678"></a><tt class="py-lineno">678</tt>  <tt class="py-line"> </tt>
+<a name="L679"></a><tt class="py-lineno">679</tt>  <tt class="py-line"> </tt>
+<a name="L680"></a><tt class="py-lineno">680</tt>  <tt class="py-line"><tt class="py-comment"># if not used as a module, run the doctest</tt> </tt>
+<a name="L681"></a><tt class="py-lineno">681</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L682"></a><tt class="py-lineno">682</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-59" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-59', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-60" class="py-name"><a title="Bio.Phylo._utils
+Bio.SearchIO._utils
+Bio._utils" class="py-name" href="#" onclick="return doclink('link-60', '_utils', 'link-16');">_utils</a></tt> <tt class="py-keyword">import</tt> <tt id="link-61" class="py-name" targets="Function Bio._utils.run_doctest()=Bio._utils-module.html#run_doctest"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-61', 'run_doctest', 'link-61');">run_doctest</a></tt> </tt>
+<a name="L683"></a><tt class="py-lineno">683</tt>  <tt class="py-line">    <tt id="link-62" class="py-name"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-62', 'run_doctest', 'link-61');">run_doctest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L684"></a><tt class="py-lineno">684</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:59 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

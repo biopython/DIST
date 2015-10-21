@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO.BlatIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SearchIO-module.html">Package&nbsp;SearchIO</a> ::
+        Module&nbsp;BlatIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO.BlatIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module BlatIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Bio.SearchIO parser for BLAT output formats.</p>
+<p>This module adds support for parsing BLAT outputs. BLAT (BLAST-Like Alignment
+Tool) is a sequence similarity search program initially built for annotating
+the human genome.</p>
+<p>Bio.SearchIO.BlastIO was tested using standalone BLAT version 34, psLayout
+version 3. It should be able to parse psLayout version 4 without problems.</p>
+<p>More information on BLAT is available from these sites:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>Publication: <a class="rst-reference external" href="http://genome.cshlp.org/content/12/4/656" target="_top">http://genome.cshlp.org/content/12/4/656</a></li>
+<li>User guide: <a class="rst-reference external" href="http://genome.ucsc.edu/goldenPath/help/blatSpec.html" target="_top">http://genome.ucsc.edu/goldenPath/help/blatSpec.html</a></li>
+<li>Source download: <a class="rst-reference external" href="http://www.soe.ucsc.edu/~kent/src" target="_top">http://www.soe.ucsc.edu/~kent/src</a></li>
+<li>Executable download: <a class="rst-reference external" href="http://hgdownload.cse.ucsc.edu/admin/exe/" target="_top">http://hgdownload.cse.ucsc.edu/admin/exe/</a></li>
+<li>Blat score calculation: <a class="rst-reference external" href="http://genome.ucsc.edu/FAQ/FAQblat.html#blat4" target="_top">http://genome.ucsc.edu/FAQ/FAQblat.html#blat4</a></li>
+</ul>
+</blockquote>
+<div class="rst-section" id="rst-supported-formats">
+<h1 class="heading">Supported Formats</h1>
+<p>BlatIO supports parsing, indexing, and writing for both PSL and PSLX output
+formats, with or without header. To parse, index, or write PSLX files, use the
+'pslx' keyword argument and set it to True.</p>
+<blockquote>
+<p># blat-psl defaults to PSL files
+&gt;&gt;&gt; from Bio import SearchIO
+&gt;&gt;&gt; psl = 'Blat/psl_34_004.psl'
+&gt;&gt;&gt; qresult = SearchIO.read(psl, 'blat-psl')
+&gt;&gt;&gt; qresult
+QueryResult(id='hg19_dna', 10 hits)</p>
+<p># set the pslx flag to parse PSLX files
+&gt;&gt;&gt; pslx = 'Blat/pslx_34_004.pslx'
+&gt;&gt;&gt; qresult = SearchIO.read(pslx, 'blat-psl', pslx=True)
+&gt;&gt;&gt; qresult
+QueryResult(id='hg19_dna', 10 hits)</p>
+</blockquote>
+<p>For parsing and indexing, you do not need to specify whether the file has a
+header or not. For writing, if you want to write a header, you can set the
+'header' keyword argument to True. This will write a 'psLayout version 3' header
+to your output file.</p>
+<blockquote>
+from Bio import SearchIO
+qresult = SearchIO.read(psl, 'blat-psl')
+SearchIO.write(qresult, 'header.psl', header=True)
+&lt;stdout&gt; (1, 10, 19, 23)</blockquote>
+<p>Note that the number of HSPFragments written may exceed the number of HSP
+objects. This is because in PSL files, it is possible to have single matches
+consisting of noncontiguous sequence fragments. This is where the HSPFragment
+object comes into play. These fragments are grouped into a single HSP because
+they share the same statistics (e.g. match numbers, BLAT score, etc.). However,
+they do not share the same sequence attributes, such as the start and end
+coordinates, making them distinct objects.</p>
+<p>In addition to parsing PSL(X) files, BlatIO also computes the percent identities
+and scores of your search results. This is done using the calculation formula
+posted here: <a class="rst-reference external" href="http://genome.ucsc.edu/FAQ/FAQblat.html#blat4" target="_top">http://genome.ucsc.edu/FAQ/FAQblat.html#blat4</a>. It mimics the score
+and percent identity calculation done by UCSC's web BLAT service.</p>
+<p>Since BlatIO parses the file in a single pass, it expects all results from
+the same query to be in consecutive rows. If the results from one query are
+spread in nonconsecutive rows, BlatIO will consider them to be separate
+QueryResult objects.</p>
+<p>In most cases, the PSL(X) format uses the same coordinate system as Python
+(zero-based, half open). These coordinates are anchored on the plus strand.
+However, if the query aligns on the minus strand, BLAT will anchor the qStarts
+coordinates on the minus strand instead. BlatIO is aware of this, and will
+re-anchor the qStarts coordinates to the plus strand whenever it sees a minus
+strand query match. Conversely, when you write out to a PSL(X) file, BlatIO will
+reanchor qStarts to the minus strand again.</p>
+<p>BlatIO provides the following attribute-column mapping:</p>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="21%" />
+<col width="33%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Object</th>
+<th class="rst-head">Attribute</th>
+<th class="rst-head">Column Name, Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td rowspan="2">QueryResutl</td>
+<td>id</td>
+<td>Q name, query sequence ID</td>
+</tr>
+<tr><td>seq_len</td>
+<td>Q size, query sequence full
+length</td>
+</tr>
+<tr><td rowspan="2">Hit</td>
+<td>id</td>
+<td>T name, hit sequence ID</td>
+</tr>
+<tr><td>seq_len</td>
+<td>T size, hit sequence full length</td>
+</tr>
+<tr><td rowspan="17">HSP</td>
+<td>hit_end</td>
+<td>T end, end coordinate of the last
+hit fragment</td>
+</tr>
+<tr><td>hit_gap_num</td>
+<td>T gap bases, number of bases
+inserted in hit</td>
+</tr>
+<tr><td>hit_gapopen_num</td>
+<td>T gap count, number of hit gap
+inserts</td>
+</tr>
+<tr><td>hit_span_all</td>
+<td>blockSizes, sizes of each
+fragment</td>
+</tr>
+<tr><td>hit_start</td>
+<td>T start, start coordinate of the
+first hit fragment</td>
+</tr>
+<tr><td>hit_start_all</td>
+<td>tStarts, start coordinate of each
+hit fragment</td>
+</tr>
+<tr><td>match_num</td>
+<td>match, number of non-repeat
+matches</td>
+</tr>
+<tr><td>mismatch_num</td>
+<td>mismatch, number of mismatches</td>
+</tr>
+<tr><td>match_rep_num</td>
+<td>rep. match, number of matches
+that are part of repeats</td>
+</tr>
+<tr><td>n_num</td>
+<td>N's, number of N bases</td>
+</tr>
+<tr><td>query_end</td>
+<td>Q end, end coordinate of the last</td>
+</tr>
+<tr><td>query_gap_num</td>
+<td>query fragment
+Q gap bases, number of bases
+inserted in query</td>
+</tr>
+<tr><td>query_gapopen_num</td>
+<td>Q gap count, number of query gap
+inserts</td>
+</tr>
+<tr><td>query_span_all</td>
+<td>blockSizes, sizes of each
+fragment</td>
+</tr>
+<tr><td>query_start</td>
+<td>Q start, start coordinate of the
+first query block</td>
+</tr>
+<tr><td>query_start_all</td>
+<td>qStarts, start coordinate of each
+query fragment</td>
+</tr>
+<tr><td>len [1]</td>
+<td>block count, the number of blocks
+in the alignment</td>
+</tr>
+<tr><td rowspan="4">HSPFragment</td>
+<td>hit</td>
+<td>hit sequence, if present</td>
+</tr>
+<tr><td>hit_strand</td>
+<td>strand, hit sequence strand</td>
+</tr>
+<tr><td>query</td>
+<td>query sequence, if present</td>
+</tr>
+<tr><td>query_strand</td>
+<td>strand, query sequence strand</td>
+</tr>
+</tbody>
+</table>
+<p>In addition to the column mappings above, BlatIO also provides the following
+object attributes:</p>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="21%" />
+<col width="33%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Object</th>
+<th class="rst-head">Attribute</th>
+<th class="rst-head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td rowspan="5">HSP</td>
+<td>gapopen_num</td>
+<td><dl class="rst-first rst-last rst-docutils">
+<dt>Q gap count + T gap count, total</dt>
+<dd>number of gap openings</dd>
+</dl>
+</td>
+</tr>
+<tr><td>ident_num</td>
+<td>matches + repmatches, total
+number of identical residues</td>
+</tr>
+<tr><td>ident_pct</td>
+<td>percent identity, calculated
+using UCSC's formula</td>
+</tr>
+<tr><td>query_is_protein</td>
+<td>boolean, whether the query
+sequence is a protein</td>
+</tr>
+<tr><td>score</td>
+<td>HSP score, calculated using
+UCSC's formula</td>
+</tr>
+</tbody>
+</table>
+<p>Finally, the default HSP and HSPFragment properties are also provided. See the
+HSP and HSPFragment documentation for more details on these properties.</p>
+<table class="rst-docutils footnote" frame="void" id="rst-id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="rst-label">[1]</td><td>You can obtain the number of blocks / fragments in the HSP by invoking
+<tt class="rst-docutils literal">len</tt> on the HSP</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.BlatIO.BlatPslParser-class.html" class="summary-name">BlatPslParser</a><br />
+      Parser for the BLAT PSL format.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.BlatIO.BlatPslIndexer-class.html" class="summary-name">BlatPslIndexer</a><br />
+      Indexer class for BLAT PSL output.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.BlatIO.BlatPslWriter-class.html" class="summary-name">BlatPslWriter</a><br />
+      Writer for the blat-psl format.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO.BlatIO-module.html#_list_from_csv" class="summary-sig-name" onclick="show_private();">_list_from_csv</a>(<span class="summary-sig-arg">csv_string</span>,
+        <span class="summary-sig-arg">caster</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Transforms the given comma-separated string into a list.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_list_from_csv">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO.BlatIO-module.html#_reorient_starts" class="summary-sig-name" onclick="show_private();">_reorient_starts</a>(<span class="summary-sig-arg">starts</span>,
+        <span class="summary-sig-arg">blksizes</span>,
+        <span class="summary-sig-arg">seqlen</span>,
+        <span class="summary-sig-arg">strand</span>)</span><br />
+      Reorients block starts into the opposite strand's coordinates.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_reorient_starts">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_is_protein"></a><span class="summary-sig-name">_is_protein</span>(<span class="summary-sig-arg">psl</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_is_protein">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_calc_millibad"></a><span class="summary-sig-name">_calc_millibad</span>(<span class="summary-sig-arg">psl</span>,
+        <span class="summary-sig-arg">is_protein</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_calc_millibad">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_calc_score"></a><span class="summary-sig-name">_calc_score</span>(<span class="summary-sig-arg">psl</span>,
+        <span class="summary-sig-arg">is_protein</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_calc_score">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_create_hsp"></a><span class="summary-sig-name">_create_hsp</span>(<span class="summary-sig-arg">hid</span>,
+        <span class="summary-sig-arg">qid</span>,
+        <span class="summary-sig-arg">psl</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_create_hsp">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_PTR_ROW_CHECK"></a><span class="summary-name">_PTR_ROW_CHECK</span> = <code title="'^\\d+\\s+\\d+\\s+\\d+\\s+\\d+'"><code class="variable-quote">'</code><code class="variable-string">^\\d+\\s+\\d+\\s+\\d+\\s+\\d+</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_RE_ROW_CHECK"></a><span class="summary-name">_RE_ROW_CHECK</span> = <code title="re.compile(r'^\d+\s+\d+\s+\d+\s+\d+')">re.compile(r'^\d<code class="re-op">+</code>\s<code class="re-op">+</code>\d<code class="re-op">+</code>\s<code class="re-op">+</code>\d<code class="re-op">+</code>\s<code class="re-op">+</code>\d<code class="re-op">+</code>')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_RE_ROW_CHECK_IDX"></a><span class="summary-name">_RE_ROW_CHECK_IDX</span> = <code title="re.compile(r'^\d+\s+\d+\s+\d+\s+\d+')">re.compile(r'^\d<code class="re-op">+</code>\s<code class="re-op">+</code>\d<code class="re-op">+</code>\s<code class="re-op">+</code>\d<code class="re-op">+</code>\s<code class="re-op">+</code>\d<code class="re-op">+</code>')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.SearchIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.SearchIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_list_from_csv"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_list_from_csv</span>(<span class="sig-arg">csv_string</span>,
+        <span class="sig-arg">caster</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_list_from_csv">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Transforms the given comma-separated string into a list.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>csv_string</code></strong> (string) - comma-separated input string</li>
+        <li><strong class="pname"><code>caster</code></strong> (callable, accepts string, returns object) - function used to cast each item in the input string
+to its intended type</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_reorient_starts"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_reorient_starts</span>(<span class="sig-arg">starts</span>,
+        <span class="sig-arg">blksizes</span>,
+        <span class="sig-arg">seqlen</span>,
+        <span class="sig-arg">strand</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO.BlatIO-pysrc.html#_reorient_starts">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Reorients block starts into the opposite strand's coordinates.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>starts</code></strong> (list [int]) - start coordinates</li>
+        <li><strong class="pname"><code>blksizes</code></strong> (list [int]) - block sizes</li>
+        <li><strong class="pname"><code>seqlen</code></strong> (int) - sequence length</li>
+        <li><strong class="pname"><code>strand</code></strong> (int, choice of -1, 0, or 1) - sequence strand</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:25 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

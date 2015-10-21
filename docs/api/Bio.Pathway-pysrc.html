@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Pathway</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;Pathway
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Pathway-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Pathway-module.html">Package Bio.Pathway</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2001 by Tarjei Mikkelsen.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""BioPython Pathway module.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">Bio.Pathway is a lightweight class library designed to support the following tasks:</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring"> - Data interchange and preprocessing between pathway databases and analysis software.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring"> - Quick prototyping of pathway analysis algorithms</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">The basic object in the Bio.Pathway model is Interaction, which represents an arbitrary</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">interaction between any number of biochemical species.</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring">Network objects are used to represent the connectivity between species in pathways</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">and reaction networks.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">For applications where it is not necessary to explicitly represent network connectivity,</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">the specialized classes Reaction and System should be used in place of Interacton and</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">Network.</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">The Bio.Pathway classes, especially Interaction, are intentionally</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">designed to be very flexible. Their intended use are as wrappers around database</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">specific records, such as BIND objects. The value-added in this module is a</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">framework for representing collections of reactions in a way that supports</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">graph theoretic and numeric analysis.</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">Note: This module should be regarded as a prototype only. API changes are likely.</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">      Comments and feature requests are most welcome.</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">functools</tt> <tt class="py-keyword">import</tt> <tt class="py-name">reduce</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Class Bio.KEGG.KGML.KGML_pathway.Pathway=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html,Package Bio.Pathway=Bio.Pathway-module.html"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway
+Bio.Pathway" class="py-name" href="#" onclick="return doclink('link-1', 'Pathway', 'link-1');">Pathway</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Package Bio.Pathway.Rep=Bio.Pathway.Rep-module.html"><a title="Bio.Pathway.Rep" class="py-name" href="#" onclick="return doclink('link-2', 'Rep', 'link-2');">Rep</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Module Bio.Pathway.Rep.MultiGraph=Bio.Pathway.Rep.MultiGraph-module.html,Class Bio.Pathway.Rep.MultiGraph.MultiGraph=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html"><a title="Bio.Pathway.Rep.MultiGraph
+Bio.Pathway.Rep.MultiGraph.MultiGraph" class="py-name" href="#" onclick="return doclink('link-3', 'MultiGraph', 'link-3');">MultiGraph</a></tt> <tt class="py-keyword">import</tt> <tt class="py-op">*</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="Reaction"></a><div id="Reaction-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="Reaction-toggle" onclick="return toggle('Reaction');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html">Reaction</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Reaction-expanded"><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">    <tt class="py-docstring">"""Abstraction for a biochemical transformation.</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">    This class represents a (potentially reversible) biochemical</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    transformation of the type:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">      a S1 + b S2 + ... --&gt; c P1 + d P2 + ...</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    where</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">        - a, b, c, d ... are positive numeric stochiometric coefficients,</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">        - S1, S2, ... are substrates</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">        - P1, P2, ... are products</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">    A Reaction should be viewed as the net result of one or more individual</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    reaction steps, where each step is potentially facilitated by a different</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    catalyst. Support for 'Reaction algebra' will be added at some point in</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    the future.</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring">    Attributes:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">        - reactants   -- map of involved species to their stochiometric coefficients:</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">          reactants[S] = stochiometric constant for S</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">        - catalysts   -- list of tuples of catalysts required for this reaction</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring">        - reversible  -- true iff reaction is reversible</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">        - data        -- reference to arbitrary additional data</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">    Invariants:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring">        - for all S in reactants: reactants[S] != 0</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"><tt class="py-docstring">        - for all C in catalysts: catalysts[C] != 0</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.__init__"></a><div id="Reaction.__init__-def"><a name="L73"></a><tt class="py-lineno"> 73</tt> <a class="py-toggle" href="#" id="Reaction.__init__-toggle" onclick="return toggle('Reaction.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reactants</tt><tt class="py-op">=</tt><tt class="py-op">{</tt><tt class="py-op">}</tt><tt class="py-op">,</tt> <tt class="py-param">catalysts</tt><tt class="py-op">=</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">                 <tt class="py-param">reversible</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.__init__-expanded"><a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-docstring">"""Initializes a new Reaction object."""</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-comment"># enforce invariants on reactants:</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt> <tt class="py-op">=</tt> <tt class="py-name">reactants</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method Bio.Crystal.Crystal.copy()=Bio.Crystal.Crystal-class.html#copy,Method Bio.File._IndexedSeqFileDict.copy()=Bio.File._IndexedSeqFileDict-class.html#copy,Method Bio.GA.Organism.Organism.copy()=Bio.GA.Organism.Organism-class.html#copy,Method Bio.PDB.Atom.Atom.copy()=Bio.PDB.Atom.Atom-class.html#copy,Method Bio.PDB.Entity.Entity.copy()=Bio.PDB.Entity.Entity-class.html#copy,Method Bio.PDB.Vector'.Vector.copy()=Bio.PDB.Vector%27.Vector-class.html#copy,Method Bio._py3k._ordereddict.OrderedDict.copy()=Bio._py3k._ordereddict.OrderedDict-class.html#copy"><a title="Bio.Crystal.Crystal.copy
+Bio.File._IndexedSeqFileDict.copy
+Bio.GA.Organism.Organism.copy
+Bio.PDB.Atom.Atom.copy
+Bio.PDB.Entity.Entity.copy
+Bio.PDB.Vector'.Vector.copy
+Bio._py3k._ordereddict.OrderedDict.copy" class="py-name" href="#" onclick="return doclink('link-4', 'copy', 'link-4');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-comment"># loop over original, edit the copy</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">r</tt><tt class="py-op">,</tt> <tt id="link-5" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.value()=Bio.Phylo.PhyloXMLIO.Writer-class.html#value"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-5', 'value', 'link-5');">value</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">reactants</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method Bio.Crystal.Crystal.items()=Bio.Crystal.Crystal-class.html#items,Method Bio.File._IndexedSeqFileDict.items()=Bio.File._IndexedSeqFileDict-class.html#items,Method Bio.Phylo.PhyloXML.Events.items()=Bio.Phylo.PhyloXML.Events-class.html#items,Variable Bio.SearchIO._model.query.QueryResult.items=Bio.SearchIO._model.query.QueryResult-class.html#items,Method Bio._py3k._ordereddict.OrderedDict.items()=Bio._py3k._ordereddict.OrderedDict-class.html#items,Method BioSQL.BioSeqDatabase.BioSeqDatabase.items()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#items,Method BioSQL.BioSeqDatabase.DBServer.items()=BioSQL.BioSeqDatabase.DBServer-class.html#items"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-6', 'items', 'link-6');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-7" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-7', 'value', 'link-5');">value</a></tt> <tt class="py-op">==</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">                <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">[</tt><tt class="py-name">r</tt><tt class="py-op">]</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">catalysts</tt> <tt class="py-op">=</tt> <tt class="py-name">sorted</tt><tt class="py-op">(</tt><tt id="link-8" class="py-name" targets="Method Bio.Nexus.Nexus.StepMatrix.set()=Bio.Nexus.Nexus.StepMatrix-class.html#set,Method Bio.PDB.QCPSuperimposer.QCPSuperimposer.set()=Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html#set,Method Bio.SVDSuperimposer.SVDSuperimposer.set()=Bio.SVDSuperimposer.SVDSuperimposer-class.html#set"><a title="Bio.Nexus.Nexus.StepMatrix.set
+Bio.PDB.QCPSuperimposer.QCPSuperimposer.set
+Bio.SVDSuperimposer.SVDSuperimposer.set" class="py-name" href="#" onclick="return doclink('link-8', 'set', 'link-8');">set</a></tt><tt class="py-op">(</tt><tt class="py-name">catalysts</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-9', 'data', 'link-9');">data</a></tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-10', 'data', 'link-9');">data</a></tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reversible</tt> <tt class="py-op">=</tt> <tt class="py-name">reversible</tt> </tt>
+</div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.__eq__"></a><div id="Reaction.__eq__-def"><a name="L86"></a><tt class="py-lineno"> 86</tt> <a class="py-toggle" href="#" id="Reaction.__eq__-toggle" onclick="return toggle('Reaction.__eq__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#__eq__">__eq__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">r</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.__eq__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.__eq__-expanded"><a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns true iff self is equal to r."""</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">r</tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name" targets="Class Bio.KEGG.KGML.KGML_pathway.Reaction=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html,Class Bio.Pathway.Reaction=Bio.Pathway.Reaction-class.html"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction
+Bio.Pathway.Reaction" class="py-name" href="#" onclick="return doclink('link-11', 'Reaction', 'link-11');">Reaction</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> \ </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt> <tt class="py-op">==</tt> <tt class="py-name">r</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt> <tt class="py-keyword">and</tt> \ </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">catalysts</tt> <tt class="py-op">==</tt> <tt class="py-name">r</tt><tt class="py-op">.</tt><tt class="py-name">catalysts</tt> <tt class="py-keyword">and</tt> \ </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-12', 'data', 'link-9');">data</a></tt> <tt class="py-op">==</tt> <tt class="py-name">r</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-13', 'data', 'link-9');">data</a></tt> <tt class="py-keyword">and</tt> \ </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">               <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reversible</tt> <tt class="py-op">==</tt> <tt class="py-name">r</tt><tt class="py-op">.</tt><tt class="py-name">reversible</tt> </tt>
+</div><a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.__ne__"></a><div id="Reaction.__ne__-def"><a name="L94"></a><tt class="py-lineno"> 94</tt> <a class="py-toggle" href="#" id="Reaction.__ne__-toggle" onclick="return toggle('Reaction.__ne__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#__ne__">__ne__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">r</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.__ne__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.__ne__-expanded"><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns true iff self is not equal to r."""</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.Crystal.Chain.__eq__()=Bio.Crystal.Chain-class.html#__eq__,Method Bio.Crystal.Hetero.__eq__()=Bio.Crystal.Hetero-class.html#__eq__,Method Bio.GA.Organism.Organism.__eq__()=Bio.GA.Organism.Organism-class.html#__eq__,Method Bio.Pathway.Reaction.__eq__()=Bio.Pathway.Reaction-class.html#__eq__,Method Bio.Pathway.Rep.Graph.Graph.__eq__()=Bio.Pathway.Rep.Graph.Graph-class.html#__eq__,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.__eq__()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#__eq__,Method Bio.Phylo.PhyloXML.Confidence.__eq__()=Bio.Phylo.PhyloXML.Confidence-class.html#__eq__,Method Bio.Restriction.Restriction.FormattedSeq.__eq__()=Bio.Restriction.Restriction.FormattedSeq-class.html#__eq__,Method Bio.Restriction.Restriction.RestrictionType.__eq__()=Bio.Restriction.Restriction.RestrictionType-class.html#__eq__,Method Bio.Seq.MutableSeq.__eq__()=Bio.Seq.MutableSeq-class.html#__eq__,Method Bio.Seq.Seq.__eq__()=Bio.Seq.Seq-class.html#__eq__,Method Bio._py3k._ordereddict.OrderedDict.__eq__()=Bio._py3k._ordereddict.OrderedDict-class.html#__eq__,Method Bio.motifs.jaspar.Motif.__eq__()=Bio.motifs.jaspar.Motif-class.html#__eq__"><a title="Bio.Crystal.Chain.__eq__
+Bio.Crystal.Hetero.__eq__
+Bio.GA.Organism.Organism.__eq__
+Bio.Pathway.Reaction.__eq__
+Bio.Pathway.Rep.Graph.Graph.__eq__
+Bio.Pathway.Rep.MultiGraph.MultiGraph.__eq__
+Bio.Phylo.PhyloXML.Confidence.__eq__
+Bio.Restriction.Restriction.FormattedSeq.__eq__
+Bio.Restriction.Restriction.RestrictionType.__eq__
+Bio.Seq.MutableSeq.__eq__
+Bio.Seq.Seq.__eq__
+Bio._py3k._ordereddict.OrderedDict.__eq__
+Bio.motifs.jaspar.Motif.__eq__" class="py-name" href="#" onclick="return doclink('link-14', '__eq__', 'link-14');">__eq__</a></tt><tt class="py-op">(</tt><tt class="py-name">r</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.__hash__"></a><div id="Reaction.__hash__-def"><a name="L98"></a><tt class="py-lineno"> 98</tt> <a class="py-toggle" href="#" id="Reaction.__hash__-toggle" onclick="return toggle('Reaction.__hash__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#__hash__">__hash__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.__hash__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.__hash__-expanded"><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a hashcode for self."""</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-name">tuple</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.Pathway.Network.species()=Bio.Pathway.Network-class.html#species,Method Bio.Pathway.Reaction.species()=Bio.Pathway.Reaction-class.html#species,Method Bio.Pathway.System.species()=Bio.Pathway.System-class.html#species"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-15', 'species', 'link-15');">species</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">hash</tt><tt class="py-op">(</tt><tt class="py-name">t</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.__repr__"></a><div id="Reaction.__repr__-def"><a name="L103"></a><tt class="py-lineno">103</tt> <a class="py-toggle" href="#" id="Reaction.__repr__-toggle" onclick="return toggle('Reaction.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.__repr__-expanded"><a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a debugging string representation of self."""</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"Reaction("</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">               <tt class="py-string">","</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-16" class="py-name" targets="Method Bio.SearchIO._model.hit.Hit.map()=Bio.SearchIO._model.hit.Hit-class.html#map"><a title="Bio.SearchIO._model.hit.Hit.map" class="py-name" href="#" onclick="return doclink('link-16', 'map', 'link-16');">map</a></tt><tt class="py-op">(</tt><tt class="py-name">repr</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">,</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                                  <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">catalysts</tt><tt class="py-op">,</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">                                  <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-17', 'data', 'link-9');">data</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">                                  <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reversible</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">")"</tt> </tt>
+</div><a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.__str__"></a><div id="Reaction.__str__-def"><a name="L111"></a><tt class="py-lineno">111</tt> <a class="py-toggle" href="#" id="Reaction.__str__-toggle" onclick="return toggle('Reaction.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.__str__-expanded"><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a string representation of self."""</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt id="link-18" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Reaction.substrates=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#substrates"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-18', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt id="link-19" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Reaction.products=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#products"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-19', 'products', 'link-19');">products</a></tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-name">all_species</tt> <tt class="py-op">=</tt> <tt class="py-name">sorted</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">)</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-20" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-20', 'species', 'link-15');">species</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">all_species</tt><tt class="py-op">:</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-name">stoch</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">[</tt><tt id="link-21" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-21', 'species', 'link-15');">species</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">stoch</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">                <tt class="py-comment"># species is a substrate:</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-22" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-22', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">!=</tt> <tt class="py-string">""</tt><tt class="py-op">:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">                    <tt id="link-23" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-23', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">=</tt> <tt id="link-24" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-24', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">+</tt> <tt class="py-string">" + "</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">stoch</tt> <tt class="py-op">!=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">                    <tt id="link-25" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-25', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-26', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-27" class="py-name" targets="Method Bio.FSSP.FSSPAlignDict.abs()=Bio.FSSP.FSSPAlignDict-class.html#abs"><a title="Bio.FSSP.FSSPAlignDict.abs" class="py-name" href="#" onclick="return doclink('link-27', 'abs', 'link-27');">abs</a></tt><tt class="py-op">(</tt><tt class="py-name">stoch</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">" "</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">                <tt id="link-28" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-28', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-29', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-30" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-30', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">stoch</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0</tt><tt class="py-op">:</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                <tt class="py-comment"># species is a product:</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt id="link-31" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-31', 'products', 'link-19');">products</a></tt> <tt class="py-op">!=</tt> <tt class="py-string">""</tt><tt class="py-op">:</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">                    <tt id="link-32" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-32', 'products', 'link-19');">products</a></tt> <tt class="py-op">=</tt> <tt id="link-33" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-33', 'products', 'link-19');">products</a></tt> <tt class="py-op">+</tt> <tt class="py-string">" + "</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">stoch</tt> <tt class="py-op">!=</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">                    <tt id="link-34" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-34', 'products', 'link-19');">products</a></tt> <tt class="py-op">=</tt> <tt id="link-35" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-35', 'products', 'link-19');">products</a></tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">stoch</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">" "</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">                <tt id="link-36" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-36', 'products', 'link-19');">products</a></tt> <tt class="py-op">=</tt> <tt id="link-37" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-37', 'products', 'link-19');">products</a></tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-38" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-38', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">                <tt class="py-keyword">raise</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">(</tt><tt class="py-string">"Invalid 0 coefficient in Reaction.reactants"</tt><tt class="py-op">)</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reversible</tt><tt class="py-op">:</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt id="link-39" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-39', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">+</tt> <tt class="py-string">" &lt;=&gt; "</tt> <tt class="py-op">+</tt> <tt id="link-40" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-40', 'products', 'link-19');">products</a></tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt id="link-41" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.substrates" class="py-name" href="#" onclick="return doclink('link-41', 'substrates', 'link-18');">substrates</a></tt> <tt class="py-op">+</tt> <tt class="py-string">" --&gt; "</tt> <tt class="py-op">+</tt> <tt id="link-42" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction.products" class="py-name" href="#" onclick="return doclink('link-42', 'products', 'link-19');">products</a></tt> </tt>
+</div><a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.reverse"></a><div id="Reaction.reverse-def"><a name="L139"></a><tt class="py-lineno">139</tt> <a class="py-toggle" href="#" id="Reaction.reverse-toggle" onclick="return toggle('Reaction.reverse');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#reverse">reverse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.reverse-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.reverse-expanded"><a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a new Reaction that is the reverse of self."""</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">        <tt class="py-name">reactants</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">r</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">:</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">            <tt class="py-name">reactants</tt><tt class="py-op">[</tt><tt class="py-name">r</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">[</tt><tt class="py-name">r</tt><tt class="py-op">]</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-43" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Reaction
+Bio.Pathway.Reaction" class="py-name" href="#" onclick="return doclink('link-43', 'Reaction', 'link-11');">Reaction</a></tt><tt class="py-op">(</tt><tt class="py-name">reactants</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">catalysts</tt><tt class="py-op">,</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reversible</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-44', 'data', 'link-9');">data</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"> </tt>
+<a name="Reaction.species"></a><div id="Reaction.species-def"><a name="L147"></a><tt class="py-lineno">147</tt> <a class="py-toggle" href="#" id="Reaction.species-toggle" onclick="return toggle('Reaction.species');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Reaction-class.html#species">species</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Reaction.species-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Reaction.species-expanded"><a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a list of all Species involved in self."""</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line"> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"> </tt>
+<a name="System"></a><div id="System-def"><a name="L152"></a><tt class="py-lineno">152</tt> <a class="py-toggle" href="#" id="System-toggle" onclick="return toggle('System');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html">System</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="System-expanded"><a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">    <tt class="py-docstring">"""Abstraction for a collection of reactions.</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">    This class is used in the Bio.Pathway framework to represent an arbitrary</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring">    collection of reactions without explicitly defined links.</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"><tt class="py-docstring">    Attributes:</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-docstring">    None</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"> </tt>
+<a name="System.__init__"></a><div id="System.__init__-def"><a name="L163"></a><tt class="py-lineno">163</tt> <a class="py-toggle" href="#" id="System.__init__-toggle" onclick="return toggle('System.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reactions</tt><tt class="py-op">=</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.__init__-expanded"><a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-docstring">"""Initializes a new System object."""</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__reactions</tt> <tt class="py-op">=</tt> <tt id="link-45" class="py-name"><a title="Bio.Nexus.Nexus.StepMatrix.set
+Bio.PDB.QCPSuperimposer.QCPSuperimposer.set
+Bio.SVDSuperimposer.SVDSuperimposer.set" class="py-name" href="#" onclick="return doclink('link-45', 'set', 'link-8');">set</a></tt><tt class="py-op">(</tt><tt id="link-46" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Pathway.reactions=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#reactions,Method Bio.Pathway.System.reactions()=Bio.Pathway.System-class.html#reactions"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-46', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"> </tt>
+<a name="System.__repr__"></a><div id="System.__repr__-def"><a name="L167"></a><tt class="py-lineno">167</tt> <a class="py-toggle" href="#" id="System.__repr__-toggle" onclick="return toggle('System.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.__repr__-expanded"><a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a debugging string representation of self."""</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"System("</tt> <tt class="py-op">+</tt> <tt class="py-string">","</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt id="link-47" class="py-name"><a title="Bio.SearchIO._model.hit.Hit.map" class="py-name" href="#" onclick="return doclink('link-47', 'map', 'link-16');">map</a></tt><tt class="py-op">(</tt><tt class="py-name">repr</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__reactions</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">")"</tt> </tt>
+</div><a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line"> </tt>
+<a name="System.__str__"></a><div id="System.__str__-def"><a name="L171"></a><tt class="py-lineno">171</tt> <a class="py-toggle" href="#" id="System.__str__-toggle" onclick="return toggle('System.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.__str__-expanded"><a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a string representation of self."""</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"System of "</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__reactions</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line">               <tt class="py-string">" reactions involving "</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-48', 'species', 'link-15');">species</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">               <tt class="py-string">" species"</tt> </tt>
+</div><a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"> </tt>
+<a name="System.add_reaction"></a><div id="System.add_reaction-def"><a name="L177"></a><tt class="py-lineno">177</tt> <a class="py-toggle" href="#" id="System.add_reaction-toggle" onclick="return toggle('System.add_reaction');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#add_reaction">add_reaction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reaction</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.add_reaction-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.add_reaction-expanded"><a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">        <tt class="py-docstring">"""Adds reaction to self."""</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__reactions</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name" targets="Method Bio.Graphics.BasicChromosome._ChromosomeComponent.add()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#add,Method Bio.Nexus.Nexus.StepMatrix.add()=Bio.Nexus.Nexus.StepMatrix-class.html#add,Method Bio.Nexus.Nodes.Chain.add()=Bio.Nexus.Nodes.Chain-class.html#add,Method Bio.PDB.Entity.Entity.add()=Bio.PDB.Entity.Entity-class.html#add,Method Bio.PDB.Residue.DisorderedResidue.add()=Bio.PDB.Residue.DisorderedResidue-class.html#add,Method Bio.PDB.Residue.Residue.add()=Bio.PDB.Residue.Residue-class.html#add,Method Bio.Restriction.Restriction.RestrictionBatch.add()=Bio.Restriction.Restriction.RestrictionBatch-class.html#add"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-49', 'add', 'link-49');">add</a></tt><tt class="py-op">(</tt><tt id="link-50" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.reaction=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#reaction"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.reaction" class="py-name" href="#" onclick="return doclink('link-50', 'reaction', 'link-50');">reaction</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"> </tt>
+<a name="System.remove_reaction"></a><div id="System.remove_reaction-def"><a name="L181"></a><tt class="py-lineno">181</tt> <a class="py-toggle" href="#" id="System.remove_reaction-toggle" onclick="return toggle('System.remove_reaction');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#remove_reaction">remove_reaction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reaction</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.remove_reaction-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.remove_reaction-expanded"><a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">        <tt class="py-docstring">"""Removes reaction from self."""</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__reactions</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name" targets="Method Bio.Crystal.Chain.remove()=Bio.Crystal.Chain-class.html#remove,Method Bio.Graphics.BasicChromosome._ChromosomeComponent.remove()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#remove,Method Bio.Restriction.Restriction.RestrictionBatch.remove()=Bio.Restriction.Restriction.RestrictionBatch-class.html#remove,Method Bio.Seq.MutableSeq.remove()=Bio.Seq.MutableSeq-class.html#remove,Method BioSQL.Loader.DatabaseRemover.remove()=BioSQL.Loader.DatabaseRemover-class.html#remove"><a title="Bio.Crystal.Chain.remove
+Bio.Graphics.BasicChromosome._ChromosomeComponent.remove
+Bio.Restriction.Restriction.RestrictionBatch.remove
+Bio.Seq.MutableSeq.remove
+BioSQL.Loader.DatabaseRemover.remove" class="py-name" href="#" onclick="return doclink('link-51', 'remove', 'link-51');">remove</a></tt><tt class="py-op">(</tt><tt id="link-52" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.reaction" class="py-name" href="#" onclick="return doclink('link-52', 'reaction', 'link-50');">reaction</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"> </tt>
+<a name="System.reactions"></a><div id="System.reactions-def"><a name="L185"></a><tt class="py-lineno">185</tt> <a class="py-toggle" href="#" id="System.reactions-toggle" onclick="return toggle('System.reactions');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#reactions">reactions</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.reactions-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.reactions-expanded"><a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a list of the reactions in this system.</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"><tt class="py-docstring">        Note the order is arbitrary!</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">        <tt class="py-comment"># TODO - Define __lt__ so that Reactions can be sorted on Python?</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__reactions</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"> </tt>
+<a name="System.species"></a><div id="System.species-def"><a name="L193"></a><tt class="py-lineno">193</tt> <a class="py-toggle" href="#" id="System.species-toggle" onclick="return toggle('System.species');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#species">species</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.species-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.species-expanded"><a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a list of the species in this system."""</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">sorted</tt><tt class="py-op">(</tt><tt id="link-53" class="py-name"><a title="Bio.Nexus.Nexus.StepMatrix.set
+Bio.PDB.QCPSuperimposer.QCPSuperimposer.set
+Bio.SVDSuperimposer.SVDSuperimposer.set" class="py-name" href="#" onclick="return doclink('link-53', 'set', 'link-8');">set</a></tt><tt class="py-op">(</tt><tt class="py-name">reduce</tt><tt class="py-op">(</tt><tt class="py-keyword">lambda</tt> <tt class="py-name">s</tt><tt class="py-op">,</tt> <tt id="link-54" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-54', 'x', 'link-54');">x</a></tt><tt class="py-op">:</tt> <tt class="py-name">s</tt> <tt class="py-op">+</tt> <tt id="link-55" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-55', 'x', 'link-54');">x</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">                          <tt class="py-op">[</tt><tt id="link-56" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-56', 'x', 'link-54');">x</a></tt><tt class="py-op">.</tt><tt id="link-57" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-57', 'species', 'link-15');">species</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-58" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-58', 'x', 'link-54');">x</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-59" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-59', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"> </tt>
+<a name="System.stochiometry"></a><div id="System.stochiometry-def"><a name="L198"></a><tt class="py-lineno">198</tt> <a class="py-toggle" href="#" id="System.stochiometry-toggle" onclick="return toggle('System.stochiometry');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.System-class.html#stochiometry">stochiometry</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="System.stochiometry-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="System.stochiometry-expanded"><a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt class="py-docstring">"""Computes the stoichiometry matrix for self.</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line"><tt class="py-docstring">        Returns (species, reactions, stoch) where</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line"><tt class="py-docstring">            - species    = ordered list of species in this system</tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"><tt class="py-docstring">            - reactions  = ordered list of reactions in this system</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-docstring">            - stoch      = 2D array where stoch[i][j] is coef of the</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"><tt class="py-docstring">              jth species in the ith reaction, as defined</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line"><tt class="py-docstring">              by species and reactions above</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line">        <tt class="py-comment"># Note: This an inefficient and ugly temporary implementation.</tt> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-comment">#       To be practical, stochiometric matrices should probably</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">        <tt class="py-comment">#       be implemented by sparse matrices, which would require</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-comment">#       NumPy dependencies.</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">        <tt class="py-comment">#</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">        <tt class="py-comment"># PS: We should implement automatic checking for NumPy here.</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt id="link-60" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-60', 'species', 'link-15');">species</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-61" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-61', 'species', 'link-15');">species</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">        <tt id="link-62" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-62', 'reactions', 'link-46');">reactions</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-63" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-63', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">        <tt class="py-name">stoch</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-64" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-64', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-65" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-65', 'i', 'link-65');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-66" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-66', 'range', 'link-66');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-67" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-67', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">            <tt class="py-name">stoch</tt><tt class="py-op">[</tt><tt id="link-68" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-68', 'i', 'link-65');">i</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> <tt class="py-op">*</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-69" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-69', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">s</tt> <tt class="py-keyword">in</tt> <tt id="link-70" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-70', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">[</tt><tt id="link-71" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-71', 'i', 'link-65');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-72" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-72', 'species', 'link-15');">species</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">                <tt class="py-name">stoch</tt><tt class="py-op">[</tt><tt id="link-73" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-73', 'species', 'link-15');">species</a></tt><tt class="py-op">.</tt><tt id="link-74" class="py-name" targets="Method Bio.Crystal.Chain.index()=Bio.Crystal.Chain-class.html#index,Method Bio.SCOP.Raf.SeqMap.index()=Bio.SCOP.Raf.SeqMap-class.html#index,Method Bio.SearchIO._model.hit.Hit.index()=Bio.SearchIO._model.hit.Hit-class.html#index,Method Bio.SearchIO._model.query.QueryResult.index()=Bio.SearchIO._model.query.QueryResult-class.html#index,Function Bio.SearchIO.index()=Bio.SearchIO-module.html#index,Method Bio.Seq.MutableSeq.index()=Bio.Seq.MutableSeq-class.html#index,Function Bio.SeqIO.index()=Bio.SeqIO-module.html#index"><a title="Bio.Crystal.Chain.index
+Bio.SCOP.Raf.SeqMap.index
+Bio.SearchIO._model.hit.Hit.index
+Bio.SearchIO._model.query.QueryResult.index
+Bio.SearchIO.index
+Bio.Seq.MutableSeq.index
+Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-74', 'index', 'link-74');">index</a></tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-75" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-75', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">[</tt><tt id="link-76" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-76', 'i', 'link-65');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">reactants</tt><tt class="py-op">[</tt><tt class="py-name">s</tt><tt class="py-op">]</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt id="link-77" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-77', 'species', 'link-15');">species</a></tt><tt class="py-op">,</tt> <tt id="link-78" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Pathway.reactions
+Bio.Pathway.System.reactions" class="py-name" href="#" onclick="return doclink('link-78', 'reactions', 'link-46');">reactions</a></tt><tt class="py-op">,</tt> <tt class="py-name">stoch</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line"> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line"> </tt>
+<a name="Interaction"></a><div id="Interaction-def"><a name="L225"></a><tt class="py-lineno">225</tt> <a class="py-toggle" href="#" id="Interaction-toggle" onclick="return toggle('Interaction');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Pathway.Interaction-class.html">Interaction</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Interaction-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Interaction-expanded"><a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">    <tt class="py-docstring">"""An arbitrary interaction between any number of species.</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line"><tt class="py-docstring">    This class definition is intended solely as a minimal wrapper interface that should</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line"><tt class="py-docstring">    be implemented and extended by more specific abstractions.</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line"><tt class="py-docstring">    Attributes:</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line"><tt class="py-docstring">        - data      -- reference to arbitrary additional data</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line"> </tt>
+<a name="Interaction.__init_"></a><div id="Interaction.__init_-def"><a name="L236"></a><tt class="py-lineno">236</tt> <a class="py-toggle" href="#" id="Interaction.__init_-toggle" onclick="return toggle('Interaction.__init_');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Interaction-class.html#__init_">__init_</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Interaction.__init_-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Interaction.__init_-expanded"><a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-79" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-79', 'data', 'link-9');">data</a></tt> <tt class="py-op">=</tt> <tt id="link-80" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-80', 'data', 'link-9');">data</a></tt> </tt>
+</div><a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line"> </tt>
+<a name="Interaction.__hash__"></a><div id="Interaction.__hash__-def"><a name="L239"></a><tt class="py-lineno">239</tt> <a class="py-toggle" href="#" id="Interaction.__hash__-toggle" onclick="return toggle('Interaction.__hash__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Interaction-class.html#__hash__">__hash__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Interaction.__hash__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Interaction.__hash__-expanded"><a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a hashcode for self."""</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">hash</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-81" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-81', 'data', 'link-9');">data</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line"> </tt>
+<a name="Interaction.__repr__"></a><div id="Interaction.__repr__-def"><a name="L243"></a><tt class="py-lineno">243</tt> <a class="py-toggle" href="#" id="Interaction.__repr__-toggle" onclick="return toggle('Interaction.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Interaction-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Interaction.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Interaction.__repr__-expanded"><a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a debugging string representation of self."""</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"Interaction("</tt> <tt class="py-op">+</tt> <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-82" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-82', 'data', 'link-9');">data</a></tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">")"</tt> </tt>
+</div><a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line"> </tt>
+<a name="Interaction.__str__"></a><div id="Interaction.__str__-def"><a name="L247"></a><tt class="py-lineno">247</tt> <a class="py-toggle" href="#" id="Interaction.__str__-toggle" onclick="return toggle('Interaction.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Interaction-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Interaction.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Interaction.__str__-expanded"><a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a string representation of self."""</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"&lt;"</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-83" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-83', 'data', 'link-9');">data</a></tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"&gt;"</tt> </tt>
+</div></div><a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line"> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line"> </tt>
+<a name="Network"></a><div id="Network-def"><a name="L252"></a><tt class="py-lineno">252</tt> <a class="py-toggle" href="#" id="Network-toggle" onclick="return toggle('Network');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html">Network</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Network-expanded"><a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">    <tt class="py-docstring">"""A set of species that are explicitly linked by interactions.</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line"><tt class="py-docstring">    The network is a directed multigraph with labeled edges. The nodes in the graph</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"><tt class="py-docstring">    are the biochemical species involved. The edges represent an interaction between</tt> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line"><tt class="py-docstring">    two species, and the edge label is a reference to the associated Interaction</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line"><tt class="py-docstring">    object.</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line"><tt class="py-docstring">    Attributes:</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line"><tt class="py-docstring">    None</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line"> </tt>
+<a name="Network.__init__"></a><div id="Network.__init__-def"><a name="L265"></a><tt class="py-lineno">265</tt> <a class="py-toggle" href="#" id="Network.__init__-toggle" onclick="return toggle('Network.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">species</tt><tt class="py-op">=</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.__init__-expanded"><a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">        <tt class="py-docstring">"""Initializes a new Network object."""</tt> </tt>
+<a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt> <tt class="py-op">=</tt> <tt id="link-84" class="py-name"><a title="Bio.Pathway.Rep.MultiGraph
+Bio.Pathway.Rep.MultiGraph.MultiGraph" class="py-name" href="#" onclick="return doclink('link-84', 'MultiGraph', 'link-3');">MultiGraph</a></tt><tt class="py-op">(</tt><tt id="link-85" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-85', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line"> </tt>
+<a name="Network.__repr__"></a><div id="Network.__repr__-def"><a name="L269"></a><tt class="py-lineno">269</tt> <a class="py-toggle" href="#" id="Network.__repr__-toggle" onclick="return toggle('Network.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.__repr__-expanded"><a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a debugging string representation of this network."""</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"&lt;Network: __graph: "</tt> <tt class="py-op">+</tt> <tt class="py-name">repr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"&gt;"</tt> </tt>
+</div><a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line"> </tt>
+<a name="Network.__str__"></a><div id="Network.__str__-def"><a name="L273"></a><tt class="py-lineno">273</tt> <a class="py-toggle" href="#" id="Network.__str__-toggle" onclick="return toggle('Network.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.__str__-expanded"><a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a string representation of this network."""</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"Network of "</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-86" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-86', 'species', 'link-15');">species</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">" species and "</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">               <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-87" class="py-name" targets="Method Bio.Pathway.Network.interactions()=Bio.Pathway.Network-class.html#interactions"><a title="Bio.Pathway.Network.interactions" class="py-name" href="#" onclick="return doclink('link-87', 'interactions', 'link-87');">interactions</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">" interactions."</tt> </tt>
+</div><a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line"> </tt>
+<a name="Network.add_species"></a><div id="Network.add_species-def"><a name="L278"></a><tt class="py-lineno">278</tt> <a class="py-toggle" href="#" id="Network.add_species-toggle" onclick="return toggle('Network.add_species');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#add_species">add_species</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">species</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.add_species-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.add_species-expanded"><a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">        <tt class="py-docstring">"""Adds species to this network."""</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-88" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.add_node()=Bio.Pathway.Rep.Graph.Graph-class.html#add_node,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.add_node()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#add_node"><a title="Bio.Pathway.Rep.Graph.Graph.add_node
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_node" class="py-name" href="#" onclick="return doclink('link-88', 'add_node', 'link-88');">add_node</a></tt><tt class="py-op">(</tt><tt id="link-89" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-89', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line"> </tt>
+<a name="Network.add_interaction"></a><div id="Network.add_interaction-def"><a name="L282"></a><tt class="py-lineno">282</tt> <a class="py-toggle" href="#" id="Network.add_interaction-toggle" onclick="return toggle('Network.add_interaction');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#add_interaction">add_interaction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">source</tt><tt class="py-op">,</tt> <tt class="py-param">sink</tt><tt class="py-op">,</tt> <tt class="py-param">interaction</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.add_interaction-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.add_interaction-expanded"><a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">        <tt class="py-docstring">"""Adds interaction to this network."""</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-90" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.add_edge()=Bio.Pathway.Rep.Graph.Graph-class.html#add_edge,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.add_edge()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#add_edge"><a title="Bio.Pathway.Rep.Graph.Graph.add_edge
+Bio.Pathway.Rep.MultiGraph.MultiGraph.add_edge" class="py-name" href="#" onclick="return doclink('link-90', 'add_edge', 'link-90');">add_edge</a></tt><tt class="py-op">(</tt><tt id="link-91" class="py-name" targets="Method Bio.GenBank._FeatureConsumer.source()=Bio.GenBank._FeatureConsumer-class.html#source,Method Bio.GenBank._RecordConsumer.source()=Bio.GenBank._RecordConsumer-class.html#source,Method Bio.Pathway.Network.source()=Bio.Pathway.Network-class.html#source"><a title="Bio.GenBank._FeatureConsumer.source
+Bio.GenBank._RecordConsumer.source
+Bio.Pathway.Network.source" class="py-name" href="#" onclick="return doclink('link-91', 'source', 'link-91');">source</a></tt><tt class="py-op">,</tt> <tt id="link-92" class="py-name" targets="Method Bio.Pathway.Network.sink()=Bio.Pathway.Network-class.html#sink"><a title="Bio.Pathway.Network.sink" class="py-name" href="#" onclick="return doclink('link-92', 'sink', 'link-92');">sink</a></tt><tt class="py-op">,</tt> <tt class="py-name">interaction</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line"> </tt>
+<a name="Network.source"></a><div id="Network.source-def"><a name="L286"></a><tt class="py-lineno">286</tt> <a class="py-toggle" href="#" id="Network.source-toggle" onclick="return toggle('Network.source');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#source">source</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">species</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.source-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.source-expanded"><a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns list of unique sources for species."""</tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-93" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.parents()=Bio.Pathway.Rep.Graph.Graph-class.html#parents,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.parents()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#parents"><a title="Bio.Pathway.Rep.Graph.Graph.parents
+Bio.Pathway.Rep.MultiGraph.MultiGraph.parents" class="py-name" href="#" onclick="return doclink('link-93', 'parents', 'link-93');">parents</a></tt><tt class="py-op">(</tt><tt id="link-94" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-94', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line"> </tt>
+<a name="Network.source_interactions"></a><div id="Network.source_interactions-def"><a name="L290"></a><tt class="py-lineno">290</tt> <a class="py-toggle" href="#" id="Network.source_interactions-toggle" onclick="return toggle('Network.source_interactions');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#source_interactions">source_interactions</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">species</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.source_interactions-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.source_interactions-expanded"><a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns list of (source, interaction) pairs for species."""</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-95" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.parent_edges()=Bio.Pathway.Rep.Graph.Graph-class.html#parent_edges,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.parent_edges()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#parent_edges"><a title="Bio.Pathway.Rep.Graph.Graph.parent_edges
+Bio.Pathway.Rep.MultiGraph.MultiGraph.parent_edges" class="py-name" href="#" onclick="return doclink('link-95', 'parent_edges', 'link-95');">parent_edges</a></tt><tt class="py-op">(</tt><tt id="link-96" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-96', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line"> </tt>
+<a name="Network.sink"></a><div id="Network.sink-def"><a name="L294"></a><tt class="py-lineno">294</tt> <a class="py-toggle" href="#" id="Network.sink-toggle" onclick="return toggle('Network.sink');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#sink">sink</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">species</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.sink-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.sink-expanded"><a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns list of unique sinks for species."""</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-97" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.children()=Bio.Pathway.Rep.Graph.Graph-class.html#children,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.children()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#children"><a title="Bio.Pathway.Rep.Graph.Graph.children
+Bio.Pathway.Rep.MultiGraph.MultiGraph.children" class="py-name" href="#" onclick="return doclink('link-97', 'children', 'link-97');">children</a></tt><tt class="py-op">(</tt><tt id="link-98" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-98', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"> </tt>
+<a name="Network.sink_interactions"></a><div id="Network.sink_interactions-def"><a name="L298"></a><tt class="py-lineno">298</tt> <a class="py-toggle" href="#" id="Network.sink_interactions-toggle" onclick="return toggle('Network.sink_interactions');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#sink_interactions">sink_interactions</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">species</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.sink_interactions-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.sink_interactions-expanded"><a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns list of (sink, interaction) pairs for species."""</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-99" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.child_edges()=Bio.Pathway.Rep.Graph.Graph-class.html#child_edges,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.child_edges()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#child_edges"><a title="Bio.Pathway.Rep.Graph.Graph.child_edges
+Bio.Pathway.Rep.MultiGraph.MultiGraph.child_edges" class="py-name" href="#" onclick="return doclink('link-99', 'child_edges', 'link-99');">child_edges</a></tt><tt class="py-op">(</tt><tt id="link-100" class="py-name"><a title="Bio.Pathway.Network.species
+Bio.Pathway.Reaction.species
+Bio.Pathway.System.species" class="py-name" href="#" onclick="return doclink('link-100', 'species', 'link-15');">species</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line"> </tt>
+<a name="Network.species"></a><div id="Network.species-def"><a name="L302"></a><tt class="py-lineno">302</tt> <a class="py-toggle" href="#" id="Network.species-toggle" onclick="return toggle('Network.species');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#species">species</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.species-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.species-expanded"><a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns list of the species in this network."""</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-101" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.nodes()=Bio.Pathway.Rep.Graph.Graph-class.html#nodes,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.nodes()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#nodes"><a title="Bio.Pathway.Rep.Graph.Graph.nodes
+Bio.Pathway.Rep.MultiGraph.MultiGraph.nodes" class="py-name" href="#" onclick="return doclink('link-101', 'nodes', 'link-101');">nodes</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line"> </tt>
+<a name="Network.interactions"></a><div id="Network.interactions-def"><a name="L306"></a><tt class="py-lineno">306</tt> <a class="py-toggle" href="#" id="Network.interactions-toggle" onclick="return toggle('Network.interactions');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Pathway.Network-class.html#interactions">interactions</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Network.interactions-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Network.interactions-expanded"><a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns list of the unique interactions in this network."""</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__graph</tt><tt class="py-op">.</tt><tt id="link-102" class="py-name" targets="Method Bio.Pathway.Rep.Graph.Graph.labels()=Bio.Pathway.Rep.Graph.Graph-class.html#labels,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.labels()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#labels"><a title="Bio.Pathway.Rep.Graph.Graph.labels
+Bio.Pathway.Rep.MultiGraph.MultiGraph.labels" class="py-name" href="#" onclick="return doclink('link-102', 'labels', 'link-102');">labels</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:31 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

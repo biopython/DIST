@@ -1,0 +1,942 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.GenBank</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;GenBank
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.GenBank-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package GenBank</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.GenBank-pysrc.html">source&nbsp;code</a></span></p>
+<p>Code to work with GenBank formatted files.</p>
+<p>Rather than using Bio.GenBank, you are now encouraged to use Bio.SeqIO with
+the &quot;genbank&quot; or &quot;embl&quot; format names to parse GenBank or EMBL files into
+SeqRecord and SeqFeature objects (see the Biopython tutorial for details).</p>
+<p>Using Bio.GenBank directly to parse GenBank files is only useful if you want
+to obtain GenBank-specific Record objects, which is a much closer
+representation to the raw file contents that the SeqRecord alternative from
+the FeatureParser (used in Bio.SeqIO).</p>
+<p>To use the Bio.GenBank parser, there are two helper functions:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>read                  Parse a handle containing a single GenBank record
+as Bio.GenBank specific Record objects.</li>
+<li>parse                 Iterate over a handle containing multiple GenBank
+records as Bio.GenBank specific Record objects.</li>
+</ul>
+</blockquote>
+<p>The following internal classes are not intended for direct use and may
+be deprecated in a future release.</p>
+<p>Classes:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>Iterator              Iterate through a file of GenBank entries</li>
+<li>ErrorFeatureParser    Catch errors caused during parsing.</li>
+<li>FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.</li>
+<li>RecordParser          Parse GenBank data into a Record object.</li>
+</ul>
+</blockquote>
+<p>Exceptions:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>ParserFailureError    Exception indicating a failure in the parser (ie.
+scanner or consumer)</li>
+<li>LocationParserError   Exception indicating a problem with the spark based
+location parser.</li>
+</ul>
+</blockquote>
+
+<!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="Bio.GenBank.Record-module.html">Bio.GenBank.Record</a></strong>: <em class="summary">Hold GenBank data in a straightforward format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.GenBank.Scanner-module.html">Bio.GenBank.Scanner</a></strong>: <em class="summary">Internal code for parsing GenBank and EMBL files (PRIVATE).</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.GenBank.utils-module.html">Bio.GenBank.utils</a></strong>: <em class="summary">Useful utilities for helping in parsing GenBank files.</em>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank.Iterator-class.html" class="summary-name">Iterator</a><br />
+      Iterator interface to move over a file of GenBank entries one at a time (OBSOLETE).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank.ParserFailureError-class.html" class="summary-name">ParserFailureError</a><br />
+      Failure caused by some kind of problem in the parser.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank.LocationParserError-class.html" class="summary-name">LocationParserError</a><br />
+      Could not Properly parse out a location from a GenBank file.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank.FeatureParser-class.html" class="summary-name">FeatureParser</a><br />
+      Parse GenBank files into Seq + Feature objects (OBSOLETE).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank.RecordParser-class.html" class="summary-name">RecordParser</a><br />
+      Parse GenBank files into Record objects (OBSOLETE).
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank._BaseGenBankConsumer-class.html" class="summary-name" onclick="show_private();">_BaseGenBankConsumer</a><br />
+      Abstract GenBank consumer providing useful general functions (PRIVATE).
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank._FeatureConsumer-class.html" class="summary-name" onclick="show_private();">_FeatureConsumer</a><br />
+      Create a SeqRecord object with Features to return (PRIVATE).
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank._RecordConsumer-class.html" class="summary-name" onclick="show_private();">_RecordConsumer</a><br />
+      Create a GenBank Record object from scanner generated information (PRIVATE).
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.GenBank-module.html#_pos" class="summary-sig-name" onclick="show_private();">_pos</a>(<span class="summary-sig-arg">pos_str</span>,
+        <span class="summary-sig-arg">offset</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Build a Position object (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.GenBank-pysrc.html#_pos">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.GenBank-module.html#_loc" class="summary-sig-name" onclick="show_private();">_loc</a>(<span class="summary-sig-arg">loc_str</span>,
+        <span class="summary-sig-arg">expected_seq_length</span>,
+        <span class="summary-sig-arg">strand</span>)</span><br />
+      FeatureLocation from non-compound non-complement location (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.GenBank-pysrc.html#_loc">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_split_compound_loc"></a><span class="summary-sig-name">_split_compound_loc</span>(<span class="summary-sig-arg">compound_loc</span>)</span><br />
+      Split a tricky compound location string (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.GenBank-pysrc.html#_split_compound_loc">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.GenBank-module.html#parse" class="summary-sig-name">parse</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Iterate over GenBank formatted entries as Record objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.GenBank-pysrc.html#parse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.GenBank-module.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Read a handle containing a single GenBank entry as a Record object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.GenBank-pysrc.html#read">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_test"></a><span class="summary-sig-name">_test</span>()</span><br />
+      Run the Bio.GenBank module's doctests.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.GenBank-pysrc.html#_test">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="GENBANK_INDENT"></a><span class="summary-name">GENBANK_INDENT</span> = <code title="12">12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="GENBANK_SPACER"></a><span class="summary-name">GENBANK_SPACER</span> = <code title="'            '"><code class="variable-quote">'</code><code class="variable-string">            </code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FEATURE_KEY_INDENT"></a><span class="summary-name">FEATURE_KEY_INDENT</span> = <code title="5">5</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FEATURE_QUALIFIER_INDENT"></a><span class="summary-name">FEATURE_QUALIFIER_INDENT</span> = <code title="21">21</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FEATURE_KEY_SPACER"></a><span class="summary-name">FEATURE_KEY_SPACER</span> = <code title="'     '"><code class="variable-quote">'</code><code class="variable-string">     </code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FEATURE_QUALIFIER_SPACER"></a><span class="summary-name">FEATURE_QUALIFIER_SPACER</span> = <code title="'                     '"><code class="variable-quote">'</code><code class="variable-string">                     </code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_solo_location"></a><span class="summary-name">_solo_location</span> = <code title="'[&lt;&gt;]?\\d+'"><code class="variable-quote">'</code><code class="variable-string">[&lt;&gt;]?\\d+</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_pair_location"></a><span class="summary-name">_pair_location</span> = <code title="'[&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\d+'"><code class="variable-quote">'</code><code class="variable-string">[&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\d+</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_between_location"></a><span class="summary-name">_between_location</span> = <code title="'\\d+\\^\\d+'"><code class="variable-quote">'</code><code class="variable-string">\\d+\\^\\d+</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_within_position"></a><span class="summary-name">_within_position</span> = <code title="'\\(\\d+\\.\\d+\\)'"><code class="variable-quote">'</code><code class="variable-string">\\(\\d+\\.\\d+\\)</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_re_within_position"></a><span class="summary-name">_re_within_position</span> = <code title="re.compile(r'\(\d+\.\d+\)')">re.compile(r'\(\d<code class="re-op">+</code>\.\d<code class="re-op">+</code>\)')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank-module.html#_within_location" class="summary-name" onclick="show_private();">_within_location</a> = <code title="'([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))'"><code class="variable-quote">'</code><code class="variable-string">([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_oneof_position"></a><span class="summary-name">_oneof_position</span> = <code title="'one\\-of\\(\\d+(,\\d+)+\\)'"><code class="variable-quote">'</code><code class="variable-string">one\\-of\\(\\d+(,\\d+)+\\)</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_re_oneof_position"></a><span class="summary-name">_re_oneof_position</span> = <code title="re.compile(r'one-of\(\d+(,\d+)+\)')">re.compile(r'one-of\(\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">+</code>\)')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank-module.html#_oneof_location" class="summary-name" onclick="show_private();">_oneof_location</a> = <code title="'([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?\\d+|one\\-of\\(\\d\
++(,\\d+)+\\))'"><code class="variable-quote">'</code><code class="variable-string">([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_simple_location"></a><span class="summary-name">_simple_location</span> = <code title="'\\d+\\.\\.\\d+'"><code class="variable-quote">'</code><code class="variable-string">\\d+\\.\\.\\d+</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_re_simple_location"></a><span class="summary-name">_re_simple_location</span> = <code title="re.compile(r'^\d+\.\.\d+$')">re.compile(r'^\d<code class="re-op">+</code>\.\.\d<code class="re-op">+</code>$')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank-module.html#_re_simple_compound" class="summary-name" onclick="show_private();">_re_simple_compound</a> = <code title="re.compile(r'^(join|order|bond)\(\d+\.\.\d+(,\d+\.\.\d+)*\)$')">re.compile(r'^<code class="re-group">(</code>join<code class="re-op">|</code>order<code class="re-op">|</code>bond<code class="re-group">)</code>\(\d<code class="re-op">+</code>\.\.<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank-module.html#_complex_location" class="summary-name" onclick="show_private();">_complex_location</a> = <code title="'([a-zA-z][a-zA-Z0-9_]*(\\.[a-zA-Z0-9]+)?\\:)?([&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\d\
++|[&lt;&gt;]?\\d+|\\d+\\^\\d+|([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+|\
+\\(\\d+\\.\\d+\\))|([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?\\
+\d+|one\\-of\\(\\d+(,\\d+)+\\)))'"><code class="variable-quote">'</code><code class="variable-string">([a-zA-z][a-zA-Z0-9_]*(\\.[a-zA-Z0-9]+)?\</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank-module.html#_re_complex_location" class="summary-name" onclick="show_private();">_re_complex_location</a> = <code title="re.compile(r'^([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?:)?([&lt;&gt;]?\d+\.\.[\
+&lt;&gt;]?\d+|[&lt;&gt;]?\d+|\d+\^\d+|([&lt;&gt;]?\d+|\(\d+\.\d+\))\.\.([&lt;&gt;]?\d+|\(\d+\.\
+\d+\))|([&lt;&gt;]?\d+|one-of\(\d+(,\d+)+\))\.\.([&lt;&gt;]?\d+|one-of\(\d+(,\d+)+\
+\)))$')">re.compile(r'^<code class="re-group">(</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>z<code class="re-group">]</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9_<code class="re-group">]</code><code class="re-op">*</code><code class="re-group">(</code>\.<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank-module.html#_possibly_complemented_complex_location" class="summary-name" onclick="show_private();">_possibly_complemented_complex_location</a> = <code title="'(([a-zA-z][a-zA-Z0-9_]*(\\.[a-zA-Z0-9]+)?\\:)?([&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\\
+d+|[&lt;&gt;]?\\d+|\\d+\\^\\d+|([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+\
+|\\(\\d+\\.\\d+\\))|([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?\
+\\d+|one\\-of\\(\\d+(,\\d+)+\\)))|complement\\(([a-zA-z][a-zA-Z0-9_]*(\
+\\.[a-zA-Z0-9]+)?\\:)?([&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\d+|[&lt;&gt;]?\\d+|\\d+\\^\\d+|\
+([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))|([&lt;&gt;]\
+?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d\
++)+\\)))\\))'"><code class="variable-quote">'</code><code class="variable-string">(([a-zA-z][a-zA-Z0-</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.GenBank-module.html#_re_complex_compound" class="summary-name" onclick="show_private();">_re_complex_compound</a> = <code title="re.compile(r'^(join|order|bond)\((([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]\
++)?:)?([&lt;&gt;]?\d+\.\.[&lt;&gt;]?\d+|[&lt;&gt;]?\d+|\d+\^\d+|([&lt;&gt;]?\d+|\(\d+\.\d+\))\\
+.\.([&lt;&gt;]?\d+|\(\d+\.\d+\))|([&lt;&gt;]?\d+|one-of\(\d+(,\d+)+\))\.\.([&lt;&gt;]?\d\
++|one-of\(\d+(,\d+)+\)))|complement\(([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0\
+-9]+)?:)?([&lt;&gt;]?\d+\.\.[&lt;&gt;]?\d+|[&lt;&gt;]?\d+|\d+\^\d+|([&lt;&gt;]?\d+|\(\d+\.\d+\\
+))\.\.([&lt;&gt;]?\d+|\(\d+\.\d+\))|([&lt;&gt;]?\d+|one-of\(\d+(,\d+)+\))\.\.([&lt;&gt;]\
+?\d+|one-of\(\d+(,\d+)+\)))\))(,(([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+\
+)?:)?([&lt;&gt;]?\d+\.\.[&lt;&gt;]?\d+|[&lt;&gt;]?\d+|\d+\^\d+|([&lt;&gt;]?\d+|\(\d+\.\d+\))\.\
+...">re.compile(r'^<code class="re-group">(</code>join<code class="re-op">|</code>order<code class="re-op">|</code>bond<code class="re-group">)</code>\(<code class="re-group">(</code><code class="re-group">(</code><code class="re-group">[</code>a<code class="re-op">-</code>z<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_solo_bond"></a><span class="summary-name">_solo_bond</span> = <code title="re.compile(r'bond\([&lt;&gt;]?\d+\)')">re.compile(r'bond\(<code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code>\)')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.GenBank'"><code class="variable-quote">'</code><code class="variable-string">Bio.GenBank</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_pos"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_pos</span>(<span class="sig-arg">pos_str</span>,
+        <span class="sig-arg">offset</span>=<span class="sig-default">0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.GenBank-pysrc.html#_pos">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Build a Position object (PRIVATE).</p>
+<p>For an end position, leave offset as zero (default):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_pos(<span class="py-string">&quot;5&quot;</span>)
+<span class="py-output">ExactPosition(5)</span></pre>
+<p>For a start position, set offset to minus one (for Python counting):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_pos(<span class="py-string">&quot;5&quot;</span>, -1)
+<span class="py-output">ExactPosition(4)</span></pre>
+<p>This also covers fuzzy positions:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>p = _pos(<span class="py-string">&quot;&lt;5&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>p
+<span class="py-output">BeforePosition(5)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(p)
+<span class="py-output">&lt;5</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>int(p)
+<span class="py-output">5</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_pos(<span class="py-string">&quot;&gt;5&quot;</span>)
+<span class="py-output">AfterPosition(5)</span></pre>
+<p>By default assumes an end position, so note the integer behaviour:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>p = _pos(<span class="py-string">&quot;one-of(5,8,11)&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>p
+<span class="py-output">OneOfPosition(11, choices=[ExactPosition(5), ExactPosition(8), ExactPosition(11)])</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(p)
+<span class="py-output">one-of(5,8,11)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>int(p)
+<span class="py-output">11</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_pos(<span class="py-string">&quot;(8.10)&quot;</span>)
+<span class="py-output">WithinPosition(10, left=8, right=10)</span></pre>
+<p>Fuzzy start positions:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>p = _pos(<span class="py-string">&quot;&lt;5&quot;</span>, -1)
+<span class="py-prompt">&gt;&gt;&gt; </span>p
+<span class="py-output">BeforePosition(4)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(p)
+<span class="py-output">&lt;4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>int(p)
+<span class="py-output">4</span></pre>
+<p>Notice how the integer behaviour changes too!</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>p = _pos(<span class="py-string">&quot;one-of(5,8,11)&quot;</span>, -1)
+<span class="py-prompt">&gt;&gt;&gt; </span>p
+<span class="py-output">OneOfPosition(4, choices=[ExactPosition(4), ExactPosition(7), ExactPosition(10)])</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(p)
+<span class="py-output">one-of(4,7,10)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>int(p)
+<span class="py-output">4</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_loc"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_loc</span>(<span class="sig-arg">loc_str</span>,
+        <span class="sig-arg">expected_seq_length</span>,
+        <span class="sig-arg">strand</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.GenBank-pysrc.html#_loc">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>FeatureLocation from non-compound non-complement location (PRIVATE).</p>
+<p>Simple examples,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_loc(<span class="py-string">&quot;123..456&quot;</span>, 1000, +1)
+<span class="py-output">FeatureLocation(ExactPosition(122), ExactPosition(456), strand=1)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>_loc(<span class="py-string">&quot;&lt;123..&gt;456&quot;</span>, 1000, strand = -1)
+<span class="py-output">FeatureLocation(BeforePosition(122), AfterPosition(456), strand=-1)</span></pre>
+<p>A more complex location using within positions,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_loc(<span class="py-string">&quot;(9.10)..(20.25)&quot;</span>, 1000, 1)
+<span class="py-output">FeatureLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)</span></pre>
+<p>Notice how that will act as though it has overall start 8 and end 25.</p>
+<p>Zero length between feature,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_loc(<span class="py-string">&quot;123^124&quot;</span>, 1000, 0)
+<span class="py-output">FeatureLocation(ExactPosition(123), ExactPosition(123), strand=0)</span></pre>
+<p>The expected sequence length is needed for a special case, a between
+position at the start/end of a circular genome:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_loc(<span class="py-string">&quot;1000^1&quot;</span>, 1000, 1)
+<span class="py-output">FeatureLocation(ExactPosition(1000), ExactPosition(1000), strand=1)</span></pre>
+<p>Apart from this special case, between positions P^Q must have P+1==Q,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>_loc(<span class="py-string">&quot;123^456&quot;</span>, 1000, 1)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">   ...</span>
+<span class="py-except">ValueError: Invalid between location '123^456'</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="parse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.GenBank-pysrc.html#parse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over GenBank formatted entries as Record objects.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> GenBank
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;GenBank/NC_000932.gb&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> GenBank.parse(handle):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(record.accession)
+<span class="py-output">['NC_000932']</span></pre>
+<p>To get SeqRecord objects use Bio.SeqIO.parse(..., format=&quot;gb&quot;)
+instead.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="read"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.GenBank-pysrc.html#read">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Read a handle containing a single GenBank entry as a Record object.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> GenBank
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;GenBank/NC_000932.gb&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    record = GenBank.read(handle)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record.accession)
+<span class="py-output">['NC_000932']</span></pre>
+<p>To get a SeqRecord object use Bio.SeqIO.read(..., format=&quot;gb&quot;)
+instead.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_within_location"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_within_location</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'</code><code class="variable-string">([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))</code><code class="variable-quote">'</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_oneof_location"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_oneof_location</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'</code><code class="variable-string">([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?\\d+|one\\-of\\(\\d</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">+(,\\d+)+\\))</code><code class="variable-quote">'</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_re_simple_compound"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_re_simple_compound</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'^<code class="re-group">(</code>join<code class="re-op">|</code>order<code class="re-op">|</code>bond<code class="re-group">)</code>\(\d<code class="re-op">+</code>\.\.\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code>\.\.\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">*</code>\)$')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_complex_location"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_complex_location</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'</code><code class="variable-string">([a-zA-z][a-zA-Z0-9_]*(\\.[a-zA-Z0-9]+)?\\:)?([&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\d</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">+|[&lt;&gt;]?\\d+|\\d+\\^\\d+|([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+|</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">\\(\\d+\\.\\d+\\))|([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?\</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">\d+|one\\-of\\(\\d+(,\\d+)+\\)))</code><code class="variable-quote">'</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_re_complex_location"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_re_complex_location</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'^<code class="re-group">(</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>z<code class="re-group">]</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9_<code class="re-group">]</code><code class="re-op">*</code><code class="re-group">(</code>\.<code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9<code class="re-group">]</code><code class="re-op">+</code><code class="re-group">)</code><code class="re-op">?</code>:<code class="re-group">)</code><code class="re-op">?</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code>\.\.<code class="re-group">[</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\d<code class="re-op">+</code>\^\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\(\d<code class="re-op">+</code>\.\d<code class="re-op">+</code>\)<code class="re-group">)</code>\.\.<code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\(\d<code class="re-op">+</code>\.<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+\d<code class="re-op">+</code>\)<code class="re-group">)</code><code class="re-op">|</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>one-of\(\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">+</code>\)<code class="re-group">)</code>\.\.<code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>one-of\(\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">+</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+\)<code class="re-group">)</code><code class="re-group">)</code>$')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_possibly_complemented_complex_location"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_possibly_complemented_complex_location</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'</code><code class="variable-string">(([a-zA-z][a-zA-Z0-9_]*(\\.[a-zA-Z0-9]+)?\\:)?([&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">d+|[&lt;&gt;]?\\d+|\\d+\\^\\d+|([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">|\\(\\d+\\.\\d+\\))|([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">\\d+|one\\-of\\(\\d+(,\\d+)+\\)))|complement\\(([a-zA-z][a-zA-Z0-9_]*(</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">\\.[a-zA-Z0-9]+)?\\:)?([&lt;&gt;]?\\d+\\.\\.[&lt;&gt;]?\\d+|[&lt;&gt;]?\\d+|\\d+\\^\\d+|</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))\\.\\.([&lt;&gt;]?\\d+|\\(\\d+\\.\\d+\\))|([&lt;&gt;]</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">?\\d+|one\\-of\\(\\d+(,\\d+)+\\))\\.\\.([&lt;&gt;]?\\d+|one\\-of\\(\\d+(,\\d</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">+)+\\)))\\))</code><code class="variable-quote">'</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_re_complex_compound"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_re_complex_compound</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'^<code class="re-group">(</code>join<code class="re-op">|</code>order<code class="re-op">|</code>bond<code class="re-group">)</code>\(<code class="re-group">(</code><code class="re-group">(</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>z<code class="re-group">]</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9_<code class="re-group">]</code><code class="re-op">*</code><code class="re-group">(</code>\.<code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9<code class="re-group">]</code><code class="re-op"></code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">?</code>:<code class="re-group">)</code><code class="re-op">?</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code>\.\.<code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\d<code class="re-op">+</code>\^\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\(\d<code class="re-op">+</code>\.\d<code class="re-op">+</code>\)<code class="re-group">)</code>\<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+.\.<code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\(\d<code class="re-op">+</code>\.\d<code class="re-op">+</code>\)<code class="re-group">)</code><code class="re-op">|</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>one-of\(\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">+</code>\)<code class="re-group">)</code>\.\.<code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op"></code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="re-op">+</code><code class="re-op">|</code>one-of\(\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">+</code>\)<code class="re-group">)</code><code class="re-group">)</code><code class="re-op">|</code>complement\(<code class="re-group">(</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>z<code class="re-group">]</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9_<code class="re-group">]</code><code class="re-op">*</code><code class="re-group">(</code>\.<code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op"></code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="re-op">-</code>9<code class="re-group">]</code><code class="re-op">+</code><code class="re-group">)</code><code class="re-op">?</code>:<code class="re-group">)</code><code class="re-op">?</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code>\.\.<code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\d<code class="re-op">+</code>\^\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\(\d<code class="re-op">+</code>\.\d<code class="re-op">+</code>\<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+)<code class="re-group">)</code>\.\.<code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\(\d<code class="re-op">+</code>\.\d<code class="re-op">+</code>\)<code class="re-group">)</code><code class="re-op">|</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>one-of\(\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">+</code>\)<code class="re-group">)</code>\.\.<code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op"></code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>one-of\(\d<code class="re-op">+</code><code class="re-group">(</code>,\d<code class="re-op">+</code><code class="re-group">)</code><code class="re-op">+</code>\)<code class="re-group">)</code><code class="re-group">)</code>\)<code class="re-group">)</code><code class="re-group">(</code>,<code class="re-group">(</code><code class="re-group">(</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>z<code class="re-group">]</code><code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9_<code class="re-group">]</code><code class="re-op">*</code><code class="re-group">(</code>\.<code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9<code class="re-group">]</code><code class="re-op">+</code><code class="re-group"></code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="re-group">)</code><code class="re-op">?</code>:<code class="re-group">)</code><code class="re-op">?</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code>\.\.<code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\d<code class="re-op">+</code>\^\d<code class="re-op">+</code><code class="re-op">|</code><code class="re-group">(</code><code class="re-group">[</code>&lt;&gt;<code class="re-group">]</code><code class="re-op">?</code>\d<code class="re-op">+</code><code class="re-op">|</code>\(\d<code class="re-op">+</code>\.\d<code class="re-op">+</code>\)<code class="re-group">)</code>\.<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:15 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

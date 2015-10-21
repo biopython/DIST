@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.GA.Organism</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.GA-module.html">Package&nbsp;GA</a> ::
+        Module&nbsp;Organism
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.GA.Organism-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.GA.Organism-module.html">Module Bio.GA.Organism</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Deal with an Organism in a Genetic Algorithm population.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># standard modules</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt>  <tt class="py-comment"># for Python 3 hack</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">random</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">array</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment"># Sequence objects from Biopython</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module Bio.Seq=Bio.Seq-module.html,Class Bio.Seq.Seq=Bio.Seq.Seq-class.html"><a title="Bio.Seq
+Bio.Seq.Seq" class="py-name" href="#" onclick="return doclink('link-1', 'Seq', 'link-1');">Seq</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Class Bio.Seq.MutableSeq=Bio.Seq.MutableSeq-class.html"><a title="Bio.Seq.MutableSeq" class="py-name" href="#" onclick="return doclink('link-2', 'MutableSeq', 'link-2');">MutableSeq</a></tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="function_population"></a><div id="function_population-def"><a name="L17"></a><tt class="py-lineno"> 17</tt> <a class="py-toggle" href="#" id="function_population-toggle" onclick="return toggle('function_population');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism-module.html#function_population">function_population</a><tt class="py-op">(</tt><tt class="py-param">new_genome</tt><tt class="py-op">,</tt> <tt class="py-param">num_organisms</tt><tt class="py-op">,</tt> <tt class="py-param">fitness_calculator</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="function_population-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="function_population-expanded"><a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">    <tt class="py-docstring">"""Generate a population given a function to create genomes</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">    Arguments:</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">    o new_genome - A function or callable object that will return</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">    a genome that can be used for a new organism. This new genome</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">    should be a MutableSeq object with a specified alphabet.</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">    o num_organisms - The number of individuals we want in the population.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">    o fitness_calculator -- A function that will calculate the fitness</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    of the organism when given the organisms genome.</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">    <tt class="py-name">all_orgs</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">org_num</tt> <tt class="py-keyword">in</tt> <tt id="link-3" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-3', 'range', 'link-3');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">num_organisms</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-name">cur_genome</tt> <tt class="py-op">=</tt> <tt class="py-name">new_genome</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-name">all_orgs</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-4', 'append', 'link-4');">append</a></tt><tt class="py-op">(</tt><tt id="link-5" class="py-name" targets="Module Bio.GA.Organism=Bio.GA.Organism-module.html,Class Bio.GA.Organism.Organism=Bio.GA.Organism.Organism-class.html,Class Bio.Graphics.BasicChromosome.Organism=Bio.Graphics.BasicChromosome.Organism-class.html"><a title="Bio.GA.Organism
+Bio.GA.Organism.Organism
+Bio.Graphics.BasicChromosome.Organism" class="py-name" href="#" onclick="return doclink('link-5', 'Organism', 'link-5');">Organism</a></tt><tt class="py-op">(</tt><tt class="py-name">cur_genome</tt><tt class="py-op">,</tt> <tt class="py-name">fitness_calculator</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">all_orgs</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="random_population"></a><div id="random_population-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="random_population-toggle" onclick="return toggle('random_population');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism-module.html#random_population">random_population</a><tt class="py-op">(</tt><tt class="py-param">genome_alphabet</tt><tt class="py-op">,</tt> <tt class="py-param">genome_size</tt><tt class="py-op">,</tt> <tt class="py-param">num_organisms</tt><tt class="py-op">,</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">                      <tt class="py-param">fitness_calculator</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="random_population-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="random_population-expanded"><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">    <tt class="py-docstring">"""Generate a population of individuals with randomly set genomes.</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    Arguments:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">    o genome_alphabet -- An Alphabet object describing all of the</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    possible letters that could potentially be in the genome of an</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    organism.</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">    o genome_size -- The size of each organisms genome.</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">    o num_organism -- The number of organisms we want in the population.</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    o fitness_calculator -- A function that will calculate the fitness</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    of the organism when given the organisms genome.</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">    <tt class="py-name">all_orgs</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">    <tt class="py-comment"># a random number generator to get letters for the genome</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-name">letter_rand</tt> <tt class="py-op">=</tt> <tt class="py-name">random</tt><tt class="py-op">.</tt><tt class="py-name">Random</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-comment"># figure out what type of characters are in the alphabet</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">genome_alphabet</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Variable Bio.Alphabet.Alphabet.letters=Bio.Alphabet.Alphabet-class.html#letters,Variable Bio.Alphabet.IUPAC.ExtendedIUPACDNA.letters=Bio.Alphabet.IUPAC.ExtendedIUPACDNA-class.html#letters,Variable Bio.Alphabet.IUPAC.ExtendedIUPACProtein.letters=Bio.Alphabet.IUPAC.ExtendedIUPACProtein-class.html#letters,Variable Bio.Alphabet.IUPAC.IUPACAmbiguousDNA.letters=Bio.Alphabet.IUPAC.IUPACAmbiguousDNA-class.html#letters,Variable Bio.Alphabet.IUPAC.IUPACAmbiguousRNA.letters=Bio.Alphabet.IUPAC.IUPACAmbiguousRNA-class.html#letters,Variable Bio.Alphabet.IUPAC.IUPACProtein.letters=Bio.Alphabet.IUPAC.IUPACProtein-class.html#letters,Variable Bio.Alphabet.IUPAC.IUPACUnambiguousDNA.letters=Bio.Alphabet.IUPAC.IUPACUnambiguousDNA-class.html#letters,Variable Bio.Alphabet.IUPAC.IUPACUnambiguousRNA.letters=Bio.Alphabet.IUPAC.IUPACUnambiguousRNA-class.html#letters,Variable Bio.Alphabet.Reduced.HPModel.letters=Bio.Alphabet.Reduced.HPModel-class.html#letters,Variable Bio.Alphabet.Reduced.Murphy10.letters=Bio.Alphabet.Reduced.Murphy10-class.html#letters,Variable Bio.Alphabet.Reduced.Murphy15.letters=Bio.Alphabet.Reduced.Murphy15-class.html#letters,Variable Bio.Alphabet.Reduced.Murphy4.letters=Bio.Alphabet.Reduced.Murphy4-class.html#letters,Variable Bio.Alphabet.Reduced.Murphy8.letters=Bio.Alphabet.Reduced.Murphy8-class.html#letters,Variable Bio.Alphabet.Reduced.PC5.letters=Bio.Alphabet.Reduced.PC5-class.html#letters,Variable Bio.Alphabet.SecondaryStructure.letters=Bio.Alphabet.SecondaryStructure-class.html#letters,Variable Bio.Alphabet.SingleLetterAlphabet.letters=Bio.Alphabet.SingleLetterAlphabet-class.html#letters,Variable Bio.Alphabet.ThreeLetterProtein.letters=Bio.Alphabet.ThreeLetterProtein-class.html#letters,Variable Bio.NeuralNetwork.Gene.Schema.SchemaDNAAlphabet.letters=Bio.NeuralNetwork.Gene.Schema.SchemaDNAAlphabet-class.html#letters,Variable Bio.codonalign.codonalphabet.CodonAlphabet.letters=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#letters"><a title="Bio.Alphabet.Alphabet.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACDNA.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousRNA.letters
+Bio.Alphabet.IUPAC.IUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousRNA.letters
+Bio.Alphabet.Reduced.HPModel.letters
+Bio.Alphabet.Reduced.Murphy10.letters
+Bio.Alphabet.Reduced.Murphy15.letters
+Bio.Alphabet.Reduced.Murphy4.letters
+Bio.Alphabet.Reduced.Murphy8.letters
+Bio.Alphabet.Reduced.PC5.letters
+Bio.Alphabet.SecondaryStructure.letters
+Bio.Alphabet.SingleLetterAlphabet.letters
+Bio.Alphabet.ThreeLetterProtein.letters
+Bio.NeuralNetwork.Gene.Schema.SchemaDNAAlphabet.letters
+Bio.codonalign.codonalphabet.CodonAlphabet.letters" class="py-name" href="#" onclick="return doclink('link-6', 'letters', 'link-6');">letters</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">str</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">version_info</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-number">3</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">            <tt class="py-name">alphabet_type</tt> <tt class="py-op">=</tt> <tt class="py-string">"u"</tt>  <tt class="py-comment"># Use unicode string on Python 3</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">            <tt class="py-name">alphabet_type</tt> <tt class="py-op">=</tt> <tt class="py-string">"c"</tt>  <tt class="py-comment"># Use byte string on Python 2</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">genome_alphabet</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="Bio.Alphabet.Alphabet.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACDNA.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousRNA.letters
+Bio.Alphabet.IUPAC.IUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousRNA.letters
+Bio.Alphabet.Reduced.HPModel.letters
+Bio.Alphabet.Reduced.Murphy10.letters
+Bio.Alphabet.Reduced.Murphy15.letters
+Bio.Alphabet.Reduced.Murphy4.letters
+Bio.Alphabet.Reduced.Murphy8.letters
+Bio.Alphabet.Reduced.PC5.letters
+Bio.Alphabet.SecondaryStructure.letters
+Bio.Alphabet.SingleLetterAlphabet.letters
+Bio.Alphabet.ThreeLetterProtein.letters
+Bio.NeuralNetwork.Gene.Schema.SchemaDNAAlphabet.letters
+Bio.codonalign.codonalphabet.CodonAlphabet.letters" class="py-name" href="#" onclick="return doclink('link-7', 'letters', 'link-6');">letters</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">int</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-name">alphabet_type</tt> <tt class="py-op">=</tt> <tt class="py-string">"i"</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">genome_alphabet</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="Bio.Alphabet.Alphabet.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACDNA.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousRNA.letters
+Bio.Alphabet.IUPAC.IUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousRNA.letters
+Bio.Alphabet.Reduced.HPModel.letters
+Bio.Alphabet.Reduced.Murphy10.letters
+Bio.Alphabet.Reduced.Murphy15.letters
+Bio.Alphabet.Reduced.Murphy4.letters
+Bio.Alphabet.Reduced.Murphy8.letters
+Bio.Alphabet.Reduced.PC5.letters
+Bio.Alphabet.SecondaryStructure.letters
+Bio.Alphabet.SingleLetterAlphabet.letters
+Bio.Alphabet.ThreeLetterProtein.letters
+Bio.NeuralNetwork.Gene.Schema.SchemaDNAAlphabet.letters
+Bio.codonalign.codonalphabet.CodonAlphabet.letters" class="py-name" href="#" onclick="return doclink('link-8', 'letters', 'link-6');">letters</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">float</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-name">alphabet_type</tt> <tt class="py-op">=</tt> <tt class="py-string">"d"</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt class="py-string">"Alphabet type is unsupported: %s"</tt> <tt class="py-op">%</tt> <tt class="py-name">genome_alphabet</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="Bio.Alphabet.Alphabet.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACDNA.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousRNA.letters
+Bio.Alphabet.IUPAC.IUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousRNA.letters
+Bio.Alphabet.Reduced.HPModel.letters
+Bio.Alphabet.Reduced.Murphy10.letters
+Bio.Alphabet.Reduced.Murphy15.letters
+Bio.Alphabet.Reduced.Murphy4.letters
+Bio.Alphabet.Reduced.Murphy8.letters
+Bio.Alphabet.Reduced.PC5.letters
+Bio.Alphabet.SecondaryStructure.letters
+Bio.Alphabet.SingleLetterAlphabet.letters
+Bio.Alphabet.ThreeLetterProtein.letters
+Bio.NeuralNetwork.Gene.Schema.SchemaDNAAlphabet.letters
+Bio.codonalign.codonalphabet.CodonAlphabet.letters" class="py-name" href="#" onclick="return doclink('link-9', 'letters', 'link-6');">letters</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">org_num</tt> <tt class="py-keyword">in</tt> <tt id="link-10" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-10', 'range', 'link-3');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">num_organisms</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">new_genome</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="Bio.Seq.MutableSeq" class="py-name" href="#" onclick="return doclink('link-11', 'MutableSeq', 'link-2');">MutableSeq</a></tt><tt class="py-op">(</tt><tt class="py-name">array</tt><tt class="py-op">.</tt><tt class="py-name">array</tt><tt class="py-op">(</tt><tt class="py-name">alphabet_type</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">genome_alphabet</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-comment"># generate the genome randomly</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">gene_num</tt> <tt class="py-keyword">in</tt> <tt id="link-12" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-12', 'range', 'link-3');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">genome_size</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">            <tt class="py-name">new_gene</tt> <tt class="py-op">=</tt> <tt class="py-name">letter_rand</tt><tt class="py-op">.</tt><tt class="py-name">choice</tt><tt class="py-op">(</tt><tt class="py-name">genome_alphabet</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="Bio.Alphabet.Alphabet.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACDNA.letters
+Bio.Alphabet.IUPAC.ExtendedIUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACAmbiguousRNA.letters
+Bio.Alphabet.IUPAC.IUPACProtein.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousDNA.letters
+Bio.Alphabet.IUPAC.IUPACUnambiguousRNA.letters
+Bio.Alphabet.Reduced.HPModel.letters
+Bio.Alphabet.Reduced.Murphy10.letters
+Bio.Alphabet.Reduced.Murphy15.letters
+Bio.Alphabet.Reduced.Murphy4.letters
+Bio.Alphabet.Reduced.Murphy8.letters
+Bio.Alphabet.Reduced.PC5.letters
+Bio.Alphabet.SecondaryStructure.letters
+Bio.Alphabet.SingleLetterAlphabet.letters
+Bio.Alphabet.ThreeLetterProtein.letters
+Bio.NeuralNetwork.Gene.Schema.SchemaDNAAlphabet.letters
+Bio.codonalign.codonalphabet.CodonAlphabet.letters" class="py-name" href="#" onclick="return doclink('link-13', 'letters', 'link-6');">letters</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-name">new_genome</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-14', 'append', 'link-4');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">new_gene</tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-comment"># add the new organism with this genome</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-name">all_orgs</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-15', 'append', 'link-4');">append</a></tt><tt class="py-op">(</tt><tt id="link-16" class="py-name"><a title="Bio.GA.Organism
+Bio.GA.Organism.Organism
+Bio.Graphics.BasicChromosome.Organism" class="py-name" href="#" onclick="return doclink('link-16', 'Organism', 'link-5');">Organism</a></tt><tt class="py-op">(</tt><tt class="py-name">new_genome</tt><tt class="py-op">,</tt> <tt class="py-name">fitness_calculator</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">all_orgs</tt> </tt>
+</div><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"> </tt>
+<a name="Organism"></a><div id="Organism-def"><a name="L90"></a><tt class="py-lineno"> 90</tt> <a class="py-toggle" href="#" id="Organism-toggle" onclick="return toggle('Organism');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html">Organism</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Organism-expanded"><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">    <tt class="py-docstring">"""Represent a single individual in a population.</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring">    Attributes:</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring">    o genome -- The genome of the organism. This is a Bio.MutableSeq</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">    object that has the sequence of the genome, and the alphabet</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">    describing all elements that can be a part of the genome.</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">    o fitness -- The calculate fitness of the organism. This fitness is</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">    based on the last time it was calculated using the fitness_calculator.</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"><tt class="py-docstring">    So... the fitness could potentially be out of date with the real genome</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"><tt class="py-docstring">    if you are not careful to recalculate it after changes with</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-docstring">    recalculate_fitness()</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="Organism.__init__"></a><div id="Organism.__init__-def"><a name="L105"></a><tt class="py-lineno">105</tt> <a class="py-toggle" href="#" id="Organism.__init__-toggle" onclick="return toggle('Organism.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">genome</tt><tt class="py-op">,</tt> <tt class="py-param">fitness_calculator</tt><tt class="py-op">,</tt> <tt class="py-param">start_fitness</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__init__-expanded"><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-docstring">"""Initialize an organism</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-docstring">        o genome -- A MutableSeq object representing the sequence of the</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-docstring">        genome.</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line"><tt class="py-docstring">        o fitness_calculator -- A function that will calculate the fitness</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"><tt class="py-docstring">        of the organism when given the organisms genome.</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"><tt class="py-docstring">        o start_fitness - the starting fitness corresponding with the</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"><tt class="py-docstring">        given genome. If not supplied, the fitness will be calculated</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"><tt class="py-docstring">        using fitness_calculator.</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">genome</tt><tt class="py-op">,</tt> <tt id="link-17" class="py-name"><a title="Bio.Seq.MutableSeq" class="py-name" href="#" onclick="return doclink('link-17', 'MutableSeq', 'link-2');">MutableSeq</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">"Genome must be a MutableSeq"</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt> <tt class="py-op">=</tt> <tt class="py-name">genome</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_fitness_calc</tt> <tt class="py-op">=</tt> <tt class="py-name">fitness_calculator</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt class="py-comment"># calculate the fitness of the genome</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">start_fitness</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fitness</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_fitness_calc</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fitness</tt> <tt class="py-op">=</tt> <tt class="py-name">start_fitness</tt> </tt>
+</div><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"> </tt>
+<a name="Organism.__str__"></a><div id="Organism.__str__-def"><a name="L131"></a><tt class="py-lineno">131</tt> <a class="py-toggle" href="#" id="Organism.__str__-toggle" onclick="return toggle('Organism.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__str__-expanded"><a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">        <tt class="py-docstring">"""Provide a string output for debugging.</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"Genome: %s; Fitness %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fitness</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"> </tt>
+<a name="Organism.__eq__"></a><div id="Organism.__eq__-def"><a name="L136"></a><tt class="py-lineno">136</tt> <a class="py-toggle" href="#" id="Organism.__eq__-toggle" onclick="return toggle('Organism.__eq__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__eq__">__eq__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__eq__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__eq__-expanded"><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-docstring">"""Compare organisms by their genomes (as strings of letters).</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-comment"># See Bio/Seq.py and the comments there about shifting to</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">        <tt class="py-comment"># using simple string equality. Previously Seq objects used</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">        <tt class="py-comment"># object equality, while MutableSeq objects used alphabet</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">        <tt class="py-comment"># aware string equality.</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-18" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Parser.other()=Bio.Phylo.PhyloXMLIO.Parser-class.html#other,Method Bio.Phylo.PhyloXMLIO.Writer.other()=Bio.Phylo.PhyloXMLIO.Writer-class.html#other"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-18', 'other', 'link-18');">other</a></tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line"> </tt>
+<a name="Organism.__ne__"></a><div id="Organism.__ne__-def"><a name="L145"></a><tt class="py-lineno">145</tt> <a class="py-toggle" href="#" id="Organism.__ne__-toggle" onclick="return toggle('Organism.__ne__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__ne__">__ne__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__ne__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__ne__-expanded"><a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">        <tt class="py-docstring">"""Compare organisms by their genomes (as strings of letters).</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-19" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-19', 'other', 'link-18');">other</a></tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line"> </tt>
+<a name="Organism.__lt__"></a><div id="Organism.__lt__-def"><a name="L150"></a><tt class="py-lineno">150</tt> <a class="py-toggle" href="#" id="Organism.__lt__-toggle" onclick="return toggle('Organism.__lt__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__lt__">__lt__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__lt__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__lt__-expanded"><a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">        <tt class="py-docstring">"""Compare organisms by their genomes (as strings of letters).</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-20" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-20', 'other', 'link-18');">other</a></tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"> </tt>
+<a name="Organism.__le__"></a><div id="Organism.__le__-def"><a name="L155"></a><tt class="py-lineno">155</tt> <a class="py-toggle" href="#" id="Organism.__le__-toggle" onclick="return toggle('Organism.__le__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__le__">__le__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__le__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__le__-expanded"><a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line">        <tt class="py-docstring">"""Compare organisms by their genomes (as strings of letters).</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-21" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-21', 'other', 'link-18');">other</a></tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"> </tt>
+<a name="Organism.__gt__"></a><div id="Organism.__gt__-def"><a name="L160"></a><tt class="py-lineno">160</tt> <a class="py-toggle" href="#" id="Organism.__gt__-toggle" onclick="return toggle('Organism.__gt__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__gt__">__gt__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__gt__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__gt__-expanded"><a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">        <tt class="py-docstring">"""Compare organisms by their genomes (as strings of letters).</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-22" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-22', 'other', 'link-18');">other</a></tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"> </tt>
+<a name="Organism.__ge__"></a><div id="Organism.__ge__-def"><a name="L165"></a><tt class="py-lineno">165</tt> <a class="py-toggle" href="#" id="Organism.__ge__-toggle" onclick="return toggle('Organism.__ge__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#__ge__">__ge__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.__ge__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.__ge__-expanded"><a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line">        <tt class="py-docstring">"""Compare organisms by their genomes (as strings of letters).</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;=</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-23" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-23', 'other', 'link-18');">other</a></tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"> </tt>
+<a name="Organism.copy"></a><div id="Organism.copy-def"><a name="L170"></a><tt class="py-lineno">170</tt> <a class="py-toggle" href="#" id="Organism.copy-toggle" onclick="return toggle('Organism.copy');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#copy">copy</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.copy-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.copy-expanded"><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line">        <tt class="py-docstring">"""Return a copy of the organism.</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"><tt class="py-docstring">        This makes it easy to duplicate an organism before changing it.</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">        <tt class="py-name">copy_genome</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-24" class="py-name"><a title="Bio.GA.Organism
+Bio.GA.Organism.Organism
+Bio.Graphics.BasicChromosome.Organism" class="py-name" href="#" onclick="return doclink('link-24', 'Organism', 'link-5');">Organism</a></tt><tt class="py-op">(</tt><tt class="py-name">copy_genome</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_fitness_calc</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fitness</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="Organism.recalculate_fitness"></a><div id="Organism.recalculate_fitness-def"><a name="L178"></a><tt class="py-lineno">178</tt> <a class="py-toggle" href="#" id="Organism.recalculate_fitness-toggle" onclick="return toggle('Organism.recalculate_fitness');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.GA.Organism.Organism-class.html#recalculate_fitness">recalculate_fitness</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Organism.recalculate_fitness-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Organism.recalculate_fitness-expanded"><a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">        <tt class="py-docstring">"""Calculate and reset the fitness of the current genome</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"><tt class="py-docstring">        This should be called after the genome is updated to ensure that</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line"><tt class="py-docstring">        fitness always stays in sync with the current genome.</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">fitness</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_fitness_calc</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">genome</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:28 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Motif.Thresholds</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Motif-module.html">Package&nbsp;Motif</a> ::
+        Module&nbsp;Thresholds
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Motif.Thresholds-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Motif.Thresholds-module.html">Module Bio.Motif.Thresholds</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2008 by Norbert Dojer.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"># Adapted by Bartek Wilczynski.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">"""Approximate calculation of appropriate thresholds for motif finding</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">math</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">random</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution"></a><div id="ScoreDistribution-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="ScoreDistribution-toggle" onclick="return toggle('ScoreDistribution');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html">ScoreDistribution</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="ScoreDistribution-expanded"><a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt class="py-docstring">""" Class representing approximate score distribution for a given motif.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">    Utilizes a dynamic programming approch to calculate the distribution of</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring">    scores with a predefined precision. Provides a number of methods for calculating</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">    thresholds for motif occurences.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="ScoreDistribution.__init__"></a><div id="ScoreDistribution.__init__-def"><a name="L19"></a><tt class="py-lineno">19</tt> <a class="py-toggle" href="#" id="ScoreDistribution.__init__-toggle" onclick="return toggle('ScoreDistribution.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">motif</tt><tt class="py-op">,</tt> <tt class="py-param">precision</tt><tt class="py-op">=</tt><tt class="py-number">10</tt> <tt class="py-op">**</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution.__init__-expanded"><a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Method Bio.Motif._Motif.Motif.min_score()=Bio.Motif._Motif.Motif-class.html#min_score"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-0', 'min_score', 'link-0');">min_score</a></tt> <tt class="py-op">=</tt> <tt id="link-1" class="py-name" targets="Variable Bio.motifs.matrix.PositionSpecificScoringMatrix.min=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#min"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.min" class="py-name" href="#" onclick="return doclink('link-1', 'min', 'link-1');">min</a></tt><tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-2', 'min_score', 'link-0');">min_score</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">interval</tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name" targets="Variable Bio.motifs.matrix.PositionSpecificScoringMatrix.max=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#max"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-3', 'max', 'link-3');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method Bio.Motif._Motif.Motif.max_score()=Bio.Motif._Motif.Motif-class.html#max_score"><a title="Bio.Motif._Motif.Motif.max_score" class="py-name" href="#" onclick="return doclink('link-4', 'max_score', 'link-4');">max_score</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-5', 'min_score', 'link-0');">min_score</a></tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> <tt class="py-op">=</tt> <tt class="py-name">precision</tt> <tt class="py-op">*</tt> <tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method Bio.Blast.NCBIStandalone._AlignmentConsumer.length()=Bio.Blast.NCBIStandalone._AlignmentConsumer-class.html#length"><a title="Bio.Blast.NCBIStandalone._AlignmentConsumer.length" class="py-name" href="#" onclick="return doclink('link-6', 'length', 'link-6');">length</a></tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">step</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">interval</tt> <tt class="py-op">/</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mo_density</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-number">0.0</tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mo_density</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method Bio.Motif.Thresholds.ScoreDistribution._index_diff()=Bio.Motif.Thresholds.ScoreDistribution-class.html#_index_diff,Method Bio.motifs.thresholds.ScoreDistribution._index_diff()=Bio.motifs.thresholds.ScoreDistribution-class.html#_index_diff"><a title="Bio.Motif.Thresholds.ScoreDistribution._index_diff
+Bio.motifs.thresholds.ScoreDistribution._index_diff" class="py-name" href="#" onclick="return doclink('link-7', '_index_diff', 'link-7');">_index_diff</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-8', 'min_score', 'link-0');">min_score</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">bg_density</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-number">0.0</tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">bg_density</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="Bio.Motif.Thresholds.ScoreDistribution._index_diff
+Bio.motifs.thresholds.ScoreDistribution._index_diff" class="py-name" href="#" onclick="return doclink('link-9', '_index_diff', 'link-7');">_index_diff</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-10', 'min_score', 'link-0');">min_score</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method Bio.Motif._Motif.Motif.ic()=Bio.Motif._Motif.Motif-class.html#ic"><a title="Bio.Motif._Motif.Motif.ic" class="py-name" href="#" onclick="return doclink('link-11', 'ic', 'link-11');">ic</a></tt> <tt class="py-op">=</tt> <tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="Bio.Motif._Motif.Motif.ic" class="py-name" href="#" onclick="return doclink('link-12', 'ic', 'link-11');">ic</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">lo</tt><tt class="py-op">,</tt> <tt class="py-name">mo</tt> <tt class="py-keyword">in</tt> <tt class="py-name">zip</tt><tt class="py-op">(</tt><tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method Bio.Motif._Motif.Motif.log_odds()=Bio.Motif._Motif.Motif-class.html#log_odds,Method Bio.motifs.matrix.PositionWeightMatrix.log_odds()=Bio.motifs.matrix.PositionWeightMatrix-class.html#log_odds"><a title="Bio.Motif._Motif.Motif.log_odds
+Bio.motifs.matrix.PositionWeightMatrix.log_odds" class="py-name" href="#" onclick="return doclink('link-13', 'log_odds', 'link-13');">log_odds</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.Motif._Motif.Motif.pwm()=Bio.Motif._Motif.Motif-class.html#pwm,Variable Bio.motifs.Motif.pwm=Bio.motifs.Motif-class.html#pwm"><a title="Bio.Motif._Motif.Motif.pwm
+Bio.motifs.Motif.pwm" class="py-name" href="#" onclick="return doclink('link-14', 'pwm', 'link-14');">pwm</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.Motif.Thresholds.ScoreDistribution.modify()=Bio.Motif.Thresholds.ScoreDistribution-class.html#modify,Method Bio.motifs.thresholds.ScoreDistribution.modify()=Bio.motifs.thresholds.ScoreDistribution-class.html#modify"><a title="Bio.Motif.Thresholds.ScoreDistribution.modify
+Bio.motifs.thresholds.ScoreDistribution.modify" class="py-name" href="#" onclick="return doclink('link-15', 'modify', 'link-15');">modify</a></tt><tt class="py-op">(</tt><tt class="py-name">lo</tt><tt class="py-op">,</tt> <tt class="py-name">mo</tt><tt class="py-op">,</tt> <tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Variable Bio.motifs.Motif.background=Bio.motifs.Motif-class.html#background"><a title="Bio.motifs.Motif.background" class="py-name" href="#" onclick="return doclink('link-16', 'background', 'link-16');">background</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution._index_diff"></a><div id="ScoreDistribution._index_diff-def"><a name="L32"></a><tt class="py-lineno">32</tt> <a class="py-toggle" href="#" id="ScoreDistribution._index_diff-toggle" onclick="return toggle('ScoreDistribution._index_diff');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#_index_diff">_index_diff</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">,</tt> <tt class="py-param">y</tt><tt class="py-op">=</tt><tt class="py-number">0.0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution._index_diff-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution._index_diff-expanded"><a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt id="link-17" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-17', 'x', 'link-17');">x</a></tt> <tt class="py-op">-</tt> <tt id="link-18" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.y=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#y"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-18', 'y', 'link-18');">y</a></tt> <tt class="py-op">+</tt> <tt class="py-number">0.5</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">step</tt><tt class="py-op">)</tt> <tt class="py-op">//</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">step</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution._add"></a><div id="ScoreDistribution._add-def"><a name="L35"></a><tt class="py-lineno">35</tt> <a class="py-toggle" href="#" id="ScoreDistribution._add-toggle" onclick="return toggle('ScoreDistribution._add');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#_add">_add</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">i</tt><tt class="py-op">,</tt> <tt class="py-param">j</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution._add-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution._add-expanded"><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-19" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-19', 'max', 'link-3');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.min" class="py-name" href="#" onclick="return doclink('link-20', 'min', 'link-1');">min</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt id="link-21" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-21', 'i', 'link-21');">i</a></tt> <tt class="py-op">+</tt> <tt class="py-name">j</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution.modify"></a><div id="ScoreDistribution.modify-def"><a name="L38"></a><tt class="py-lineno">38</tt> <a class="py-toggle" href="#" id="ScoreDistribution.modify-toggle" onclick="return toggle('ScoreDistribution.modify');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#modify">modify</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">scores</tt><tt class="py-op">,</tt> <tt class="py-param">mo_probs</tt><tt class="py-op">,</tt> <tt class="py-param">bg_probs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution.modify-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution.modify-expanded"><a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt class="py-name">mo_new</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-number">0.0</tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">        <tt class="py-name">bg_new</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-number">0.0</tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">k</tt><tt class="py-op">,</tt> <tt class="py-name">v</tt> <tt class="py-keyword">in</tt> <tt class="py-name">scores</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method Bio.Crystal.Crystal.items()=Bio.Crystal.Crystal-class.html#items,Method Bio.File._IndexedSeqFileDict.items()=Bio.File._IndexedSeqFileDict-class.html#items,Method Bio.Phylo.PhyloXML.Events.items()=Bio.Phylo.PhyloXML.Events-class.html#items,Variable Bio.SearchIO._model.query.QueryResult.items=Bio.SearchIO._model.query.QueryResult-class.html#items,Method Bio._py3k._ordereddict.OrderedDict.items()=Bio._py3k._ordereddict.OrderedDict-class.html#items,Method BioSQL.BioSeqDatabase.BioSeqDatabase.items()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#items,Method BioSQL.BioSeqDatabase.DBServer.items()=BioSQL.BioSeqDatabase.DBServer-class.html#items"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-22', 'items', 'link-22');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">            <tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="Bio.Motif.Thresholds.ScoreDistribution._index_diff
+Bio.motifs.thresholds.ScoreDistribution._index_diff" class="py-name" href="#" onclick="return doclink('link-23', '_index_diff', 'link-7');">_index_diff</a></tt><tt class="py-op">(</tt><tt class="py-name">v</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt id="link-24" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-24', 'i', 'link-21');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-25" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-25', 'range', 'link-25');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">                <tt class="py-name">mo_new</tt><tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Method Bio.Motif.Thresholds.ScoreDistribution._add()=Bio.Motif.Thresholds.ScoreDistribution-class.html#_add,Method Bio.motifs.thresholds.ScoreDistribution._add()=Bio.motifs.thresholds.ScoreDistribution-class.html#_add"><a title="Bio.Motif.Thresholds.ScoreDistribution._add
+Bio.motifs.thresholds.ScoreDistribution._add" class="py-name" href="#" onclick="return doclink('link-26', '_add', 'link-26');">_add</a></tt><tt class="py-op">(</tt><tt id="link-27" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-27', 'i', 'link-21');">i</a></tt><tt class="py-op">,</tt> <tt class="py-name">d</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mo_density</tt><tt class="py-op">[</tt><tt id="link-28" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-28', 'i', 'link-21');">i</a></tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">mo_probs</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">                <tt class="py-name">bg_new</tt><tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="Bio.Motif.Thresholds.ScoreDistribution._add
+Bio.motifs.thresholds.ScoreDistribution._add" class="py-name" href="#" onclick="return doclink('link-29', '_add', 'link-26');">_add</a></tt><tt class="py-op">(</tt><tt id="link-30" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-30', 'i', 'link-21');">i</a></tt><tt class="py-op">,</tt> <tt class="py-name">d</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">bg_density</tt><tt class="py-op">[</tt><tt id="link-31" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-31', 'i', 'link-21');">i</a></tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">bg_probs</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mo_density</tt> <tt class="py-op">=</tt> <tt class="py-name">mo_new</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">bg_density</tt> <tt class="py-op">=</tt> <tt class="py-name">bg_new</tt> </tt>
+</div><a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution.threshold_fpr"></a><div id="ScoreDistribution.threshold_fpr-def"><a name="L49"></a><tt class="py-lineno">49</tt> <a class="py-toggle" href="#" id="ScoreDistribution.threshold_fpr-toggle" onclick="return toggle('ScoreDistribution.threshold_fpr');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#threshold_fpr">threshold_fpr</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">fpr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution.threshold_fpr-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution.threshold_fpr-expanded"><a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"><tt class="py-docstring">        Approximate the log-odds threshold which makes the type I error (false positive rate).</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">        <tt id="link-32" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-32', 'i', 'link-21');">i</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-name">prob</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">prob</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">fpr</tt><tt class="py-op">:</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">            <tt id="link-33" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-33', 'i', 'link-21');">i</a></tt> <tt class="py-op">-=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">            <tt class="py-name">prob</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">bg_density</tt><tt class="py-op">[</tt><tt id="link-34" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-34', 'i', 'link-21');">i</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-35', 'min_score', 'link-0');">min_score</a></tt> <tt class="py-op">+</tt> <tt id="link-36" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-36', 'i', 'link-21');">i</a></tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">step</tt> </tt>
+</div><a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution.threshold_fnr"></a><div id="ScoreDistribution.threshold_fnr-def"><a name="L60"></a><tt class="py-lineno">60</tt> <a class="py-toggle" href="#" id="ScoreDistribution.threshold_fnr-toggle" onclick="return toggle('ScoreDistribution.threshold_fnr');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#threshold_fnr">threshold_fnr</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">fnr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution.threshold_fnr-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution.threshold_fnr-expanded"><a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"><tt class="py-docstring">        Approximate the log-odds threshold which makes the type II error (false negative rate).</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">        <tt id="link-37" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-37', 'i', 'link-21');">i</a></tt> <tt class="py-op">=</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">        <tt class="py-name">prob</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">prob</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">fnr</tt><tt class="py-op">:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">            <tt id="link-38" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-38', 'i', 'link-21');">i</a></tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">            <tt class="py-name">prob</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mo_density</tt><tt class="py-op">[</tt><tt id="link-39" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-39', 'i', 'link-21');">i</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-40', 'min_score', 'link-0');">min_score</a></tt> <tt class="py-op">+</tt> <tt id="link-41" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-41', 'i', 'link-21');">i</a></tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">step</tt> </tt>
+</div><a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution.threshold_balanced"></a><div id="ScoreDistribution.threshold_balanced-def"><a name="L71"></a><tt class="py-lineno">71</tt> <a class="py-toggle" href="#" id="ScoreDistribution.threshold_balanced-toggle" onclick="return toggle('ScoreDistribution.threshold_balanced');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#threshold_balanced">threshold_balanced</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">rate_proportion</tt><tt class="py-op">=</tt><tt class="py-number">1.0</tt><tt class="py-op">,</tt> <tt class="py-param">return_rate</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution.threshold_balanced-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution.threshold_balanced-expanded"><a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line"><tt class="py-docstring">        Approximate the log-odds threshold which makes FNR equal to FPR times rate_proportion</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">        <tt id="link-42" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-42', 'i', 'link-21');">i</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">n_points</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">        <tt class="py-name">fpr</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">        <tt class="py-name">fnr</tt> <tt class="py-op">=</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">fpr</tt> <tt class="py-op">*</tt> <tt class="py-name">rate_proportion</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">fnr</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">            <tt id="link-43" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-43', 'i', 'link-21');">i</a></tt> <tt class="py-op">-=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">            <tt class="py-name">fpr</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">bg_density</tt><tt class="py-op">[</tt><tt id="link-44" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-44', 'i', 'link-21');">i</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">            <tt class="py-name">fnr</tt> <tt class="py-op">-=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">mo_density</tt><tt class="py-op">[</tt><tt id="link-45" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-45', 'i', 'link-21');">i</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">return_rate</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-46', 'min_score', 'link-0');">min_score</a></tt> <tt class="py-op">+</tt> <tt id="link-47" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-47', 'i', 'link-21');">i</a></tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">step</tt><tt class="py-op">,</tt> <tt class="py-name">fpr</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.Motif._Motif.Motif.min_score" class="py-name" href="#" onclick="return doclink('link-48', 'min_score', 'link-0');">min_score</a></tt> <tt class="py-op">+</tt> <tt id="link-49" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-49', 'i', 'link-21');">i</a></tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">step</tt> </tt>
+</div><a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line"> </tt>
+<a name="ScoreDistribution.threshold_patser"></a><div id="ScoreDistribution.threshold_patser-def"><a name="L87"></a><tt class="py-lineno">87</tt> <a class="py-toggle" href="#" id="ScoreDistribution.threshold_patser-toggle" onclick="return toggle('ScoreDistribution.threshold_patser');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Motif.Thresholds.ScoreDistribution-class.html#threshold_patser">threshold_patser</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ScoreDistribution.threshold_patser-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ScoreDistribution.threshold_patser-expanded"><a name="L88"></a><tt class="py-lineno">88</tt>  <tt class="py-line">        <tt class="py-docstring">"""Threshold selection mimicking the behaviour of patser (Hertz, Stormo 1999) software.</tt> </tt>
+<a name="L89"></a><tt class="py-lineno">89</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L90"></a><tt class="py-lineno">90</tt>  <tt class="py-line"><tt class="py-docstring">        It selects such a threshold that the log(fpr)=-ic(M)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno">91</tt>  <tt class="py-line"><tt class="py-docstring">        note: the actual patser software uses natural logarithms instead of log_2, so the numbers</tt> </tt>
+<a name="L92"></a><tt class="py-lineno">92</tt>  <tt class="py-line"><tt class="py-docstring">        are not directly comparable.</tt> </tt>
+<a name="L93"></a><tt class="py-lineno">93</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L94"></a><tt class="py-lineno">94</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-50" class="py-name" targets="Method Bio.Motif.Thresholds.ScoreDistribution.threshold_fpr()=Bio.Motif.Thresholds.ScoreDistribution-class.html#threshold_fpr,Method Bio.motifs.thresholds.ScoreDistribution.threshold_fpr()=Bio.motifs.thresholds.ScoreDistribution-class.html#threshold_fpr"><a title="Bio.Motif.Thresholds.ScoreDistribution.threshold_fpr
+Bio.motifs.thresholds.ScoreDistribution.threshold_fpr" class="py-name" href="#" onclick="return doclink('link-50', 'threshold_fpr', 'link-50');">threshold_fpr</a></tt><tt class="py-op">(</tt><tt class="py-name">fpr</tt><tt class="py-op">=</tt><tt class="py-number">2</tt> <tt class="py-op">**</tt> <tt class="py-op">-</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="Bio.Motif._Motif.Motif.ic" class="py-name" href="#" onclick="return doclink('link-51', 'ic', 'link-11');">ic</a></tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L95"></a><tt class="py-lineno">95</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:45 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

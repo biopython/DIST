@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.bgzf</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Module&nbsp;bgzf
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.bgzf-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module bgzf</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.bgzf-pysrc.html">source&nbsp;code</a></span></p>
+<p>Read and write BGZF compressed files (the GZIP variant used in BAM).</p>
+<p>The SAM/BAM file format (Sequence Alignment/Map) comes in a plain text
+format (SAM), and a compressed binary format (BAM). The latter uses a
+modified form of gzip compression called BGZF (Blocked GNU Zip Format),
+which can be applied to any file format to provide compression with
+efficient random access. BGZF is described together with the SAM/BAM
+file format at <a class="rst-reference external" href="http://samtools.sourceforge.net/SAM1.pdf" target="_top">http://samtools.sourceforge.net/SAM1.pdf</a></p>
+<p>Please read the text below about 'virtual offsets' before using BGZF
+files for random access.</p>
+<div class="rst-section" id="rst-aim-of-this-module">
+<h1 class="heading">Aim of this module</h1>
+<p>The Python gzip library can be used to read BGZF files, since for
+decompression they are just (specialised) gzip files. What this
+module aims to facilitate is random access to BGZF files (using the
+'virtual offset' idea), and writing BGZF files (which means using
+suitably sized gzip blocks and writing the extra 'BC' field in the
+gzip headers). As in the gzip library, the zlib library is used
+internally.</p>
+<p>In addition to being required for random access to and writing of
+BAM files, the BGZF format can also be used on other sequential
+data (in the sense of one record after another), such as most of
+the sequence data formats supported in Bio.SeqIO (like FASTA,
+FASTQ, GenBank, etc) or large MAF alignments.</p>
+<p>The Bio.SeqIO indexing functions use this module to support BGZF files.</p>
+</div>
+<div class="rst-section" id="rst-technical-introduction-to-bgzf">
+<h1 class="heading">Technical Introduction to BGZF</h1>
+<p>The gzip file format allows multiple compressed blocks, each of which
+could be a stand alone gzip file. As an interesting bonus, this means
+you can use Unix &quot;cat&quot; to combined to gzip files into one by
+concatenating them. Also, each block can have one of several compression
+levels (including uncompressed, which actually takes up a little bit
+more space due to the gzip header).</p>
+<p>What the BAM designers realised was that while random access to data
+stored in traditional gzip files was slow, breaking the file into
+gzip blocks would allow fast random access to each block. To access
+a particular piece of the decompressed data, you just need to know
+which block it starts in (the offset of the gzip block start), and
+how far into the (decompressed) contents of the block you need to
+read.</p>
+<p>One problem with this is finding the gzip block sizes efficiently.
+You can do it with a standard gzip file, but it requires every block
+to be decompressed -- and that would be rather slow. Additionally
+typical gzip files may use very large blocks.</p>
+<p>All that differs in BGZF is that compressed size of each gzip block
+is limited to 2^16 bytes, and an extra 'BC' field in the gzip header
+records this size. Traditional decompression tools can ignore this,
+and unzip the file just like any other gzip file.</p>
+<p>The point of this is you can look at the first BGZF block, find out
+how big it is from this 'BC' header, and thus seek immediately to
+the second block, and so on.</p>
+<p>The BAM indexing scheme records read positions using a 64 bit
+'virtual offset', comprising coffset &lt;&lt; 16 | uoffset, where coffset
+is the file offset of the BGZF block containing the start of the read
+(unsigned integer using up to 64-16 = 48 bits), and uoffset is the
+offset within the (decompressed) block (unsigned 16 bit integer).</p>
+<p>This limits you to BAM files where the last block starts by 2^48
+bytes, or 256 petabytes, and the decompressed size of each block
+is at most 2^16 bytes, or 64kb. Note that this matches the BGZF
+'BC' field size which limits the compressed size of each block to
+2^16 bytes, allowing for BAM files to use BGZF with no gzip
+compression (useful for intermediate files in memory to reduced
+CPU load).</p>
+</div>
+<div class="rst-section" id="rst-warning-about-namespaces">
+<h1 class="heading">Warning about namespaces</h1>
+<p>It is considered a bad idea to use &quot;from XXX import <tt class="rst-docutils literal">*</tt>&quot; in Python, because
+it pollutes the namespace. This is a real issue with Bio.bgzf (and the
+standard Python library gzip) because they contain a function called open
+i.e. Suppose you do this:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.bgzf <span class="py-keyword">import</span> *
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(open.__module__)
+<span class="py-output">Bio.bgzf</span></pre>
+<p>Or,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> gzip <span class="py-keyword">import</span> *
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(open.__module__)
+<span class="py-output">gzip</span></pre>
+<p>Notice that the open function has been replaced. You can &quot;fix&quot; this if you
+need to by importing the built-in open function:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>try:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> __builtin__ <span class="py-keyword">import</span> open <span class="py-comment"># Python 2</span>
+<span class="py-more">... </span><span class="py-keyword">except</span> ImportError:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> builtins <span class="py-keyword">import</span> open <span class="py-comment"># Python 3</span>
+<span class="py-more">...</span></pre>
+<p>However, what we recommend instead is to use the explicit namespace, e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> bgzf
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(bgzf.open.__module__)
+<span class="py-output">Bio.bgzf</span></pre>
+</div>
+<div class="rst-section" id="rst-example">
+<h1 class="heading">Example</h1>
+<p>This is an ordinary GenBank file compressed using BGZF, so it can
+be decompressed using gzip,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> gzip
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = gzip.open(<span class="py-string">&quot;GenBank/NC_000932.gb.bgz&quot;</span>, <span class="py-string">&quot;r&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>assert 0 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span>line = handle.readline()
+<span class="py-prompt">&gt;&gt;&gt; </span>assert 80 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span>line = handle.readline()
+<span class="py-prompt">&gt;&gt;&gt; </span>assert 143 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span>data = handle.read(70000)
+<span class="py-prompt">&gt;&gt;&gt; </span>assert 70143 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+<p>We can also access the file using the BGZF reader - but pay
+attention to the file offsets which will be explained below:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = BgzfReader(<span class="py-string">&quot;GenBank/NC_000932.gb.bgz&quot;</span>, <span class="py-string">&quot;r&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>assert 0 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().rstrip())
+<span class="py-output">LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>assert 80 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().rstrip())
+<span class="py-output">DEFINITION  Arabidopsis thaliana chloroplast, complete genome.</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>assert 143 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span>data = handle.read(70000)
+<span class="py-prompt">&gt;&gt;&gt; </span>assert 987828735 == handle.tell()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().rstrip())
+<span class="py-output">f=&quot;GeneID:844718&quot;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().rstrip())
+<span class="py-output">     CDS             complement(join(84337..84771,85454..85843))</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>offset = handle.seek(make_virtual_offset(55074, 126))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().rstrip())
+<span class="py-output">    68521 tatgtcattc gaaattgtat aaagacaact cctatttaat agagctattt gtgcaagtat</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+<p>Notice the handle's offset looks different as a BGZF file. This
+brings us to the key point about BGZF, which is the block structure:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = open(<span class="py-string">&quot;GenBank/NC_000932.gb.bgz&quot;</span>, <span class="py-string">&quot;rb&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> <span class="py-builtin">values</span> <span class="py-keyword">in</span> BgzfBlocks(handle):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Raw start %i, raw length %i; data start %i, data length %i&quot;</span> % <span class="py-builtin">values</span>)
+<span class="py-output">Raw start 0, raw length 15073; data start 0, data length 65536</span>
+<span class="py-output">Raw start 15073, raw length 17857; data start 65536, data length 65536</span>
+<span class="py-output">Raw start 32930, raw length 22144; data start 131072, data length 65536</span>
+<span class="py-output">Raw start 55074, raw length 22230; data start 196608, data length 65536</span>
+<span class="py-output">Raw start 77304, raw length 14939; data start 262144, data length 43478</span>
+<span class="py-output">Raw start 92243, raw length 28; data start 305622, data length 0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+<p>In this example the first three blocks are 'full' and hold 65536 bytes
+of uncompressed data. The fourth block isn't full and holds 43478 bytes.
+Finally there is a special empty fifth block which takes 28 bytes on
+disk and serves as an 'end of file' (EOF) marker. If this is missing,
+it is possible your BGZF file is incomplete.</p>
+<p>By reading ahead 70,000 bytes we moved into the second BGZF block,
+and at that point the BGZF virtual offsets start to look different
+to a simple offset into the decompressed data as exposed by the gzip
+library.</p>
+<p>As an example, consider seeking to the decompressed position 196734.
+Since 196734 = 65536 + 65536 + 65536 + 126 = 65536*3 + 126, this
+is equivalent to jumping the first three blocks (which in this
+specific example are all size 65536 after decompression - which
+does not always hold) and starting at byte 126 of the fourth block
+(after decompression). For BGZF, we need to know the fourth block's
+offset of 55074 and the offset within the block of 126 to get the
+BGZF virtual offset.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(55074 &lt;&lt; 16 | 126)
+<span class="py-output">3609329790</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(bgzf.make_virtual_offset(55074, 126))
+<span class="py-output">3609329790</span></pre>
+<p>Thus for this BGZF file, decompressed position 196734 corresponds
+to the virtual offset 3609329790. However, another BGZF file with
+different contents would have compressed more or less efficiently,
+so the compressed blocks would be different sizes. What this means
+is the mapping between the uncompressed offset and the compressed
+virtual offset depends on the BGZF file you are using.</p>
+<p>If you are accessing a BGZF file via this module, just use the
+handle.tell() method to note the virtual offset of a position you
+may later want to return to using handle.seek().</p>
+<p>The catch with BGZF virtual offsets is while they can be compared
+(which offset comes first in the file), you cannot safely subtract
+them to get the size of the data between them, nor add/subtract
+a relative offset.</p>
+<p>Of course you can parse this file with Bio.SeqIO using BgzfReader,
+although there isn't any benefit over using gzip.open(...), unless
+you want to index BGZF compressed sequence files:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = BgzfReader(<span class="py-string">&quot;GenBank/NC_000932.gb.bgz&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(handle, <span class="py-string">&quot;genbank&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.id)
+<span class="py-output">NC_000932.1</span></pre>
+</div>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.bgzf.BgzfReader-class.html" class="summary-name">BgzfReader</a><br />
+      BGZF reader, acts like a read only handle but seek/tell differ.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.bgzf.BgzfWriter-class.html" class="summary-name">BgzfWriter</a>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="open"></a><span class="summary-sig-name">open</span>(<span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">mode</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">rb</code><code class="variable-quote">'</code></span>)</span><br />
+      Open a BGZF file for reading, writing or appending.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.bgzf-pysrc.html#open">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.bgzf-module.html#make_virtual_offset" class="summary-sig-name">make_virtual_offset</a>(<span class="summary-sig-arg">block_start_offset</span>,
+        <span class="summary-sig-arg">within_block_offset</span>)</span><br />
+      Compute a BGZF virtual offset from block start and within block offsets.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.bgzf-pysrc.html#make_virtual_offset">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="split_virtual_offset"></a><span class="summary-sig-name">split_virtual_offset</span>(<span class="summary-sig-arg">virtual_offset</span>)</span><br />
+      Divides a 64-bit BGZF virtual offset into block start &amp; within block offsets.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.bgzf-pysrc.html#split_virtual_offset">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.bgzf-module.html#BgzfBlocks" class="summary-sig-name">BgzfBlocks</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Low level debugging function to inspect BGZF blocks.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.bgzf-pysrc.html#BgzfBlocks">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_load_bgzf_block"></a><span class="summary-sig-name">_load_bgzf_block</span>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">text_mode</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Internal function to load the next BGZF function (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.bgzf-pysrc.html#_load_bgzf_block">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_bgzf_magic"></a><span class="summary-name">_bgzf_magic</span> = <code title="'\x1f\x8b\x08\x04'"><code class="variable-quote">'</code><code class="variable-string">\x1f\x8b\x08\x04</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.bgzf-module.html#_bgzf_header" class="summary-name" onclick="show_private();">_bgzf_header</a> = <code title="'\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00'"><code class="variable-quote">'</code><code class="variable-string">\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.bgzf-module.html#_bgzf_eof" class="summary-name" onclick="show_private();">_bgzf_eof</a> = <code title="'\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00\x0\
+3\x00\x00\x00\x00\x00\x00\x00\x00\x00'"><code class="variable-quote">'</code><code class="variable-string">\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00B</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_bytes_BC"></a><span class="summary-name">_bytes_BC</span> = <code title="'BC'"><code class="variable-quote">'</code><code class="variable-string">BC</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio'"><code class="variable-quote">'</code><code class="variable-string">Bio</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="make_virtual_offset"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_virtual_offset</span>(<span class="sig-arg">block_start_offset</span>,
+        <span class="sig-arg">within_block_offset</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.bgzf-pysrc.html#make_virtual_offset">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Compute a BGZF virtual offset from block start and within block offsets.</p>
+<p>The BAM indexing scheme records read positions using a 64 bit
+'virtual offset', comprising in C terms:</p>
+<p>block_start_offset &lt;&lt; 16 | within_block_offset</p>
+<p>Here block_start_offset is the file offset of the BGZF block
+start (unsigned integer using up to 64-16 = 48 bits), and
+within_block_offset within the (decompressed) block (unsigned
+16 bit integer).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>make_virtual_offset(0, 0)
+<span class="py-output">0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>make_virtual_offset(0, 1)
+<span class="py-output">1</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>make_virtual_offset(0, 2**16 - 1)
+<span class="py-output">65535</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>make_virtual_offset(0, 2**16)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">...</span>
+<span class="py-except">ValueError: Require 0 &lt;= within_block_offset &lt; 2**16, got 65536</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>65536 == make_virtual_offset(1, 0)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>65537 == make_virtual_offset(1, 1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>131071 == make_virtual_offset(1, 2**16 - 1)
+<span class="py-output">True</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>6553600000 == make_virtual_offset(100000, 0)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>6553600001 == make_virtual_offset(100000, 1)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>6553600010 == make_virtual_offset(100000, 10)
+<span class="py-output">True</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>make_virtual_offset(2**48, 0)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">...</span>
+<span class="py-except">ValueError: Require 0 &lt;= block_start_offset &lt; 2**48, got 281474976710656</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="BgzfBlocks"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">BgzfBlocks</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.bgzf-pysrc.html#BgzfBlocks">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Low level debugging function to inspect BGZF blocks.</p>
+<p>Expects a BGZF compressed file opened in binary read mode using
+the builtin open function. Do not use a handle from this bgzf
+module or the gzip module's open function which will decompress
+the file.</p>
+<p>Returns the block start offset (see virtual offsets), the block
+length (add these for the start of the next block), and the
+decompressed length of the blocks contents (limited to 65536 in
+BGZF), as an iterator - one tuple per BGZF block.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>try:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> __builtin__ <span class="py-keyword">import</span> open <span class="py-comment"># Python 2</span>
+<span class="py-more">... </span><span class="py-keyword">except</span> ImportError:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> builtins <span class="py-keyword">import</span> open <span class="py-comment"># Python 3</span>
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = open(<span class="py-string">&quot;SamBam/ex1.bam&quot;</span>, <span class="py-string">&quot;rb&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> <span class="py-builtin">values</span> <span class="py-keyword">in</span> BgzfBlocks(handle):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Raw start %i, raw length %i; data start %i, data length %i&quot;</span> % <span class="py-builtin">values</span>)
+<span class="py-output">Raw start 0, raw length 18239; data start 0, data length 65536</span>
+<span class="py-output">Raw start 18239, raw length 18223; data start 65536, data length 65536</span>
+<span class="py-output">Raw start 36462, raw length 18017; data start 131072, data length 65536</span>
+<span class="py-output">Raw start 54479, raw length 17342; data start 196608, data length 65536</span>
+<span class="py-output">Raw start 71821, raw length 17715; data start 262144, data length 65536</span>
+<span class="py-output">Raw start 89536, raw length 17728; data start 327680, data length 65536</span>
+<span class="py-output">Raw start 107264, raw length 17292; data start 393216, data length 63398</span>
+<span class="py-output">Raw start 124556, raw length 28; data start 456614, data length 0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+<p>Indirectly we can tell this file came from an old version of
+samtools because all the blocks (except the final one and the
+dummy empty EOF marker block) are 65536 bytes.  Later versions
+avoid splitting a read between two blocks, and give the header
+its own block (useful to speed up replacing the header). You
+can see this in ex1_refresh.bam created using samtools 0.1.18:</p>
+<p>samtools view -b ex1.bam &gt; ex1_refresh.bam</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = open(<span class="py-string">&quot;SamBam/ex1_refresh.bam&quot;</span>, <span class="py-string">&quot;rb&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> <span class="py-builtin">values</span> <span class="py-keyword">in</span> BgzfBlocks(handle):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Raw start %i, raw length %i; data start %i, data length %i&quot;</span> % <span class="py-builtin">values</span>)
+<span class="py-output">Raw start 0, raw length 53; data start 0, data length 38</span>
+<span class="py-output">Raw start 53, raw length 18195; data start 38, data length 65434</span>
+<span class="py-output">Raw start 18248, raw length 18190; data start 65472, data length 65409</span>
+<span class="py-output">Raw start 36438, raw length 18004; data start 130881, data length 65483</span>
+<span class="py-output">Raw start 54442, raw length 17353; data start 196364, data length 65519</span>
+<span class="py-output">Raw start 71795, raw length 17708; data start 261883, data length 65411</span>
+<span class="py-output">Raw start 89503, raw length 17709; data start 327294, data length 65466</span>
+<span class="py-output">Raw start 107212, raw length 17390; data start 392760, data length 63854</span>
+<span class="py-output">Raw start 124602, raw length 28; data start 456614, data length 0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+<p>The above example has no embedded SAM header (thus the first block
+is very small at just 38 bytes of decompressed data), while the next
+example does (a larger block of 103 bytes). Notice that the rest of
+the blocks show the same sizes (they contain the same read data):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = open(<span class="py-string">&quot;SamBam/ex1_header.bam&quot;</span>, <span class="py-string">&quot;rb&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> <span class="py-builtin">values</span> <span class="py-keyword">in</span> BgzfBlocks(handle):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Raw start %i, raw length %i; data start %i, data length %i&quot;</span> % <span class="py-builtin">values</span>)
+<span class="py-output">Raw start 0, raw length 104; data start 0, data length 103</span>
+<span class="py-output">Raw start 104, raw length 18195; data start 103, data length 65434</span>
+<span class="py-output">Raw start 18299, raw length 18190; data start 65537, data length 65409</span>
+<span class="py-output">Raw start 36489, raw length 18004; data start 130946, data length 65483</span>
+<span class="py-output">Raw start 54493, raw length 17353; data start 196429, data length 65519</span>
+<span class="py-output">Raw start 71846, raw length 17708; data start 261948, data length 65411</span>
+<span class="py-output">Raw start 89554, raw length 17709; data start 327359, data length 65466</span>
+<span class="py-output">Raw start 107263, raw length 17390; data start 392825, data length 63854</span>
+<span class="py-output">Raw start 124653, raw length 28; data start 456679, data length 0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_bgzf_header"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_bgzf_header</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'</code><code class="variable-string">\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00</code><code class="variable-quote">'</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_bgzf_eof"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_bgzf_eof</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'</code><code class="variable-string">\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC\x02\x00\x1b\x00\x0</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">3\x00\x00\x00\x00\x00\x00\x00\x00\x00</code><code class="variable-quote">'</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:30 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

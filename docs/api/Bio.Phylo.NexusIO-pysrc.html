@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Phylo.NexusIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Phylo-module.html">Package&nbsp;Phylo</a> ::
+        Module&nbsp;NexusIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Phylo.NexusIO-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Phylo.NexusIO-module.html">Module Bio.Phylo.NexusIO</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2009 by Eric Talevich (eric.talevich@gmail.com)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># license. Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">"""I/O function wrappers for `Bio.Nexus` trees."""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">itertools</tt> <tt class="py-keyword">import</tt> <tt class="py-name">chain</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.Nexus=Bio.Nexus-module.html,Module Bio.Nexus.Nexus=Bio.Nexus.Nexus-module.html,Class Bio.Nexus.Nexus.Nexus=Bio.Nexus.Nexus.Nexus-class.html"><a title="Bio.Nexus
+Bio.Nexus.Nexus
+Bio.Nexus.Nexus.Nexus" class="py-name" href="#" onclick="return doclink('link-1', 'Nexus', 'link-1');">Nexus</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name"><a title="Bio.Nexus
+Bio.Nexus.Nexus
+Bio.Nexus.Nexus.Nexus" class="py-name" href="#" onclick="return doclink('link-2', 'Nexus', 'link-1');">Nexus</a></tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package Bio.Phylo=Bio.Phylo-module.html"><a title="Bio.Phylo" class="py-name" href="#" onclick="return doclink('link-4', 'Phylo', 'link-4');">Phylo</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name" targets="Module Bio.Phylo.Newick=Bio.Phylo.Newick-module.html"><a title="Bio.Phylo.Newick" class="py-name" href="#" onclick="return doclink('link-5', 'Newick', 'link-5');">Newick</a></tt><tt class="py-op">,</tt> <tt id="link-6" class="py-name" targets="Module Bio.Phylo.NewickIO=Bio.Phylo.NewickIO-module.html"><a title="Bio.Phylo.NewickIO" class="py-name" href="#" onclick="return doclink('link-6', 'NewickIO', 'link-6');">NewickIO</a></tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment"># Structure of a Nexus tree-only file</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt id="link-7" class="py-name" targets="Variable Bio.Phylo.NexusIO.NEX_TEMPLATE=Bio.Phylo.NexusIO-module.html#NEX_TEMPLATE"><a title="Bio.Phylo.NexusIO.NEX_TEMPLATE" class="py-name" href="#" onclick="return doclink('link-7', 'NEX_TEMPLATE', 'link-7');">NEX_TEMPLATE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"""\</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-string">#NEXUS</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-string">Begin Taxa;</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-string"> Dimensions NTax=%(count)d;</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-string"> TaxLabels %(labels)s;</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-string">End;</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-string">Begin Trees;</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-string"> %(trees)s</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-string">End;</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-string">"""</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-comment"># 'index' starts from 1; 'tree' is the Newick tree string</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt id="link-8" class="py-name" targets="Variable Bio.Phylo.NexusIO.TREE_TEMPLATE=Bio.Phylo.NexusIO-module.html#TREE_TEMPLATE"><a title="Bio.Phylo.NexusIO.TREE_TEMPLATE" class="py-name" href="#" onclick="return doclink('link-8', 'TREE_TEMPLATE', 'link-8');">TREE_TEMPLATE</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"Tree tree%(index)d=[&amp;U]%(tree)s"</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"> </tt>
+<a name="parse"></a><div id="parse-def"><a name="L31"></a><tt class="py-lineno">31</tt> <a class="py-toggle" href="#" id="parse-toggle" onclick="return toggle('parse');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NexusIO-module.html#parse">parse</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="parse-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="parse-expanded"><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parse the trees in a Nexus file.</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-docstring">    Uses the old Nexus.Trees parser to extract the trees, converts them back to</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt class="py-docstring">    plain Newick trees, and feeds those strings through the new Newick parser.</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-docstring">    This way we don't have to modify the Nexus module yet. (Perhaps we'll</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-docstring">    eventually change Nexus to use the new NewickIO parser directly.)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">    <tt class="py-name">nex</tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="Bio.Nexus
+Bio.Nexus.Nexus
+Bio.Nexus.Nexus.Nexus" class="py-name" href="#" onclick="return doclink('link-9', 'Nexus', 'link-1');">Nexus</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="Bio.Nexus
+Bio.Nexus.Nexus
+Bio.Nexus.Nexus.Nexus" class="py-name" href="#" onclick="return doclink('link-10', 'Nexus', 'link-1');">Nexus</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">    <tt class="py-comment"># NB: Once Nexus.Trees is modified to use Tree.Newick objects, do this:</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">    <tt class="py-comment"># return iter(nex.trees)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">    <tt class="py-comment"># Until then, convert the Nexus.Trees.Tree object hierarchy:</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">    <tt class="py-keyword">def</tt> <tt class="py-def-name">node2clade</tt><tt class="py-op">(</tt><tt class="py-param">nxtree</tt><tt class="py-op">,</tt> <tt class="py-param">node</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">        <tt class="py-name">subclades</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">node2clade</tt><tt class="py-op">(</tt><tt class="py-name">nxtree</tt><tt class="py-op">,</tt> <tt class="py-name">nxtree</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method Bio.Nexus.Trees.Tree.node()=Bio.Nexus.Trees.Tree-class.html#node"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-11', 'node', 'link-11');">node</a></tt><tt class="py-op">(</tt><tt class="py-name">n</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">n</tt> <tt class="py-keyword">in</tt> <tt id="link-12" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-12', 'node', 'link-11');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">succ</tt><tt class="py-op">]</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-13" class="py-name"><a title="Bio.Phylo.Newick" class="py-name" href="#" onclick="return doclink('link-13', 'Newick', 'link-5');">Newick</a></tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Class Bio.Phylo.BaseTree.Clade=Bio.Phylo.BaseTree.Clade-class.html,Class Bio.Phylo.CDAO.Clade=Bio.Phylo.CDAO.Clade-class.html,Class Bio.Phylo.NeXML.Clade=Bio.Phylo.NeXML.Clade-class.html,Class Bio.Phylo.Newick.Clade=Bio.Phylo.Newick.Clade-class.html,Class Bio.Phylo.PhyloXML.Clade=Bio.Phylo.PhyloXML.Clade-class.html"><a title="Bio.Phylo.BaseTree.Clade
+Bio.Phylo.CDAO.Clade
+Bio.Phylo.NeXML.Clade
+Bio.Phylo.Newick.Clade
+Bio.Phylo.PhyloXML.Clade" class="py-name" href="#" onclick="return doclink('link-14', 'Clade', 'link-14');">Clade</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">            <tt id="link-15" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.branch_length()=Bio.Phylo.PhyloXMLIO.Writer-class.html#branch_length"><a title="Bio.Phylo.PhyloXMLIO.Writer.branch_length" class="py-name" href="#" onclick="return doclink('link-15', 'branch_length', 'link-15');">branch_length</a></tt><tt class="py-op">=</tt><tt id="link-16" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-16', 'node', 'link-11');">node</a></tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-17', 'data', 'link-17');">data</a></tt><tt class="py-op">.</tt><tt class="py-name">branchlength</tt><tt class="py-op">,</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">            <tt id="link-18" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-18', 'name', 'link-18');">name</a></tt><tt class="py-op">=</tt><tt id="link-19" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-19', 'node', 'link-11');">node</a></tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-20', 'data', 'link-17');">data</a></tt><tt class="py-op">.</tt><tt class="py-name">taxon</tt><tt class="py-op">,</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">            <tt class="py-name">clades</tt><tt class="py-op">=</tt><tt class="py-name">subclades</tt><tt class="py-op">,</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">            <tt id="link-21" class="py-name" targets="Variable Bio.Phylo.PhyloXML.Clade.confidence=Bio.Phylo.PhyloXML.Clade-class.html#confidence,Variable Bio.Phylo.PhyloXML.Phylogeny.confidence=Bio.Phylo.PhyloXML.Phylogeny-class.html#confidence,Method Bio.Phylo.PhyloXMLIO.Parser.confidence()=Bio.Phylo.PhyloXMLIO.Parser-class.html#confidence,Method Bio.Phylo.PhyloXMLIO.Writer.confidence()=Bio.Phylo.PhyloXMLIO.Writer-class.html#confidence"><a title="Bio.Phylo.PhyloXML.Clade.confidence
+Bio.Phylo.PhyloXML.Phylogeny.confidence
+Bio.Phylo.PhyloXMLIO.Parser.confidence
+Bio.Phylo.PhyloXMLIO.Writer.confidence" class="py-name" href="#" onclick="return doclink('link-21', 'confidence', 'link-21');">confidence</a></tt><tt class="py-op">=</tt><tt id="link-22" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-22', 'node', 'link-11');">node</a></tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-23', 'data', 'link-17');">data</a></tt><tt class="py-op">.</tt><tt class="py-name">support</tt><tt class="py-op">,</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">            <tt id="link-24" class="py-name" targets="Method Bio.GenBank._FeatureConsumer.comment()=Bio.GenBank._FeatureConsumer-class.html#comment,Method Bio.GenBank._RecordConsumer.comment()=Bio.GenBank._RecordConsumer-class.html#comment"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-24', 'comment', 'link-24');">comment</a></tt><tt class="py-op">=</tt><tt id="link-25" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-25', 'node', 'link-11');">node</a></tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-26', 'data', 'link-17');">data</a></tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="Bio.GenBank._FeatureConsumer.comment
+Bio.GenBank._RecordConsumer.comment" class="py-name" href="#" onclick="return doclink('link-27', 'comment', 'link-24');">comment</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">nxtree</tt> <tt class="py-keyword">in</tt> <tt class="py-name">nex</tt><tt class="py-op">.</tt><tt class="py-name">trees</tt><tt class="py-op">:</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-name">newroot</tt> <tt class="py-op">=</tt> <tt class="py-name">node2clade</tt><tt class="py-op">(</tt><tt class="py-name">nxtree</tt><tt class="py-op">,</tt> <tt class="py-name">nxtree</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-28', 'node', 'link-11');">node</a></tt><tt class="py-op">(</tt><tt class="py-name">nxtree</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Variable Bio.Phylo.BaseTree.Clade.root=Bio.Phylo.BaseTree.Clade-class.html#root,Variable Bio.Phylo._cdao_owl.root=Bio.Phylo._cdao_owl-module.html#root"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-29', 'root', 'link-29');">root</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">        <tt class="py-keyword">yield</tt> <tt id="link-30" class="py-name"><a title="Bio.Phylo.Newick" class="py-name" href="#" onclick="return doclink('link-30', 'Newick', 'link-5');">Newick</a></tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Class Bio.Nexus.Trees.Tree=Bio.Nexus.Trees.Tree-class.html,Class Bio.Phylo.BaseTree.Tree=Bio.Phylo.BaseTree.Tree-class.html,Class Bio.Phylo.CDAO.Tree=Bio.Phylo.CDAO.Tree-class.html,Class Bio.Phylo.NeXML.Tree=Bio.Phylo.NeXML.Tree-class.html,Class Bio.Phylo.Newick.Tree=Bio.Phylo.Newick.Tree-class.html"><a title="Bio.Nexus.Trees.Tree
+Bio.Phylo.BaseTree.Tree
+Bio.Phylo.CDAO.Tree
+Bio.Phylo.NeXML.Tree
+Bio.Phylo.Newick.Tree" class="py-name" href="#" onclick="return doclink('link-31', 'Tree', 'link-31');">Tree</a></tt><tt class="py-op">(</tt><tt id="link-32" class="py-name"><a title="Bio.Phylo.BaseTree.Clade.root
+Bio.Phylo._cdao_owl.root" class="py-name" href="#" onclick="return doclink('link-32', 'root', 'link-29');">root</a></tt><tt class="py-op">=</tt><tt class="py-name">newroot</tt><tt class="py-op">,</tt> <tt class="py-name">rooted</tt><tt class="py-op">=</tt><tt class="py-name">nxtree</tt><tt class="py-op">.</tt><tt class="py-name">rooted</tt><tt class="py-op">,</tt> <tt id="link-33" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-33', 'name', 'link-18');">name</a></tt><tt class="py-op">=</tt><tt class="py-name">nxtree</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-34', 'name', 'link-18');">name</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">                          <tt class="py-name">weight</tt><tt class="py-op">=</tt><tt class="py-name">nxtree</tt><tt class="py-op">.</tt><tt class="py-name">weight</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line"> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"> </tt>
+<a name="write"></a><div id="write-def"><a name="L59"></a><tt class="py-lineno">59</tt> <a class="py-toggle" href="#" id="write-toggle" onclick="return toggle('write');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Phylo.NexusIO-module.html#write">write</a><tt class="py-op">(</tt><tt class="py-param">obj</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="write-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="write-expanded"><a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">    <tt class="py-docstring">"""Write a new Nexus file containing the given trees.</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"><tt class="py-docstring">    Uses a simple Nexus template and the NewickIO writer to serialize just the</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line"><tt class="py-docstring">    trees and minimal supporting info needed for a valid Nexus file.</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">    <tt class="py-name">trees</tt> <tt class="py-op">=</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">obj</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">    <tt class="py-name">writer</tt> <tt class="py-op">=</tt> <tt id="link-35" class="py-name"><a title="Bio.Phylo.NewickIO" class="py-name" href="#" onclick="return doclink('link-35', 'NewickIO', 'link-6');">NewickIO</a></tt><tt class="py-op">.</tt><tt id="link-36" class="py-name" targets="Class Bio.Phylo.CDAOIO.Writer=Bio.Phylo.CDAOIO.Writer-class.html,Class Bio.Phylo.NeXMLIO.Writer=Bio.Phylo.NeXMLIO.Writer-class.html,Class Bio.Phylo.NewickIO.Writer=Bio.Phylo.NewickIO.Writer-class.html,Class Bio.Phylo.PhyloXMLIO.Writer=Bio.Phylo.PhyloXMLIO.Writer-class.html"><a title="Bio.Phylo.CDAOIO.Writer
+Bio.Phylo.NeXMLIO.Writer
+Bio.Phylo.NewickIO.Writer
+Bio.Phylo.PhyloXMLIO.Writer" class="py-name" href="#" onclick="return doclink('link-36', 'Writer', 'link-36');">Writer</a></tt><tt class="py-op">(</tt><tt class="py-name">trees</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">    <tt class="py-name">nexus_trees</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt id="link-37" class="py-name"><a title="Bio.Phylo.NexusIO.TREE_TEMPLATE" class="py-name" href="#" onclick="return doclink('link-37', 'TREE_TEMPLATE', 'link-8');">TREE_TEMPLATE</a></tt> <tt class="py-op">%</tt> <tt class="py-op">{</tt><tt class="py-string">'index'</tt><tt class="py-op">:</tt> <tt class="py-name">idx</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-string">'tree'</tt><tt class="py-op">:</tt> <tt class="py-name">nwk</tt><tt class="py-op">}</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">                   <tt class="py-keyword">for</tt> <tt class="py-name">idx</tt><tt class="py-op">,</tt> <tt class="py-name">nwk</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">        <tt class="py-name">writer</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Method Bio.Phylo.NewickIO.Writer.to_strings()=Bio.Phylo.NewickIO.Writer-class.html#to_strings"><a title="Bio.Phylo.NewickIO.Writer.to_strings" class="py-name" href="#" onclick="return doclink('link-38', 'to_strings', 'link-38');">to_strings</a></tt><tt class="py-op">(</tt><tt class="py-name">plain</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-name">plain_newick</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">                          <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">    <tt class="py-name">tax_labels</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt id="link-39" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-39', 'x', 'link-39');">x</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-40" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-40', 'x', 'link-39');">x</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">chain</tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">t</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name" targets="Method Bio.Nexus.Trees.Tree.get_terminals()=Bio.Nexus.Trees.Tree-class.html#get_terminals,Method Bio.Phylo.BaseTree.TreeMixin.get_terminals()=Bio.Phylo.BaseTree.TreeMixin-class.html#get_terminals"><a title="Bio.Nexus.Trees.Tree.get_terminals
+Bio.Phylo.BaseTree.TreeMixin.get_terminals" class="py-name" href="#" onclick="return doclink('link-41', 'get_terminals', 'link-41');">get_terminals</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">t</tt> <tt class="py-keyword">in</tt> <tt class="py-name">trees</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">    <tt class="py-name">text</tt> <tt class="py-op">=</tt> <tt id="link-42" class="py-name"><a title="Bio.Phylo.NexusIO.NEX_TEMPLATE" class="py-name" href="#" onclick="return doclink('link-42', 'NEX_TEMPLATE', 'link-7');">NEX_TEMPLATE</a></tt> <tt class="py-op">%</tt> <tt class="py-op">{</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">        <tt class="py-string">'count'</tt><tt class="py-op">:</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">tax_labels</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">        <tt class="py-string">'labels'</tt><tt class="py-op">:</tt> <tt class="py-string">' '</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">tax_labels</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">        <tt class="py-string">'trees'</tt><tt class="py-op">:</tt> <tt class="py-string">'\n'</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">nexus_trees</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">    <tt class="py-op">}</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">    <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-43', 'write', 'link-43');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">text</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">nexus_trees</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:56 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

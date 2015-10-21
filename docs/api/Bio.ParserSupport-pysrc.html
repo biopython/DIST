@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.ParserSupport</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Module&nbsp;ParserSupport
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.ParserSupport-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.ParserSupport-module.html">Module Bio.ParserSupport</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 1999 by Jeffrey Chang.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Code to support writing parsers (DEPRECATED).</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">Classes:</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">    - AbstractParser         Base class for parsers.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">    - AbstractConsumer       Base class of all Consumers.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring">    - TaggingConsumer        Consumer that tags output with its event.  For debugging</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">    - EventGenerator         Generate Biopython Events from Martel XML output</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">      (note that Martel has been removed)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring">Functions:</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">    - safe_readline          Read a line from a handle, with check for EOF.</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">    - safe_peekline          Peek at next line, with check for EOF.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">    - read_and_call          Read a line from a handle and pass it to a method.</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    - read_and_call_while    Read many lines, as long as a condition is met.</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">    - read_and_call_until    Read many lines, until a condition is met.</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">    - attempt_read_and_call  Like read_and_call, but forgiving of errors.</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">    - is_blank_line          Test whether a line is blank.</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class Bio.BiopythonDeprecationWarning=Bio.BiopythonDeprecationWarning-class.html"><a title="Bio.BiopythonDeprecationWarning" class="py-name" href="#" onclick="return doclink('link-1', 'BiopythonDeprecationWarning', 'link-1');">BiopythonDeprecationWarning</a></tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">warnings</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-name">warnings</tt><tt class="py-op">.</tt><tt class="py-name">warn</tt><tt class="py-op">(</tt><tt class="py-string">"Bio.ParserSupport is now deprecated will be removed in a "</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">              <tt class="py-string">"future release of Biopython."</tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name"><a title="Bio.BiopythonDeprecationWarning" class="py-name" href="#" onclick="return doclink('link-2', 'BiopythonDeprecationWarning', 'link-1');">BiopythonDeprecationWarning</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">types</tt> <tt class="py-keyword">import</tt> <tt class="py-name">InstanceType</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">    <tt class="py-comment"># Python 3, see http://bugs.python.org/issue8206</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">    <tt class="py-name">InstanceType</tt> <tt class="py-op">=</tt> <tt class="py-name">object</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">types</tt> <tt class="py-keyword">import</tt> <tt class="py-name">MethodType</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-4', '_py3k', 'link-4');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-5" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-5', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Module Bio.File=Bio.File-module.html"><a title="Bio.File" class="py-name" href="#" onclick="return doclink('link-6', 'File', 'link-6');">File</a></tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-comment"># XML from python 2.0</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">xml</tt><tt class="py-op">.</tt><tt class="py-name">sax</tt> <tt class="py-keyword">import</tt> <tt class="py-name">handler</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt id="link-7" class="py-name" targets="Variable Bio.ParserSupport.xml_support=Bio.ParserSupport-module.html#xml_support"><a title="Bio.ParserSupport.xml_support" class="py-name" href="#" onclick="return doclink('link-7', 'xml_support', 'link-7');">xml_support</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stderr</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-8', 'write', 'link-8');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">"Warning: Could not import SAX for dealing with XML.\n"</tt> <tt class="py-op">+</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">                     <tt class="py-string">"This causes problems with some ParserSupport modules\n"</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">    <tt id="link-9" class="py-name"><a title="Bio.ParserSupport.xml_support" class="py-name" href="#" onclick="return doclink('link-9', 'xml_support', 'link-7');">xml_support</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="AbstractParser"></a><div id="AbstractParser-def"><a name="L57"></a><tt class="py-lineno"> 57</tt> <a class="py-toggle" href="#" id="AbstractParser-toggle" onclick="return toggle('AbstractParser');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractParser-class.html">AbstractParser</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractParser-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="AbstractParser-expanded"><a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-docstring">"""Base class for other parsers.</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="AbstractParser.parse"></a><div id="AbstractParser.parse-def"><a name="L61"></a><tt class="py-lineno"> 61</tt> <a class="py-toggle" href="#" id="AbstractParser.parse-toggle" onclick="return toggle('AbstractParser.parse');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractParser-class.html#parse">parse</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractParser.parse-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="AbstractParser.parse-expanded"><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">NotImplementedError</tt><tt class="py-op">(</tt><tt class="py-string">"Please implement in a derived class"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"> </tt>
+<a name="AbstractParser.parse_str"></a><div id="AbstractParser.parse_str-def"><a name="L64"></a><tt class="py-lineno"> 64</tt> <a class="py-toggle" href="#" id="AbstractParser.parse_str-toggle" onclick="return toggle('AbstractParser.parse_str');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractParser-class.html#parse_str">parse_str</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">string</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractParser.parse_str-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="AbstractParser.parse_str-expanded"><a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Function Bio.AlignIO.parse()=Bio.AlignIO-module.html#parse,Method Bio.Blast.NCBIStandalone.BlastErrorParser.parse()=Bio.Blast.NCBIStandalone.BlastErrorParser-class.html#parse,Method Bio.Blast.NCBIStandalone.BlastParser.parse()=Bio.Blast.NCBIStandalone.BlastParser-class.html#parse,Method Bio.Blast.NCBIStandalone.PSIBlastParser.parse()=Bio.Blast.NCBIStandalone.PSIBlastParser-class.html#parse,Function Bio.Blast.NCBIXML.parse()=Bio.Blast.NCBIXML-module.html#parse,Function Bio.Compass.parse()=Bio.Compass-module.html#parse,Function Bio.Emboss.Primer3.parse()=Bio.Emboss.Primer3-module.html#parse,Method Bio.Entrez.Parser.DataHandler.parse()=Bio.Entrez.Parser.DataHandler-class.html#parse,Function Bio.Entrez.parse()=Bio.Entrez-module.html#parse,Function Bio.ExPASy.Enzyme.parse()=Bio.ExPASy.Enzyme-module.html#parse,Function Bio.ExPASy.Prodoc.parse()=Bio.ExPASy.Prodoc-module.html#parse,Function Bio.ExPASy.Prosite.parse()=Bio.ExPASy.Prosite-module.html#parse,Method Bio.GenBank.FeatureParser.parse()=Bio.GenBank.FeatureParser-class.html#parse,Method Bio.GenBank.RecordParser.parse()=Bio.GenBank.RecordParser-class.html#parse,Method Bio.GenBank.Scanner.InsdcScanner.parse()=Bio.GenBank.Scanner.InsdcScanner-class.html#parse,Function Bio.Geo.parse()=Bio.Geo-module.html#parse,Function Bio.KEGG.Compound.parse()=Bio.KEGG.Compound-module.html#parse,Function Bio.KEGG.Enzyme.parse()=Bio.KEGG.Enzyme-module.html#parse,Method Bio.KEGG.KGML.KGML_parser.KGMLParser.parse()=Bio.KEGG.KGML.KGML_parser.KGMLParser-class.html#parse,Function Bio.KEGG.KGML.KGML_parser.parse()=Bio.KEGG.KGML.KGML_parser-module.html#parse,Function Bio.KEGG.Map.parse()=Bio.KEGG.Map-module.html#parse,Function Bio.Medline.parse()=Bio.Medline-module.html#parse,Function Bio.Motif.parse()=Bio.Motif-module.html#parse,Method Bio.ParserSupport.AbstractParser.parse()=Bio.ParserSupport.AbstractParser-class.html#parse,Method Bio.Phylo.CDAOIO.Parser.parse()=Bio.Phylo.CDAOIO.Parser-class.html#parse,Function Bio.Phylo.CDAOIO.parse()=Bio.Phylo.CDAOIO-module.html#parse,Method Bio.Phylo.NeXMLIO.Parser.parse()=Bio.Phylo.NeXMLIO.Parser-class.html#parse,Function Bio.Phylo.NeXMLIO.parse()=Bio.Phylo.NeXMLIO-module.html#parse,Method Bio.Phylo.NewickIO.Parser.parse()=Bio.Phylo.NewickIO.Parser-class.html#parse,Function Bio.Phylo.NewickIO.parse()=Bio.Phylo.NewickIO-module.html#parse,Function Bio.Phylo.NexusIO.parse()=Bio.Phylo.NexusIO-module.html#parse,Method Bio.Phylo.PhyloXMLIO.Parser.parse()=Bio.Phylo.PhyloXMLIO.Parser-class.html#parse,Function Bio.Phylo.PhyloXMLIO.parse()=Bio.Phylo.PhyloXMLIO-module.html#parse,Function Bio.Phylo._io.parse()=Bio.Phylo._io-module.html#parse,Function Bio.SCOP.Cla.parse()=Bio.SCOP.Cla-module.html#parse,Function Bio.SCOP.Des.parse()=Bio.SCOP.Des-module.html#parse,Function Bio.SCOP.Dom.parse()=Bio.SCOP.Dom-module.html#parse,Function Bio.SCOP.Hie.parse()=Bio.SCOP.Hie-module.html#parse,Function Bio.SCOP.Raf.parse()=Bio.SCOP.Raf-module.html#parse,Function Bio.SearchIO.parse()=Bio.SearchIO-module.html#parse,Method Bio.SeqIO.UniprotIO.Parser.parse()=Bio.SeqIO.UniprotIO.Parser-class.html#parse,Function Bio.SeqIO.parse()=Bio.SeqIO-module.html#parse,Function Bio.Sequencing.Ace.parse()=Bio.Sequencing.Ace-module.html#parse,Function Bio.Sequencing.Phd.parse()=Bio.Sequencing.Phd-module.html#parse,Function Bio.SwissProt.KeyWList.parse()=Bio.SwissProt.KeyWList-module.html#parse,Function Bio.SwissProt.parse()=Bio.SwissProt-module.html#parse,Function Bio.UniGene.parse()=Bio.UniGene-module.html#parse,Function Bio.Wise.psw.parse()=Bio.Wise.psw-module.html#parse,Function Bio.motifs.parse()=Bio.motifs-module.html#parse"><a title="Bio.AlignIO.parse
+Bio.Blast.NCBIStandalone.BlastErrorParser.parse
+Bio.Blast.NCBIStandalone.BlastParser.parse
+Bio.Blast.NCBIStandalone.PSIBlastParser.parse
+Bio.Blast.NCBIXML.parse
+Bio.Compass.parse
+Bio.Emboss.Primer3.parse
+Bio.Entrez.Parser.DataHandler.parse
+Bio.Entrez.parse
+Bio.ExPASy.Enzyme.parse
+Bio.ExPASy.Prodoc.parse
+Bio.ExPASy.Prosite.parse
+Bio.GenBank.FeatureParser.parse
+Bio.GenBank.RecordParser.parse
+Bio.GenBank.Scanner.InsdcScanner.parse
+Bio.Geo.parse
+Bio.KEGG.Compound.parse
+Bio.KEGG.Enzyme.parse
+Bio.KEGG.KGML.KGML_parser.KGMLParser.parse
+Bio.KEGG.KGML.KGML_parser.parse
+Bio.KEGG.Map.parse
+Bio.Medline.parse
+Bio.Motif.parse
+Bio.ParserSupport.AbstractParser.parse
+Bio.Phylo.CDAOIO.Parser.parse
+Bio.Phylo.CDAOIO.parse
+Bio.Phylo.NeXMLIO.Parser.parse
+Bio.Phylo.NeXMLIO.parse
+Bio.Phylo.NewickIO.Parser.parse
+Bio.Phylo.NewickIO.parse
+Bio.Phylo.NexusIO.parse
+Bio.Phylo.PhyloXMLIO.Parser.parse
+Bio.Phylo.PhyloXMLIO.parse
+Bio.Phylo._io.parse
+Bio.SCOP.Cla.parse
+Bio.SCOP.Des.parse
+Bio.SCOP.Dom.parse
+Bio.SCOP.Hie.parse
+Bio.SCOP.Raf.parse
+Bio.SearchIO.parse
+Bio.SeqIO.UniprotIO.Parser.parse
+Bio.SeqIO.parse
+Bio.Sequencing.Ace.parse
+Bio.Sequencing.Phd.parse
+Bio.SwissProt.KeyWList.parse
+Bio.SwissProt.parse
+Bio.UniGene.parse
+Bio.Wise.psw.parse
+Bio.motifs.parse" class="py-name" href="#" onclick="return doclink('link-10', 'parse', 'link-10');">parse</a></tt><tt class="py-op">(</tt><tt class="py-name">StringIO</tt><tt class="py-op">(</tt><tt class="py-name">string</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"> </tt>
+<a name="AbstractParser.parse_file"></a><div id="AbstractParser.parse_file-def"><a name="L67"></a><tt class="py-lineno"> 67</tt> <a class="py-toggle" href="#" id="AbstractParser.parse_file-toggle" onclick="return toggle('AbstractParser.parse_file');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractParser-class.html#parse_file">parse_file</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">filename</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractParser.parse_file-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="AbstractParser.parse_file-expanded"><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">with</tt> <tt id="link-11" class="py-name" targets="Function Bio.bgzf.open()=Bio.bgzf-module.html#open"><a title="Bio.bgzf.open" class="py-name" href="#" onclick="return doclink('link-11', 'open', 'link-11');">open</a></tt><tt class="py-op">(</tt><tt class="py-name">filename</tt><tt class="py-op">)</tt> <tt class="py-keyword">as</tt> <tt class="py-name">h</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">            <tt class="py-name">retval</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="Bio.AlignIO.parse
+Bio.Blast.NCBIStandalone.BlastErrorParser.parse
+Bio.Blast.NCBIStandalone.BlastParser.parse
+Bio.Blast.NCBIStandalone.PSIBlastParser.parse
+Bio.Blast.NCBIXML.parse
+Bio.Compass.parse
+Bio.Emboss.Primer3.parse
+Bio.Entrez.Parser.DataHandler.parse
+Bio.Entrez.parse
+Bio.ExPASy.Enzyme.parse
+Bio.ExPASy.Prodoc.parse
+Bio.ExPASy.Prosite.parse
+Bio.GenBank.FeatureParser.parse
+Bio.GenBank.RecordParser.parse
+Bio.GenBank.Scanner.InsdcScanner.parse
+Bio.Geo.parse
+Bio.KEGG.Compound.parse
+Bio.KEGG.Enzyme.parse
+Bio.KEGG.KGML.KGML_parser.KGMLParser.parse
+Bio.KEGG.KGML.KGML_parser.parse
+Bio.KEGG.Map.parse
+Bio.Medline.parse
+Bio.Motif.parse
+Bio.ParserSupport.AbstractParser.parse
+Bio.Phylo.CDAOIO.Parser.parse
+Bio.Phylo.CDAOIO.parse
+Bio.Phylo.NeXMLIO.Parser.parse
+Bio.Phylo.NeXMLIO.parse
+Bio.Phylo.NewickIO.Parser.parse
+Bio.Phylo.NewickIO.parse
+Bio.Phylo.NexusIO.parse
+Bio.Phylo.PhyloXMLIO.Parser.parse
+Bio.Phylo.PhyloXMLIO.parse
+Bio.Phylo._io.parse
+Bio.SCOP.Cla.parse
+Bio.SCOP.Des.parse
+Bio.SCOP.Dom.parse
+Bio.SCOP.Hie.parse
+Bio.SCOP.Raf.parse
+Bio.SearchIO.parse
+Bio.SeqIO.UniprotIO.Parser.parse
+Bio.SeqIO.parse
+Bio.Sequencing.Ace.parse
+Bio.Sequencing.Phd.parse
+Bio.SwissProt.KeyWList.parse
+Bio.SwissProt.parse
+Bio.UniGene.parse
+Bio.Wise.psw.parse
+Bio.motifs.parse" class="py-name" href="#" onclick="return doclink('link-12', 'parse', 'link-10');">parse</a></tt><tt class="py-op">(</tt><tt class="py-name">h</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">retval</tt> </tt>
+</div></div><a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line"> </tt>
+<a name="AbstractConsumer"></a><div id="AbstractConsumer-def"><a name="L73"></a><tt class="py-lineno"> 73</tt> <a class="py-toggle" href="#" id="AbstractConsumer-toggle" onclick="return toggle('AbstractConsumer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractConsumer-class.html">AbstractConsumer</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractConsumer-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="AbstractConsumer-expanded"><a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt class="py-docstring">"""Base class for other Consumers.</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">    Derive Consumers from this class and implement appropriate</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"><tt class="py-docstring">    methods for each event that you want to receive.</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="AbstractConsumer._unhandled_section"></a><div id="AbstractConsumer._unhandled_section-def"><a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="AbstractConsumer._unhandled_section-toggle" onclick="return toggle('AbstractConsumer._unhandled_section');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractConsumer-class.html#_unhandled_section">_unhandled_section</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractConsumer._unhandled_section-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="AbstractConsumer._unhandled_section-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"> </tt>
+<a name="AbstractConsumer._unhandled"></a><div id="AbstractConsumer._unhandled-def"><a name="L83"></a><tt class="py-lineno"> 83</tt> <a class="py-toggle" href="#" id="AbstractConsumer._unhandled-toggle" onclick="return toggle('AbstractConsumer._unhandled');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractConsumer-class.html#_unhandled">_unhandled</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractConsumer._unhandled-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="AbstractConsumer._unhandled-expanded"><a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-keyword">pass</tt> </tt>
+</div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="AbstractConsumer.__getattr__"></a><div id="AbstractConsumer.__getattr__-def"><a name="L86"></a><tt class="py-lineno"> 86</tt> <a class="py-toggle" href="#" id="AbstractConsumer.__getattr__-toggle" onclick="return toggle('AbstractConsumer.__getattr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.AbstractConsumer-class.html#__getattr__">__getattr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">attr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AbstractConsumer.__getattr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="AbstractConsumer.__getattr__-expanded"><a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">attr</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">6</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'start_'</tt> <tt class="py-keyword">or</tt> <tt class="py-name">attr</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">4</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'end_'</tt><tt class="py-op">:</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">            <tt class="py-name">method</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method Bio.ParserSupport.AbstractConsumer._unhandled_section()=Bio.ParserSupport.AbstractConsumer-class.html#_unhandled_section"><a title="Bio.ParserSupport.AbstractConsumer._unhandled_section" class="py-name" href="#" onclick="return doclink('link-13', '_unhandled_section', 'link-13');">_unhandled_section</a></tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">            <tt class="py-name">method</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.GenBank._BaseGenBankConsumer._unhandled()=Bio.GenBank._BaseGenBankConsumer-class.html#_unhandled,Method Bio.ParserSupport.AbstractConsumer._unhandled()=Bio.ParserSupport.AbstractConsumer-class.html#_unhandled"><a title="Bio.GenBank._BaseGenBankConsumer._unhandled
+Bio.ParserSupport.AbstractConsumer._unhandled" class="py-name" href="#" onclick="return doclink('link-14', '_unhandled', 'link-14');">_unhandled</a></tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">method</tt> </tt>
+</div></div><a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"> </tt>
+<a name="TaggingConsumer"></a><div id="TaggingConsumer-def"><a name="L94"></a><tt class="py-lineno"> 94</tt> <a class="py-toggle" href="#" id="TaggingConsumer-toggle" onclick="return toggle('TaggingConsumer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.ParserSupport.TaggingConsumer-class.html">TaggingConsumer</a><tt class="py-op">(</tt><tt class="py-base-class">AbstractConsumer</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TaggingConsumer-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="TaggingConsumer-expanded"><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">    <tt class="py-docstring">"""A Consumer that tags the data stream with the event and</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">    prints it to a handle.  Useful for debugging.</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="TaggingConsumer.__init__"></a><div id="TaggingConsumer.__init__-def"><a name="L99"></a><tt class="py-lineno"> 99</tt> <a class="py-toggle" href="#" id="TaggingConsumer.__init__-toggle" onclick="return toggle('TaggingConsumer.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.TaggingConsumer-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">colwidth</tt><tt class="py-op">=</tt><tt class="py-number">15</tt><tt class="py-op">,</tt> <tt class="py-param">maxwidth</tt><tt class="py-op">=</tt><tt class="py-number">80</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TaggingConsumer.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="TaggingConsumer.__init__-expanded"><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-docstring">"""TaggingConsumer(handle=sys.stdout, colwidth=15, maxwidth=80)"""</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-comment"># I can't assign sys.stdout to handle in the argument list.</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-comment"># If I do that, handle will be assigned the value of sys.stdout</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-comment"># the first time this function is called.  This will fail if</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-comment"># the user has assigned sys.stdout to some other file, which may</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-comment"># be closed or invalid at a later time.</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">handle</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">            <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_colwidth</tt> <tt class="py-op">=</tt> <tt class="py-name">colwidth</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_maxwidth</tt> <tt class="py-op">=</tt> <tt class="py-name">maxwidth</tt> </tt>
+</div><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"> </tt>
+<a name="TaggingConsumer.unhandled_section"></a><div id="TaggingConsumer.unhandled_section-def"><a name="L112"></a><tt class="py-lineno">112</tt> <a class="py-toggle" href="#" id="TaggingConsumer.unhandled_section-toggle" onclick="return toggle('TaggingConsumer.unhandled_section');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.TaggingConsumer-class.html#unhandled_section">unhandled_section</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TaggingConsumer.unhandled_section-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="TaggingConsumer.unhandled_section-expanded"><a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.ParserSupport.TaggingConsumer._print_name()=Bio.ParserSupport.TaggingConsumer-class.html#_print_name"><a title="Bio.ParserSupport.TaggingConsumer._print_name" class="py-name" href="#" onclick="return doclink('link-15', '_print_name', 'link-15');">_print_name</a></tt><tt class="py-op">(</tt><tt class="py-string">'unhandled_section'</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"> </tt>
+<a name="TaggingConsumer.unhandled"></a><div id="TaggingConsumer.unhandled-def"><a name="L115"></a><tt class="py-lineno">115</tt> <a class="py-toggle" href="#" id="TaggingConsumer.unhandled-toggle" onclick="return toggle('TaggingConsumer.unhandled');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.TaggingConsumer-class.html#unhandled">unhandled</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TaggingConsumer.unhandled-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="TaggingConsumer.unhandled-expanded"><a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="Bio.ParserSupport.TaggingConsumer._print_name" class="py-name" href="#" onclick="return doclink('link-16', '_print_name', 'link-15');">_print_name</a></tt><tt class="py-op">(</tt><tt class="py-string">'unhandled'</tt><tt class="py-op">,</tt> <tt id="link-17" class="py-name" targets="Variable BioSQL.BioSeq.DBSeq.data=BioSQL.BioSeq.DBSeq-class.html#data"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-17', 'data', 'link-17');">data</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"> </tt>
+<a name="TaggingConsumer._print_name"></a><div id="TaggingConsumer._print_name-def"><a name="L118"></a><tt class="py-lineno">118</tt> <a class="py-toggle" href="#" id="TaggingConsumer._print_name-toggle" onclick="return toggle('TaggingConsumer._print_name');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.TaggingConsumer-class.html#_print_name">_print_name</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">name</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TaggingConsumer._print_name-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="TaggingConsumer._print_name-expanded"><a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-18" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-18', 'data', 'link-17');">data</a></tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">            <tt class="py-comment"># Write the name of a section.</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-19', 'write', 'link-8');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">"%s %s\n"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-string">"*"</tt> <tt class="py-op">*</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_colwidth</tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-20', 'name', 'link-20');">name</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">            <tt class="py-comment"># Write the tag and line.</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_handle</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-21', 'write', 'link-8');">write</a></tt><tt class="py-op">(</tt><tt class="py-string">"%-*s: %s\n"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_colwidth</tt><tt class="py-op">,</tt> <tt id="link-22" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-22', 'name', 'link-20');">name</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_colwidth</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                <tt id="link-23" class="py-name"><a title="BioSQL.BioSeq.DBSeq.data" class="py-name" href="#" onclick="return doclink('link-23', 'data', 'link-17');">data</a></tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_maxwidth</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_colwidth</tt> <tt class="py-op">-</tt> <tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Method Bio.Seq.Seq.rstrip()=Bio.Seq.Seq-class.html#rstrip"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-24', 'rstrip', 'link-24');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"> </tt>
+<a name="TaggingConsumer.__getattr__"></a><div id="TaggingConsumer.__getattr__-def"><a name="L128"></a><tt class="py-lineno">128</tt> <a class="py-toggle" href="#" id="TaggingConsumer.__getattr__-toggle" onclick="return toggle('TaggingConsumer.__getattr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.TaggingConsumer-class.html#__getattr__">__getattr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">attr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="TaggingConsumer.__getattr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="TaggingConsumer.__getattr__-expanded"><a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">attr</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">6</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'start_'</tt> <tt class="py-keyword">or</tt> <tt class="py-name">attr</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">4</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'end_'</tt><tt class="py-op">:</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">            <tt class="py-name">method</tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt id="link-25" class="py-name" targets="Variable Bio.Graphics.ColorSpiral.ColorSpiral.a=Bio.Graphics.ColorSpiral.ColorSpiral-class.html#a"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-25', 'a', 'link-25');">a</a></tt><tt class="py-op">=</tt><tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt class="py-name">s</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">s</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="Bio.ParserSupport.TaggingConsumer._print_name" class="py-name" href="#" onclick="return doclink('link-26', '_print_name', 'link-15');">_print_name</a></tt><tt class="py-op">(</tt><tt id="link-27" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-27', 'a', 'link-25');">a</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">            <tt class="py-name">method</tt> <tt class="py-op">=</tt> <tt class="py-keyword">lambda</tt> <tt id="link-28" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-28', 'x', 'link-28');">x</a></tt><tt class="py-op">,</tt> <tt id="link-29" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-29', 'a', 'link-25');">a</a></tt><tt class="py-op">=</tt><tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt class="py-name">s</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">:</tt> <tt class="py-name">s</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="Bio.ParserSupport.TaggingConsumer._print_name" class="py-name" href="#" onclick="return doclink('link-30', '_print_name', 'link-15');">_print_name</a></tt><tt class="py-op">(</tt><tt id="link-31" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-31', 'a', 'link-25');">a</a></tt><tt class="py-op">,</tt> <tt id="link-32" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-32', 'x', 'link-28');">x</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">method</tt> </tt>
+</div></div><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line"> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line"><tt class="py-comment"># onle use the Event Generator if XML handling is okay</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt id="link-33" class="py-name"><a title="Bio.ParserSupport.xml_support" class="py-name" href="#" onclick="return doclink('link-33', 'xml_support', 'link-7');">xml_support</a></tt><tt class="py-op">:</tt> </tt>
+<a name="EventGenerator"></a><div id="EventGenerator-def"><a name="L138"></a><tt class="py-lineno">138</tt> <a class="py-toggle" href="#" id="EventGenerator-toggle" onclick="return toggle('EventGenerator');">-</a><tt class="py-line">    <tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.ParserSupport.EventGenerator-class.html">EventGenerator</a><tt class="py-op">(</tt><tt class="py-base-class">handler</tt><tt class="py-op">.</tt><tt class="py-base-class">ContentHandler</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EventGenerator-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="EventGenerator-expanded"><a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">        <tt class="py-docstring">"""Handler to generate events associated with a Martel parsed file.</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"><tt class="py-docstring">        This acts like a normal SAX handler, and accepts XML generated by</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"><tt class="py-docstring">        Martel during parsing. These events are then converted into</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"><tt class="py-docstring">        'Biopython events', which can then be caught by a standard</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line"><tt class="py-docstring">        biopython consumer.</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"><tt class="py-docstring">        Note that Martel is now DEPRECATED.</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="EventGenerator.__init__"></a><div id="EventGenerator.__init__-def"><a name="L148"></a><tt class="py-lineno">148</tt> <a class="py-toggle" href="#" id="EventGenerator.__init__-toggle" onclick="return toggle('EventGenerator.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.EventGenerator-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">consumer</tt><tt class="py-op">,</tt> <tt class="py-param">interest_tags</tt><tt class="py-op">,</tt> <tt class="py-param">callback_finalizer</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                     <tt class="py-param">exempt_tags</tt><tt class="py-op">=</tt><tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EventGenerator.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="EventGenerator.__init__-expanded"><a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">            <tt class="py-docstring">"""Initialize to begin catching and firing off events.</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">            Arguments:</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring">            o consumer - The consumer that we'll send Biopython events to.</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">            o interest_tags - A listing of all the tags we are interested in.</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">            o callback_finalizer - A function to deal with the collected</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"><tt class="py-docstring">            information before passing it on to the consumer. By default</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line"><tt class="py-docstring">            the collected information is a list of all of the lines read</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-docstring">            for a particular tag -- if there are multiple tags in a row</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"><tt class="py-docstring">            like:</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"><tt class="py-docstring">            &lt;some_info&gt;Spam&lt;some_info&gt;</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"><tt class="py-docstring">            &lt;some_info&gt;More Spam&lt;some_info&gt;</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"><tt class="py-docstring">            In this case the list of information would be:</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"><tt class="py-docstring">            ['Spam', 'More Spam']</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line"><tt class="py-docstring">            This list of lines will be passed to the callback finalizer if</tt> </tt>
+<a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"><tt class="py-docstring">            it is present. Otherwise the consumer will be called with the</tt> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"><tt class="py-docstring">            list of content information.</tt> </tt>
+<a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-docstring">            o exempt_tags - A listing of particular tags that are exempt from</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line"><tt class="py-docstring">            being processed by the callback_finalizer. This allows you to</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring">            use a finalizer to deal with most tags, but leave those you don't</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"><tt class="py-docstring">            want touched.</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line"><tt class="py-docstring">            """</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_consumer</tt> <tt class="py-op">=</tt> <tt class="py-name">consumer</tt> </tt>
+<a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">interest_tags</tt> <tt class="py-op">=</tt> <tt class="py-name">interest_tags</tt> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_finalizer</tt> <tt class="py-op">=</tt> <tt class="py-name">callback_finalizer</tt> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_exempt_tags</tt> <tt class="py-op">=</tt> <tt class="py-name">exempt_tags</tt> </tt>
+<a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">            <tt class="py-comment"># a dictionary of content for each tag of interest</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line">            <tt class="py-comment"># the information for each tag is held as a list of the lines.</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line">            <tt class="py-comment"># This allows us to collect information from multiple tags</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">            <tt class="py-comment"># in a row, and return it all at once.</tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">info</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt id="link-34" class="py-name" targets="Variable Bio.SeqIO.AbiIO.tag=Bio.SeqIO.AbiIO-module.html#tag"><a title="Bio.SeqIO.AbiIO.tag" class="py-name" href="#" onclick="return doclink('link-34', 'tag', 'link-34');">tag</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">interest_tags</tt><tt class="py-op">:</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">[</tt><tt id="link-35" class="py-name"><a title="Bio.SeqIO.AbiIO.tag" class="py-name" href="#" onclick="return doclink('link-35', 'tag', 'link-34');">tag</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line">            <tt class="py-comment"># the previous tag we were collecting information for.</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">            <tt class="py-comment"># We set a delay in sending info to the consumer so that we can</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line">            <tt class="py-comment"># collect a bunch of tags in a row and append all of the info</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line">            <tt class="py-comment"># together.</tt> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_previous_tag</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">            <tt class="py-comment"># the current character information for a tag</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_cur_content</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">            <tt class="py-comment"># whether we should be collecting information</tt> </tt>
+<a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_collect_characters</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+</div><a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"> </tt>
+<a name="EventGenerator.startElement"></a><div id="EventGenerator.startElement-def"><a name="L203"></a><tt class="py-lineno">203</tt> <a class="py-toggle" href="#" id="EventGenerator.startElement-toggle" onclick="return toggle('EventGenerator.startElement');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.EventGenerator-class.html#startElement">startElement</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">name</tt><tt class="py-op">,</tt> <tt class="py-param">attrs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EventGenerator.startElement-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="EventGenerator.startElement-expanded"><a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">            <tt class="py-docstring">"""Determine if we should collect characters from this tag.</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-docstring">            """</tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-36" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-36', 'name', 'link-20');">name</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">interest_tags</tt><tt class="py-op">:</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_collect_characters</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line"> </tt>
+<a name="EventGenerator.characters"></a><div id="EventGenerator.characters-def"><a name="L209"></a><tt class="py-lineno">209</tt> <a class="py-toggle" href="#" id="EventGenerator.characters-toggle" onclick="return toggle('EventGenerator.characters');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.EventGenerator-class.html#characters">characters</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">content</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EventGenerator.characters-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="EventGenerator.characters-expanded"><a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">            <tt class="py-docstring">"""Extract the information if we are interested in it.</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line"><tt class="py-docstring">            """</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_collect_characters</tt><tt class="py-op">:</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_cur_content</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-37', 'append', 'link-37');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">content</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line"> </tt>
+<a name="EventGenerator.endElement"></a><div id="EventGenerator.endElement-def"><a name="L215"></a><tt class="py-lineno">215</tt> <a class="py-toggle" href="#" id="EventGenerator.endElement-toggle" onclick="return toggle('EventGenerator.endElement');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.EventGenerator-class.html#endElement">endElement</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">name</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EventGenerator.endElement-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="EventGenerator.endElement-expanded"><a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">            <tt class="py-docstring">"""Send the information to the consumer.</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line"><tt class="py-docstring">            Once we've got the end element we've collected up all of the</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line"><tt class="py-docstring">            character information we need, and we need to send this on to</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line"><tt class="py-docstring">            the consumer to do something with it.</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line"><tt class="py-docstring">            We have a delay of one tag on doing this, so that we can collect</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line"><tt class="py-docstring">            all of the info from multiple calls to the same element at once.</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line"><tt class="py-docstring">            """</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line">            <tt class="py-comment"># only deal with the tag if it is something we are</tt> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">            <tt class="py-comment"># interested in and potentially have information for</tt> </tt>
+<a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_collect_characters</tt><tt class="py-op">:</tt> </tt>
+<a name="L228"></a><tt class="py-lineno">228</tt>  <tt class="py-line">                <tt class="py-comment"># add all of the information collected inside this tag</tt> </tt>
+<a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">[</tt><tt id="link-38" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-38', 'name', 'link-20');">name</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-39', 'append', 'link-37');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">""</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_cur_content</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line">                <tt class="py-comment"># reset our information and flags</tt> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_cur_content</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_collect_characters</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line"> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">                <tt class="py-comment"># if we are at a new tag, pass on the info from the last tag</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_previous_tag</tt> <tt class="py-keyword">and</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_previous_tag</tt> <tt class="py-op">!=</tt> <tt id="link-40" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-40', 'name', 'link-20');">name</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name" targets="Method Bio.ParserSupport.EventGenerator._make_callback()=Bio.ParserSupport.EventGenerator-class.html#_make_callback"><a title="Bio.ParserSupport.EventGenerator._make_callback" class="py-name" href="#" onclick="return doclink('link-41', '_make_callback', 'link-41');">_make_callback</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_previous_tag</tt><tt class="py-op">)</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line"> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">                <tt class="py-comment"># set this tag as the next to be passed</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_previous_tag</tt> <tt class="py-op">=</tt> <tt id="link-42" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-42', 'name', 'link-20');">name</a></tt> </tt>
+</div><a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line"> </tt>
+<a name="EventGenerator._make_callback"></a><div id="EventGenerator._make_callback-def"><a name="L241"></a><tt class="py-lineno">241</tt> <a class="py-toggle" href="#" id="EventGenerator._make_callback-toggle" onclick="return toggle('EventGenerator._make_callback');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.EventGenerator-class.html#_make_callback">_make_callback</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">name</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EventGenerator._make_callback-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="EventGenerator._make_callback-expanded"><a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">            <tt class="py-docstring">"""Call the callback function with the info with the given name.</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line"><tt class="py-docstring">            """</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line">            <tt class="py-comment"># strip off whitespace and call the consumer</tt> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">            <tt class="py-name">callback_function</tt> <tt class="py-op">=</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_consumer</tt><tt class="py-op">,</tt> <tt id="link-43" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-43', 'name', 'link-20');">name</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line"> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">            <tt class="py-comment"># --- pass back the information</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">            <tt class="py-comment"># if there is a finalizer, use that</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_finalizer</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> <tt class="py-keyword">and</tt> <tt id="link-44" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-44', 'name', 'link-20');">name</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_exempt_tags</tt><tt class="py-op">:</tt> </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">                <tt class="py-name">info_to_pass</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_finalizer</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">[</tt><tt id="link-45" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-45', 'name', 'link-20');">name</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">            <tt class="py-comment"># otherwise pass back the entire list of information</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">                <tt class="py-name">info_to_pass</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">[</tt><tt id="link-46" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-46', 'name', 'link-20');">name</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line"> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">            <tt class="py-name">callback_function</tt><tt class="py-op">(</tt><tt class="py-name">info_to_pass</tt><tt class="py-op">)</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line"> </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">            <tt class="py-comment"># reset the information for the tag</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">info</tt><tt class="py-op">[</tt><tt id="link-47" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-47', 'name', 'link-20');">name</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line"> </tt>
+<a name="EventGenerator.endDocument"></a><div id="EventGenerator.endDocument-def"><a name="L260"></a><tt class="py-lineno">260</tt> <a class="py-toggle" href="#" id="EventGenerator.endDocument-toggle" onclick="return toggle('EventGenerator.endDocument');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport.EventGenerator-class.html#endDocument">endDocument</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="EventGenerator.endDocument-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="EventGenerator.endDocument-expanded"><a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">            <tt class="py-docstring">"""Make sure all of our information has been passed.</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line"><tt class="py-docstring">            This just flushes out any stored tags that need to be passed.</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line"><tt class="py-docstring">            """</tt> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_previous_tag</tt><tt class="py-op">:</tt> </tt>
+<a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.ParserSupport.EventGenerator._make_callback" class="py-name" href="#" onclick="return doclink('link-48', '_make_callback', 'link-41');">_make_callback</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_previous_tag</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L267"></a><tt class="py-lineno">267</tt>  <tt class="py-line"> </tt>
+<a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line"> </tt>
+<a name="read_and_call"></a><div id="read_and_call-def"><a name="L269"></a><tt class="py-lineno">269</tt> <a class="py-toggle" href="#" id="read_and_call-toggle" onclick="return toggle('read_and_call');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#read_and_call">read_and_call</a><tt class="py-op">(</tt><tt class="py-param">uhandle</tt><tt class="py-op">,</tt> <tt class="py-param">method</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="read_and_call-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="read_and_call-expanded"><a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line">    <tt class="py-docstring">"""read_and_call(uhandle, method[, start][, end][, contains][, blank][, has_re])</tt> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line"><tt class="py-docstring">    Read a line from uhandle, check it, and pass it to the method.</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line"><tt class="py-docstring">    Raises a ValueError if the line does not pass the checks.</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line"><tt class="py-docstring">    start, end, contains, blank, and has_re specify optional conditions</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line"><tt class="py-docstring">    that the line must pass.  start and end specifies what the line must</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line"><tt class="py-docstring">    begin or end with (not counting EOL characters).  contains</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line"><tt class="py-docstring">    specifies a substring that must be found in the line.  If blank</tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line"><tt class="py-docstring">    is a true value, then the line must be blank.  has_re should be</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line"><tt class="py-docstring">    a regular expression object with a pattern that the line must match</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line"><tt class="py-docstring">    somewhere.</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line">    <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt id="link-49" class="py-name" targets="Function Bio.ParserSupport.safe_readline()=Bio.ParserSupport-module.html#safe_readline"><a title="Bio.ParserSupport.safe_readline" class="py-name" href="#" onclick="return doclink('link-49', 'safe_readline', 'link-49');">safe_readline</a></tt><tt class="py-op">(</tt><tt class="py-name">uhandle</tt><tt class="py-op">)</tt> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">    <tt class="py-name">errmsg</tt> <tt class="py-op">=</tt> <tt id="link-50" class="py-name" targets="Function Bio.ParserSupport._fails_conditions()=Bio.ParserSupport-module.html#_fails_conditions"><a title="Bio.ParserSupport._fails_conditions" class="py-name" href="#" onclick="return doclink('link-50', '_fails_conditions', 'link-50');">_fails_conditions</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">keywds</tt><tt class="py-op">)</tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">errmsg</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-name">errmsg</tt><tt class="py-op">)</tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">    <tt class="py-name">method</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line"> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"> </tt>
+<a name="read_and_call_while"></a><div id="read_and_call_while-def"><a name="L291"></a><tt class="py-lineno">291</tt> <a class="py-toggle" href="#" id="read_and_call_while-toggle" onclick="return toggle('read_and_call_while');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#read_and_call_while">read_and_call_while</a><tt class="py-op">(</tt><tt class="py-param">uhandle</tt><tt class="py-op">,</tt> <tt class="py-param">method</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="read_and_call_while-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="read_and_call_while-expanded"><a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">    <tt class="py-docstring">"""read_and_call_while(uhandle, method[, start][, end][, contains][, blank][, has_re]) -&gt; number of lines</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line"><tt class="py-docstring">    Read a line from uhandle and pass it to the method as long as</tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line"><tt class="py-docstring">    some condition is true.  Returns the number of lines that were read.</tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line"><tt class="py-docstring">    See the docstring for read_and_call for a description of the parameters.</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line">    <tt class="py-name">nlines</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line">    <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line">        <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt id="link-51" class="py-name"><a title="Bio.ParserSupport.safe_readline" class="py-name" href="#" onclick="return doclink('link-51', 'safe_readline', 'link-49');">safe_readline</a></tt><tt class="py-op">(</tt><tt class="py-name">uhandle</tt><tt class="py-op">)</tt> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">        <tt class="py-comment"># If I've failed the condition, then stop reading the line.</tt> </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-52" class="py-name"><a title="Bio.ParserSupport._fails_conditions" class="py-name" href="#" onclick="return doclink('link-52', '_fails_conditions', 'link-50');">_fails_conditions</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line">            <tt class="py-name">uhandle</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name" targets="Method Bio.File.UndoHandle.saveline()=Bio.File.UndoHandle-class.html#saveline"><a title="Bio.File.UndoHandle.saveline" class="py-name" href="#" onclick="return doclink('link-53', 'saveline', 'link-53');">saveline</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line">            <tt class="py-keyword">break</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line">        <tt class="py-name">method</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">        <tt class="py-name">nlines</tt> <tt class="py-op">=</tt> <tt class="py-name">nlines</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">nlines</tt> </tt>
+</div><a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line"> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line"> </tt>
+<a name="read_and_call_until"></a><div id="read_and_call_until-def"><a name="L312"></a><tt class="py-lineno">312</tt> <a class="py-toggle" href="#" id="read_and_call_until-toggle" onclick="return toggle('read_and_call_until');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#read_and_call_until">read_and_call_until</a><tt class="py-op">(</tt><tt class="py-param">uhandle</tt><tt class="py-op">,</tt> <tt class="py-param">method</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="read_and_call_until-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="read_and_call_until-expanded"><a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line">    <tt class="py-docstring">"""read_and_call_until(uhandle, method,</tt> </tt>
+<a name="L314"></a><tt class="py-lineno">314</tt>  <tt class="py-line"><tt class="py-docstring">    start=None, end=None, contains=None, blank=None) -&gt; number of lines</tt> </tt>
+<a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line"><tt class="py-docstring">    Read a line from uhandle and pass it to the method until</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line"><tt class="py-docstring">    some condition is true.  Returns the number of lines that were read.</tt> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line"><tt class="py-docstring">    See the docstring for read_and_call for a description of the parameters.</tt> </tt>
+<a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line">    <tt class="py-name">nlines</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line">    <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">        <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt id="link-54" class="py-name"><a title="Bio.ParserSupport.safe_readline" class="py-name" href="#" onclick="return doclink('link-54', 'safe_readline', 'link-49');">safe_readline</a></tt><tt class="py-op">(</tt><tt class="py-name">uhandle</tt><tt class="py-op">)</tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line">        <tt class="py-comment"># If I've met the condition, then stop reading the line.</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-55" class="py-name"><a title="Bio.ParserSupport._fails_conditions" class="py-name" href="#" onclick="return doclink('link-55', '_fails_conditions', 'link-50');">_fails_conditions</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L327"></a><tt class="py-lineno">327</tt>  <tt class="py-line">            <tt class="py-name">uhandle</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="Bio.File.UndoHandle.saveline" class="py-name" href="#" onclick="return doclink('link-56', 'saveline', 'link-53');">saveline</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L328"></a><tt class="py-lineno">328</tt>  <tt class="py-line">            <tt class="py-keyword">break</tt> </tt>
+<a name="L329"></a><tt class="py-lineno">329</tt>  <tt class="py-line">        <tt class="py-name">method</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L330"></a><tt class="py-lineno">330</tt>  <tt class="py-line">        <tt class="py-name">nlines</tt> <tt class="py-op">=</tt> <tt class="py-name">nlines</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L331"></a><tt class="py-lineno">331</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">nlines</tt> </tt>
+</div><a name="L332"></a><tt class="py-lineno">332</tt>  <tt class="py-line"> </tt>
+<a name="L333"></a><tt class="py-lineno">333</tt>  <tt class="py-line"> </tt>
+<a name="attempt_read_and_call"></a><div id="attempt_read_and_call-def"><a name="L334"></a><tt class="py-lineno">334</tt> <a class="py-toggle" href="#" id="attempt_read_and_call-toggle" onclick="return toggle('attempt_read_and_call');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#attempt_read_and_call">attempt_read_and_call</a><tt class="py-op">(</tt><tt class="py-param">uhandle</tt><tt class="py-op">,</tt> <tt class="py-param">method</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">keywds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="attempt_read_and_call-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="attempt_read_and_call-expanded"><a name="L335"></a><tt class="py-lineno">335</tt>  <tt class="py-line">    <tt class="py-docstring">"""attempt_read_and_call(uhandle, method, **keywds) -&gt; boolean</tt> </tt>
+<a name="L336"></a><tt class="py-lineno">336</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L337"></a><tt class="py-lineno">337</tt>  <tt class="py-line"><tt class="py-docstring">    Similar to read_and_call, but returns a boolean specifying</tt> </tt>
+<a name="L338"></a><tt class="py-lineno">338</tt>  <tt class="py-line"><tt class="py-docstring">    whether the line has passed the checks.  Does not raise</tt> </tt>
+<a name="L339"></a><tt class="py-lineno">339</tt>  <tt class="py-line"><tt class="py-docstring">    exceptions.</tt> </tt>
+<a name="L340"></a><tt class="py-lineno">340</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L341"></a><tt class="py-lineno">341</tt>  <tt class="py-line"><tt class="py-docstring">    See docs for read_and_call for a description of the function</tt> </tt>
+<a name="L342"></a><tt class="py-lineno">342</tt>  <tt class="py-line"><tt class="py-docstring">    arguments.</tt> </tt>
+<a name="L343"></a><tt class="py-lineno">343</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L344"></a><tt class="py-lineno">344</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L345"></a><tt class="py-lineno">345</tt>  <tt class="py-line">    <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt id="link-57" class="py-name"><a title="Bio.ParserSupport.safe_readline" class="py-name" href="#" onclick="return doclink('link-57', 'safe_readline', 'link-49');">safe_readline</a></tt><tt class="py-op">(</tt><tt class="py-name">uhandle</tt><tt class="py-op">)</tt> </tt>
+<a name="L346"></a><tt class="py-lineno">346</tt>  <tt class="py-line">    <tt class="py-name">passed</tt> <tt class="py-op">=</tt> <tt class="py-keyword">not</tt> <tt id="link-58" class="py-name"><a title="Bio.ParserSupport._fails_conditions" class="py-name" href="#" onclick="return doclink('link-58', '_fails_conditions', 'link-50');">_fails_conditions</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">keywds</tt><tt class="py-op">)</tt> </tt>
+<a name="L347"></a><tt class="py-lineno">347</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">passed</tt><tt class="py-op">:</tt> </tt>
+<a name="L348"></a><tt class="py-lineno">348</tt>  <tt class="py-line">        <tt class="py-name">method</tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L349"></a><tt class="py-lineno">349</tt>  <tt class="py-line">    <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L350"></a><tt class="py-lineno">350</tt>  <tt class="py-line">        <tt class="py-name">uhandle</tt><tt class="py-op">.</tt><tt id="link-59" class="py-name"><a title="Bio.File.UndoHandle.saveline" class="py-name" href="#" onclick="return doclink('link-59', 'saveline', 'link-53');">saveline</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L351"></a><tt class="py-lineno">351</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">passed</tt> </tt>
+</div><a name="L352"></a><tt class="py-lineno">352</tt>  <tt class="py-line"> </tt>
+<a name="L353"></a><tt class="py-lineno">353</tt>  <tt class="py-line"> </tt>
+<a name="_fails_conditions"></a><div id="_fails_conditions-def"><a name="L354"></a><tt class="py-lineno">354</tt> <a class="py-toggle" href="#" id="_fails_conditions-toggle" onclick="return toggle('_fails_conditions');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#_fails_conditions">_fails_conditions</a><tt class="py-op">(</tt><tt class="py-param">line</tt><tt class="py-op">,</tt> <tt class="py-param">start</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">end</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">contains</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">blank</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> </tt>
+<a name="L355"></a><tt class="py-lineno">355</tt>  <tt class="py-line">                      <tt class="py-param">has_re</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_fails_conditions-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_fails_conditions-expanded"><a name="L356"></a><tt class="py-lineno">356</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-60" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.start=Bio.SeqFeature.CompoundLocation-class.html#start,Variable Bio.SeqFeature.FeatureLocation.start=Bio.SeqFeature.FeatureLocation-class.html#start"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-60', 'start', 'link-60');">start</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L357"></a><tt class="py-lineno">357</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-61" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-61', 'start', 'link-60');">start</a></tt><tt class="py-op">)</tt><tt class="py-op">]</tt> <tt class="py-op">!=</tt> <tt id="link-62" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-62', 'start', 'link-60');">start</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L358"></a><tt class="py-lineno">358</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-string">"Line does not start with '%s':\n%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-63" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.start
+Bio.SeqFeature.FeatureLocation.start" class="py-name" href="#" onclick="return doclink('link-63', 'start', 'link-60');">start</a></tt><tt class="py-op">,</tt> <tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L359"></a><tt class="py-lineno">359</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-64" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.end=Bio.SeqFeature.CompoundLocation-class.html#end,Variable Bio.SeqFeature.FeatureLocation.end=Bio.SeqFeature.FeatureLocation-class.html#end"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-64', 'end', 'link-64');">end</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L360"></a><tt class="py-lineno">360</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-65" class="py-name"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-65', 'rstrip', 'link-24');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-66" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-66', 'end', 'link-64');">end</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> <tt class="py-op">!=</tt> <tt id="link-67" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-67', 'end', 'link-64');">end</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L361"></a><tt class="py-lineno">361</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-string">"Line does not end with '%s':\n%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-68" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-68', 'end', 'link-64');">end</a></tt><tt class="py-op">,</tt> <tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L362"></a><tt class="py-lineno">362</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt id="link-69" class="py-name" targets="Method Bio.Alphabet.Alphabet.contains()=Bio.Alphabet.Alphabet-class.html#contains,Method Bio.Alphabet.AlphabetEncoder.contains()=Bio.Alphabet.AlphabetEncoder-class.html#contains,Method Bio.Alphabet.Gapped.contains()=Bio.Alphabet.Gapped-class.html#contains,Method Bio.Alphabet.HasStopCodon.contains()=Bio.Alphabet.HasStopCodon-class.html#contains,Method Bio.Phylo.Consensus._BitString.contains()=Bio.Phylo.Consensus._BitString-class.html#contains"><a title="Bio.Alphabet.Alphabet.contains
+Bio.Alphabet.AlphabetEncoder.contains
+Bio.Alphabet.Gapped.contains
+Bio.Alphabet.HasStopCodon.contains
+Bio.Phylo.Consensus._BitString.contains" class="py-name" href="#" onclick="return doclink('link-69', 'contains', 'link-69');">contains</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L363"></a><tt class="py-lineno">363</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt id="link-70" class="py-name"><a title="Bio.Alphabet.Alphabet.contains
+Bio.Alphabet.AlphabetEncoder.contains
+Bio.Alphabet.Gapped.contains
+Bio.Alphabet.HasStopCodon.contains
+Bio.Phylo.Consensus._BitString.contains" class="py-name" href="#" onclick="return doclink('link-70', 'contains', 'link-69');">contains</a></tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">line</tt><tt class="py-op">:</tt> </tt>
+<a name="L364"></a><tt class="py-lineno">364</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-string">"Line does not contain '%s':\n%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt id="link-71" class="py-name"><a title="Bio.Alphabet.Alphabet.contains
+Bio.Alphabet.AlphabetEncoder.contains
+Bio.Alphabet.Gapped.contains
+Bio.Alphabet.HasStopCodon.contains
+Bio.Phylo.Consensus._BitString.contains" class="py-name" href="#" onclick="return doclink('link-71', 'contains', 'link-69');">contains</a></tt><tt class="py-op">,</tt> <tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L365"></a><tt class="py-lineno">365</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">blank</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L366"></a><tt class="py-lineno">366</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">blank</tt><tt class="py-op">:</tt> </tt>
+<a name="L367"></a><tt class="py-lineno">367</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-72" class="py-name" targets="Function Bio.ParserSupport.is_blank_line()=Bio.ParserSupport-module.html#is_blank_line"><a title="Bio.ParserSupport.is_blank_line" class="py-name" href="#" onclick="return doclink('link-72', 'is_blank_line', 'link-72');">is_blank_line</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L368"></a><tt class="py-lineno">368</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"Expected blank line, but got:\n%s"</tt> <tt class="py-op">%</tt> <tt class="py-name">line</tt> </tt>
+<a name="L369"></a><tt class="py-lineno">369</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L370"></a><tt class="py-lineno">370</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-73" class="py-name"><a title="Bio.ParserSupport.is_blank_line" class="py-name" href="#" onclick="return doclink('link-73', 'is_blank_line', 'link-72');">is_blank_line</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L371"></a><tt class="py-lineno">371</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-string">"Expected non-blank line, but got a blank one"</tt> </tt>
+<a name="L372"></a><tt class="py-lineno">372</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">has_re</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L373"></a><tt class="py-lineno">373</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">has_re</tt><tt class="py-op">.</tt><tt id="link-74" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.search()=Bio.KDTree.KDTree%27.KDTree-class.html#search,Method Bio.PDB.NeighborSearch'.NeighborSearch.search()=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html#search,Method Bio.Phylo.TreeConstruction.NNITreeSearcher.search()=Bio.Phylo.TreeConstruction.NNITreeSearcher-class.html#search,Method Bio.Phylo.TreeConstruction.TreeSearcher.search()=Bio.Phylo.TreeConstruction.TreeSearcher-class.html#search,Class Method Bio.Restriction.Restriction.AbstractCut.search()=Bio.Restriction.Restriction.AbstractCut-class.html#search,Method Bio.Restriction.Restriction.RestrictionBatch.search()=Bio.Restriction.Restriction.RestrictionBatch-class.html#search,Function Bio.SCOP.search()=Bio.SCOP-module.html#search,Function Bio.TogoWS.search()=Bio.TogoWS-module.html#search,Method Bio.motifs.Instances.search()=Bio.motifs.Instances-class.html#search,Method Bio.motifs.matrix.PositionSpecificScoringMatrix.search()=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#search"><a title="Bio.KDTree.KDTree'.KDTree.search
+Bio.PDB.NeighborSearch'.NeighborSearch.search
+Bio.Phylo.TreeConstruction.NNITreeSearcher.search
+Bio.Phylo.TreeConstruction.TreeSearcher.search
+Bio.Restriction.Restriction.AbstractCut.search
+Bio.Restriction.Restriction.RestrictionBatch.search
+Bio.SCOP.search
+Bio.TogoWS.search
+Bio.motifs.Instances.search
+Bio.motifs.matrix.PositionSpecificScoringMatrix.search" class="py-name" href="#" onclick="return doclink('link-74', 'search', 'link-74');">search</a></tt><tt class="py-op">(</tt><tt class="py-name">line</tt><tt class="py-op">)</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L374"></a><tt class="py-lineno">374</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-string">"Line does not match regex '%s':\n%s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt> </tt>
+<a name="L375"></a><tt class="py-lineno">375</tt>  <tt class="py-line">                <tt class="py-name">has_re</tt><tt class="py-op">.</tt><tt class="py-name">pattern</tt><tt class="py-op">,</tt> <tt class="py-name">line</tt><tt class="py-op">)</tt> </tt>
+<a name="L376"></a><tt class="py-lineno">376</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L377"></a><tt class="py-lineno">377</tt>  <tt class="py-line"> </tt>
+<a name="L378"></a><tt class="py-lineno">378</tt>  <tt class="py-line"> </tt>
+<a name="is_blank_line"></a><div id="is_blank_line-def"><a name="L379"></a><tt class="py-lineno">379</tt> <a class="py-toggle" href="#" id="is_blank_line-toggle" onclick="return toggle('is_blank_line');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#is_blank_line">is_blank_line</a><tt class="py-op">(</tt><tt class="py-param">line</tt><tt class="py-op">,</tt> <tt class="py-param">allow_spaces</tt><tt class="py-op">=</tt><tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="is_blank_line-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="is_blank_line-expanded"><a name="L380"></a><tt class="py-lineno">380</tt>  <tt class="py-line">    <tt class="py-docstring">"""is_blank_line(line, allow_spaces=0) -&gt; boolean</tt> </tt>
+<a name="L381"></a><tt class="py-lineno">381</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L382"></a><tt class="py-lineno">382</tt>  <tt class="py-line"><tt class="py-docstring">    Return whether a line is blank.  allow_spaces specifies whether to</tt> </tt>
+<a name="L383"></a><tt class="py-lineno">383</tt>  <tt class="py-line"><tt class="py-docstring">    allow whitespaces in a blank line.  A true value signifies that a</tt> </tt>
+<a name="L384"></a><tt class="py-lineno">384</tt>  <tt class="py-line"><tt class="py-docstring">    line containing whitespaces as well as end-of-line characters</tt> </tt>
+<a name="L385"></a><tt class="py-lineno">385</tt>  <tt class="py-line"><tt class="py-docstring">    should be considered blank.</tt> </tt>
+<a name="L386"></a><tt class="py-lineno">386</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L387"></a><tt class="py-lineno">387</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L388"></a><tt class="py-lineno">388</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">line</tt><tt class="py-op">:</tt> </tt>
+<a name="L389"></a><tt class="py-lineno">389</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+<a name="L390"></a><tt class="py-lineno">390</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">allow_spaces</tt><tt class="py-op">:</tt> </tt>
+<a name="L391"></a><tt class="py-lineno">391</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-75" class="py-name"><a title="Bio.Seq.Seq.rstrip" class="py-name" href="#" onclick="return doclink('link-75', 'rstrip', 'link-24');">rstrip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">''</tt> </tt>
+<a name="L392"></a><tt class="py-lineno">392</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'\n'</tt> <tt class="py-keyword">or</tt> <tt class="py-name">line</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-string">'\r'</tt> </tt>
+</div><a name="L393"></a><tt class="py-lineno">393</tt>  <tt class="py-line"> </tt>
+<a name="L394"></a><tt class="py-lineno">394</tt>  <tt class="py-line"> </tt>
+<a name="safe_readline"></a><div id="safe_readline-def"><a name="L395"></a><tt class="py-lineno">395</tt> <a class="py-toggle" href="#" id="safe_readline-toggle" onclick="return toggle('safe_readline');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#safe_readline">safe_readline</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="safe_readline-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="safe_readline-expanded"><a name="L396"></a><tt class="py-lineno">396</tt>  <tt class="py-line">    <tt class="py-docstring">"""safe_readline(handle) -&gt; line</tt> </tt>
+<a name="L397"></a><tt class="py-lineno">397</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L398"></a><tt class="py-lineno">398</tt>  <tt class="py-line"><tt class="py-docstring">    Read a line from an UndoHandle and return it.  If there are no more</tt> </tt>
+<a name="L399"></a><tt class="py-lineno">399</tt>  <tt class="py-line"><tt class="py-docstring">    lines to read, I will raise a ValueError.</tt> </tt>
+<a name="L400"></a><tt class="py-lineno">400</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L401"></a><tt class="py-lineno">401</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L402"></a><tt class="py-lineno">402</tt>  <tt class="py-line">    <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-76" class="py-name" targets="Method Bio.File.UndoHandle.readline()=Bio.File.UndoHandle-class.html#readline,Method Bio.bgzf.BgzfReader.readline()=Bio.bgzf.BgzfReader-class.html#readline"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-76', 'readline', 'link-76');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L403"></a><tt class="py-lineno">403</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">line</tt><tt class="py-op">:</tt> </tt>
+<a name="L404"></a><tt class="py-lineno">404</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Unexpected end of stream."</tt><tt class="py-op">)</tt> </tt>
+<a name="L405"></a><tt class="py-lineno">405</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">line</tt> </tt>
+</div><a name="L406"></a><tt class="py-lineno">406</tt>  <tt class="py-line"> </tt>
+<a name="L407"></a><tt class="py-lineno">407</tt>  <tt class="py-line"> </tt>
+<a name="safe_peekline"></a><div id="safe_peekline-def"><a name="L408"></a><tt class="py-lineno">408</tt> <a class="py-toggle" href="#" id="safe_peekline-toggle" onclick="return toggle('safe_peekline');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.ParserSupport-module.html#safe_peekline">safe_peekline</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="safe_peekline-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="safe_peekline-expanded"><a name="L409"></a><tt class="py-lineno">409</tt>  <tt class="py-line">    <tt class="py-docstring">"""safe_peekline(handle) -&gt; line</tt> </tt>
+<a name="L410"></a><tt class="py-lineno">410</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L411"></a><tt class="py-lineno">411</tt>  <tt class="py-line"><tt class="py-docstring">    Peek at the next line in an UndoHandle and return it.  If there are no</tt> </tt>
+<a name="L412"></a><tt class="py-lineno">412</tt>  <tt class="py-line"><tt class="py-docstring">    more lines to peek, I will raise a ValueError.</tt> </tt>
+<a name="L413"></a><tt class="py-lineno">413</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L414"></a><tt class="py-lineno">414</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L415"></a><tt class="py-lineno">415</tt>  <tt class="py-line">    <tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-77" class="py-name" targets="Method Bio.File.UndoHandle.peekline()=Bio.File.UndoHandle-class.html#peekline"><a title="Bio.File.UndoHandle.peekline" class="py-name" href="#" onclick="return doclink('link-77', 'peekline', 'link-77');">peekline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L416"></a><tt class="py-lineno">416</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">line</tt><tt class="py-op">:</tt> </tt>
+<a name="L417"></a><tt class="py-lineno">417</tt>  <tt class="py-line">        <tt class="py-keyword">raise</tt> <tt class="py-name">ValueError</tt><tt class="py-op">(</tt><tt class="py-string">"Unexpected end of stream."</tt><tt class="py-op">)</tt> </tt>
+<a name="L418"></a><tt class="py-lineno">418</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">line</tt> </tt>
+</div><a name="L419"></a><tt class="py-lineno">419</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:05:08 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

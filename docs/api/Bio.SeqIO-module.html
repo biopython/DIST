@@ -1,0 +1,1218 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SeqIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;SeqIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SeqIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package SeqIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SeqIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Sequence input/output as SeqRecord objects.</p>
+<p>Bio.SeqIO is also documented at <a class="rst-reference external" href="http://biopython.org/wiki/SeqIO" target="_top">SeqIO</a> and by
+a whole chapter in our tutorial:</p>
+<blockquote>
+<ul class="rst-simple">
+<li><a class="rst-reference external" href="http://biopython.org/DIST/docs/tutorial/Tutorial.html" target="_top">HTML Tutorial</a></li>
+<li><a class="rst-reference external" href="http://biopython.org/DIST/docs/tutorial/Tutorial.pdf" target="_top">PDF Tutorial</a></li>
+</ul>
+</blockquote>
+<div class="rst-section" id="rst-input">
+<h1 class="heading">Input</h1>
+<p>The main function is Bio.SeqIO.parse(...) which takes an input file handle
+(or in recent versions of Biopython alternatively a filename as a string),
+and format string.  This returns an iterator giving SeqRecord objects:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Fasta/f002&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">gi|1348912|gb|G26680|G26680 633</span>
+<span class="py-output">gi|1348917|gb|G26685|G26685 413</span>
+<span class="py-output">gi|1592936|gb|G29385|G29385 471</span></pre>
+<p>Note that the parse() function will invoke the relevant parser for the
+format with its default settings.  You may want more control, in which case
+you need to create a format specific sequence iterator directly.</p>
+</div>
+<div class="rst-section" id="rst-input-single-records">
+<h1 class="heading">Input - Single Records</h1>
+<p>If you expect your file to contain one-and-only-one record, then we provide
+the following 'helper' function which will return a single SeqRecord, or
+raise an exception if there are no records or more than one record:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Fasta/f001&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">gi|3318709|pdb|1A91| 79</span></pre>
+<p>This style is useful when you expect a single record only (and would
+consider multiple records an error).  For example, when dealing with GenBank
+files for bacterial genomes or chromosomes, there is normally only a single
+record.  Alternatively, use this with a handle when downloading a single
+record from the internet.</p>
+<p>However, if you just want the first record from a file containing multiple
+record, use the next() function on the iterator (or under Python 2, the
+iterator's next() method):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = next(SeqIO.parse(<span class="py-string">&quot;Fasta/f002&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">gi|1348912|gb|G26680|G26680 633</span></pre>
+<p>The above code will work as long as the file contains at least one record.
+Note that if there is more than one record, the remaining records will be
+silently ignored.</p>
+</div>
+<div class="rst-section" id="rst-input-multiple-records">
+<h1 class="heading">Input - Multiple Records</h1>
+<p>For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records
+using a sequence iterator can save you a lot of memory (RAM).  There is
+less benefit for interlaced file formats (e.g. most multiple alignment file
+formats).  However, an iterator only lets you access the records one by one.</p>
+<p>If you want random access to the records by number, turn this into a list:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>records = list(SeqIO.parse(<span class="py-string">&quot;Fasta/f002&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>len(records)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[1].id)
+<span class="py-output">gi|1348917|gb|G26685|G26685</span></pre>
+<p>If you want random access to the records by a key such as the record id,
+turn the iterator into a dictionary:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record_dict = SeqIO.to_dict(SeqIO.parse(<span class="py-string">&quot;Fasta/f002&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>len(record_dict)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(len(record_dict[<span class="py-string">&quot;gi|1348917|gb|G26685|G26685&quot;</span>]))
+<span class="py-output">413</span></pre>
+<p>However, using list() or the to_dict() function will load all the records
+into memory at once, and therefore is not possible on very large files.
+Instead, for <em>some</em> file formats Bio.SeqIO provides an indexing approach
+providing dictionary like access to any record. For example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record_dict = SeqIO.index(<span class="py-string">&quot;Fasta/f002&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(record_dict)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(len(record_dict[<span class="py-string">&quot;gi|1348917|gb|G26685|G26685&quot;</span>]))
+<span class="py-output">413</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>record_dict.close()</pre>
+<p>Many but not all of the supported input file formats can be indexed like
+this. For example &quot;fasta&quot;, &quot;fastq&quot;, &quot;qual&quot; and even the binary format &quot;sff&quot;
+work, but alignment formats like &quot;phylip&quot;, &quot;clustalw&quot; and &quot;nexus&quot; will not.</p>
+<p>In most cases you can also use SeqIO.index to get the record from the file
+as a raw string (not a SeqRecord). This can be useful for example to extract
+a sub-set of records from a file where SeqIO cannot output the file format
+(e.g. the plain text SwissProt format, &quot;swiss&quot;) or where it is important to
+keep the output 100% identical to the input). For example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record_dict = SeqIO.index(<span class="py-string">&quot;Fasta/f002&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(record_dict)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record_dict.get_raw(<span class="py-string">&quot;gi|1348917|gb|G26685|G26685&quot;</span>).decode())
+<span class="py-output">&gt;gi|1348917|gb|G26685|G26685 human STS STS_D11734.</span>
+<span class="py-output">CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATCTTACTCTTTC</span>
+<span class="py-output">ATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTTTACAGATGTGAAACTTTCAA</span>
+<span class="py-output">GAGATTTACTGACTTTCCTAGAATAGTTTCTCTACTGGAAACCTGATGCTTTTATAAGCCATTGTGATTA</span>
+<span class="py-output">GGATGACTGTTACAGGCTTAGCTTTGTGTGAAANCCAGTCACCTTTCTCCTAGGTAATGAGTAGTGCTGT</span>
+<span class="py-output">TCATATTACTNTAAGTTCTATAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGG</span>
+<span class="py-output">AATTGNTTTGCCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record_dict[<span class="py-string">&quot;gi|1348917|gb|G26685|G26685&quot;</span>].format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;gi|1348917|gb|G26685|G26685 human STS STS_D11734.</span>
+<span class="py-output">CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATC</span>
+<span class="py-output">TTACTCTTTCATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTT</span>
+<span class="py-output">TACAGATGTGAAACTTTCAAGAGATTTACTGACTTTCCTAGAATAGTTTCTCTACTGGAA</span>
+<span class="py-output">ACCTGATGCTTTTATAAGCCATTGTGATTAGGATGACTGTTACAGGCTTAGCTTTGTGTG</span>
+<span class="py-output">AAANCCAGTCACCTTTCTCCTAGGTAATGAGTAGTGCTGTTCATATTACTNTAAGTTCTA</span>
+<span class="py-output">TAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGGAATTGNTTTG</span>
+<span class="py-output">CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>record_dict.close()</pre>
+<p>Here the original file and what Biopython would output differ in the line
+wrapping. Also note that under Python 3, the get_raw method will return a
+bytes string, hence the use of decode to turn it into a (unicode) string.
+This is unnecessary on Python 2.</p>
+<p>Also note that the get_raw method will preserve the newline endings. This
+example FASTQ file uses Unix style endings (b&quot;n&quot; only),</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>fastq_dict = SeqIO.index(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(fastq_dict)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>raw = fastq_dict.get_raw(<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>raw.count(b<span class="py-string">&quot;\n&quot;</span>)
+<span class="py-output">4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>raw.count(b<span class="py-string">&quot;\r\n&quot;</span>)
+<span class="py-output">0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>b<span class="py-string">&quot;\r&quot;</span> <span class="py-keyword">in</span> raw
+<span class="py-output">False</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(raw)
+<span class="py-output">78</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>fastq_dict.close()</pre>
+<p>Here is the same file but using DOS/Windows new lines (b&quot;rn&quot; instead),</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>fastq_dict = SeqIO.index(<span class="py-string">&quot;Quality/example_dos.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(fastq_dict)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>raw = fastq_dict.get_raw(<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>raw.count(b<span class="py-string">&quot;\n&quot;</span>)
+<span class="py-output">4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>raw.count(b<span class="py-string">&quot;\r\n&quot;</span>)
+<span class="py-output">4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>b<span class="py-string">&quot;\r\n&quot;</span> <span class="py-keyword">in</span> raw
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(raw)
+<span class="py-output">82</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>fastq_dict.close()</pre>
+<p>Because this uses two bytes for each new line, the file is longer than
+the Unix equivalent with only one byte.</p>
+</div>
+<div class="rst-section" id="rst-input-alignments">
+<h1 class="heading">Input - Alignments</h1>
+<p>You can read in alignment files as alignment objects using Bio.AlignIO.
+Alternatively, reading in an alignment file format via Bio.SeqIO will give
+you a SeqRecord for each row of each alignment:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Clustalw/hedgehog.aln&quot;</span>, <span class="py-string">&quot;clustal&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">gi|167877390|gb|EDS40773.1| 447</span>
+<span class="py-output">gi|167234445|ref|NP_001107837. 447</span>
+<span class="py-output">gi|74100009|gb|AAZ99217.1| 447</span>
+<span class="py-output">gi|13990994|dbj|BAA33523.2| 447</span>
+<span class="py-output">gi|56122354|gb|AAV74328.1| 447</span></pre>
+</div>
+<div class="rst-section" id="rst-output">
+<h1 class="heading">Output</h1>
+<p>Use the function Bio.SeqIO.write(...), which takes a complete set of
+SeqRecord objects (either as a list, or an iterator), an output file handle
+(or in recent versions of Biopython an output filename as a string) and of
+course the file format:</p>
+<pre class="rst-literal-block">
+from Bio import SeqIO
+records = ...
+SeqIO.write(records, &quot;example.faa&quot;, &quot;fasta&quot;)
+</pre>
+<p>Or, using a handle:</p>
+<pre class="rst-literal-block">
+from Bio import SeqIO
+records = ...
+with open(&quot;example.faa&quot;, &quot;w&quot;) as handle:
+  SeqIO.write(records, handle, &quot;fasta&quot;)
+</pre>
+<p>You are expected to call this function once (with all your records) and if
+using a handle, make sure you close it to flush the data to the hard disk.</p>
+</div>
+<div class="rst-section" id="rst-output-advanced">
+<h1 class="heading">Output - Advanced</h1>
+<p>The effect of calling write() multiple times on a single file will vary
+depending on the file format, and is best avoided unless you have a strong
+reason to do so.</p>
+<p>If you give a filename, then each time you call write() the existing file
+will be overwritten. For sequential files formats (e.g. fasta, genbank) each
+&quot;record block&quot; holds a single sequence.  For these files it would probably
+be safe to call write() multiple times by re-using the same handle.</p>
+<p>However, trying this for certain alignment formats (e.g. phylip, clustal,
+stockholm) would have the effect of concatenating several multiple sequence
+alignments together.  Such files are created by the PHYLIP suite of programs
+for bootstrap analysis, but it is clearer to do this via Bio.AlignIO instead.</p>
+</div>
+<div class="rst-section" id="rst-conversion">
+<h1 class="heading">Conversion</h1>
+<p>The Bio.SeqIO.convert(...) function allows an easy interface for simple
+file format conversions. Additionally, it may use file format specific
+optimisations so this should be the fastest way too.</p>
+<p>In general however, you can combine the Bio.SeqIO.parse(...) function with
+the Bio.SeqIO.write(...) function for sequence file conversion. Using
+generator expressions or generator functions provides a memory efficient way
+to perform filtering or other extra operations as part of the process.</p>
+</div>
+<div class="rst-section" id="rst-file-formats">
+<h1 class="heading">File Formats</h1>
+<p>When specifying the file format, use lowercase strings.  The same format
+names are also used in Bio.AlignIO and include the following:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>abif    - Applied Biosystem's sequencing trace format</li>
+<li>ace     - Reads the contig sequences from an ACE assembly file.</li>
+<li>embl    - The EMBL flat file format. Uses Bio.GenBank internally.</li>
+<li>fasta   - The generic sequence file format where each record starts with
+an identifer line starting with a &quot;&gt;&quot; character, followed by
+lines of sequence.</li>
+<li>fastq   - A &quot;FASTA like&quot; format used by Sanger which also stores PHRED
+sequence quality values (with an ASCII offset of 33).</li>
+<li>fastq-sanger - An alias for &quot;fastq&quot; for consistency with BioPerl and EMBOSS</li>
+<li>fastq-solexa - Original Solexa/Illumnia variant of the FASTQ format which
+encodes Solexa quality scores (not PHRED quality scores) with an
+ASCII offset of 64.</li>
+<li>fastq-illumina - Solexa/Illumina 1.3 to 1.7 variant of the FASTQ format
+which encodes PHRED quality scores with an ASCII offset of 64
+(not 33). Note as of version 1.8 of the CASAVA pipeline Illumina
+will produce FASTQ files using the standard Sanger encoding.</li>
+<li>genbank - The GenBank or GenPept flat file format.</li>
+<li>gb      - An alias for &quot;genbank&quot;, for consistency with NCBI Entrez Utilities</li>
+<li>ig      - The IntelliGenetics file format, apparently the same as the
+MASE alignment format.</li>
+<li>imgt    - An EMBL like format from IMGT where the feature tables are more
+indented to allow for longer feature types.</li>
+<li>pdb-seqres -  Reads a Protein Data Bank (PDB) file to determine the
+complete protein sequence as it appears in the header (no dependencies).</li>
+<li>pdb-atom - Uses Bio.PDB to determine the (partial) protein sequence as
+it appears in the structure based on the atom coordinate section of the
+file (requires NumPy for Bio.PDB).</li>
+<li>phd     - Output from PHRED, used by PHRAP and CONSED for input.</li>
+<li>pir     - A &quot;FASTA like&quot; format introduced by the National Biomedical
+Research Foundation (NBRF) for the Protein Information Resource
+(PIR) database, now part of UniProt.</li>
+<li>seqxml  - SeqXML, simple XML format described in Schmitt et al (2011).</li>
+<li>sff     - Standard Flowgram Format (SFF), typical output from Roche 454.</li>
+<li>sff-trim - Standard Flowgram Format (SFF) with given trimming applied.</li>
+<li>swiss   - Plain text Swiss-Prot aka UniProt format.</li>
+<li>tab     - Simple two column tab separated sequence files, where each
+line holds a record's identifier and sequence. For example,
+this is used as by Aligent's eArray software when saving
+microarray probes in a minimal tab delimited text file.</li>
+<li>qual    - A &quot;FASTA like&quot; format holding PHRED quality values from
+sequencing DNA, but no actual sequences (usually provided
+in separate FASTA files).</li>
+<li>uniprot-xml - The UniProt XML format (replacement for the SwissProt plain
+text format which we call &quot;swiss&quot;)</li>
+</ul>
+</blockquote>
+<p>Note that while Bio.SeqIO can read all the above file formats, it cannot
+write to all of them.</p>
+<p>You can also use any file format supported by Bio.AlignIO, such as &quot;nexus&quot;,
+&quot;phylip&quot; and &quot;stockholm&quot;, which gives you access to the individual sequences
+making up each alignment as SeqRecords.</p>
+</div>
+
+<!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.AbiIO-module.html">Bio.SeqIO.AbiIO</a></strong>: <em class="summary">Bio.SeqIO parser for the ABI format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.AceIO-module.html">Bio.SeqIO.AceIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;ace&quot; file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.FastaIO-module.html">Bio.SeqIO.FastaIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;fasta&quot; (aka FastA or Pearson) file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.IgIO-module.html">Bio.SeqIO.IgIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;ig&quot; (IntelliGenetics or MASE) file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.InsdcIO-module.html">Bio.SeqIO.InsdcIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;genbank&quot; and &quot;embl&quot; file formats.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.Interfaces-module.html">Bio.SeqIO.Interfaces</a></strong>: <em class="summary">Bio.SeqIO support module (not for general use).</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.PdbIO-module.html">Bio.SeqIO.PdbIO</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.PhdIO-module.html">Bio.SeqIO.PhdIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;phd&quot; file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.PirIO-module.html">Bio.SeqIO.PirIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;pir&quot; (aka PIR or NBRF) file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.QualityIO-module.html">Bio.SeqIO.QualityIO</a></strong>: <em class="summary">Bio.SeqIO support for the FASTQ and QUAL file formats.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.SeqXmlIO-module.html">Bio.SeqIO.SeqXmlIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;seqxml&quot; file format, SeqXML.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.SffIO-module.html">Bio.SeqIO.SffIO</a></strong>: <em class="summary">Bio.SeqIO support for the binary Standard Flowgram Format (SFF) file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.SwissIO-module.html">Bio.SeqIO.SwissIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;swiss&quot; (aka SwissProt/UniProt) file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.TabIO-module.html">Bio.SeqIO.TabIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;tab&quot; (simple tab separated) file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.UniprotIO-module.html">Bio.SeqIO.UniprotIO</a></strong>: <em class="summary">Bio.SeqIO support for the &quot;uniprot-xml&quot; file format.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SeqIO._convert-module.html">Bio.SeqIO._convert</a></strong>: <em class="summary">Optimised sequence conversion code (PRIVATE).</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SeqIO._index-module.html">Bio.SeqIO._index</a></strong>: <em class="summary">Dictionary like indexing of sequence files (PRIVATE).</em>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#write" class="summary-sig-name">write</a>(<span class="summary-sig-arg">sequences</span>,
+        <span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>)</span><br />
+      Write complete set of sequences to a file.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#write">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#parse" class="summary-sig-name">parse</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Turns a sequence file into an iterator returning SeqRecords.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#parse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_force_alphabet"></a><span class="summary-sig-name">_force_alphabet</span>(<span class="summary-sig-arg">record_iterator</span>,
+        <span class="summary-sig-arg">alphabet</span>)</span><br />
+      Iterate over records, over-riding the alphabet (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#_force_alphabet">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Turns a sequence file into a single SeqRecord.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#read">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#to_dict" class="summary-sig-name">to_dict</a>(<span class="summary-sig-arg">sequences</span>,
+        <span class="summary-sig-arg">key_function</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Turns a sequence iterator or list into a dictionary.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#to_dict">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#index" class="summary-sig-name">index</a>(<span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">format</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">key_function</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Indexes a sequence file and returns a dictionary like object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#index_db" class="summary-sig-name">index_db</a>(<span class="summary-sig-arg">index_filename</span>,
+        <span class="summary-sig-arg">filenames</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">key_function</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Index several sequence files and return a dictionary like object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#index_db">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#convert" class="summary-sig-name">convert</a>(<span class="summary-sig-arg">in_file</span>,
+        <span class="summary-sig-arg">in_format</span>,
+        <span class="summary-sig-arg">out_file</span>,
+        <span class="summary-sig-arg">out_format</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Convert between two sequence file formats, return number of records.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO-pysrc.html#convert">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO-module.html#_FormatToIterator" class="summary-name" onclick="show_private();">_FormatToIterator</a> = <code title="{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;gb&quot;: InsdcIO.GenBankIterator, &quot;genba\
+nk&quot;: InsdcIO.GenBankIterator, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeature\
+Iterator, &quot;embl&quot;: InsdcIO.EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFea\
+tureIterator, &quot;imgt&quot;: InsdcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;sw\
+iss&quot;: SwissIO.SwissIterator, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-s\
+eqres&quot;: PdbIO.PdbSeqresIterator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceI\
+O.AceIterator, &quot;tab&quot;: TabIO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fa\
+stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.FastqPhr\
+...">{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;gb&quot;: Ins<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO-module.html#_FormatToWriter" class="summary-name" onclick="show_private();">_FormatToWriter</a> = <code title="{'embl': &lt;class 'Bio.SeqIO.InsdcIO.EmblWriter'&gt;,
+ 'fasta': &lt;class 'Bio.SeqIO.FastaIO.FastaWriter'&gt;,
+ 'fastq': &lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;,
+ 'fastq-illumina': &lt;class 'Bio.SeqIO.QualityIO.FastqIlluminaWriter'&gt;,
+ 'fastq-sanger': &lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;,
+ 'fastq-solexa': &lt;class 'Bio.SeqIO.QualityIO.FastqSolexaWriter'&gt;,
+ 'gb': &lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;,
+ 'genbank': &lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;,
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">embl</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.EmblWrite<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_BinaryFormats"></a><span class="summary-name">_BinaryFormats</span> = <code title="['sff', 'sff-trim', 'abi', 'abi-trim']"><code class="variable-group">[</code><code class="variable-quote">'</code><code class="variable-string">sff</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">sff-trim</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">abi</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">abi-trim</code><code class="variable-quote">'</code><code class="variable-group">]</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.SeqIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.SeqIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="write"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write</span>(<span class="sig-arg">sequences</span>,
+        <span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO-pysrc.html#write">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Write complete set of sequences to a file.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>sequences - A list (or iterator) of SeqRecord objects, or (if using
+Biopython 1.54 or later) a single SeqRecord.</li>
+<li>handle    - File handle object to write to, or filename as string
+(note older versions of Biopython only took a handle).</li>
+<li>format    - lower case string describing the file format to write.</li>
+</ul>
+</blockquote>
+<p>You should close the handle after calling this function.</p>
+<p>Returns the number of records written (as an integer).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="parse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO-pysrc.html#parse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turns a sequence file into an iterator returning SeqRecords.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>handle   - handle to the file, or the filename as a string
+(note older versions of Biopython only took a handle).</li>
+<li>format   - lower case string describing the file format.</li>
+<li>alphabet - optional Alphabet object, useful when the sequence type
+cannot be automatically inferred from the file itself
+(e.g. format=&quot;fasta&quot; or &quot;tab&quot;)</li>
+</ul>
+</blockquote>
+<p>Typical usage, opening a file to read in, and looping over the record(s):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;Fasta/sweetpea.nu&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(filename, <span class="py-string">&quot;fasta&quot;</span>):
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;ID %s&quot;</span> % record.id)
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;Sequence length %i&quot;</span> % len(record))
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;Sequence alphabet %s&quot;</span> % record.seq.alphabet)
+<span class="py-output">ID gi|3176602|gb|U78617.1|LOU78617</span>
+<span class="py-output">Sequence length 309</span>
+<span class="py-output">Sequence alphabet SingleLetterAlphabet()</span></pre>
+<p>For file formats like FASTA where the alphabet cannot be determined, it
+may be useful to specify the alphabet explicitly:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;Fasta/sweetpea.nu&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(filename, <span class="py-string">&quot;fasta&quot;</span>, generic_dna):
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;ID %s&quot;</span> % record.id)
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;Sequence length %i&quot;</span> % len(record))
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;Sequence alphabet %s&quot;</span> % record.seq.alphabet)
+<span class="py-output">ID gi|3176602|gb|U78617.1|LOU78617</span>
+<span class="py-output">Sequence length 309</span>
+<span class="py-output">Sequence alphabet DNAAlphabet()</span></pre>
+<p>If you have a string 'data' containing the file contents, you must
+first turn this into a handle in order to parse it:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>data = <span class="py-string">&quot;&gt;Alpha\nACCGGATGTA\n&gt;Beta\nAGGCTCGGTTA\n&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>try:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO <span class="py-comment"># Python 2</span>
+<span class="py-more">... </span><span class="py-keyword">except</span> ImportError:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> io <span class="py-keyword">import</span> StringIO <span class="py-comment"># Python 3</span>
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(StringIO(data), <span class="py-string">&quot;fasta&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">Alpha ACCGGATGTA</span>
+<span class="py-output">Beta AGGCTCGGTTA</span></pre>
+<p>Use the Bio.SeqIO.read(...) function when you expect a single record
+only.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="read"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO-pysrc.html#read">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turns a sequence file into a single SeqRecord.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>handle   - handle to the file, or the filename as a string
+(note older versions of Biopython only took a handle).</li>
+<li>format   - string describing the file format.</li>
+<li>alphabet - optional Alphabet object, useful when the sequence type
+cannot be automatically inferred from the file itself
+(e.g. format=&quot;fasta&quot; or &quot;tab&quot;)</li>
+</ul>
+</blockquote>
+<p>This function is for use parsing sequence files containing
+exactly one record.  For example, reading a GenBank file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;GenBank/arab1.gb&quot;</span>, <span class="py-string">&quot;genbank&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;ID %s&quot;</span> % record.id)
+<span class="py-output">ID AC007323.5</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Sequence length %i&quot;</span> % len(record))
+<span class="py-output">Sequence length 86436</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Sequence alphabet %s&quot;</span> % record.seq.alphabet)
+<span class="py-output">Sequence alphabet IUPACAmbiguousDNA()</span></pre>
+<p>If the handle contains no records, or more than one record,
+an exception is raised.  For example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;GenBank/cor6_6.gb&quot;</span>, <span class="py-string">&quot;genbank&quot;</span>)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">    ...</span>
+<span class="py-except">ValueError: More than one record found in handle</span></pre>
+<p>If however you want the first record from a file containing
+multiple records this function would raise an exception (as
+shown in the example above).  Instead use:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = next(SeqIO.parse(<span class="py-string">&quot;GenBank/cor6_6.gb&quot;</span>, <span class="py-string">&quot;genbank&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;First record's ID %s&quot;</span> % record.id)
+<span class="py-output">First record's ID X55053.1</span></pre>
+<p>Use the Bio.SeqIO.parse(handle, format) function if you want
+to read multiple records from the handle.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="to_dict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">to_dict</span>(<span class="sig-arg">sequences</span>,
+        <span class="sig-arg">key_function</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO-pysrc.html#to_dict">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turns a sequence iterator or list into a dictionary.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>sequences  - An iterator that returns SeqRecord objects,
+or simply a list of SeqRecord objects.</li>
+<li>key_function - Optional callback function which when given a
+SeqRecord should return a unique key for the dictionary.</li>
+</ul>
+</blockquote>
+<p>e.g. key_function = lambda rec : rec.name
+or,  key_function = lambda rec : rec.description.split()[0]</p>
+<p>If key_function is omitted then record.id is used, on the assumption
+that the records objects returned are SeqRecords with a unique id.</p>
+<p>If there are duplicate keys, an error is raised.</p>
+<p>Example usage, defaulting to using the record.id as key:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;GenBank/cor6_6.gb&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>format = <span class="py-string">&quot;genbank&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>id_dict = SeqIO.to_dict(SeqIO.parse(filename, format))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sorted(id_dict))
+<span class="py-output">['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(id_dict[<span class="py-string">&quot;L31939.1&quot;</span>].description)
+<span class="py-output">Brassica rapa (clone bif72) kin mRNA, complete cds.</span></pre>
+<p>A more complex example, using the key_function argument in order to
+use a sequence checksum as the dictionary key:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils.CheckSum <span class="py-keyword">import</span> seguid
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;GenBank/cor6_6.gb&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>format = <span class="py-string">&quot;genbank&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>seguid_dict = SeqIO.to_dict(SeqIO.parse(filename, format),
+<span class="py-more">... </span>              key_function = <span class="py-keyword">lambda</span> rec : seguid(rec.seq))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> key, record <span class="py-keyword">in</span> sorted(seguid_dict.items()):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (key, record.id))
+<span class="py-output">/wQvmrl87QWcm9llO4/efg23Vgg AJ237582.1</span>
+<span class="py-output">BUg6YxXSKWEcFFH0L08JzaLGhQs L31939.1</span>
+<span class="py-output">SabZaA4V2eLE9/2Fm5FnyYy07J4 X55053.1</span>
+<span class="py-output">TtWsXo45S3ZclIBy4X/WJc39+CY M81224.1</span>
+<span class="py-output">l7gjJFE6W/S1jJn5+1ASrUKW/FA X62281.1</span>
+<span class="py-output">uVEYeAQSV5EDQOnFoeMmVea+Oow AF297471.1</span></pre>
+<p>This approach is not suitable for very large sets of sequences, as all
+the SeqRecord objects are held in memory. Instead, consider using the
+Bio.SeqIO.index() function (if it supports your particular file format).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="index"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">index</span>(<span class="sig-arg">filename</span>,
+        <span class="sig-arg">format</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">key_function</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO-pysrc.html#index">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Indexes a sequence file and returns a dictionary like object.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>filename - string giving name of file to be indexed</li>
+<li>format   - lower case string describing the file format</li>
+<li>alphabet - optional Alphabet object, useful when the sequence type
+cannot be automatically inferred from the file itself
+(e.g. format=&quot;fasta&quot; or &quot;tab&quot;)</li>
+<li>key_function - Optional callback function which when given a
+SeqRecord identifier string should return a unique
+key for the dictionary.</li>
+</ul>
+</blockquote>
+<p>This indexing function will return a dictionary like object, giving the
+SeqRecord objects as values:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.index(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(records)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(records)
+<span class="py-output">['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>].format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;EAS54_6_R1_2_1_540_792</span>
+<span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span> <span class="py-keyword">in</span> records
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records.get(<span class="py-string">&quot;Missing&quot;</span>, None))
+<span class="py-output">None</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>records.close()</pre>
+<p>If the file is BGZF compressed, this is detected automatically. Ordinary
+GZIP files are not supported:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.index(<span class="py-string">&quot;Quality/example.fastq.bgz&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(records)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>].seq)
+<span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>records.close()</pre>
+<p>Note that this pseudo dictionary will not support all the methods of a
+true Python dictionary, for example values() is not defined since this
+would require loading all of the records into memory at once.</p>
+<p>When you call the index function, it will scan through the file, noting
+the location of each record. When you access a particular record via the
+dictionary methods, the code will jump to the appropriate part of the
+file and then parse that section into a SeqRecord.</p>
+<p>Note that not all the input formats supported by Bio.SeqIO can be used
+with this index function. It is designed to work only with sequential
+file formats (e.g. &quot;fasta&quot;, &quot;gb&quot;, &quot;fastq&quot;) and is not suitable for any
+interlaced file format (e.g. alignment formats such as &quot;clustal&quot;).</p>
+<p>For small files, it may be more efficient to use an in memory Python
+dictionary, e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.to_dict(SeqIO.parse(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>len(records)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(records)
+<span class="py-output">['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>].format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;EAS54_6_R1_2_1_540_792</span>
+<span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>As with the to_dict() function, by default the id string of each record
+is used as the key. You can specify a callback function to transform
+this (the record identifier string) into your preferred key. For example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">make_tuple</span>(identifier):
+<span class="py-more">... </span>    parts = identifier.split(<span class="py-string">&quot;_&quot;</span>)
+<span class="py-more">... </span>    return int(parts[-2]), int(parts[-1])
+<span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.index(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>,
+<span class="py-more">... </span>                      key_function=make_tuple)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(records)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(records)
+<span class="py-output">[(413, 324), (443, 348), (540, 792)]</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[(540, 792)].format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;EAS54_6_R1_2_1_540_792</span>
+<span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>(540, 792) <span class="py-keyword">in</span> records
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span> <span class="py-keyword">in</span> records
+<span class="py-output">False</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records.get(<span class="py-string">&quot;Missing&quot;</span>, None))
+<span class="py-output">None</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>records.close()</pre>
+<p>Another common use case would be indexing an NCBI style FASTA file,
+where you might want to extract the GI number from the FASTA identifier
+to use as the dictionary key.</p>
+<p>Notice that unlike the to_dict() function, here the key_function does
+not get given the full SeqRecord to use to generate the key. Doing so
+would impose a severe performance penalty as it would require the file
+to be completely parsed while building the index. Right now this is
+usually avoided.</p>
+<p>See also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="index_db"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">index_db</span>(<span class="sig-arg">index_filename</span>,
+        <span class="sig-arg">filenames</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">key_function</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO-pysrc.html#index_db">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Index several sequence files and return a dictionary like object.</p>
+<p>The index is stored in an SQLite database rather than in memory (as in the
+Bio.SeqIO.index(...) function).</p>
+<blockquote>
+<ul class="rst-simple">
+<li>index_filename - Where to store the SQLite index</li>
+<li>filenames - list of strings specifying file(s) to be indexed, or when
+indexing a single file this can be given as a string.
+(optional if reloading an existing index, but must match)</li>
+<li>format   - lower case string describing the file format
+(optional if reloading an existing index, but must match)</li>
+<li>alphabet - optional Alphabet object, useful when the sequence type
+cannot be automatically inferred from the file itself
+(e.g. format=&quot;fasta&quot; or &quot;tab&quot;)</li>
+<li>key_function - Optional callback function which when given a
+SeqRecord identifier string should return a unique
+key for the dictionary.</li>
+</ul>
+</blockquote>
+<p>This indexing function will return a dictionary like object, giving the
+SeqRecord objects as values:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_protein
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>files = [<span class="py-string">&quot;GenBank/NC_000932.faa&quot;</span>, <span class="py-string">&quot;GenBank/NC_005816.faa&quot;</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">get_gi</span>(name):
+<span class="py-more">... </span>    parts = name.split(<span class="py-string">&quot;|&quot;</span>)
+<span class="py-more">... </span>    i = parts.index(<span class="py-string">&quot;gi&quot;</span>)
+<span class="py-more">... </span>    assert i != -1
+<span class="py-more">... </span>    return parts[i+1]
+<span class="py-prompt">&gt;&gt;&gt; </span>idx_name = <span class="py-string">&quot;:memory:&quot;</span> <span class="py-comment">#use an in memory SQLite DB for this test</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.index_db(idx_name, files, <span class="py-string">&quot;fasta&quot;</span>, generic_protein, get_gi)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(records)
+<span class="py-output">95</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>records[<span class="py-string">&quot;7525076&quot;</span>].description
+<span class="py-output">'gi|7525076|ref|NP_051101.1| Ycf2 [Arabidopsis thaliana]'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>records[<span class="py-string">&quot;45478717&quot;</span>].description
+<span class="py-output">'gi|45478717|ref|NP_995572.1| pesticin [Yersinia pestis biovar Microtus str. 91001]'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>records.close()</pre>
+<p>In this example the two files contain 85 and 10 records respectively.</p>
+<p>BGZF compressed files are supported, and detected automatically. Ordinary
+GZIP compressed files are not supported.</p>
+<p>See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict(), and the Python module
+glob which is useful for building lists of files.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="convert"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">convert</span>(<span class="sig-arg">in_file</span>,
+        <span class="sig-arg">in_format</span>,
+        <span class="sig-arg">out_file</span>,
+        <span class="sig-arg">out_format</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO-pysrc.html#convert">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert between two sequence file formats, return number of records.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>in_file - an input handle or filename</li>
+<li>in_format - input file format, lower case string</li>
+<li>out_file - an output handle or filename</li>
+<li>out_format - output file format, lower case string</li>
+<li>alphabet - optional alphabet to assume</li>
+</ul>
+</blockquote>
+<p><strong>NOTE</strong> - If you provide an output filename, it will be opened which will
+overwrite any existing file without warning. This may happen if even
+the conversion is aborted (e.g. an invalid out_format name is given).</p>
+<p>For example, going from a filename to a handle:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>try:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO <span class="py-comment"># Python 2</span>
+<span class="py-more">... </span><span class="py-keyword">except</span> ImportError:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> io <span class="py-keyword">import</span> StringIO <span class="py-comment"># Python 3</span>
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = StringIO(<span class="py-string">&quot;&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>SeqIO.convert(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>, handle, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.getvalue())
+<span class="py-output">&gt;EAS54_6_R1_2_1_413_324</span>
+<span class="py-output">CCCTTCTTGTCTTCAGCGTTTCTCC</span>
+<span class="py-output">&gt;EAS54_6_R1_2_1_540_792</span>
+<span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">&gt;EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">GTTGCTTCTGGCGTGGGTGGGGGGG</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_FormatToIterator"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_FormatToIterator</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;gb&quot;: InsdcIO.GenBankIterator, &quot;genba<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+nk&quot;: InsdcIO.GenBankIterator, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeature<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+Iterator, &quot;embl&quot;: InsdcIO.EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFea<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+tureIterator, &quot;imgt&quot;: InsdcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;sw<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+iss&quot;: SwissIO.SwissIterator, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-s<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+eqres&quot;: PdbIO.PdbSeqresIterator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceI<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+O.AceIterator, &quot;tab&quot;: TabIO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fa<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.FastqPhr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_FormatToWriter"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_FormatToWriter</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">embl</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.EmblWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fasta</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.FastaIO.FastaWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fastq</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fastq-illumina</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqIlluminaWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fastq-sanger</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fastq-solexa</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqSolexaWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">gb</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">genbank</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;<code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:26 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

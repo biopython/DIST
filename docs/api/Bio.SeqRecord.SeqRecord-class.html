@@ -1,0 +1,1565 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SeqRecord.SeqRecord</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SeqRecord-module.html">Module&nbsp;SeqRecord</a> ::
+        Class&nbsp;SeqRecord
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SeqRecord.SeqRecord-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class SeqRecord</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+object --+
+         |
+        <strong class="uidshort">SeqRecord</strong>
+</pre>
+
+<dl><dt>Known Subclasses:</dt>
+<dd>
+      <ul class="subclass-list">
+<li><a href="BioSQL.BioSeq.DBSeqRecord-class.html">BioSQL.BioSeq.DBSeqRecord</a></li>  </ul>
+</dd></dl>
+
+<hr />
+<p>A SeqRecord object holds a sequence and information about it.</p>
+<dl class="rst-docutils">
+<dt>Main attributes:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>id          - Identifier such as a locus tag (string)</li>
+<li>seq         - The sequence itself (Seq object or similar)</li>
+</ul>
+</dd>
+<dt>Additional attributes:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>name        - Sequence name, e.g. gene name (string)</li>
+<li>description - Additional text (string)</li>
+<li>dbxrefs     - List of database cross references (list of strings)</li>
+<li>features    - Any (sub)features defined (list of SeqFeature objects)</li>
+<li>annotations - Further information about the whole sequence (dictionary).
+Most entries are strings, or lists of strings.</li>
+<li>letter_annotations - Per letter/symbol annotation (restricted
+dictionary). This holds Python sequences (lists, strings
+or tuples) whose length matches that of the sequence.
+A typical use would be to hold a list of integers
+representing sequencing quality scores, or a string
+representing the secondary structure.</li>
+</ul>
+</dd>
+</dl>
+<p>You will typically use Bio.SeqIO to read in sequences from files as
+SeqRecord objects.  However, you may want to create your own SeqRecord
+objects directly (see the __init__ method for further details):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> IUPAC
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqRecord(Seq(<span class="py-string">&quot;MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF&quot;</span>,
+<span class="py-more">... </span>                        IUPAC.protein),
+<span class="py-more">... </span>                   id=<span class="py-string">&quot;YP_025292.1&quot;</span>, name=<span class="py-string">&quot;HokC&quot;</span>,
+<span class="py-more">... </span>                   description=<span class="py-string">&quot;toxic membrane protein&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record)
+<span class="py-output">ID: YP_025292.1</span>
+<span class="py-output">Name: HokC</span>
+<span class="py-output">Description: toxic membrane protein</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())</span></pre>
+<p>If you want to save SeqRecord objects to a sequence file, use Bio.SeqIO
+for this.  For the special case where you want the SeqRecord turned into
+a string in a particular file format there is a format method which uses
+Bio.SeqIO internally:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;YP_025292.1 toxic membrane protein</span>
+<span class="py-output">MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>You can also do things like slicing a SeqRecord, checking its length, etc</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>len(record)
+<span class="py-output">44</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>edited = record[:10] + record[11:]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(edited.seq)
+<span class="py-output">MKQHKAMIVAIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.seq)
+<span class="py-output">MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF</span></pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">seq</span>,
+        <span class="summary-sig-arg">id</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">&lt;unknown id&gt;</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">&lt;unknown name&gt;</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">description</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">&lt;unknown description&gt;</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">dbxrefs</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">features</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">annotations</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">letter_annotations</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Create a SeqRecord.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_set_per_letter_annotations"></a><span class="summary-sig-name">_set_per_letter_annotations</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord._set_per_letter_annotations">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_set_seq"></a><span class="summary-sig-name">_set_seq</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord._set_seq">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      Returns a sub-sequence or an individual letter.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__iter__" class="summary-sig-name">__iter__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Iterate over the letters in the sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__iter__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__contains__" class="summary-sig-name">__contains__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">char</span>)</span><br />
+      Implements the 'in' keyword, searches the sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__contains__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      A human readable summary of the record and its annotation (string).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      A concise summary of the record for debugging (string).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#format" class="summary-sig-name">format</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">format</span>)</span><br />
+      Returns the record as a string in the specified file format.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.format">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__format__" class="summary-sig-name">__format__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">format_spec</span>)</span><br />
+      Returns the record as a string in the specified file format.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__format__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__len__" class="summary-sig-name">__len__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the length of the sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__len__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__bool__" class="summary-sig-name">__bool__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Boolean value of an instance of this class (True).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__bool__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__nonzero__" class="summary-sig-name">__nonzero__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Boolean value of an instance of this class (True).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__bool__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__add__" class="summary-sig-name">__add__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      Add another sequence or string to this sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__add__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#__radd__" class="summary-sig-name">__radd__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      Add another sequence or string to this sequence (from the left).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__radd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#upper" class="summary-sig-name">upper</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns a copy of the record with an upper case sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.upper">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#lower" class="summary-sig-name">lower</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns a copy of the record with a lower case sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.lower">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#reverse_complement" class="summary-sig-name">reverse_complement</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">id</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">description</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">features</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">annotations</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">letter_annotations</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">dbxrefs</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Returns new SeqRecord with reverse complement sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.reverse_complement">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqRecord.SeqRecord-class.html#letter_annotations" class="summary-name">letter_annotations</a><br />
+      Dictionary of per-letter-annotation for the sequence.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqRecord.SeqRecord-class.html#seq" class="summary-name">seq</a><br />
+      The sequence itself, as a Seq or MutableSeq object.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">seq</span>,
+        <span class="sig-arg">id</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">&lt;unknown id&gt;</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">&lt;unknown name&gt;</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">description</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">&lt;unknown description&gt;</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">dbxrefs</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">features</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">annotations</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">letter_annotations</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a SeqRecord.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)</li>
+<li>id          - Sequence identifier, recommended (string)</li>
+<li>name        - Sequence name, optional (string)</li>
+<li>description - Sequence description, optional (string)</li>
+<li>dbxrefs     - Database cross references, optional (list of strings)</li>
+<li>features    - Any (sub)features, optional (list of SeqFeature objects)</li>
+<li>annotations - Dictionary of annotations for the whole sequence</li>
+<li>letter_annotations - Dictionary of per-letter-annotations, values
+should be strings, list or tuples of the same
+length as the full sequence.</li>
+</ul>
+</dd>
+</dl>
+<p>You will typically use Bio.SeqIO to read in sequences from files as
+SeqRecord objects.  However, you may want to create your own SeqRecord
+objects directly.</p>
+<p>Note that while an id is optional, we strongly recommend you supply a
+unique id string for each record.  This is especially important
+if you wish to write your sequences to a file.</p>
+<p>If you don't have the actual sequence, but you do know its length,
+then using the UnknownSeq object from Bio.Seq is appropriate.</p>
+<p>You can create a 'blank' SeqRecord object, and then populate the
+attributes later.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__getitem__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a sub-sequence or an individual letter.</p>
+<p>Slicing, e.g. my_record[5:10], returns a new SeqRecord for
+that sub-sequence with appropriate annotation preserved.  The
+name, id and description are kept.</p>
+<p>Any per-letter-annotations are sliced to match the requested
+sub-sequence.  Unless a stride is used, all those features
+which fall fully within the subsequence are included (with
+their locations adjusted accordingly).</p>
+<p>However, the annotations dictionary and the dbxrefs list are
+not used for the new SeqRecord, as in general they may not
+apply to the subsequence.  If you want to preserve them, you
+must explicitly copy them to the new SeqRecord yourself.</p>
+<p>Using an integer index, e.g. my_record[5] is shorthand for
+extracting that letter from the sequence, my_record.seq[5].</p>
+<p>For example, consider this short protein and its secondary
+structure as encoded by the PDB (e.g. H for alpha helices),
+plus a simple feature for its histidine self phosphorylation
+site:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqFeature <span class="py-keyword">import</span> SeqFeature, FeatureLocation
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> IUPAC
+<span class="py-prompt">&gt;&gt;&gt; </span>rec = SeqRecord(Seq(<span class="py-string">&quot;MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLAT&quot;</span>
+<span class="py-more">... </span>                    <span class="py-string">&quot;EMMSEQDGYLAESINKDIEECNAIIEQFIDYLR&quot;</span>,
+<span class="py-more">... </span>                    IUPAC.protein),
+<span class="py-more">... </span>                id=<span class="py-string">&quot;1JOY&quot;</span>, name=<span class="py-string">&quot;EnvZ&quot;</span>,
+<span class="py-more">... </span>                description=<span class="py-string">&quot;Homodimeric domain of EnvZ from E. coli&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>rec.letter_annotations[<span class="py-string">&quot;secondary_structure&quot;</span>] = <span class="py-string">&quot;  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  &quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>rec.features.append(SeqFeature(FeatureLocation(20, 21),
+<span class="py-more">... </span>                    type = <span class="py-string">&quot;Site&quot;</span>))</pre>
+<p>Now let's have a quick look at the full record,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rec)
+<span class="py-output">ID: 1JOY</span>
+<span class="py-output">Name: EnvZ</span>
+<span class="py-output">Description: Homodimeric domain of EnvZ from E. coli</span>
+<span class="py-output">Number of features: 1</span>
+<span class="py-output">Per letter annotation for: secondary_structure</span>
+<span class="py-output">Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rec.letter_annotations[<span class="py-string">&quot;secondary_structure&quot;</span>])
+<span class="py-output">  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rec.features[0].location)
+<span class="py-output">[20:21]</span></pre>
+<p>Now let's take a sub sequence, here chosen as the first (fractured)
+alpha helix which includes the histidine phosphorylation site:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub = rec[11:41]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub)
+<span class="py-output">ID: 1JOY</span>
+<span class="py-output">Name: EnvZ</span>
+<span class="py-output">Description: Homodimeric domain of EnvZ from E. coli</span>
+<span class="py-output">Number of features: 1</span>
+<span class="py-output">Per letter annotation for: secondary_structure</span>
+<span class="py-output">Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD', IUPACProtein())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub.letter_annotations[<span class="py-string">&quot;secondary_structure&quot;</span>])
+<span class="py-output">HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub.features[0].location)
+<span class="py-output">[9:10]</span></pre>
+<p>You can also of course omit the start or end values, for
+example to get the first ten letters only:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rec[:10])
+<span class="py-output">ID: 1JOY</span>
+<span class="py-output">Name: EnvZ</span>
+<span class="py-output">Description: Homodimeric domain of EnvZ from E. coli</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Per letter annotation for: secondary_structure</span>
+<span class="py-output">Seq('MAAGVKQLAD', IUPACProtein())</span></pre>
+<p>Or for the last ten letters:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rec[-10:])
+<span class="py-output">ID: 1JOY</span>
+<span class="py-output">Name: EnvZ</span>
+<span class="py-output">Description: Homodimeric domain of EnvZ from E. coli</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Per letter annotation for: secondary_structure</span>
+<span class="py-output">Seq('IIEQFIDYLR', IUPACProtein())</span></pre>
+<p>If you omit both, then you get a copy of the original record (although
+lacking the annotations and dbxrefs):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rec[:])
+<span class="py-output">ID: 1JOY</span>
+<span class="py-output">Name: EnvZ</span>
+<span class="py-output">Description: Homodimeric domain of EnvZ from E. coli</span>
+<span class="py-output">Number of features: 1</span>
+<span class="py-output">Per letter annotation for: secondary_structure</span>
+<span class="py-output">Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())</span></pre>
+<p>Finally, indexing with a simple integer is shorthand for pulling out
+that letter from the sequence directly:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>rec[5]
+<span class="py-output">'K'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>rec.seq[5]
+<span class="py-output">'K'</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__iter__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__iter__</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__iter__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over the letters in the sequence.</p>
+<p>For example, using Bio.SeqIO to read in a protein FASTA file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Fasta/loveliesbleeding.pro&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> amino <span class="py-keyword">in</span> record:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(amino)
+<span class="py-more">... </span>    <span class="py-keyword">if</span> amino == <span class="py-string">&quot;L&quot;</span>: break
+<span class="py-output">X</span>
+<span class="py-output">A</span>
+<span class="py-output">G</span>
+<span class="py-output">L</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.seq[3])
+<span class="py-output">L</span></pre>
+<p>This is just a shortcut for iterating over the sequence directly:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> amino <span class="py-keyword">in</span> record.seq:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(amino)
+<span class="py-more">... </span>    <span class="py-keyword">if</span> amino == <span class="py-string">&quot;L&quot;</span>: break
+<span class="py-output">X</span>
+<span class="py-output">A</span>
+<span class="py-output">G</span>
+<span class="py-output">L</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.seq[3])
+<span class="py-output">L</span></pre>
+<p>Note that this does not facilitate iteration together with any
+per-letter-annotation.  However, you can achieve that using the
+python zip function on the record (or its sequence) and the relevant
+per-letter-annotation:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>rec = SeqIO.read(<span class="py-string">&quot;Quality/solexa_faked.fastq&quot;</span>, <span class="py-string">&quot;fastq-solexa&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (rec.id, rec.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(rec.letter_annotations))
+<span class="py-output">['solexa_quality']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> nuc, qual <span class="py-keyword">in</span> zip(rec, rec.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>]):
+<span class="py-more">... </span>    <span class="py-keyword">if</span> qual &gt; 35:
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (nuc, qual))
+<span class="py-output">A 40</span>
+<span class="py-output">C 39</span>
+<span class="py-output">G 38</span>
+<span class="py-output">T 37</span>
+<span class="py-output">A 36</span></pre>
+<p>You may agree that using zip(rec.seq, ...) is more explicit than using
+zip(rec, ...) as shown above.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__contains__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__contains__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">char</span>)</span>
+    <br /><em class="fname">(In operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__contains__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Implements the 'in' keyword, searches the sequence.</p>
+<p>e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Fasta/sweetpea.nu&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;GAATTC&quot;</span> <span class="py-keyword">in</span> record
+<span class="py-output">False</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;AAA&quot;</span> <span class="py-keyword">in</span> record
+<span class="py-output">True</span></pre>
+<p>This essentially acts as a proxy for using &quot;in&quot; on the sequence:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;GAATTC&quot;</span> <span class="py-keyword">in</span> record.seq
+<span class="py-output">False</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;AAA&quot;</span> <span class="py-keyword">in</span> record.seq
+<span class="py-output">True</span></pre>
+<p>Note that you can also use Seq objects as the query,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span>Seq(<span class="py-string">&quot;AAA&quot;</span>) <span class="py-keyword">in</span> record
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>Seq(<span class="py-string">&quot;AAA&quot;</span>, generic_dna) <span class="py-keyword">in</span> record
+<span class="py-output">True</span></pre>
+<p>See also the Seq object's __contains__ method.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>A human readable summary of the record and its annotation (string).</p>
+<p>The python built in function str works by calling the object's ___str__
+method.  e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> IUPAC
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqRecord(Seq(<span class="py-string">&quot;MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF&quot;</span>,
+<span class="py-more">... </span>                        IUPAC.protein),
+<span class="py-more">... </span>                   id=<span class="py-string">&quot;YP_025292.1&quot;</span>, name=<span class="py-string">&quot;HokC&quot;</span>,
+<span class="py-more">... </span>                   description=<span class="py-string">&quot;toxic membrane protein, small&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(str(record))
+<span class="py-output">ID: YP_025292.1</span>
+<span class="py-output">Name: HokC</span>
+<span class="py-output">Description: toxic membrane protein, small</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())</span></pre>
+<p>In this example you don't actually need to call str explicity, as the
+print command does this automatically:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record)
+<span class="py-output">ID: YP_025292.1</span>
+<span class="py-output">Name: HokC</span>
+<span class="py-output">Description: toxic membrane protein, small</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())</span></pre>
+<p>Note that long sequences are shown truncated.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__repr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>A concise summary of the record for debugging (string).</p>
+<p>The python built in function repr works by calling the object's ___repr__
+method.  e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_protein
+<span class="py-prompt">&gt;&gt;&gt; </span>rec = SeqRecord(Seq(<span class="py-string">&quot;MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKAT&quot;</span>
+<span class="py-more">... </span>                   +<span class="py-string">&quot;GEMKEQTEWHRVVLFGKLAEVASEYLRKGSQVYIEGQLRTRKWTDQ&quot;</span>
+<span class="py-more">... </span>                   +<span class="py-string">&quot;SGQDRYTTEVVVNVGGTMQMLGGRQGGGAPAGGNIGGGQPQGGWGQ&quot;</span>
+<span class="py-more">... </span>                   +<span class="py-string">&quot;PQQPQGGNQFSGGAQSRPQQSAPAAPSNEPPMDFDDDIPF&quot;</span>,
+<span class="py-more">... </span>                   generic_protein),
+<span class="py-more">... </span>                id=<span class="py-string">&quot;NP_418483.1&quot;</span>, name=<span class="py-string">&quot;b4059&quot;</span>,
+<span class="py-more">... </span>                description=<span class="py-string">&quot;ssDNA-binding protein&quot;</span>,
+<span class="py-more">... </span>                dbxrefs=[<span class="py-string">&quot;ASAP:13298&quot;</span>, <span class="py-string">&quot;GI:16131885&quot;</span>, <span class="py-string">&quot;GeneID:948570&quot;</span>])
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(repr(rec))
+<span class="py-output">SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])</span></pre>
+<p>At the python prompt you can also use this shorthand:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>rec
+<span class="py-output">SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])</span></pre>
+<p>Note that long sequences are shown truncated. Also note that any
+annotations, letter_annotations and features are not shown (as they
+would lead to a very long string).</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="format"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">format</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">format</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.format">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns the record as a string in the specified file format.</p>
+<p>The format should be a lower case string supported as an output
+format by Bio.SeqIO, which is used to turn the SeqRecord into a
+string.  e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> IUPAC
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqRecord(Seq(<span class="py-string">&quot;MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF&quot;</span>,
+<span class="py-more">... </span>                        IUPAC.protein),
+<span class="py-more">... </span>                   id=<span class="py-string">&quot;YP_025292.1&quot;</span>, name=<span class="py-string">&quot;HokC&quot;</span>,
+<span class="py-more">... </span>                   description=<span class="py-string">&quot;toxic membrane protein&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record.format(<span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-output">'&gt;YP_025292.1 toxic membrane protein\nMKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF\n'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;YP_025292.1 toxic membrane protein</span>
+<span class="py-output">MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>The python print command automatically appends a new line, meaning
+in this example a blank line is shown.  If you look at the string
+representation you can see there is a trailing new line (shown as
+slash n) which is important when writing to a file or if
+concatenating multiple sequence strings together.</p>
+<p>Note that this method will NOT work on every possible file format
+supported by Bio.SeqIO (e.g. some are for multiple sequences only).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__format__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__format__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">format_spec</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__format__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns the record as a string in the specified file format.</p>
+<p>This method supports the python format() function added in
+Python 2.6/3.0.  The format_spec should be a lower case string
+supported by Bio.SeqIO as an output file format. See also the
+SeqRecord's format() method.</p>
+<p>Under Python 3 please note that for binary formats a bytes
+string is returned, otherwise a (unicode) string is returned.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__format__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__len__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__len__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Length operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__len__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns the length of the sequence.</p>
+<p>For example, using Bio.SeqIO to read in a FASTA nucleotide file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Fasta/sweetpea.nu&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(record)
+<span class="py-output">309</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(record.seq)
+<span class="py-output">309</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__bool__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__bool__</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__bool__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Boolean value of an instance of this class (True).</p>
+<p>This behaviour is for backwards compatibility, since until the
+__len__ method was added, a SeqRecord always evaluated as True.</p>
+<p>Note that in comparison, a Seq object will evaluate to False if it
+has a zero length sequence.</p>
+<p>WARNING: The SeqRecord may in future evaluate to False when its
+sequence is of zero length (in order to better match the Seq
+object behaviour)!</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__nonzero__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__nonzero__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Boolean test operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__bool__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Boolean value of an instance of this class (True).</p>
+<p>This behaviour is for backwards compatibility, since until the
+__len__ method was added, a SeqRecord always evaluated as True.</p>
+<p>Note that in comparison, a Seq object will evaluate to False if it
+has a zero length sequence.</p>
+<p>WARNING: The SeqRecord may in future evaluate to False when its
+sequence is of zero length (in order to better match the Seq
+object behaviour)!</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__add__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__add__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+    <br /><em class="fname">(Addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__add__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add another sequence or string to this sequence.</p>
+<p>The other sequence can be a SeqRecord object, a Seq object (or
+similar, e.g. a MutableSeq) or a plain Python string. If you add
+a plain string or a Seq (like) object, the new SeqRecord will simply
+have this appended to the existing data. However, any per letter
+annotation will be lost:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Quality/solexa_faked.fastq&quot;</span>, <span class="py-string">&quot;fastq-solexa&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(record.letter_annotations))
+<span class="py-output">['solexa_quality']</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>new = record + <span class="py-string">&quot;ACT&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (new.id, new.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNNACT</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(new.letter_annotations))
+<span class="py-output">[]</span></pre>
+<p>The new record will attempt to combine the annotation, but for any
+ambiguities (e.g. different names) it defaults to omitting that
+annotation.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;GenBank/pBAD30.gb&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    plasmid = SeqIO.read(handle, <span class="py-string">&quot;gb&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (plasmid.id, len(plasmid)))
+<span class="py-output">pBAD30 4923</span></pre>
+<p>Now let's cut the plasmid into two pieces, and join them back up the
+other way round (i.e. shift the starting point on this plasmid, have
+a look at the annotated features in the original file to see why this
+particular split point might make sense):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>left = plasmid[:3765]
+<span class="py-prompt">&gt;&gt;&gt; </span>right = plasmid[3765:]
+<span class="py-prompt">&gt;&gt;&gt; </span>new = right + left
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (new.id, len(new)))
+<span class="py-output">pBAD30 4923</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>str(new.seq) == str(right.seq + left.seq)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(new.features) == len(left.features) + len(right.features)
+<span class="py-output">True</span></pre>
+<p>When we add the left and right SeqRecord objects, their annotation
+is all consistent, so it is all conserved in the new SeqRecord:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>new.id == left.id == right.id == plasmid.id
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>new.name == left.name == right.name == plasmid.name
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>new.description == plasmid.description
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>new.annotations == left.annotations == right.annotations
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>new.letter_annotations == plasmid.letter_annotations
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>new.dbxrefs == left.dbxrefs == right.dbxrefs
+<span class="py-output">True</span></pre>
+<p>However, we should point out that when we sliced the SeqRecord,
+any annotations dictionary or dbxrefs list entries were lost.
+You can explicitly copy them like this:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>new.annotations = plasmid.annotations.copy()
+<span class="py-prompt">&gt;&gt;&gt; </span>new.dbxrefs = plasmid.dbxrefs[:]</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__radd__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__radd__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+    <br /><em class="fname">(Right-side addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.__radd__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add another sequence or string to this sequence (from the left).</p>
+<p>This method handles adding a Seq object (or similar, e.g. MutableSeq)
+or a plain Python string (on the left) to a SeqRecord (on the right).
+See the __add__ method for more details, but for example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Quality/solexa_faked.fastq&quot;</span>, <span class="py-string">&quot;fastq-solexa&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(record.letter_annotations))
+<span class="py-output">['solexa_quality']</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>new = <span class="py-string">&quot;ACT&quot;</span> + record
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (new.id, new.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(new.letter_annotations))
+<span class="py-output">[]</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="upper"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">upper</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.upper">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a copy of the record with an upper case sequence.</p>
+<p>All the annotation is preserved unchanged. e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqRecord(Seq(<span class="py-string">&quot;acgtACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Test&quot;</span>,
+<span class="py-more">... </span>                   description = <span class="py-string">&quot;Made up for this example&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>] = [1, 2, 3, 4, 5, 6, 7, 8]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.upper().format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-output">@Test Made up for this example</span>
+<span class="py-output">ACGTACGT</span>
+<span class="py-output">+</span>
+<span class="py-output">&quot;#$%&amp;'()</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>Naturally, there is a matching lower method:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.lower().format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-output">@Test Made up for this example</span>
+<span class="py-output">acgtacgt</span>
+<span class="py-output">+</span>
+<span class="py-output">&quot;#$%&amp;'()</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="lower"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">lower</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.lower">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a copy of the record with a lower case sequence.</p>
+<p>All the annotation is preserved unchanged. e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Fasta/aster.pro&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;gi|3298468|dbj|BAA31520.1| SAMIPF</span>
+<span class="py-output">GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVG</span>
+<span class="py-output">VTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.lower().format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;gi|3298468|dbj|BAA31520.1| SAMIPF</span>
+<span class="py-output">gghvnpavtfgafvggnitllrgivyiiaqllgstvaclllkfvtndmavgvfslsagvg</span>
+<span class="py-output">vtnalvfeivmtfglvytvyataidpkkgslgtiapiaigfivgani</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>To take a more annotation rich example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>old = SeqIO.read(<span class="py-string">&quot;EMBL/TRBG361.embl&quot;</span>, <span class="py-string">&quot;embl&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(old.features)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>new = old.lower()
+<span class="py-prompt">&gt;&gt;&gt; </span>len(old.features) == len(new.features)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>old.annotations[<span class="py-string">&quot;organism&quot;</span>] == new.annotations[<span class="py-string">&quot;organism&quot;</span>]
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>old.dbxrefs == new.dbxrefs
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="reverse_complement"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">reverse_complement</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">id</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">name</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">description</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">features</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">annotations</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">letter_annotations</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">dbxrefs</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqRecord-pysrc.html#SeqRecord.reverse_complement">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns new SeqRecord with reverse complement sequence.</p>
+<p>You can specify the returned record's id, name and description as
+strings, or True to keep that of the parent, or False for a default.</p>
+<p>You can specify the returned record's features with a list of
+SeqFeature objects, or True to keep that of the parent, or False to
+omit them. The default is to keep the original features (with the
+strand and locations adjusted).</p>
+<p>You can also specify both the returned record's annotations and
+letter_annotations as dictionaries, True to keep that of the parent,
+or False to omit them. The default is to keep the original
+annotations (with the letter annotations reversed).</p>
+<p>To show what happens to the pre-letter annotations, consider an
+example Solexa variant FASTQ file with a single entry, which we'll
+read in as a SeqRecord:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Quality/solexa_faked.fastq&quot;</span>, <span class="py-string">&quot;fastq-solexa&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(record.letter_annotations))
+<span class="py-output">['solexa_quality']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>])
+<span class="py-output">[40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</span></pre>
+<p>Now take the reverse complement,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>rc_record = record.reverse_complement(id=record.id+<span class="py-string">&quot;_rc&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (rc_record.id, rc_record.seq))
+<span class="py-output">slxa_0001_1_0001_01_rc NNNNNNACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT</span></pre>
+<p>Notice that the per-letter-annotations have also been reversed,
+although this may not be appropriate for all cases.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rc_record.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>])
+<span class="py-output">[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]</span></pre>
+<p>Now for the features, we need a different example. Parsing a GenBank
+file is probably the easiest way to get an nice example with features
+in it...</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;GenBank/pBAD30.gb&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    plasmid = SeqIO.read(handle, <span class="py-string">&quot;gb&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (plasmid.id, len(plasmid)))
+<span class="py-output">pBAD30 4923</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>plasmid.seq
+<span class="py-output">Seq('GCTAGCGGAGTGTATACTGGCTTACTATGTTGGCACTGATGAGGGTGTCAGTGA...ATG', IUPACAmbiguousDNA())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(plasmid.features)
+<span class="py-output">13</span></pre>
+<p>Now, let's take the reverse complement of this whole plasmid:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>rc_plasmid = plasmid.reverse_complement(id=plasmid.id+<span class="py-string">&quot;_rc&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (rc_plasmid.id, len(rc_plasmid)))
+<span class="py-output">pBAD30_rc 4923</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>rc_plasmid.seq
+<span class="py-output">Seq('CATGGGCAAATATTATACGCAAGGCGACAAGGTGCTGATGCCGCTGGCGATTCA...AGC', IUPACAmbiguousDNA())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(rc_plasmid.features)
+<span class="py-output">13</span></pre>
+<p>Let's compare the first CDS feature - it has gone from being the
+second feature (index 1) to the second last feature (index -2), its
+strand has changed, and the location switched round.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(plasmid.features[1])
+<span class="py-output">type: CDS</span>
+<span class="py-output">location: [1081:1960](-)</span>
+<span class="py-output">qualifiers:</span>
+<span class="py-output">    Key: label, Value: ['araC']</span>
+<span class="py-output">    Key: note, Value: ['araC regulator of the arabinose BAD promoter']</span>
+<span class="py-output">    Key: vntifkey, Value: ['4']</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rc_plasmid.features[-2])
+<span class="py-output">type: CDS</span>
+<span class="py-output">location: [2963:3842](+)</span>
+<span class="py-output">qualifiers:</span>
+<span class="py-output">    Key: label, Value: ['araC']</span>
+<span class="py-output">    Key: note, Value: ['araC regulator of the arabinose BAD promoter']</span>
+<span class="py-output">    Key: vntifkey, Value: ['4']</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>You can check this new location, based on the length of the plasmid:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>len(plasmid) - 1081
+<span class="py-output">3842</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(plasmid) - 1960
+<span class="py-output">2963</span></pre>
+<p>Note that if the SeqFeature annotation includes any strand specific
+information (e.g. base changes for a SNP), this information is not
+amended, and would need correction after the reverse complement.</p>
+<p>Note trying to reverse complement a protein SeqRecord raises an
+exception:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> IUPAC
+<span class="py-prompt">&gt;&gt;&gt; </span>protein_rec = SeqRecord(Seq(<span class="py-string">&quot;MAIVMGR&quot;</span>, IUPAC.protein), id=<span class="py-string">&quot;Test&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>protein_rec.reverse_complement()
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">   ...</span>
+<span class="py-except">ValueError: Proteins do not have complements!</span></pre>
+<p>Also note you can reverse complement a SeqRecord using a MutableSeq:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> MutableSeq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span>rec = SeqRecord(MutableSeq(<span class="py-string">&quot;ACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Test&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>rec.seq[0] = <span class="py-string">&quot;T&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (rec.id, rec.seq))
+<span class="py-output">Test TCGT</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>rc = rec.reverse_complement(id=True)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (rc.id, rc.seq))
+<span class="py-output">Test ACGA</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="letter_annotations"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">letter_annotations</h3>
+  <p>Dictionary of per-letter-annotation for the sequence.</p>
+<p>For example, this can hold quality scores used in FASTQ or QUAL files.
+Consider this example using Bio.SeqIO to read in an example Solexa
+variant FASTQ file as a SeqRecord:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Quality/solexa_faked.fastq&quot;</span>, <span class="py-string">&quot;fastq-solexa&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(record.letter_annotations))
+<span class="py-output">['solexa_quality']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>])
+<span class="py-output">[40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</span></pre>
+<p>The letter_annotations get sliced automatically if you slice the
+parent SeqRecord, for example taking the last ten bases:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_record = record[-10:]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (sub_record.id, sub_record.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_record.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>])
+<span class="py-output">[4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</span></pre>
+<p>Any python sequence (i.e. list, tuple or string) can be recorded in
+the SeqRecord's letter_annotations dictionary as long as the length
+matches that of the SeqRecord's sequence.  e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>len(sub_record.letter_annotations)
+<span class="py-output">1</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sub_record.letter_annotations[<span class="py-string">&quot;dummy&quot;</span>] = <span class="py-string">&quot;abcdefghij&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>len(sub_record.letter_annotations)
+<span class="py-output">2</span></pre>
+<p>You can delete entries from the letter_annotations dictionary as usual:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">del</span> sub_record.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_record.letter_annotations
+<span class="py-output">{'dummy': 'abcdefghij'}</span></pre>
+<p>You can completely clear the dictionary easily as follows:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_record.letter_annotations = {}
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_record.letter_annotations
+<span class="py-output">{}</span></pre>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#_set_per_letter_annotations" class="summary-sig-name" onclick="show_private();">_set_per_letter_annotations</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="seq"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">seq</h3>
+  The sequence itself, as a Seq or MutableSeq object.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.SeqRecord.SeqRecord-class.html#_set_seq" class="summary-sig-name" onclick="show_private();">_set_seq</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:21 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

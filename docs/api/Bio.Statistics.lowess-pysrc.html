@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Statistics.lowess</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Statistics-module.html">Package&nbsp;Statistics</a> ::
+        Module&nbsp;lowess
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Statistics.lowess-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.Statistics.lowess-module.html">Module Bio.Statistics.lowess</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2004-2008 by M de Hoon.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># All rights reserved.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Implements the Lowess function for nonparametric regression.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">Functions:</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">lowess        Fit a smooth nonparametric regression curve to a scatterplot.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">For more information, see</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">William S. Cleveland: "Robust locally weighted regression and smoothing</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">scatterplots", Journal of the American Statistical Association, December 1979,</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">volume 74, number 368, pp. 829-836.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">William S. Cleveland and Susan J. Devlin: "Locally weighted regression: An</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">approach to regression analysis by local fitting", Journal of the American</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">Statistical Association, September 1988, volume 83, number 403, pp. 596-610.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio._py3k=Bio._py3k-module.html"><a title="Bio._py3k" class="py-name" href="#" onclick="return doclink('link-1', '_py3k', 'link-1');">_py3k</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-2', 'range', 'link-2');">range</a></tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">numpy</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package Bio.Cluster=Bio.Cluster-module.html"><a title="Bio.Cluster" class="py-name" href="#" onclick="return doclink('link-4', 'Cluster', 'link-4');">Cluster</a></tt> <tt class="py-keyword">import</tt> <tt id="link-5" class="py-name" targets="Function Bio.Cluster.cluster.median()=Bio.Cluster.cluster-module.html#median"><a title="Bio.Cluster.cluster.median" class="py-name" href="#" onclick="return doclink('link-5', 'median', 'link-5');">median</a></tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">    <tt class="py-comment"># The function median in Bio.Cluster is faster than the function median</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">    <tt class="py-comment"># in NumPy, as it does not require a full sort.</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-keyword">except</tt> <tt class="py-name">ImportError</tt> <tt class="py-keyword">as</tt> <tt id="link-6" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-6', 'x', 'link-6');">x</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">    <tt class="py-comment"># Use the median function in NumPy if Bio.Cluster is not available</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name"><a title="Bio.Cluster.cluster.median" class="py-name" href="#" onclick="return doclink('link-7', 'median', 'link-5');">median</a></tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"> </tt>
+<a name="lowess"></a><div id="lowess-def"><a name="L37"></a><tt class="py-lineno"> 37</tt> <a class="py-toggle" href="#" id="lowess-toggle" onclick="return toggle('lowess');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Statistics.lowess-module.html#lowess">lowess</a><tt class="py-op">(</tt><tt class="py-param">x</tt><tt class="py-op">,</tt> <tt class="py-param">y</tt><tt class="py-op">,</tt> <tt class="py-param">f</tt><tt class="py-op">=</tt><tt class="py-number">2.</tt> <tt class="py-op">/</tt> <tt class="py-number">3.</tt><tt class="py-op">,</tt> <tt class="py-param">iter</tt><tt class="py-op">=</tt><tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="lowess-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="lowess-expanded"><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">    <tt class="py-docstring">"""lowess(x, y, f=2./3., iter=3) -&gt; yest</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">    Lowess smoother: Robust locally weighted regression.</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">    The lowess function fits a nonparametric regression curve to a scatterplot.</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">    The arrays x and y contain an equal number of elements; each pair</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">    (x[i], y[i]) defines a data point in the scatterplot. The function returns</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    the estimated (smooth) values of y.</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">    The smoothing span is given by f. A larger value for f will result in a</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    smoother curve. The number of robustifying iterations is given by iter. The</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    function will run faster with a smaller number of iterations.</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">    x and y should be numpy float arrays of equal length.  The return value is</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">    also a numpy float array of that length.</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">    e.g.</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; import numpy</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; x = numpy.array([4,  4,  7,  7,  8,  9, 10, 10, 10, 11, 11, 12, 12, 12,</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    ...                 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 16, 16,</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring">    ...                 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 20, 20, 20, 20,</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring">    ...                 20, 22, 23, 24, 24, 24, 24, 25], numpy.float)</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; y = numpy.array([2, 10,  4, 22, 16, 10, 18, 26, 34, 17, 28, 14, 20, 24,</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    ...                 28, 26, 34, 34, 46, 26, 36, 60, 80, 20, 26, 54, 32, 40,</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">    ...                 32, 40, 50, 42, 56, 76, 84, 36, 46, 68, 32, 48, 52, 56,</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">    ...                 64, 66, 54, 70, 92, 93, 120, 85], numpy.float)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; result = lowess(x, y)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; len(result)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"><tt class="py-docstring">    50</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; print("[%0.2f, ..., %0.2f]" % (result[0], result[-1]))</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring">    [4.85, ..., 84.98]</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-name">n</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-8" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-8', 'x', 'link-6');">x</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-name">r</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">ceil</tt><tt class="py-op">(</tt><tt class="py-name">f</tt> <tt class="py-op">*</tt> <tt class="py-name">n</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">    <tt class="py-name">h</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.sort()=Bio.Align.MultipleSeqAlignment-class.html#sort,Method Bio.PDB.Residue.DisorderedResidue.sort()=Bio.PDB.Residue.DisorderedResidue-class.html#sort,Method Bio.PDB.Residue.Residue.sort()=Bio.PDB.Residue.Residue-class.html#sort,Method Bio.SearchIO._model.hit.Hit.sort()=Bio.SearchIO._model.hit.Hit-class.html#sort,Method Bio.SearchIO._model.query.QueryResult.sort()=Bio.SearchIO._model.query.QueryResult-class.html#sort,Method Bio.Sequencing.Ace.ACEFileRecord.sort()=Bio.Sequencing.Ace.ACEFileRecord-class.html#sort"><a title="Bio.Align.MultipleSeqAlignment.sort
+Bio.PDB.Residue.DisorderedResidue.sort
+Bio.PDB.Residue.Residue.sort
+Bio.SearchIO._model.hit.Hit.sort
+Bio.SearchIO._model.query.QueryResult.sort
+Bio.Sequencing.Ace.ACEFileRecord.sort" class="py-name" href="#" onclick="return doclink('link-9', 'sort', 'link-9');">sort</a></tt><tt class="py-op">(</tt><tt id="link-10" class="py-name" targets="Method Bio.FSSP.FSSPAlignDict.abs()=Bio.FSSP.FSSPAlignDict-class.html#abs"><a title="Bio.FSSP.FSSPAlignDict.abs" class="py-name" href="#" onclick="return doclink('link-10', 'abs', 'link-10');">abs</a></tt><tt class="py-op">(</tt><tt id="link-11" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-11', 'x', 'link-6');">x</a></tt> <tt class="py-op">-</tt> <tt id="link-12" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-12', 'x', 'link-6');">x</a></tt><tt class="py-op">[</tt><tt id="link-13" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-13', 'i', 'link-13');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">r</tt><tt class="py-op">]</tt> <tt class="py-keyword">for</tt> <tt id="link-14" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-14', 'i', 'link-13');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-15" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-15', 'range', 'link-2');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">n</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">    <tt class="py-name">w</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">clip</tt><tt class="py-op">(</tt><tt id="link-16" class="py-name"><a title="Bio.FSSP.FSSPAlignDict.abs" class="py-name" href="#" onclick="return doclink('link-16', 'abs', 'link-10');">abs</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt id="link-17" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-17', 'x', 'link-6');">x</a></tt><tt class="py-op">]</tt> <tt class="py-op">-</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">transpose</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt id="link-18" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-18', 'x', 'link-6');">x</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-name">h</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">    <tt class="py-name">w</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> <tt class="py-op">-</tt> <tt class="py-name">w</tt> <tt class="py-op">*</tt> <tt class="py-name">w</tt> <tt class="py-op">*</tt> <tt class="py-name">w</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">    <tt class="py-name">w</tt> <tt class="py-op">=</tt> <tt class="py-name">w</tt> <tt class="py-op">*</tt> <tt class="py-name">w</tt> <tt class="py-op">*</tt> <tt class="py-name">w</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">    <tt class="py-name">yest</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">zeros</tt><tt class="py-op">(</tt><tt class="py-name">n</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">    <tt class="py-name">delta</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">ones</tt><tt class="py-op">(</tt><tt class="py-name">n</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">iteration</tt> <tt class="py-keyword">in</tt> <tt id="link-19" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-19', 'range', 'link-2');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">iter</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-20" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-20', 'i', 'link-13');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-21" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-21', 'range', 'link-2');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">n</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-name">weights</tt> <tt class="py-op">=</tt> <tt class="py-name">delta</tt> <tt class="py-op">*</tt> <tt class="py-name">w</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">,</tt> <tt id="link-22" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-22', 'i', 'link-13');">i</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-name">weights_mul_x</tt> <tt class="py-op">=</tt> <tt class="py-name">weights</tt> <tt class="py-op">*</tt> <tt id="link-23" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-23', 'x', 'link-6');">x</a></tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">            <tt class="py-name">b1</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">dot</tt><tt class="py-op">(</tt><tt class="py-name">weights</tt><tt class="py-op">,</tt> <tt id="link-24" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.y=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#y"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-24', 'y', 'link-24');">y</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-name">b2</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">dot</tt><tt class="py-op">(</tt><tt class="py-name">weights_mul_x</tt><tt class="py-op">,</tt> <tt id="link-25" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-25', 'y', 'link-24');">y</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-name">A11</tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name" targets="Method Bio.Nexus.Nexus.StepMatrix.sum()=Bio.Nexus.Nexus.StepMatrix-class.html#sum,Method Bio.SubsMat.SeqMat.sum()=Bio.SubsMat.SeqMat-class.html#sum"><a title="Bio.Nexus.Nexus.StepMatrix.sum
+Bio.SubsMat.SeqMat.sum" class="py-name" href="#" onclick="return doclink('link-26', 'sum', 'link-26');">sum</a></tt><tt class="py-op">(</tt><tt class="py-name">weights</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">            <tt class="py-name">A12</tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="Bio.Nexus.Nexus.StepMatrix.sum
+Bio.SubsMat.SeqMat.sum" class="py-name" href="#" onclick="return doclink('link-27', 'sum', 'link-26');">sum</a></tt><tt class="py-op">(</tt><tt class="py-name">weights_mul_x</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">            <tt class="py-name">A21</tt> <tt class="py-op">=</tt> <tt class="py-name">A12</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">            <tt class="py-name">A22</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">dot</tt><tt class="py-op">(</tt><tt class="py-name">weights_mul_x</tt><tt class="py-op">,</tt> <tt id="link-28" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-28', 'x', 'link-6');">x</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">            <tt class="py-name">determinant</tt> <tt class="py-op">=</tt> <tt class="py-name">A11</tt> <tt class="py-op">*</tt> <tt class="py-name">A22</tt> <tt class="py-op">-</tt> <tt class="py-name">A12</tt> <tt class="py-op">*</tt> <tt class="py-name">A21</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">            <tt class="py-name">beta1</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">A22</tt> <tt class="py-op">*</tt> <tt class="py-name">b1</tt> <tt class="py-op">-</tt> <tt class="py-name">A12</tt> <tt class="py-op">*</tt> <tt class="py-name">b2</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-name">determinant</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">            <tt class="py-name">beta2</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">A11</tt> <tt class="py-op">*</tt> <tt class="py-name">b2</tt> <tt class="py-op">-</tt> <tt class="py-name">A21</tt> <tt class="py-op">*</tt> <tt class="py-name">b1</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-name">determinant</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">            <tt class="py-name">yest</tt><tt class="py-op">[</tt><tt id="link-29" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-29', 'i', 'link-13');">i</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">beta1</tt> <tt class="py-op">+</tt> <tt class="py-name">beta2</tt> <tt class="py-op">*</tt> <tt id="link-30" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-30', 'x', 'link-6');">x</a></tt><tt class="py-op">[</tt><tt id="link-31" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-31', 'i', 'link-13');">i</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">residuals</tt> <tt class="py-op">=</tt> <tt id="link-32" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.y" class="py-name" href="#" onclick="return doclink('link-32', 'y', 'link-24');">y</a></tt> <tt class="py-op">-</tt> <tt class="py-name">yest</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-name">s</tt> <tt class="py-op">=</tt> <tt id="link-33" class="py-name"><a title="Bio.Cluster.cluster.median" class="py-name" href="#" onclick="return doclink('link-33', 'median', 'link-5');">median</a></tt><tt class="py-op">(</tt><tt id="link-34" class="py-name"><a title="Bio.FSSP.FSSPAlignDict.abs" class="py-name" href="#" onclick="return doclink('link-34', 'abs', 'link-10');">abs</a></tt><tt class="py-op">(</tt><tt class="py-name">residuals</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-name">delta</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">clip</tt><tt class="py-op">(</tt><tt class="py-name">residuals</tt> <tt class="py-op">/</tt> <tt class="py-op">(</tt><tt class="py-number">6</tt> <tt class="py-op">*</tt> <tt class="py-name">s</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-name">delta</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> <tt class="py-op">-</tt> <tt class="py-name">delta</tt> <tt class="py-op">*</tt> <tt class="py-name">delta</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-name">delta</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">delta</tt> <tt class="py-op">*</tt> <tt class="py-name">delta</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">yest</tt> </tt>
+</div><a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"> </tt>
+<a name="_test"></a><div id="_test-def"><a name="L99"></a><tt class="py-lineno"> 99</tt> <a class="py-toggle" href="#" id="_test-toggle" onclick="return toggle('_test');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.Statistics.lowess-module.html#_test">_test</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_test-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_test-expanded"><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">    <tt class="py-docstring">"""Run the Bio.Statistics.lowess module's doctests."""</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"Running doctests..."</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">doctest</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">    <tt class="py-name">doctest</tt><tt class="py-op">.</tt><tt class="py-name">testmod</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"Done"</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">    <tt id="link-35" class="py-name" targets="Function Bio.Align.Applications._ClustalOmega._test()=Bio.Align.Applications._ClustalOmega-module.html#_test,Function Bio.Align.Applications._Clustalw._test()=Bio.Align.Applications._Clustalw-module.html#_test,Function Bio.Align.Applications._Dialign._test()=Bio.Align.Applications._Dialign-module.html#_test,Function Bio.Align.Applications._MSAProbs._test()=Bio.Align.Applications._MSAProbs-module.html#_test,Function Bio.Align.Applications._Muscle._test()=Bio.Align.Applications._Muscle-module.html#_test,Function Bio.Align.Applications._Prank._test()=Bio.Align.Applications._Prank-module.html#_test,Function Bio.Align.Applications._Probcons._test()=Bio.Align.Applications._Probcons-module.html#_test,Function Bio.Align.Applications._TCoffee._test()=Bio.Align.Applications._TCoffee-module.html#_test,Function Bio.Align.Generic._test()=Bio.Align.Generic-module.html#_test,Function Bio.Application._test()=Bio.Application-module.html#_test,Function Bio.Blast.Applications._test()=Bio.Blast.Applications-module.html#_test,Function Bio.DocSQL._test()=Bio.DocSQL-module.html#_test,Function Bio.Emboss.Applications._test()=Bio.Emboss.Applications-module.html#_test,Function Bio.Entrez._test()=Bio.Entrez-module.html#_test,Function Bio.KDTree.KDTree'._test()=Bio.KDTree.KDTree%27-module.html#_test,Function Bio.PDB.Selection._test()=Bio.PDB.Selection-module.html#_test,Function Bio.Seq._test()=Bio.Seq-module.html#_test,Function Bio.SeqUtils.MeltingTemp._test()=Bio.SeqUtils.MeltingTemp-module.html#_test,Function Bio.SeqUtils._test()=Bio.SeqUtils-module.html#_test,Function Bio.Sequencing.Applications._Novoalign._test()=Bio.Sequencing.Applications._Novoalign-module.html#_test,Function Bio.Sequencing.Applications._bwa._test()=Bio.Sequencing.Applications._bwa-module.html#_test,Function Bio.Sequencing.Applications._samtools._test()=Bio.Sequencing.Applications._samtools-module.html#_test,Function Bio.Statistics.lowess._test()=Bio.Statistics.lowess-module.html#_test,Function Bio.Wise._test()=Bio.Wise-module.html#_test,Function Bio.Wise.dnal._test()=Bio.Wise.dnal-module.html#_test,Function Bio.Wise.psw._test()=Bio.Wise.psw-module.html#_test,Function Bio.motifs.applications._alignace._test()=Bio.motifs.applications._alignace-module.html#_test,Function Bio.motifs.applications._xxmotif._test()=Bio.motifs.applications._xxmotif-module.html#_test,Function Bio.pairwise2._test()=Bio.pairwise2-module.html#_test"><a title="Bio.Align.Applications._ClustalOmega._test
+Bio.Align.Applications._Clustalw._test
+Bio.Align.Applications._Dialign._test
+Bio.Align.Applications._MSAProbs._test
+Bio.Align.Applications._Muscle._test
+Bio.Align.Applications._Prank._test
+Bio.Align.Applications._Probcons._test
+Bio.Align.Applications._TCoffee._test
+Bio.Align.Generic._test
+Bio.Application._test
+Bio.Blast.Applications._test
+Bio.DocSQL._test
+Bio.Emboss.Applications._test
+Bio.Entrez._test
+Bio.KDTree.KDTree'._test
+Bio.PDB.Selection._test
+Bio.Seq._test
+Bio.SeqUtils.MeltingTemp._test
+Bio.SeqUtils._test
+Bio.Sequencing.Applications._Novoalign._test
+Bio.Sequencing.Applications._bwa._test
+Bio.Sequencing.Applications._samtools._test
+Bio.Statistics.lowess._test
+Bio.Wise._test
+Bio.Wise.dnal._test
+Bio.Wise.psw._test
+Bio.motifs.applications._alignace._test
+Bio.motifs.applications._xxmotif._test
+Bio.pairwise2._test" class="py-name" href="#" onclick="return doclink('link-35', '_test', 'link-35');">_test</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:05:07 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

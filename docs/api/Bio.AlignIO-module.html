@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.AlignIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;AlignIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.AlignIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package AlignIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.AlignIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Multiple sequence alignment input/output as alignment objects.</p>
+<p>The Bio.AlignIO interface is deliberately very similar to Bio.SeqIO, and in
+fact the two are connected internally.  Both modules use the same set of file
+format names (lower case strings).  From the user's perspective, you can read
+in a PHYLIP file containing one or more alignments using Bio.AlignIO, or you
+can read in the sequences within these alignmenta using Bio.SeqIO.</p>
+<p>Bio.AlignIO is also documented at <a class="rst-reference external" href="http://biopython.org/wiki/AlignIO" target="_top">http://biopython.org/wiki/AlignIO</a> and by
+a whole chapter in our tutorial:</p>
+<ul class="rst-simple">
+<li><a class="rst-reference external" href="http://biopython.org/DIST/docs/tutorial/Tutorial.html" target="_top">HTML Tutorial</a></li>
+<li><a class="rst-reference external" href="http://biopython.org/DIST/docs/tutorial/Tutorial.pdf" target="_top">PDF Tutorial</a></li>
+</ul>
+<div class="rst-section" id="rst-input">
+<h1 class="heading">Input</h1>
+<p>For the typical special case when your file or handle contains one and only
+one alignment, use the function Bio.AlignIO.read().  This takes an input file
+handle (or in recent versions of Biopython a filename as a string), format
+string and optional number of sequences per alignment.  It will return a single
+MultipleSeqAlignment object (or raise an exception if there isn't just one
+alignment):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>align = AlignIO.read(<span class="py-string">&quot;Phylip/interlaced.phy&quot;</span>, <span class="py-string">&quot;phylip&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">SingleLetterAlphabet() alignment with 3 rows and 384 columns</span>
+<span class="py-output">-----MKVILLFVLAVFTVFVSS---------------RGIPPE...I-- CYS1_DICDI</span>
+<span class="py-output">MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTL...VAA ALEU_HORVU</span>
+<span class="py-output">------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSL...PLV CATH_HUMAN</span></pre>
+<p>For the general case, when the handle could contain any number of alignments,
+use the function Bio.AlignIO.parse(...) which takes the same arguments, but
+returns an iterator giving MultipleSeqAlignment objects (typically used in a
+for loop). If you want random access to the alignments by number, turn this
+into a list:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>alignments = list(AlignIO.parse(<span class="py-string">&quot;Emboss/needle.txt&quot;</span>, <span class="py-string">&quot;emboss&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(alignments[2])
+<span class="py-output">SingleLetterAlphabet() alignment with 2 rows and 120 columns</span>
+<span class="py-output">-KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKER...--- ref_rec</span>
+<span class="py-output">LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAAEEYILTHP...HKE gi|94967506|receiver</span></pre>
+<p>Most alignment file formats can be concatenated so as to hold as many
+different multiple sequence alignments as possible.  One common example
+is the output of the tool seqboot in the PHLYIP suite.  Sometimes there
+can be a file header and footer, as seen in the EMBOSS alignment output.</p>
+</div>
+<div class="rst-section" id="rst-output">
+<h1 class="heading">Output</h1>
+<p>Use the function Bio.AlignIO.write(...), which takes a complete set of
+Alignment objects (either as a list, or an iterator), an output file handle
+(or filename in recent versions of Biopython) and of course the file format:</p>
+<pre class="rst-literal-block">
+from Bio import AlignIO
+alignments = ...
+count = SeqIO.write(alignments, &quot;example.faa&quot;, &quot;fasta&quot;)
+</pre>
+<p>If using a handle make sure to close it to flush the data to the disk:</p>
+<pre class="rst-literal-block">
+from Bio import AlignIO
+alignments = ...
+with open(&quot;example.faa&quot;, &quot;w&quot;) as handle:
+  count = SeqIO.write(alignments, handle, &quot;fasta&quot;)
+</pre>
+<p>In general, you are expected to call this function once (with all your
+alignments) and then close the file handle.  However, for file formats
+like PHYLIP where multiple alignments are stored sequentially (with no file
+header and footer), then multiple calls to the write function should work as
+expected when using handles.</p>
+<p>If you are using a filename, the repeated calls to the write functions will
+overwrite the existing file each time.</p>
+</div>
+<div class="rst-section" id="rst-conversion">
+<h1 class="heading">Conversion</h1>
+<p>The Bio.AlignIO.convert(...) function allows an easy interface for simple
+alignnment file format conversions. Additionally, it may use file format
+specific optimisations so this should be the fastest way too.</p>
+<p>In general however, you can combine the Bio.AlignIO.parse(...) function with
+the Bio.AlignIO.write(...) function for sequence file conversion. Using
+generator expressions provides a memory efficient way to perform filtering or
+other extra operations as part of the process.</p>
+</div>
+<div class="rst-section" id="rst-file-formats">
+<h1 class="heading">File Formats</h1>
+<p>When specifying the file format, use lowercase strings.  The same format
+names are also used in Bio.SeqIO and include the following:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>clustal -   Output from Clustal W or X, see also the module Bio.Clustalw
+which can be used to run the command line tool from Biopython.</li>
+<li>emboss    - EMBOSS tools' &quot;pairs&quot; and &quot;simple&quot; alignment formats.</li>
+<li>fasta     - The generic sequence file format where each record starts with
+an identifer line starting with a &quot;&gt;&quot; character, followed by
+lines of sequence.</li>
+<li>fasta-m10 - For the pairswise alignments output by Bill Pearson's FASTA
+tools when used with the -m 10 command line option for machine
+readable output.</li>
+<li>ig        - The IntelliGenetics file format, apparently the same as the
+MASE alignment format.</li>
+<li>nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
+read any phylogenetic trees in these files.</li>
+<li>phylip    - Interlaced PHYLIP, as used by the PHLIP tools.</li>
+<li>phylip-sequential - Sequential PHYLIP.</li>
+<li>phylip-relaxed - PHYLIP like format allowing longer names.</li>
+<li>stockholm - A richly annotated alignment file format used by PFAM.</li>
+</ul>
+</blockquote>
+<p>Note that while Bio.AlignIO can read all the above file formats, it cannot
+write to all of them.</p>
+<p>You can also use any file format supported by Bio.SeqIO, such as &quot;fasta&quot; or
+&quot;ig&quot; (which are listed above), PROVIDED the sequences in your file are all the
+same length.</p>
+</div>
+
+<!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.ClustalIO-module.html">Bio.AlignIO.ClustalIO</a></strong>: <em class="summary">Bio.AlignIO support for &quot;clustal&quot; output from CLUSTAL W and other tools.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.EmbossIO-module.html">Bio.AlignIO.EmbossIO</a></strong>: <em class="summary">Bio.AlignIO support for &quot;emboss&quot; alignment output from EMBOSS tools.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.FastaIO-module.html">Bio.AlignIO.FastaIO</a></strong>: <em class="summary">Bio.AlignIO support for &quot;fasta-m10&quot; output from Bill Pearson's FASTA tools.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.Interfaces-module.html">Bio.AlignIO.Interfaces</a></strong>: <em class="summary">AlignIO support module (not for general use).</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.NexusIO-module.html">Bio.AlignIO.NexusIO</a></strong>: <em class="summary">Bio.AlignIO support for the &quot;nexus&quot; file format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.PhylipIO-module.html">Bio.AlignIO.PhylipIO</a></strong>: <em class="summary">AlignIO support for &quot;phylip&quot; format from Joe Felsenstein's PHYLIP tools.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.StockholmIO-module.html">Bio.AlignIO.StockholmIO</a></strong>: <em class="summary">Bio.AlignIO support for &quot;stockholm&quot; format (used in the PFAM database).</em>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.AlignIO-module.html#write" class="summary-sig-name">write</a>(<span class="summary-sig-arg">alignments</span>,
+        <span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>)</span><br />
+      Write complete set of alignments to a file.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.AlignIO-pysrc.html#write">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.AlignIO-module.html#_SeqIO_to_alignment_iterator" class="summary-sig-name" onclick="show_private();">_SeqIO_to_alignment_iterator</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">seq_count</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Uses Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.AlignIO-pysrc.html#_SeqIO_to_alignment_iterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_force_alphabet"></a><span class="summary-sig-name">_force_alphabet</span>(<span class="summary-sig-arg">alignment_iterator</span>,
+        <span class="summary-sig-arg">alphabet</span>)</span><br />
+      Iterate over alignments, over-riding the alphabet (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.AlignIO-pysrc.html#_force_alphabet">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.AlignIO-module.html#parse" class="summary-sig-name">parse</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>,
+        <span class="summary-sig-arg">seq_count</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Iterate over an alignment file as MultipleSeqAlignment objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.AlignIO-pysrc.html#parse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.AlignIO-module.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>,
+        <span class="summary-sig-arg">seq_count</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Turns an alignment file into a single MultipleSeqAlignment object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.AlignIO-pysrc.html#read">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.AlignIO-module.html#convert" class="summary-sig-name">convert</a>(<span class="summary-sig-arg">in_file</span>,
+        <span class="summary-sig-arg">in_format</span>,
+        <span class="summary-sig-arg">out_file</span>,
+        <span class="summary-sig-arg">out_format</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Convert between two alignment files, returns number of alignments.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.AlignIO-pysrc.html#convert">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO-module.html#_FormatToIterator" class="summary-name" onclick="show_private();">_FormatToIterator</a> = <code title="{'clustal': &lt;class 'Bio.AlignIO.ClustalIO.ClustalIterator'&gt;,
+ 'emboss': &lt;class 'Bio.AlignIO.EmbossIO.EmbossIterator'&gt;,
+ 'fasta-m10': &lt;function FastaM10Iterator at 0x6d91398&gt;,
+ 'nexus': &lt;function NexusIterator at 0x6d87c08&gt;,
+ 'phylip': &lt;class 'Bio.AlignIO.PhylipIO.PhylipIterator'&gt;,
+ 'phylip-relaxed': &lt;class 'Bio.AlignIO.PhylipIO.RelaxedPhylipIterator'\
+&gt;,
+ 'phylip-sequential': &lt;class 'Bio.AlignIO.PhylipIO.SequentialPhylipIte\
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">clustal</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.ClustalIO.<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO-module.html#_FormatToWriter" class="summary-name" onclick="show_private();">_FormatToWriter</a> = <code title="{'clustal': &lt;class 'Bio.AlignIO.ClustalIO.ClustalWriter'&gt;,
+ 'nexus': &lt;class 'Bio.AlignIO.NexusIO.NexusWriter'&gt;,
+ 'phylip': &lt;class 'Bio.AlignIO.PhylipIO.PhylipWriter'&gt;,
+ 'phylip-relaxed': &lt;class 'Bio.AlignIO.PhylipIO.RelaxedPhylipWriter'&gt;,
+ 'phylip-sequential': &lt;class 'Bio.AlignIO.PhylipIO.SequentialPhylipWri\
+ter'&gt;,
+ 'stockholm': &lt;class 'Bio.AlignIO.StockholmIO.StockholmWriter'&gt;}"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">clustal</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.ClustalIO.Cl<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.AlignIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.AlignIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="write"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write</span>(<span class="sig-arg">alignments</span>,
+        <span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.AlignIO-pysrc.html#write">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Write complete set of alignments to a file.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>alignments - A list (or iterator) of Alignment objects (ideally the
+new MultipleSeqAlignment objects), or (if using Biopython
+1.54 or later) a single alignment object.</li>
+<li>handle    - File handle object to write to, or filename as string
+(note older versions of Biopython only took a handle).</li>
+<li>format    - lower case string describing the file format to write.</li>
+</ul>
+</dd>
+</dl>
+<p>You should close the handle after calling this function.</p>
+<p>Returns the number of alignments written (as an integer).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_SeqIO_to_alignment_iterator"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_SeqIO_to_alignment_iterator</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">seq_count</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.AlignIO-pysrc.html#_SeqIO_to_alignment_iterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Uses Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>handle    - handle to the file.</li>
+<li>format    - string describing the file format.</li>
+<li>alphabet  - optional Alphabet object, useful when the sequence type
+cannot be automatically inferred from the file itself
+(e.g. fasta, phylip, clustal)</li>
+<li>seq_count - Optional integer, number of sequences expected in each
+alignment.  Recommended for fasta format files.</li>
+</ul>
+</dd>
+</dl>
+<p>If count is omitted (default) then all the sequences in the file are
+combined into a single MultipleSeqAlignment.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="parse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>,
+        <span class="sig-arg">seq_count</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.AlignIO-pysrc.html#parse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over an alignment file as MultipleSeqAlignment objects.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>handle    - handle to the file, or the filename as a string
+(note older versions of Biopython only took a handle).</li>
+<li>format    - string describing the file format.</li>
+<li>alphabet  - optional Alphabet object, useful when the sequence type
+cannot be automatically inferred from the file itself
+(e.g. fasta, phylip, clustal)</li>
+<li>seq_count - Optional integer, number of sequences expected in each
+alignment.  Recommended for fasta format files.</li>
+</ul>
+</dd>
+</dl>
+<p>If you have the file name in a string 'filename', use:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;Emboss/needle.txt&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>format = <span class="py-string">&quot;emboss&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> alignment <span class="py-keyword">in</span> AlignIO.parse(filename, format):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Alignment of length %i&quot;</span> % alignment.get_alignment_length())
+<span class="py-output">Alignment of length 124</span>
+<span class="py-output">Alignment of length 119</span>
+<span class="py-output">Alignment of length 120</span>
+<span class="py-output">Alignment of length 118</span>
+<span class="py-output">Alignment of length 125</span></pre>
+<p>If you have a string 'data' containing the file contents, use:</p>
+<pre class="rst-literal-block">
+from Bio import AlignIO
+from StringIO import StringIO
+my_iterator = AlignIO.parse(StringIO(data), format)
+</pre>
+<p>Use the Bio.AlignIO.read() function when you expect a single record only.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="read"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>,
+        <span class="sig-arg">seq_count</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.AlignIO-pysrc.html#read">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turns an alignment file into a single MultipleSeqAlignment object.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>handle    - handle to the file, or the filename as a string
+(note older versions of Biopython only took a handle).</li>
+<li>format    - string describing the file format.</li>
+<li>alphabet  - optional Alphabet object, useful when the sequence type
+cannot be automatically inferred from the file itself
+(e.g. fasta, phylip, clustal)</li>
+<li>seq_count - Optional integer, number of sequences expected in each
+alignment.  Recommended for fasta format files.</li>
+</ul>
+</dd>
+</dl>
+<p>If the handle contains no alignments, or more than one alignment,
+an exception is raised.  For example, using a PFAM/Stockholm file
+containing one alignment:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;Clustalw/protein.aln&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>format = <span class="py-string">&quot;clustal&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>alignment = AlignIO.read(filename, format)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Alignment of length %i&quot;</span> % alignment.get_alignment_length())
+<span class="py-output">Alignment of length 411</span></pre>
+<p>If however you want the first alignment from a file containing
+multiple alignments this function would raise an exception.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;Emboss/needle.txt&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>format = <span class="py-string">&quot;emboss&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>alignment = AlignIO.read(filename, format)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">    ...</span>
+<span class="py-except">ValueError: More than one record found in handle</span></pre>
+<p>Instead use:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;Emboss/needle.txt&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>format = <span class="py-string">&quot;emboss&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>alignment = next(AlignIO.parse(filename, format))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;First alignment has length %i&quot;</span> % alignment.get_alignment_length())
+<span class="py-output">First alignment has length 124</span></pre>
+<p>You must use the Bio.AlignIO.parse() function if you want to read multiple
+records from the handle.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="convert"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">convert</span>(<span class="sig-arg">in_file</span>,
+        <span class="sig-arg">in_format</span>,
+        <span class="sig-arg">out_file</span>,
+        <span class="sig-arg">out_format</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.AlignIO-pysrc.html#convert">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert between two alignment files, returns number of alignments.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>in_file - an input handle or filename</li>
+<li>in_format - input file format, lower case string</li>
+<li>output - an output handle or filename</li>
+<li>out_file - output file format, lower case string</li>
+<li>alphabet - optional alphabet to assume</li>
+</ul>
+</blockquote>
+<p><strong>NOTE</strong> - If you provide an output filename, it will be opened which will
+overwrite any existing file without warning. This may happen if even the
+conversion is aborted (e.g. an invalid out_format name is given).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_FormatToIterator"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_FormatToIterator</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">clustal</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.ClustalIO.ClustalIterator'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">emboss</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.EmbossIO.EmbossIterator'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fasta-m10</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;function FastaM10Iterator at 0x6d91398&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">nexus</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;function NexusIterator at 0x6d87c08&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">phylip</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.PhylipIO.PhylipIterator'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">phylip-relaxed</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.PhylipIO.RelaxedPhylipIterator'<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">phylip-sequential</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.PhylipIO.SequentialPhylipIte<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_FormatToWriter"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_FormatToWriter</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">clustal</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.ClustalIO.ClustalWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">nexus</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.NexusIO.NexusWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">phylip</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.PhylipIO.PhylipWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">phylip-relaxed</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.PhylipIO.RelaxedPhylipWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">phylip-sequential</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.PhylipIO.SequentialPhylipWri<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">stockholm</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.AlignIO.StockholmIO.StockholmWriter'&gt;<code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:12 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

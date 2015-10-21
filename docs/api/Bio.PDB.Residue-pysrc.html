@@ -1,0 +1,1415 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.PDB.Residue</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.PDB-module.html">Package&nbsp;PDB</a> ::
+        Module&nbsp;Residue
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.PDB.Residue-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.PDB.Residue-module.html">Module Bio.PDB.Residue</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Residue class, used by Structure objects."""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># My Stuff</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.PDB=Bio.PDB-module.html"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-1', 'PDB', 'link-1');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module Bio.PDB.PDBExceptions=Bio.PDB.PDBExceptions-module.html"><a title="Bio.PDB.PDBExceptions" class="py-name" href="#" onclick="return doclink('link-2', 'PDBExceptions', 'link-2');">PDBExceptions</a></tt> <tt class="py-keyword">import</tt> <tt id="link-3" class="py-name" targets="Class Bio.PDB.PDBExceptions.PDBConstructionException=Bio.PDB.PDBExceptions.PDBConstructionException-class.html"><a title="Bio.PDB.PDBExceptions.PDBConstructionException" class="py-name" href="#" onclick="return doclink('link-3', 'PDBConstructionException', 'link-3');">PDBConstructionException</a></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-4" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-4', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-5', 'PDB', 'link-1');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Module Bio.PDB.Entity=Bio.PDB.Entity-module.html,Class Bio.PDB.Entity.Entity=Bio.PDB.Entity.Entity-class.html"><a title="Bio.PDB.Entity
+Bio.PDB.Entity.Entity" class="py-name" href="#" onclick="return doclink('link-6', 'Entity', 'link-6');">Entity</a></tt> <tt class="py-keyword">import</tt> <tt id="link-7" class="py-name"><a title="Bio.PDB.Entity
+Bio.PDB.Entity.Entity" class="py-name" href="#" onclick="return doclink('link-7', 'Entity', 'link-6');">Entity</a></tt><tt class="py-op">,</tt> <tt id="link-8" class="py-name" targets="Class Bio.PDB.Entity.DisorderedEntityWrapper=Bio.PDB.Entity.DisorderedEntityWrapper-class.html"><a title="Bio.PDB.Entity.DisorderedEntityWrapper" class="py-name" href="#" onclick="return doclink('link-8', 'DisorderedEntityWrapper', 'link-8');">DisorderedEntityWrapper</a></tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Variable Bio.PDB.Residue._atom_name_dict=Bio.PDB.Residue-module.html#_atom_name_dict"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-9', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt id="link-10" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-10', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">[</tt><tt class="py-string">"N"</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt id="link-11" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-11', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">[</tt><tt class="py-string">"CA"</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt id="link-12" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-12', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">[</tt><tt class="py-string">"C"</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">3</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt id="link-13" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-13', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">[</tt><tt class="py-string">"O"</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">4</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="Residue"></a><div id="Residue-def"><a name="L19"></a><tt class="py-lineno"> 19</tt> <a class="py-toggle" href="#" id="Residue-toggle" onclick="return toggle('Residue');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html">Residue</a><tt class="py-op">(</tt><tt class="py-base-class">Entity</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Residue-expanded"><a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    Represents a residue. A Residue object stores atoms.</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="Residue.__init__"></a><div id="Residue.__init__-def"><a name="L23"></a><tt class="py-lineno"> 23</tt> <a class="py-toggle" href="#" id="Residue.__init__-toggle" onclick="return toggle('Residue.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">,</tt> <tt class="py-param">resname</tt><tt class="py-op">,</tt> <tt class="py-param">segid</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.__init__-expanded"><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">level</tt> <tt class="py-op">=</tt> <tt class="py-string">"R"</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">disordered</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">resname</tt> <tt class="py-op">=</tt> <tt class="py-name">resname</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">segid</tt> <tt class="py-op">=</tt> <tt class="py-name">segid</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt id="link-14" class="py-name"><a title="Bio.PDB.Entity
+Bio.PDB.Entity.Entity" class="py-name" href="#" onclick="return doclink('link-14', 'Entity', 'link-6');">Entity</a></tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.Affy.CelFile.Record.__init__()=Bio.Affy.CelFile.Record-class.html#__init__,Method Bio.Align.AlignInfo.PSSM.__init__()=Bio.Align.AlignInfo.PSSM-class.html#__init__,Method Bio.Align.AlignInfo.SummaryInfo.__init__()=Bio.Align.AlignInfo.SummaryInfo-class.html#__init__,Method Bio.Align.Applications._ClustalOmega.ClustalOmegaCommandline.__init__()=Bio.Align.Applications._ClustalOmega.ClustalOmegaCommandline-class.html#__init__,Method Bio.Align.Applications._Clustalw.ClustalwCommandline.__init__()=Bio.Align.Applications._Clustalw.ClustalwCommandline-class.html#__init__,Method Bio.Align.Applications._Dialign.DialignCommandline.__init__()=Bio.Align.Applications._Dialign.DialignCommandline-class.html#__init__,Method Bio.Align.Applications._MSAProbs.MSAProbsCommandline.__init__()=Bio.Align.Applications._MSAProbs.MSAProbsCommandline-class.html#__init__,Method Bio.Align.Applications._Mafft.MafftCommandline.__init__()=Bio.Align.Applications._Mafft.MafftCommandline-class.html#__init__,Method Bio.Align.Applications._Muscle.MuscleCommandline.__init__()=Bio.Align.Applications._Muscle.MuscleCommandline-class.html#__init__,Method Bio.Align.Applications._Prank.PrankCommandline.__init__()=Bio.Align.Applications._Prank.PrankCommandline-class.html#__init__,Method Bio.Align.Applications._Probcons.ProbconsCommandline.__init__()=Bio.Align.Applications._Probcons.ProbconsCommandline-class.html#__init__,Method Bio.Align.Applications._TCoffee.TCoffeeCommandline.__init__()=Bio.Align.Applications._TCoffee.TCoffeeCommandline-class.html#__init__,Method Bio.Align.Generic.Alignment.__init__()=Bio.Align.Generic.Alignment-class.html#__init__,Method Bio.Align.MultipleSeqAlignment.__init__()=Bio.Align.MultipleSeqAlignment-class.html#__init__,Method Bio.AlignIO.Interfaces.AlignmentIterator.__init__()=Bio.AlignIO.Interfaces.AlignmentIterator-class.html#__init__,Method Bio.AlignIO.Interfaces.AlignmentWriter.__init__()=Bio.AlignIO.Interfaces.AlignmentWriter-class.html#__init__,Method Bio.AlignIO.Interfaces.SequentialAlignmentWriter.__init__()=Bio.AlignIO.Interfaces.SequentialAlignmentWriter-class.html#__init__,Method Bio.Alphabet.AlphabetEncoder.__init__()=Bio.Alphabet.AlphabetEncoder-class.html#__init__,Method Bio.Alphabet.Gapped.__init__()=Bio.Alphabet.Gapped-class.html#__init__,Method Bio.Alphabet.HasStopCodon.__init__()=Bio.Alphabet.HasStopCodon-class.html#__init__,Method Bio.Application.AbstractCommandline.__init__()=Bio.Application.AbstractCommandline-class.html#__init__,Method Bio.Application.ApplicationError.__init__()=Bio.Application.ApplicationError-class.html#__init__,Method Bio.Application._AbstractParameter.__init__()=Bio.Application._AbstractParameter-class.html#__init__,Method Bio.Application._Argument.__init__()=Bio.Application._Argument-class.html#__init__,Method Bio.Application._Option.__init__()=Bio.Application._Option-class.html#__init__,Method Bio.Application._StaticArgument.__init__()=Bio.Application._StaticArgument-class.html#__init__,Method Bio.Application._Switch.__init__()=Bio.Application._Switch-class.html#__init__,Method Bio.Blast.Applications.NcbiblastformatterCommandline.__init__()=Bio.Blast.Applications.NcbiblastformatterCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbiblastnCommandline.__init__()=Bio.Blast.Applications.NcbiblastnCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbiblastpCommandline.__init__()=Bio.Blast.Applications.NcbiblastpCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbiblastxCommandline.__init__()=Bio.Blast.Applications.NcbiblastxCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbideltablastCommandline.__init__()=Bio.Blast.Applications.NcbideltablastCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbipsiblastCommandline.__init__()=Bio.Blast.Applications.NcbipsiblastCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbirpsblastCommandline.__init__()=Bio.Blast.Applications.NcbirpsblastCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbirpstblastnCommandline.__init__()=Bio.Blast.Applications.NcbirpstblastnCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbitblastnCommandline.__init__()=Bio.Blast.Applications.NcbitblastnCommandline-class.html#__init__,Method Bio.Blast.Applications.NcbitblastxCommandline.__init__()=Bio.Blast.Applications.NcbitblastxCommandline-class.html#__init__,Method Bio.Blast.Applications._NcbibaseblastCommandline.__init__()=Bio.Blast.Applications._NcbibaseblastCommandline-class.html#__init__,Method Bio.Blast.Applications._Ncbiblast2SeqCommandline.__init__()=Bio.Blast.Applications._Ncbiblast2SeqCommandline-class.html#__init__,Method Bio.Blast.Applications._NcbiblastCommandline.__init__()=Bio.Blast.Applications._NcbiblastCommandline-class.html#__init__,Method Bio.Blast.Applications._NcbiblastMain2SeqCommandline.__init__()=Bio.Blast.Applications._NcbiblastMain2SeqCommandline-class.html#__init__,Method Bio.Blast.NCBIStandalone.BlastErrorParser.__init__()=Bio.Blast.NCBIStandalone.BlastErrorParser-class.html#__init__,Method Bio.Blast.NCBIStandalone.BlastParser.__init__()=Bio.Blast.NCBIStandalone.BlastParser-class.html#__init__,Method Bio.Blast.NCBIStandalone.Iterator.__init__()=Bio.Blast.NCBIStandalone.Iterator-class.html#__init__,Method Bio.Blast.NCBIStandalone.PSIBlastParser.__init__()=Bio.Blast.NCBIStandalone.PSIBlastParser-class.html#__init__,Method Bio.Blast.NCBIStandalone._BlastConsumer.__init__()=Bio.Blast.NCBIStandalone._BlastConsumer-class.html#__init__,Method Bio.Blast.NCBIStandalone._BlastErrorConsumer.__init__()=Bio.Blast.NCBIStandalone._BlastErrorConsumer-class.html#__init__,Method Bio.Blast.NCBIStandalone._PSIBlastConsumer.__init__()=Bio.Blast.NCBIStandalone._PSIBlastConsumer-class.html#__init__,Method Bio.Blast.NCBIXML.BlastParser.__init__()=Bio.Blast.NCBIXML.BlastParser-class.html#__init__,Method Bio.Blast.NCBIXML._XMLparser.__init__()=Bio.Blast.NCBIXML._XMLparser-class.html#__init__,Method Bio.Blast.ParseBlastTable.BlastTableEntry.__init__()=Bio.Blast.ParseBlastTable.BlastTableEntry-class.html#__init__,Method Bio.Blast.ParseBlastTable.BlastTableReader.__init__()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#__init__,Method Bio.Blast.ParseBlastTable.BlastTableRec.__init__()=Bio.Blast.ParseBlastTable.BlastTableRec-class.html#__init__,Method Bio.Blast.Record.Alignment.__init__()=Bio.Blast.Record.Alignment-class.html#__init__,Method Bio.Blast.Record.Blast.__init__()=Bio.Blast.Record.Blast-class.html#__init__,Method Bio.Blast.Record.DatabaseReport.__init__()=Bio.Blast.Record.DatabaseReport-class.html#__init__,Method Bio.Blast.Record.Description.__init__()=Bio.Blast.Record.Description-class.html#__init__,Method Bio.Blast.Record.HSP.__init__()=Bio.Blast.Record.HSP-class.html#__init__,Method Bio.Blast.Record.Header.__init__()=Bio.Blast.Record.Header-class.html#__init__,Method Bio.Blast.Record.MultipleAlignment.__init__()=Bio.Blast.Record.MultipleAlignment-class.html#__init__,Method Bio.Blast.Record.PSIBlast.__init__()=Bio.Blast.Record.PSIBlast-class.html#__init__,Method Bio.Blast.Record.Parameters.__init__()=Bio.Blast.Record.Parameters-class.html#__init__,Method Bio.Blast.Record.Round.__init__()=Bio.Blast.Record.Round-class.html#__init__,Method Bio.CAPS.CAPSMap.__init__()=Bio.CAPS.CAPSMap-class.html#__init__,Method Bio.CAPS.DifferentialCutsite.__init__()=Bio.CAPS.DifferentialCutsite-class.html#__init__,Method Bio.Cluster.Record.__init__()=Bio.Cluster.Record-class.html#__init__,Method Bio.Compass.Record.__init__()=Bio.Compass.Record-class.html#__init__,Method Bio.Crystal.Chain.__init__()=Bio.Crystal.Chain-class.html#__init__,Method Bio.Crystal.Crystal.__init__()=Bio.Crystal.Crystal-class.html#__init__,Method Bio.Crystal.Hetero.__init__()=Bio.Crystal.Hetero-class.html#__init__,Method Bio.Data.CodonTable.AmbiguousCodonTable.__init__()=Bio.Data.CodonTable.AmbiguousCodonTable-class.html#__init__,Method Bio.Data.CodonTable.AmbiguousForwardTable.__init__()=Bio.Data.CodonTable.AmbiguousForwardTable-class.html#__init__,Method Bio.Data.CodonTable.CodonTable.__init__()=Bio.Data.CodonTable.CodonTable-class.html#__init__,Method Bio.Data.CodonTable.NCBICodonTable.__init__()=Bio.Data.CodonTable.NCBICodonTable-class.html#__init__,Method Bio.DocSQL.Create.__init__()=Bio.DocSQL.Create-class.html#__init__,Method Bio.DocSQL.Insert.__init__()=Bio.DocSQL.Insert-class.html#__init__,Method Bio.DocSQL.IterationCursor.__init__()=Bio.DocSQL.IterationCursor-class.html#__init__,Method Bio.DocSQL.Query.__init__()=Bio.DocSQL.Query-class.html#__init__,Method Bio.DocSQL.QueryAll.__init__()=Bio.DocSQL.QueryAll-class.html#__init__,Method Bio.DocSQL.QueryGeneric.__init__()=Bio.DocSQL.QueryGeneric-class.html#__init__,Method Bio.DocSQL.QueryRow.__init__()=Bio.DocSQL.QueryRow-class.html#__init__,Method Bio.DocSQL.QuerySingle.__init__()=Bio.DocSQL.QuerySingle-class.html#__init__,Method Bio.Emboss.Applications.DiffseqCommandline.__init__()=Bio.Emboss.Applications.DiffseqCommandline-class.html#__init__,Method Bio.Emboss.Applications.EInvertedCommandline.__init__()=Bio.Emboss.Applications.EInvertedCommandline-class.html#__init__,Method Bio.Emboss.Applications.ETandemCommandline.__init__()=Bio.Emboss.Applications.ETandemCommandline-class.html#__init__,Method Bio.Emboss.Applications.Est2GenomeCommandline.__init__()=Bio.Emboss.Applications.Est2GenomeCommandline-class.html#__init__,Method Bio.Emboss.Applications.FConsenseCommandline.__init__()=Bio.Emboss.Applications.FConsenseCommandline-class.html#__init__,Method Bio.Emboss.Applications.FDNADistCommandline.__init__()=Bio.Emboss.Applications.FDNADistCommandline-class.html#__init__,Method Bio.Emboss.Applications.FDNAParsCommandline.__init__()=Bio.Emboss.Applications.FDNAParsCommandline-class.html#__init__,Method Bio.Emboss.Applications.FNeighborCommandline.__init__()=Bio.Emboss.Applications.FNeighborCommandline-class.html#__init__,Method Bio.Emboss.Applications.FProtDistCommandline.__init__()=Bio.Emboss.Applications.FProtDistCommandline-class.html#__init__,Method Bio.Emboss.Applications.FProtParsCommandline.__init__()=Bio.Emboss.Applications.FProtParsCommandline-class.html#__init__,Method Bio.Emboss.Applications.FSeqBootCommandline.__init__()=Bio.Emboss.Applications.FSeqBootCommandline-class.html#__init__,Method Bio.Emboss.Applications.FTreeDistCommandline.__init__()=Bio.Emboss.Applications.FTreeDistCommandline-class.html#__init__,Method Bio.Emboss.Applications.FuzznucCommandline.__init__()=Bio.Emboss.Applications.FuzznucCommandline-class.html#__init__,Method Bio.Emboss.Applications.IepCommandline.__init__()=Bio.Emboss.Applications.IepCommandline-class.html#__init__,Method Bio.Emboss.Applications.NeedleCommandline.__init__()=Bio.Emboss.Applications.NeedleCommandline-class.html#__init__,Method Bio.Emboss.Applications.NeedleallCommandline.__init__()=Bio.Emboss.Applications.NeedleallCommandline-class.html#__init__,Method Bio.Emboss.Applications.PalindromeCommandline.__init__()=Bio.Emboss.Applications.PalindromeCommandline-class.html#__init__,Method Bio.Emboss.Applications.Primer3Commandline.__init__()=Bio.Emboss.Applications.Primer3Commandline-class.html#__init__,Method Bio.Emboss.Applications.PrimerSearchCommandline.__init__()=Bio.Emboss.Applications.PrimerSearchCommandline-class.html#__init__,Method Bio.Emboss.Applications.SeqmatchallCommandline.__init__()=Bio.Emboss.Applications.SeqmatchallCommandline-class.html#__init__,Method Bio.Emboss.Applications.SeqretCommandline.__init__()=Bio.Emboss.Applications.SeqretCommandline-class.html#__init__,Method Bio.Emboss.Applications.StretcherCommandline.__init__()=Bio.Emboss.Applications.StretcherCommandline-class.html#__init__,Method Bio.Emboss.Applications.TranalignCommandline.__init__()=Bio.Emboss.Applications.TranalignCommandline-class.html#__init__,Method Bio.Emboss.Applications.WaterCommandline.__init__()=Bio.Emboss.Applications.WaterCommandline-class.html#__init__,Method Bio.Emboss.Applications._EmbossCommandLine.__init__()=Bio.Emboss.Applications._EmbossCommandLine-class.html#__init__,Method Bio.Emboss.Applications._EmbossMinimalCommandLine.__init__()=Bio.Emboss.Applications._EmbossMinimalCommandLine-class.html#__init__,Method Bio.Emboss.Primer3.Primers.__init__()=Bio.Emboss.Primer3.Primers-class.html#__init__,Method Bio.Emboss.Primer3.Record.__init__()=Bio.Emboss.Primer3.Record-class.html#__init__,Method Bio.Emboss.PrimerSearch.Amplifier.__init__()=Bio.Emboss.PrimerSearch.Amplifier-class.html#__init__,Method Bio.Emboss.PrimerSearch.InputRecord.__init__()=Bio.Emboss.PrimerSearch.InputRecord-class.html#__init__,Method Bio.Emboss.PrimerSearch.OutputRecord.__init__()=Bio.Emboss.PrimerSearch.OutputRecord-class.html#__init__,Method Bio.Entrez.Parser.CorruptedXMLError.__init__()=Bio.Entrez.Parser.CorruptedXMLError-class.html#__init__,Method Bio.Entrez.Parser.DataHandler.__init__()=Bio.Entrez.Parser.DataHandler-class.html#__init__,Method Bio.Entrez.Parser.NotXMLError.__init__()=Bio.Entrez.Parser.NotXMLError-class.html#__init__,Method Bio.Entrez.Parser.StructureElement.__init__()=Bio.Entrez.Parser.StructureElement-class.html#__init__,Method Bio.Entrez.Parser.ValidationError.__init__()=Bio.Entrez.Parser.ValidationError-class.html#__init__,Method Bio.ExPASy.Enzyme.Record.__init__()=Bio.ExPASy.Enzyme.Record-class.html#__init__,Method Bio.ExPASy.Prodoc.Record.__init__()=Bio.ExPASy.Prodoc.Record-class.html#__init__,Method Bio.ExPASy.Prodoc.Reference.__init__()=Bio.ExPASy.Prodoc.Reference-class.html#__init__,Method Bio.ExPASy.Prosite.Record.__init__()=Bio.ExPASy.Prosite.Record-class.html#__init__,Method Bio.ExPASy.ScanProsite.ContentHandler.__init__()=Bio.ExPASy.ScanProsite.ContentHandler-class.html#__init__,Method Bio.ExPASy.ScanProsite.Parser.__init__()=Bio.ExPASy.ScanProsite.Parser-class.html#__init__,Method Bio.ExPASy.ScanProsite.Record.__init__()=Bio.ExPASy.ScanProsite.Record-class.html#__init__,Method Bio.FSSP.FSSPAlignDict.__init__()=Bio.FSSP.FSSPAlignDict-class.html#__init__,Method Bio.FSSP.FSSPAlignRec.__init__()=Bio.FSSP.FSSPAlignRec-class.html#__init__,Method Bio.FSSP.FSSPHeader.__init__()=Bio.FSSP.FSSPHeader-class.html#__init__,Method Bio.FSSP.FSSPSumRec.__init__()=Bio.FSSP.FSSPSumRec-class.html#__init__,Method Bio.FSSP.FSSPTools.FSSPMultAlign.__init__()=Bio.FSSP.FSSPTools.FSSPMultAlign-class.html#__init__,Method Bio.FSSP.PosAlign.__init__()=Bio.FSSP.PosAlign-class.html#__init__,Method Bio.FSSP.fssp_rec.fff_rec.__init__()=Bio.FSSP.fssp_rec.fff_rec-class.html#__init__,Method Bio.File.UndoHandle.__init__()=Bio.File.UndoHandle-class.html#__init__,Method Bio.File._IndexedSeqFileDict.__init__()=Bio.File._IndexedSeqFileDict-class.html#__init__,Method Bio.File._SQLiteManySeqFilesDict.__init__()=Bio.File._SQLiteManySeqFilesDict-class.html#__init__,Method Bio.GA.Crossover.General.SafeFitnessCrossover.__init__()=Bio.GA.Crossover.General.SafeFitnessCrossover-class.html#__init__,Method Bio.GA.Crossover.GeneralPoint.GeneralPointCrossover.__init__()=Bio.GA.Crossover.GeneralPoint.GeneralPointCrossover-class.html#__init__,Method Bio.GA.Crossover.GeneralPoint.InterleaveCrossover.__init__()=Bio.GA.Crossover.GeneralPoint.InterleaveCrossover-class.html#__init__,Method Bio.GA.Crossover.Point.SinglePointCrossover.__init__()=Bio.GA.Crossover.Point.SinglePointCrossover-class.html#__init__,Method Bio.GA.Crossover.TwoPoint.TwoPointCrossover.__init__()=Bio.GA.Crossover.TwoPoint.TwoPointCrossover-class.html#__init__,Method Bio.GA.Crossover.Uniform.UniformCrossover.__init__()=Bio.GA.Crossover.Uniform.UniformCrossover-class.html#__init__,Method Bio.GA.Evolver.GenerationEvolver.__init__()=Bio.GA.Evolver.GenerationEvolver-class.html#__init__,Method Bio.GA.Evolver.SteadyStateEvolver.__init__()=Bio.GA.Evolver.SteadyStateEvolver-class.html#__init__,Method Bio.GA.Mutation.General.SafeFitnessMutation.__init__()=Bio.GA.Mutation.General.SafeFitnessMutation-class.html#__init__,Method Bio.GA.Mutation.Simple.ConversionMutation.__init__()=Bio.GA.Mutation.Simple.ConversionMutation-class.html#__init__,Method Bio.GA.Mutation.Simple.SinglePositionMutation.__init__()=Bio.GA.Mutation.Simple.SinglePositionMutation-class.html#__init__,Method Bio.GA.Organism.Organism.__init__()=Bio.GA.Organism.Organism-class.html#__init__,Method Bio.GA.Repair.Stabilizing.AmbiguousRepair.__init__()=Bio.GA.Repair.Stabilizing.AmbiguousRepair-class.html#__init__,Method Bio.GA.Selection.Abstract.AbstractSelection.__init__()=Bio.GA.Selection.Abstract.AbstractSelection-class.html#__init__,Method Bio.GA.Selection.Diversity.DiversitySelection.__init__()=Bio.GA.Selection.Diversity.DiversitySelection-class.html#__init__,Method Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.__init__()=Bio.GA.Selection.RouletteWheel.RouletteWheelSelection-class.html#__init__,Method Bio.GA.Selection.Tournament.TournamentSelection.__init__()=Bio.GA.Selection.Tournament.TournamentSelection-class.html#__init__,Method Bio.GenBank.FeatureParser.__init__()=Bio.GenBank.FeatureParser-class.html#__init__,Method Bio.GenBank.Iterator.__init__()=Bio.GenBank.Iterator-class.html#__init__,Method Bio.GenBank.Record.Feature.__init__()=Bio.GenBank.Record.Feature-class.html#__init__,Method Bio.GenBank.Record.Qualifier.__init__()=Bio.GenBank.Record.Qualifier-class.html#__init__,Method Bio.GenBank.Record.Record.__init__()=Bio.GenBank.Record.Record-class.html#__init__,Method Bio.GenBank.Record.Reference.__init__()=Bio.GenBank.Record.Reference-class.html#__init__,Method Bio.GenBank.RecordParser.__init__()=Bio.GenBank.RecordParser-class.html#__init__,Method Bio.GenBank.Scanner.InsdcScanner.__init__()=Bio.GenBank.Scanner.InsdcScanner-class.html#__init__,Method Bio.GenBank._BaseGenBankConsumer.__init__()=Bio.GenBank._BaseGenBankConsumer-class.html#__init__,Method Bio.GenBank._FeatureConsumer.__init__()=Bio.GenBank._FeatureConsumer-class.html#__init__,Method Bio.GenBank._RecordConsumer.__init__()=Bio.GenBank._RecordConsumer-class.html#__init__,Method Bio.GenBank.utils.FeatureValueCleaner.__init__()=Bio.GenBank.utils.FeatureValueCleaner-class.html#__init__,Method Bio.Geo.Record.Record.__init__()=Bio.Geo.Record.Record-class.html#__init__,Method Bio.Graphics.BasicChromosome.AnnotatedChromosomeSegment.__init__()=Bio.Graphics.BasicChromosome.AnnotatedChromosomeSegment-class.html#__init__,Method Bio.Graphics.BasicChromosome.Chromosome.__init__()=Bio.Graphics.BasicChromosome.Chromosome-class.html#__init__,Method Bio.Graphics.BasicChromosome.ChromosomeSegment.__init__()=Bio.Graphics.BasicChromosome.ChromosomeSegment-class.html#__init__,Method Bio.Graphics.BasicChromosome.Organism.__init__()=Bio.Graphics.BasicChromosome.Organism-class.html#__init__,Method Bio.Graphics.BasicChromosome.TelomereSegment.__init__()=Bio.Graphics.BasicChromosome.TelomereSegment-class.html#__init__,Method Bio.Graphics.BasicChromosome._ChromosomeComponent.__init__()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#__init__,Method Bio.Graphics.ColorSpiral.ColorSpiral.__init__()=Bio.Graphics.ColorSpiral.ColorSpiral-class.html#__init__,Method Bio.Graphics.Comparative.ComparativeScatterPlot.__init__()=Bio.Graphics.Comparative.ComparativeScatterPlot-class.html#__init__,Method Bio.Graphics.DisplayRepresentation.ChromosomeCounts.__init__()=Bio.Graphics.DisplayRepresentation.ChromosomeCounts-class.html#__init__,Method Bio.Graphics.Distribution.BarChartDistribution.__init__()=Bio.Graphics.Distribution.BarChartDistribution-class.html#__init__,Method Bio.Graphics.Distribution.DistributionPage.__init__()=Bio.Graphics.Distribution.DistributionPage-class.html#__init__,Method Bio.Graphics.Distribution.LineDistribution.__init__()=Bio.Graphics.Distribution.LineDistribution-class.html#__init__,Method Bio.Graphics.GenomeDiagram._AbstractDrawer.AbstractDrawer.__init__()=Bio.Graphics.GenomeDiagram._AbstractDrawer.AbstractDrawer-class.html#__init__,Method Bio.Graphics.GenomeDiagram._CircularDrawer.CircularDrawer.__init__()=Bio.Graphics.GenomeDiagram._CircularDrawer.CircularDrawer-class.html#__init__,Method Bio.Graphics.GenomeDiagram._Colors.ColorTranslator.__init__()=Bio.Graphics.GenomeDiagram._Colors.ColorTranslator-class.html#__init__,Method Bio.Graphics.GenomeDiagram._CrossLink.CrossLink.__init__()=Bio.Graphics.GenomeDiagram._CrossLink.CrossLink-class.html#__init__,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.__init__()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#__init__,Method Bio.Graphics.GenomeDiagram._Feature.Feature.__init__()=Bio.Graphics.GenomeDiagram._Feature.Feature-class.html#__init__,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.__init__()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#__init__,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.__init__()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#__init__,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.__init__()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#__init__,Method Bio.Graphics.GenomeDiagram._LinearDrawer.LinearDrawer.__init__()=Bio.Graphics.GenomeDiagram._LinearDrawer.LinearDrawer-class.html#__init__,Method Bio.Graphics.GenomeDiagram._Track.Track.__init__()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#__init__,Method Bio.Graphics.KGML_vis.KGMLCanvas.__init__()=Bio.Graphics.KGML_vis.KGMLCanvas-class.html#__init__,Method Bio.HMM.DynamicProgramming.AbstractDPAlgorithms.__init__()=Bio.HMM.DynamicProgramming.AbstractDPAlgorithms-class.html#__init__,Method Bio.HMM.DynamicProgramming.LogDPAlgorithms.__init__()=Bio.HMM.DynamicProgramming.LogDPAlgorithms-class.html#__init__,Method Bio.HMM.DynamicProgramming.ScaledDPAlgorithms.__init__()=Bio.HMM.DynamicProgramming.ScaledDPAlgorithms-class.html#__init__,Method Bio.HMM.MarkovModel.HiddenMarkovModel.__init__()=Bio.HMM.MarkovModel.HiddenMarkovModel-class.html#__init__,Method Bio.HMM.MarkovModel.MarkovModelBuilder.__init__()=Bio.HMM.MarkovModel.MarkovModelBuilder-class.html#__init__,Method Bio.HMM.Trainer.AbstractTrainer.__init__()=Bio.HMM.Trainer.AbstractTrainer-class.html#__init__,Method Bio.HMM.Trainer.BaumWelchTrainer.__init__()=Bio.HMM.Trainer.BaumWelchTrainer-class.html#__init__,Method Bio.HMM.Trainer.KnownStateTrainer.__init__()=Bio.HMM.Trainer.KnownStateTrainer-class.html#__init__,Method Bio.HMM.Trainer.TrainingSequence.__init__()=Bio.HMM.Trainer.TrainingSequence-class.html#__init__,Method Bio.Index._InMemoryIndex.__init__()=Bio.Index._InMemoryIndex-class.html#__init__,Method Bio.Index._ShelveIndex.__init__()=Bio.Index._ShelveIndex-class.html#__init__,Method Bio.KDTree.KDTree'.KDTree.__init__()=Bio.KDTree.KDTree%27.KDTree-class.html#__init__,Method Bio.KEGG.Compound.Record.__init__()=Bio.KEGG.Compound.Record-class.html#__init__,Method Bio.KEGG.Enzyme.Record.__init__()=Bio.KEGG.Enzyme.Record-class.html#__init__,Method Bio.KEGG.KGML.KGML_parser.KGMLParser.__init__()=Bio.KEGG.KGML.KGML_parser.KGMLParser-class.html#__init__,Method Bio.KEGG.KGML.KGML_pathway.Component.__init__()=Bio.KEGG.KGML.KGML_pathway.Component-class.html#__init__,Method Bio.KEGG.KGML.KGML_pathway.Entry.__init__()=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#__init__,Method Bio.KEGG.KGML.KGML_pathway.Graphics.__init__()=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#__init__,Method Bio.KEGG.KGML.KGML_pathway.Pathway.__init__()=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#__init__,Method Bio.KEGG.KGML.KGML_pathway.Reaction.__init__()=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#__init__,Method Bio.KEGG.KGML.KGML_pathway.Relation.__init__()=Bio.KEGG.KGML.KGML_pathway.Relation-class.html#__init__,Method Bio.LogisticRegression.LogisticRegression.__init__()=Bio.LogisticRegression.LogisticRegression-class.html#__init__,Method Bio.MarkovModel.MarkovModel.__init__()=Bio.MarkovModel.MarkovModel-class.html#__init__,Method Bio.MaxEntropy.MaxEntropy.__init__()=Bio.MaxEntropy.MaxEntropy-class.html#__init__,Method Bio.Motif.Parsers.AlignAce.Record.__init__()=Bio.Motif.Parsers.AlignAce.Record-class.html#__init__,Method Bio.Motif.Parsers.MAST.Record.__init__()=Bio.Motif.Parsers.MAST.Record-class.html#__init__,Method Bio.Motif.Parsers.MEME.MEMEInstance.__init__()=Bio.Motif.Parsers.MEME.MEMEInstance-class.html#__init__,Method Bio.Motif.Parsers.MEME.MEMEMotif.__init__()=Bio.Motif.Parsers.MEME.MEMEMotif-class.html#__init__,Method Bio.Motif.Parsers.MEME.MEMERecord.__init__()=Bio.Motif.Parsers.MEME.MEMERecord-class.html#__init__,Method Bio.Motif.Thresholds.ScoreDistribution.__init__()=Bio.Motif.Thresholds.ScoreDistribution-class.html#__init__,Method Bio.Motif._Motif.Motif.__init__()=Bio.Motif._Motif.Motif-class.html#__init__,Method Bio.NMR.xpktools.Peaklist.__init__()=Bio.NMR.xpktools.Peaklist-class.html#__init__,Method Bio.NMR.xpktools.XpkEntry.__init__()=Bio.NMR.xpktools.XpkEntry-class.html#__init__,Method Bio.NaiveBayes.NaiveBayes.__init__()=Bio.NaiveBayes.NaiveBayes-class.html#__init__,Method Bio.NeuralNetwork.BackPropagation.Layer.AbstractLayer.__init__()=Bio.NeuralNetwork.BackPropagation.Layer.AbstractLayer-class.html#__init__,Method Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.__init__()=Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer-class.html#__init__,Method Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.__init__()=Bio.NeuralNetwork.BackPropagation.Layer.InputLayer-class.html#__init__,Method Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.__init__()=Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer-class.html#__init__,Method Bio.NeuralNetwork.BackPropagation.Network.BasicNetwork.__init__()=Bio.NeuralNetwork.BackPropagation.Network.BasicNetwork-class.html#__init__,Method Bio.NeuralNetwork.Gene.Motif.MotifCoder.__init__()=Bio.NeuralNetwork.Gene.Motif.MotifCoder-class.html#__init__,Method Bio.NeuralNetwork.Gene.Motif.MotifFinder.__init__()=Bio.NeuralNetwork.Gene.Motif.MotifFinder-class.html#__init__,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.__init__()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#__init__,Method Bio.NeuralNetwork.Gene.Pattern.PatternRepository.__init__()=Bio.NeuralNetwork.Gene.Pattern.PatternRepository-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.DifferentialSchemaFitness.__init__()=Bio.NeuralNetwork.Gene.Schema.DifferentialSchemaFitness-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.GeneticAlgorithmFinder.__init__()=Bio.NeuralNetwork.Gene.Schema.GeneticAlgorithmFinder-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.MostCountSchemaFitness.__init__()=Bio.NeuralNetwork.Gene.Schema.MostCountSchemaFitness-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.RandomMotifGenerator.__init__()=Bio.NeuralNetwork.Gene.Schema.RandomMotifGenerator-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.Schema.__init__()=Bio.NeuralNetwork.Gene.Schema.Schema-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.SchemaCoder.__init__()=Bio.NeuralNetwork.Gene.Schema.SchemaCoder-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.SchemaFactory.__init__()=Bio.NeuralNetwork.Gene.Schema.SchemaFactory-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.SchemaFinder.__init__()=Bio.NeuralNetwork.Gene.Schema.SchemaFinder-class.html#__init__,Method Bio.NeuralNetwork.Gene.Schema.SimpleFinisher.__init__()=Bio.NeuralNetwork.Gene.Schema.SimpleFinisher-class.html#__init__,Method Bio.NeuralNetwork.Gene.Signature.SignatureCoder.__init__()=Bio.NeuralNetwork.Gene.Signature.SignatureCoder-class.html#__init__,Method Bio.NeuralNetwork.Gene.Signature.SignatureFinder.__init__()=Bio.NeuralNetwork.Gene.Signature.SignatureFinder-class.html#__init__,Method Bio.NeuralNetwork.StopTraining.ValidationIncreaseStop.__init__()=Bio.NeuralNetwork.StopTraining.ValidationIncreaseStop-class.html#__init__,Method Bio.NeuralNetwork.Training.ExampleManager.__init__()=Bio.NeuralNetwork.Training.ExampleManager-class.html#__init__,Method Bio.NeuralNetwork.Training.TrainingExample.__init__()=Bio.NeuralNetwork.Training.TrainingExample-class.html#__init__,Method Bio.Nexus.Nexus.Block.__init__()=Bio.Nexus.Nexus.Block-class.html#__init__,Method Bio.Nexus.Nexus.CharBuffer.__init__()=Bio.Nexus.Nexus.CharBuffer-class.html#__init__,Method Bio.Nexus.Nexus.Commandline.__init__()=Bio.Nexus.Nexus.Commandline-class.html#__init__,Method Bio.Nexus.Nexus.Nexus.__init__()=Bio.Nexus.Nexus.Nexus-class.html#__init__,Method Bio.Nexus.Nexus.StepMatrix.__init__()=Bio.Nexus.Nexus.StepMatrix-class.html#__init__,Method Bio.Nexus.Nodes.Chain.__init__()=Bio.Nexus.Nodes.Chain-class.html#__init__,Method Bio.Nexus.Nodes.Node.__init__()=Bio.Nexus.Nodes.Node-class.html#__init__,Method Bio.Nexus.Trees.NodeData.__init__()=Bio.Nexus.Trees.NodeData-class.html#__init__,Method Bio.Nexus.Trees.Tree.__init__()=Bio.Nexus.Trees.Tree-class.html#__init__,Method Bio.PDB.AbstractPropertyMap.AbstractAtomPropertyMap.__init__()=Bio.PDB.AbstractPropertyMap.AbstractAtomPropertyMap-class.html#__init__,Method Bio.PDB.AbstractPropertyMap.AbstractPropertyMap.__init__()=Bio.PDB.AbstractPropertyMap.AbstractPropertyMap-class.html#__init__,Method Bio.PDB.AbstractPropertyMap.AbstractResiduePropertyMap.__init__()=Bio.PDB.AbstractPropertyMap.AbstractResiduePropertyMap-class.html#__init__,Method Bio.PDB.Atom.Atom.__init__()=Bio.PDB.Atom.Atom-class.html#__init__,Method Bio.PDB.Atom.DisorderedAtom.__init__()=Bio.PDB.Atom.DisorderedAtom-class.html#__init__,Method Bio.PDB.Chain.Chain.__init__()=Bio.PDB.Chain.Chain-class.html#__init__,Method Bio.PDB.DSSP'.DSSP.__init__()=Bio.PDB.DSSP%27.DSSP-class.html#__init__,Method Bio.PDB.Dice.ChainSelector.__init__()=Bio.PDB.Dice.ChainSelector-class.html#__init__,Method Bio.PDB.Entity.DisorderedEntityWrapper.__init__()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#__init__,Method Bio.PDB.Entity.Entity.__init__()=Bio.PDB.Entity.Entity-class.html#__init__,Method Bio.PDB.FragmentMapper'.Fragment.__init__()=Bio.PDB.FragmentMapper%27.Fragment-class.html#__init__,Method Bio.PDB.FragmentMapper'.FragmentMapper.__init__()=Bio.PDB.FragmentMapper%27.FragmentMapper-class.html#__init__,Method Bio.PDB.HSExposure.ExposureCN.__init__()=Bio.PDB.HSExposure.ExposureCN-class.html#__init__,Method Bio.PDB.HSExposure.HSExposureCA.__init__()=Bio.PDB.HSExposure.HSExposureCA-class.html#__init__,Method Bio.PDB.HSExposure.HSExposureCB.__init__()=Bio.PDB.HSExposure.HSExposureCB-class.html#__init__,Method Bio.PDB.HSExposure._AbstractHSExposure.__init__()=Bio.PDB.HSExposure._AbstractHSExposure-class.html#__init__,Method Bio.PDB.MMCIF2Dict.MMCIF2Dict.__init__()=Bio.PDB.MMCIF2Dict.MMCIF2Dict-class.html#__init__,Method Bio.PDB.MMCIFParser'.MMCIFParser.__init__()=Bio.PDB.MMCIFParser%27.MMCIFParser-class.html#__init__,Method Bio.PDB.Model.Model.__init__()=Bio.PDB.Model.Model-class.html#__init__,Method Bio.PDB.NACCESS.NACCESS.__init__()=Bio.PDB.NACCESS.NACCESS-class.html#__init__,Method Bio.PDB.NACCESS.NACCESS_atomic.__init__()=Bio.PDB.NACCESS.NACCESS_atomic-class.html#__init__,Method Bio.PDB.NeighborSearch'.NeighborSearch.__init__()=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html#__init__,Method Bio.PDB.PDBIO'.PDBIO.__init__()=Bio.PDB.PDBIO%27.PDBIO-class.html#__init__,Method Bio.PDB.PDBList'.PDBList.__init__()=Bio.PDB.PDBList%27.PDBList-class.html#__init__,Method Bio.PDB.PDBParser'.PDBParser.__init__()=Bio.PDB.PDBParser%27.PDBParser-class.html#__init__,Method Bio.PDB.PSEA.PSEA.__init__()=Bio.PDB.PSEA.PSEA-class.html#__init__,Method Bio.PDB.Polypeptide.CaPPBuilder.__init__()=Bio.PDB.Polypeptide.CaPPBuilder-class.html#__init__,Method Bio.PDB.Polypeptide.PPBuilder.__init__()=Bio.PDB.Polypeptide.PPBuilder-class.html#__init__,Method Bio.PDB.Polypeptide._PPBuilder.__init__()=Bio.PDB.Polypeptide._PPBuilder-class.html#__init__,Method Bio.PDB.QCPSuperimposer.QCPSuperimposer.__init__()=Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html#__init__,Method Bio.PDB.Residue.DisorderedResidue.__init__()=Bio.PDB.Residue.DisorderedResidue-class.html#__init__,Method Bio.PDB.Residue.Residue.__init__()=Bio.PDB.Residue.Residue-class.html#__init__,Method Bio.PDB.ResidueDepth'.ResidueDepth.__init__()=Bio.PDB.ResidueDepth%27.ResidueDepth-class.html#__init__,Method Bio.PDB.Structure.Structure.__init__()=Bio.PDB.Structure.Structure-class.html#__init__,Method Bio.PDB.StructureAlignment'.StructureAlignment.__init__()=Bio.PDB.StructureAlignment%27.StructureAlignment-class.html#__init__,Method Bio.PDB.StructureBuilder.StructureBuilder.__init__()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#__init__,Method Bio.PDB.Superimposer'.Superimposer.__init__()=Bio.PDB.Superimposer%27.Superimposer-class.html#__init__,Method Bio.PDB.Vector'.Vector.__init__()=Bio.PDB.Vector%27.Vector-class.html#__init__,Method Bio.ParserSupport.EventGenerator.__init__()=Bio.ParserSupport.EventGenerator-class.html#__init__,Method Bio.ParserSupport.TaggingConsumer.__init__()=Bio.ParserSupport.TaggingConsumer-class.html#__init__,Method Bio.Pathway.Network.__init__()=Bio.Pathway.Network-class.html#__init__,Method Bio.Pathway.Reaction.__init__()=Bio.Pathway.Reaction-class.html#__init__,Method Bio.Pathway.Rep.Graph.Graph.__init__()=Bio.Pathway.Rep.Graph.Graph-class.html#__init__,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.__init__()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#__init__,Method Bio.Pathway.System.__init__()=Bio.Pathway.System-class.html#__init__,Method Bio.Phylo.Applications._Fasttree.FastTreeCommandline.__init__()=Bio.Phylo.Applications._Fasttree.FastTreeCommandline-class.html#__init__,Method Bio.Phylo.Applications._Phyml.PhymlCommandline.__init__()=Bio.Phylo.Applications._Phyml.PhymlCommandline-class.html#__init__,Method Bio.Phylo.Applications._Raxml.RaxmlCommandline.__init__()=Bio.Phylo.Applications._Raxml.RaxmlCommandline-class.html#__init__,Method Bio.Phylo.BaseTree.BranchColor.__init__()=Bio.Phylo.BaseTree.BranchColor-class.html#__init__,Method Bio.Phylo.BaseTree.Clade.__init__()=Bio.Phylo.BaseTree.Clade-class.html#__init__,Method Bio.Phylo.BaseTree.Tree.__init__()=Bio.Phylo.BaseTree.Tree-class.html#__init__,Method Bio.Phylo.CDAO.Clade.__init__()=Bio.Phylo.CDAO.Clade-class.html#__init__,Method Bio.Phylo.CDAO.Tree.__init__()=Bio.Phylo.CDAO.Tree-class.html#__init__,Method Bio.Phylo.CDAOIO.Parser.__init__()=Bio.Phylo.CDAOIO.Parser-class.html#__init__,Method Bio.Phylo.CDAOIO.Writer.__init__()=Bio.Phylo.CDAOIO.Writer-class.html#__init__,Method Bio.Phylo.NeXML.Clade.__init__()=Bio.Phylo.NeXML.Clade-class.html#__init__,Method Bio.Phylo.NeXML.Tree.__init__()=Bio.Phylo.NeXML.Tree-class.html#__init__,Method Bio.Phylo.NeXMLIO.Parser.__init__()=Bio.Phylo.NeXMLIO.Parser-class.html#__init__,Method Bio.Phylo.NeXMLIO.Writer.__init__()=Bio.Phylo.NeXMLIO.Writer-class.html#__init__,Method Bio.Phylo.Newick.Clade.__init__()=Bio.Phylo.Newick.Clade-class.html#__init__,Method Bio.Phylo.Newick.Tree.__init__()=Bio.Phylo.Newick.Tree-class.html#__init__,Method Bio.Phylo.NewickIO.Parser.__init__()=Bio.Phylo.NewickIO.Parser-class.html#__init__,Method Bio.Phylo.NewickIO.Writer.__init__()=Bio.Phylo.NewickIO.Writer-class.html#__init__,Method Bio.Phylo.PAML._paml.Paml.__init__()=Bio.Phylo.PAML._paml.Paml-class.html#__init__,Method Bio.Phylo.PAML.baseml.Baseml.__init__()=Bio.Phylo.PAML.baseml.Baseml-class.html#__init__,Method Bio.Phylo.PAML.codeml.Codeml.__init__()=Bio.Phylo.PAML.codeml.Codeml-class.html#__init__,Method Bio.Phylo.PAML.yn00.Yn00.__init__()=Bio.Phylo.PAML.yn00.Yn00-class.html#__init__,Method Bio.Phylo.PhyloXML.Accession.__init__()=Bio.Phylo.PhyloXML.Accession-class.html#__init__,Method Bio.Phylo.PhyloXML.Annotation.__init__()=Bio.Phylo.PhyloXML.Annotation-class.html#__init__,Method Bio.Phylo.PhyloXML.BinaryCharacters.__init__()=Bio.Phylo.PhyloXML.BinaryCharacters-class.html#__init__,Method Bio.Phylo.PhyloXML.BranchColor.__init__()=Bio.Phylo.PhyloXML.BranchColor-class.html#__init__,Method Bio.Phylo.PhyloXML.Clade.__init__()=Bio.Phylo.PhyloXML.Clade-class.html#__init__,Method Bio.Phylo.PhyloXML.CladeRelation.__init__()=Bio.Phylo.PhyloXML.CladeRelation-class.html#__init__,Method Bio.Phylo.PhyloXML.Confidence.__init__()=Bio.Phylo.PhyloXML.Confidence-class.html#__init__,Method Bio.Phylo.PhyloXML.Date.__init__()=Bio.Phylo.PhyloXML.Date-class.html#__init__,Method Bio.Phylo.PhyloXML.Distribution.__init__()=Bio.Phylo.PhyloXML.Distribution-class.html#__init__,Method Bio.Phylo.PhyloXML.DomainArchitecture.__init__()=Bio.Phylo.PhyloXML.DomainArchitecture-class.html#__init__,Method Bio.Phylo.PhyloXML.Events.__init__()=Bio.Phylo.PhyloXML.Events-class.html#__init__,Method Bio.Phylo.PhyloXML.Id.__init__()=Bio.Phylo.PhyloXML.Id-class.html#__init__,Method Bio.Phylo.PhyloXML.MolSeq.__init__()=Bio.Phylo.PhyloXML.MolSeq-class.html#__init__,Method Bio.Phylo.PhyloXML.Other.__init__()=Bio.Phylo.PhyloXML.Other-class.html#__init__,Method Bio.Phylo.PhyloXML.Phylogeny.__init__()=Bio.Phylo.PhyloXML.Phylogeny-class.html#__init__,Method Bio.Phylo.PhyloXML.Phyloxml.__init__()=Bio.Phylo.PhyloXML.Phyloxml-class.html#__init__,Method Bio.Phylo.PhyloXML.Point.__init__()=Bio.Phylo.PhyloXML.Point-class.html#__init__,Method Bio.Phylo.PhyloXML.Polygon.__init__()=Bio.Phylo.PhyloXML.Polygon-class.html#__init__,Method Bio.Phylo.PhyloXML.Property.__init__()=Bio.Phylo.PhyloXML.Property-class.html#__init__,Method Bio.Phylo.PhyloXML.ProteinDomain.__init__()=Bio.Phylo.PhyloXML.ProteinDomain-class.html#__init__,Method Bio.Phylo.PhyloXML.Reference.__init__()=Bio.Phylo.PhyloXML.Reference-class.html#__init__,Method Bio.Phylo.PhyloXML.Sequence.__init__()=Bio.Phylo.PhyloXML.Sequence-class.html#__init__,Method Bio.Phylo.PhyloXML.SequenceRelation.__init__()=Bio.Phylo.PhyloXML.SequenceRelation-class.html#__init__,Method Bio.Phylo.PhyloXML.Taxonomy.__init__()=Bio.Phylo.PhyloXML.Taxonomy-class.html#__init__,Method Bio.Phylo.PhyloXML.Uri.__init__()=Bio.Phylo.PhyloXML.Uri-class.html#__init__,Method Bio.Phylo.PhyloXMLIO.Parser.__init__()=Bio.Phylo.PhyloXMLIO.Parser-class.html#__init__,Method Bio.Phylo.PhyloXMLIO.Writer.__init__()=Bio.Phylo.PhyloXMLIO.Writer-class.html#__init__,Method Bio.Phylo.TreeConstruction.DistanceCalculator.__init__()=Bio.Phylo.TreeConstruction.DistanceCalculator-class.html#__init__,Method Bio.Phylo.TreeConstruction.DistanceTreeConstructor.__init__()=Bio.Phylo.TreeConstruction.DistanceTreeConstructor-class.html#__init__,Method Bio.Phylo.TreeConstruction.NNITreeSearcher.__init__()=Bio.Phylo.TreeConstruction.NNITreeSearcher-class.html#__init__,Method Bio.Phylo.TreeConstruction.ParsimonyScorer.__init__()=Bio.Phylo.TreeConstruction.ParsimonyScorer-class.html#__init__,Method Bio.Phylo.TreeConstruction.ParsimonyTreeConstructor.__init__()=Bio.Phylo.TreeConstruction.ParsimonyTreeConstructor-class.html#__init__,Method Bio.Phylo.TreeConstruction._DistanceMatrix.__init__()=Bio.Phylo.TreeConstruction._DistanceMatrix-class.html#__init__,Method Bio.Phylo.TreeConstruction._Matrix.__init__()=Bio.Phylo.TreeConstruction._Matrix-class.html#__init__,Method Bio.PopGen.Async.Async.__init__()=Bio.PopGen.Async.Async-class.html#__init__,Method Bio.PopGen.Async.DirectoryRetriever.__init__()=Bio.PopGen.Async.DirectoryRetriever-class.html#__init__,Method Bio.PopGen.Async.FileRetriever.__init__()=Bio.PopGen.Async.FileRetriever-class.html#__init__,Method Bio.PopGen.Async.Local.Local.__init__()=Bio.PopGen.Async.Local.Local-class.html#__init__,Method Bio.PopGen.FDist.Async.FDistAsync.__init__()=Bio.PopGen.FDist.Async.FDistAsync-class.html#__init__,Method Bio.PopGen.FDist.Async.SplitFDist.__init__()=Bio.PopGen.FDist.Async.SplitFDist-class.html#__init__,Method Bio.PopGen.FDist.Controller.FDistController.__init__()=Bio.PopGen.FDist.Controller.FDistController-class.html#__init__,Method Bio.PopGen.FDist.Record.__init__()=Bio.PopGen.FDist.Record-class.html#__init__,Method Bio.PopGen.GenePop.Controller.GenePopController.__init__()=Bio.PopGen.GenePop.Controller.GenePopController-class.html#__init__,Method Bio.PopGen.GenePop.Controller._FileIterator.__init__()=Bio.PopGen.GenePop.Controller._FileIterator-class.html#__init__,Method Bio.PopGen.GenePop.Controller._GenePopCommandline.__init__()=Bio.PopGen.GenePop.Controller._GenePopCommandline-class.html#__init__,Method Bio.PopGen.GenePop.EasyController.EasyController.__init__()=Bio.PopGen.GenePop.EasyController.EasyController-class.html#__init__,Method Bio.PopGen.GenePop.FileParser.FileRecord.__init__()=Bio.PopGen.GenePop.FileParser.FileRecord-class.html#__init__,Method Bio.PopGen.GenePop.LargeFileParser.Record.__init__()=Bio.PopGen.GenePop.LargeFileParser.Record-class.html#__init__,Method Bio.PopGen.GenePop.Record.__init__()=Bio.PopGen.GenePop.Record-class.html#__init__,Method Bio.PopGen.SimCoal.Async.SimCoalCache.__init__()=Bio.PopGen.SimCoal.Async.SimCoalCache-class.html#__init__,Method Bio.PopGen.SimCoal.Cache.SimCoalCache.__init__()=Bio.PopGen.SimCoal.Cache.SimCoalCache-class.html#__init__,Method Bio.PopGen.SimCoal.Controller.FastSimCoalController.__init__()=Bio.PopGen.SimCoal.Controller.FastSimCoalController-class.html#__init__,Method Bio.PopGen.SimCoal.Controller.SimCoalController.__init__()=Bio.PopGen.SimCoal.Controller.SimCoalController-class.html#__init__,Method Bio.PopGen.SimCoal.Controller._FastSimCoalCommandLine.__init__()=Bio.PopGen.SimCoal.Controller._FastSimCoalCommandLine-class.html#__init__,Method Bio.Restriction.PrintFormat.PrintFormat.__init__()=Bio.Restriction.PrintFormat.PrintFormat-class.html#__init__,Method Bio.Restriction.Restriction.Analysis.__init__()=Bio.Restriction.Restriction.Analysis-class.html#__init__,Method Bio.Restriction.Restriction.FormattedSeq.__init__()=Bio.Restriction.Restriction.FormattedSeq-class.html#__init__,Method Bio.Restriction.Restriction.RestrictionBatch.__init__()=Bio.Restriction.Restriction.RestrictionBatch-class.html#__init__,Method Bio.Restriction.Restriction.RestrictionType.__init__()=Bio.Restriction.Restriction.RestrictionType-class.html#__init__,Method Bio.SCOP.Astral.__init__()=Bio.SCOP.Astral-class.html#__init__,Method Bio.SCOP.Cla.Index.__init__()=Bio.SCOP.Cla.Index-class.html#__init__,Method Bio.SCOP.Cla.Record.__init__()=Bio.SCOP.Cla.Record-class.html#__init__,Method Bio.SCOP.Des.Record.__init__()=Bio.SCOP.Des.Record-class.html#__init__,Method Bio.SCOP.Dom.Record.__init__()=Bio.SCOP.Dom.Record-class.html#__init__,Method Bio.SCOP.Domain.__init__()=Bio.SCOP.Domain-class.html#__init__,Method Bio.SCOP.Hie.Record.__init__()=Bio.SCOP.Hie.Record-class.html#__init__,Method Bio.SCOP.Node.__init__()=Bio.SCOP.Node-class.html#__init__,Method Bio.SCOP.Raf.Res.__init__()=Bio.SCOP.Raf.Res-class.html#__init__,Method Bio.SCOP.Raf.SeqMap.__init__()=Bio.SCOP.Raf.SeqMap-class.html#__init__,Method Bio.SCOP.Raf.SeqMapIndex.__init__()=Bio.SCOP.Raf.SeqMapIndex-class.html#__init__,Method Bio.SCOP.Residues.Residues.__init__()=Bio.SCOP.Residues.Residues-class.html#__init__,Method Bio.SCOP.Scop.__init__()=Bio.SCOP.Scop-class.html#__init__,Method Bio.SVDSuperimposer.SVDSuperimposer.__init__()=Bio.SVDSuperimposer.SVDSuperimposer-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_tab.BlastTabIndexer.__init__()=Bio.SearchIO.BlastIO.blast_tab.BlastTabIndexer-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_tab.BlastTabParser.__init__()=Bio.SearchIO.BlastIO.blast_tab.BlastTabParser-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_tab.BlastTabWriter.__init__()=Bio.SearchIO.BlastIO.blast_tab.BlastTabWriter-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_text.BlastTextParser.__init__()=Bio.SearchIO.BlastIO.blast_text.BlastTextParser-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_xml.BlastXmlIndexer.__init__()=Bio.SearchIO.BlastIO.blast_xml.BlastXmlIndexer-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_xml.BlastXmlParser.__init__()=Bio.SearchIO.BlastIO.blast_xml.BlastXmlParser-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_xml.BlastXmlWriter.__init__()=Bio.SearchIO.BlastIO.blast_xml.BlastXmlWriter-class.html#__init__,Method Bio.SearchIO.BlastIO.blast_xml._BlastXmlGenerator.__init__()=Bio.SearchIO.BlastIO.blast_xml._BlastXmlGenerator-class.html#__init__,Method Bio.SearchIO.BlatIO.BlatPslIndexer.__init__()=Bio.SearchIO.BlatIO.BlatPslIndexer-class.html#__init__,Method Bio.SearchIO.BlatIO.BlatPslParser.__init__()=Bio.SearchIO.BlatIO.BlatPslParser-class.html#__init__,Method Bio.SearchIO.BlatIO.BlatPslWriter.__init__()=Bio.SearchIO.BlatIO.BlatPslWriter-class.html#__init__,Method Bio.SearchIO.ExonerateIO._base._BaseExonerateParser.__init__()=Bio.SearchIO.ExonerateIO._base._BaseExonerateParser-class.html#__init__,Method Bio.SearchIO.FastaIO.FastaM10Indexer.__init__()=Bio.SearchIO.FastaIO.FastaM10Indexer-class.html#__init__,Method Bio.SearchIO.FastaIO.FastaM10Parser.__init__()=Bio.SearchIO.FastaIO.FastaM10Parser-class.html#__init__,Method Bio.SearchIO.HmmerIO._base._BaseHmmerTextIndexer.__init__()=Bio.SearchIO.HmmerIO._base._BaseHmmerTextIndexer-class.html#__init__,Method Bio.SearchIO.HmmerIO.hmmer2_text.Hmmer2TextParser.__init__()=Bio.SearchIO.HmmerIO.hmmer2_text.Hmmer2TextParser-class.html#__init__,Method Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.__init__()=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#__init__,Method Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser.__init__()=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser-class.html#__init__,Method Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter.__init__()=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter-class.html#__init__,Method Bio.SearchIO.HmmerIO.hmmer3_text.Hmmer3TextParser.__init__()=Bio.SearchIO.HmmerIO.hmmer3_text.Hmmer3TextParser-class.html#__init__,Method Bio.SearchIO._index.SearchIndexer.__init__()=Bio.SearchIO._index.SearchIndexer-class.html#__init__,Method Bio.SearchIO._model.hit.Hit.__init__()=Bio.SearchIO._model.hit.Hit-class.html#__init__,Method Bio.SearchIO._model.hsp.HSP.__init__()=Bio.SearchIO._model.hsp.HSP-class.html#__init__,Method Bio.SearchIO._model.hsp.HSPFragment.__init__()=Bio.SearchIO._model.hsp.HSPFragment-class.html#__init__,Method Bio.SearchIO._model.query.QueryResult.__init__()=Bio.SearchIO._model.query.QueryResult-class.html#__init__,Method Bio.Seq.MutableSeq.__init__()=Bio.Seq.MutableSeq-class.html#__init__,Method Bio.Seq.Seq.__init__()=Bio.Seq.Seq-class.html#__init__,Method Bio.Seq.UnknownSeq.__init__()=Bio.Seq.UnknownSeq-class.html#__init__,Method Bio.SeqFeature.CompoundLocation.__init__()=Bio.SeqFeature.CompoundLocation-class.html#__init__,Method Bio.SeqFeature.FeatureLocation.__init__()=Bio.SeqFeature.FeatureLocation-class.html#__init__,Method Bio.SeqFeature.PositionGap.__init__()=Bio.SeqFeature.PositionGap-class.html#__init__,Method Bio.SeqFeature.Reference.__init__()=Bio.SeqFeature.Reference-class.html#__init__,Method Bio.SeqFeature.SeqFeature.__init__()=Bio.SeqFeature.SeqFeature-class.html#__init__,Method Bio.SeqIO.FastaIO.FastaWriter.__init__()=Bio.SeqIO.FastaIO.FastaWriter-class.html#__init__,Method Bio.SeqIO.Interfaces.SequenceIterator.__init__()=Bio.SeqIO.Interfaces.SequenceIterator-class.html#__init__,Method Bio.SeqIO.Interfaces.SequenceWriter.__init__()=Bio.SeqIO.Interfaces.SequenceWriter-class.html#__init__,Method Bio.SeqIO.Interfaces.SequentialSequenceWriter.__init__()=Bio.SeqIO.Interfaces.SequentialSequenceWriter-class.html#__init__,Method Bio.SeqIO.PhdIO.PhdWriter.__init__()=Bio.SeqIO.PhdIO.PhdWriter-class.html#__init__,Method Bio.SeqIO.QualityIO.QualPhredWriter.__init__()=Bio.SeqIO.QualityIO.QualPhredWriter-class.html#__init__,Method Bio.SeqIO.SeqXmlIO.SeqXmlIterator.__init__()=Bio.SeqIO.SeqXmlIO.SeqXmlIterator-class.html#__init__,Method Bio.SeqIO.SeqXmlIO.SeqXmlWriter.__init__()=Bio.SeqIO.SeqXmlIO.SeqXmlWriter-class.html#__init__,Method Bio.SeqIO.SeqXmlIO.XMLRecordIterator.__init__()=Bio.SeqIO.SeqXmlIO.XMLRecordIterator-class.html#__init__,Method Bio.SeqIO.SffIO.SffWriter.__init__()=Bio.SeqIO.SffIO.SffWriter-class.html#__init__,Method Bio.SeqIO.SffIO._AddTellHandle.__init__()=Bio.SeqIO.SffIO._AddTellHandle-class.html#__init__,Method Bio.SeqIO.UniprotIO.Parser.__init__()=Bio.SeqIO.UniprotIO.Parser-class.html#__init__,Method Bio.SeqIO._index.IntelliGeneticsRandomAccess.__init__()=Bio.SeqIO._index.IntelliGeneticsRandomAccess-class.html#__init__,Method Bio.SeqIO._index.SeqFileRandomAccess.__init__()=Bio.SeqIO._index.SeqFileRandomAccess-class.html#__init__,Method Bio.SeqIO._index.SequentialSeqFileRandomAccess.__init__()=Bio.SeqIO._index.SequentialSeqFileRandomAccess-class.html#__init__,Method Bio.SeqIO._index.SffRandomAccess.__init__()=Bio.SeqIO._index.SffRandomAccess-class.html#__init__,Method Bio.SeqRecord.SeqRecord.__init__()=Bio.SeqRecord.SeqRecord-class.html#__init__,Method Bio.SeqRecord._RestrictedDict.__init__()=Bio.SeqRecord._RestrictedDict-class.html#__init__,Method Bio.SeqUtils.CodonUsage.CodonAdaptationIndex.__init__()=Bio.SeqUtils.CodonUsage.CodonAdaptationIndex-class.html#__init__,Method Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint.__init__()=Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#__init__,Method Bio.SeqUtils.ProtParam.ProteinAnalysis.__init__()=Bio.SeqUtils.ProtParam.ProteinAnalysis-class.html#__init__,Method Bio.Sequencing.Ace.ACEFileRecord.__init__()=Bio.Sequencing.Ace.ACEFileRecord-class.html#__init__,Method Bio.Sequencing.Ace.Contig.__init__()=Bio.Sequencing.Ace.Contig-class.html#__init__,Method Bio.Sequencing.Ace.Reads.__init__()=Bio.Sequencing.Ace.Reads-class.html#__init__,Method Bio.Sequencing.Ace.af.__init__()=Bio.Sequencing.Ace.af-class.html#__init__,Method Bio.Sequencing.Ace.bs.__init__()=Bio.Sequencing.Ace.bs-class.html#__init__,Method Bio.Sequencing.Ace.ct.__init__()=Bio.Sequencing.Ace.ct-class.html#__init__,Method Bio.Sequencing.Ace.ds.__init__()=Bio.Sequencing.Ace.ds-class.html#__init__,Method Bio.Sequencing.Ace.qa.__init__()=Bio.Sequencing.Ace.qa-class.html#__init__,Method Bio.Sequencing.Ace.rd.__init__()=Bio.Sequencing.Ace.rd-class.html#__init__,Method Bio.Sequencing.Ace.rt.__init__()=Bio.Sequencing.Ace.rt-class.html#__init__,Method Bio.Sequencing.Ace.wa.__init__()=Bio.Sequencing.Ace.wa-class.html#__init__,Method Bio.Sequencing.Ace.wr.__init__()=Bio.Sequencing.Ace.wr-class.html#__init__,Method Bio.Sequencing.Applications._Novoalign.NovoalignCommandline.__init__()=Bio.Sequencing.Applications._Novoalign.NovoalignCommandline-class.html#__init__,Method Bio.Sequencing.Applications._bwa.BwaAlignCommandline.__init__()=Bio.Sequencing.Applications._bwa.BwaAlignCommandline-class.html#__init__,Method Bio.Sequencing.Applications._bwa.BwaBwaswCommandline.__init__()=Bio.Sequencing.Applications._bwa.BwaBwaswCommandline-class.html#__init__,Method Bio.Sequencing.Applications._bwa.BwaIndexCommandline.__init__()=Bio.Sequencing.Applications._bwa.BwaIndexCommandline-class.html#__init__,Method Bio.Sequencing.Applications._bwa.BwaSampeCommandline.__init__()=Bio.Sequencing.Applications._bwa.BwaSampeCommandline-class.html#__init__,Method Bio.Sequencing.Applications._bwa.BwaSamseCommandline.__init__()=Bio.Sequencing.Applications._bwa.BwaSamseCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsCalmdCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsCalmdCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsCatCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsCatCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsFaidxCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsFaidxCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsFixmateCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsFixmateCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsIdxstatsCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsIdxstatsCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsIndexCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsIndexCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsMergeCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsMergeCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsMpileupCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsMpileupCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsPhaseCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsPhaseCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsReheaderCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsReheaderCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsRmdupCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsRmdupCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsSortCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsSortCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsTargetcutCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsTargetcutCommandline-class.html#__init__,Method Bio.Sequencing.Applications._samtools.SamtoolsViewCommandline.__init__()=Bio.Sequencing.Applications._samtools.SamtoolsViewCommandline-class.html#__init__,Method Bio.Sequencing.Phd.Record.__init__()=Bio.Sequencing.Phd.Record-class.html#__init__,Method Bio.SubsMat.FreqTable.FreqTable.__init__()=Bio.SubsMat.FreqTable.FreqTable-class.html#__init__,Method Bio.SubsMat.SeqMat.__init__()=Bio.SubsMat.SeqMat-class.html#__init__,Method Bio.SwissProt.KeyWList.Record.__init__()=Bio.SwissProt.KeyWList.Record-class.html#__init__,Method Bio.SwissProt.Record.__init__()=Bio.SwissProt.Record-class.html#__init__,Method Bio.SwissProt.Reference.__init__()=Bio.SwissProt.Reference-class.html#__init__,Method Bio.UniGene.ProtsimLine.__init__()=Bio.UniGene.ProtsimLine-class.html#__init__,Method Bio.UniGene.Record.__init__()=Bio.UniGene.Record-class.html#__init__,Method Bio.UniGene.STSLine.__init__()=Bio.UniGene.STSLine-class.html#__init__,Method Bio.UniGene.SequenceLine.__init__()=Bio.UniGene.SequenceLine-class.html#__init__,Method Bio.Wise.dnal.Statistics.__init__()=Bio.Wise.dnal.Statistics-class.html#__init__,Method Bio.Wise.psw.AlignmentColumn.__init__()=Bio.Wise.psw.AlignmentColumn-class.html#__init__,Method Bio.Wise.psw.ColumnUnit.__init__()=Bio.Wise.psw.ColumnUnit-class.html#__init__,Method Bio._py3k._ordereddict.OrderedDict.__init__()=Bio._py3k._ordereddict.OrderedDict-class.html#__init__,Method Bio.bgzf.BgzfReader.__init__()=Bio.bgzf.BgzfReader-class.html#__init__,Method Bio.bgzf.BgzfWriter.__init__()=Bio.bgzf.BgzfWriter-class.html#__init__,Method Bio.codonalign.codonalignment.CodonAlignment.__init__()=Bio.codonalign.codonalignment.CodonAlignment-class.html#__init__,Method Bio.codonalign.codonseq.CodonSeq.__init__()=Bio.codonalign.codonseq.CodonSeq-class.html#__init__,Method Bio.kNN.kNN.__init__()=Bio.kNN.kNN-class.html#__init__,Method Bio.motifs.Instances.__init__()=Bio.motifs.Instances-class.html#__init__,Method Bio.motifs.Motif.__init__()=Bio.motifs.Motif-class.html#__init__,Method Bio.motifs.alignace.Record.__init__()=Bio.motifs.alignace.Record-class.html#__init__,Method Bio.motifs.applications._alignace.AlignAceCommandline.__init__()=Bio.motifs.applications._alignace.AlignAceCommandline-class.html#__init__,Method Bio.motifs.applications._alignace.CompareAceCommandline.__init__()=Bio.motifs.applications._alignace.CompareAceCommandline-class.html#__init__,Method Bio.motifs.applications._xxmotif.XXmotifCommandline.__init__()=Bio.motifs.applications._xxmotif.XXmotifCommandline-class.html#__init__,Method Bio.motifs.jaspar.Motif.__init__()=Bio.motifs.jaspar.Motif-class.html#__init__,Method Bio.motifs.jaspar.Record.__init__()=Bio.motifs.jaspar.Record-class.html#__init__,Method Bio.motifs.jaspar.db.JASPAR5.__init__()=Bio.motifs.jaspar.db.JASPAR5-class.html#__init__,Method Bio.motifs.mast.Record.__init__()=Bio.motifs.mast.Record-class.html#__init__,Method Bio.motifs.matrix.GenericPositionMatrix.__init__()=Bio.motifs.matrix.GenericPositionMatrix-class.html#__init__,Method Bio.motifs.matrix.PositionWeightMatrix.__init__()=Bio.motifs.matrix.PositionWeightMatrix-class.html#__init__,Method Bio.motifs.meme.Instance.__init__()=Bio.motifs.meme.Instance-class.html#__init__,Method Bio.motifs.meme.Motif.__init__()=Bio.motifs.meme.Motif-class.html#__init__,Method Bio.motifs.meme.Record.__init__()=Bio.motifs.meme.Record-class.html#__init__,Method Bio.motifs.thresholds.ScoreDistribution.__init__()=Bio.motifs.thresholds.ScoreDistribution-class.html#__init__,Method Bio.motifs.transfac.Record.__init__()=Bio.motifs.transfac.Record-class.html#__init__,Method Bio.pairwise2.affine_penalty.__init__()=Bio.pairwise2.affine_penalty-class.html#__init__,Method Bio.pairwise2.dictionary_match.__init__()=Bio.pairwise2.dictionary_match-class.html#__init__,Method Bio.pairwise2.identity_match.__init__()=Bio.pairwise2.identity_match-class.html#__init__,Method BioSQL.BioSeq.DBSeq.__init__()=BioSQL.BioSeq.DBSeq-class.html#__init__,Method BioSQL.BioSeq.DBSeqRecord.__init__()=BioSQL.BioSeq.DBSeqRecord-class.html#__init__,Method BioSQL.BioSeqDatabase.Adaptor.__init__()=BioSQL.BioSeqDatabase.Adaptor-class.html#__init__,Method BioSQL.BioSeqDatabase.BioSeqDatabase.__init__()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#__init__,Method BioSQL.BioSeqDatabase.DBServer.__init__()=BioSQL.BioSeqDatabase.DBServer-class.html#__init__,Method BioSQL.BioSeqDatabase._CursorWrapper.__init__()=BioSQL.BioSeqDatabase._CursorWrapper-class.html#__init__,Method BioSQL.DBUtils.Generic_dbutils.__init__()=BioSQL.DBUtils.Generic_dbutils-class.html#__init__,Method BioSQL.Loader.DatabaseLoader.__init__()=BioSQL.Loader.DatabaseLoader-class.html#__init__,Method BioSQL.Loader.DatabaseRemover.__init__()=BioSQL.Loader.DatabaseRemover-class.html#__init__"><a title="Bio.Affy.CelFile.Record.__init__
+Bio.Align.AlignInfo.PSSM.__init__
+Bio.Align.AlignInfo.SummaryInfo.__init__
+Bio.Align.Applications._ClustalOmega.ClustalOmegaCommandline.__init__
+Bio.Align.Applications._Clustalw.ClustalwCommandline.__init__
+Bio.Align.Applications._Dialign.DialignCommandline.__init__
+Bio.Align.Applications._MSAProbs.MSAProbsCommandline.__init__
+Bio.Align.Applications._Mafft.MafftCommandline.__init__
+Bio.Align.Applications._Muscle.MuscleCommandline.__init__
+Bio.Align.Applications._Prank.PrankCommandline.__init__
+Bio.Align.Applications._Probcons.ProbconsCommandline.__init__
+Bio.Align.Applications._TCoffee.TCoffeeCommandline.__init__
+Bio.Align.Generic.Alignment.__init__
+Bio.Align.MultipleSeqAlignment.__init__
+Bio.AlignIO.Interfaces.AlignmentIterator.__init__
+Bio.AlignIO.Interfaces.AlignmentWriter.__init__
+Bio.AlignIO.Interfaces.SequentialAlignmentWriter.__init__
+Bio.Alphabet.AlphabetEncoder.__init__
+Bio.Alphabet.Gapped.__init__
+Bio.Alphabet.HasStopCodon.__init__
+Bio.Application.AbstractCommandline.__init__
+Bio.Application.ApplicationError.__init__
+Bio.Application._AbstractParameter.__init__
+Bio.Application._Argument.__init__
+Bio.Application._Option.__init__
+Bio.Application._StaticArgument.__init__
+Bio.Application._Switch.__init__
+Bio.Blast.Applications.NcbiblastformatterCommandline.__init__
+Bio.Blast.Applications.NcbiblastnCommandline.__init__
+Bio.Blast.Applications.NcbiblastpCommandline.__init__
+Bio.Blast.Applications.NcbiblastxCommandline.__init__
+Bio.Blast.Applications.NcbideltablastCommandline.__init__
+Bio.Blast.Applications.NcbipsiblastCommandline.__init__
+Bio.Blast.Applications.NcbirpsblastCommandline.__init__
+Bio.Blast.Applications.NcbirpstblastnCommandline.__init__
+Bio.Blast.Applications.NcbitblastnCommandline.__init__
+Bio.Blast.Applications.NcbitblastxCommandline.__init__
+Bio.Blast.Applications._NcbibaseblastCommandline.__init__
+Bio.Blast.Applications._Ncbiblast2SeqCommandline.__init__
+Bio.Blast.Applications._NcbiblastCommandline.__init__
+Bio.Blast.Applications._NcbiblastMain2SeqCommandline.__init__
+Bio.Blast.NCBIStandalone.BlastErrorParser.__init__
+Bio.Blast.NCBIStandalone.BlastParser.__init__
+Bio.Blast.NCBIStandalone.Iterator.__init__
+Bio.Blast.NCBIStandalone.PSIBlastParser.__init__
+Bio.Blast.NCBIStandalone._BlastConsumer.__init__
+Bio.Blast.NCBIStandalone._BlastErrorConsumer.__init__
+Bio.Blast.NCBIStandalone._PSIBlastConsumer.__init__
+Bio.Blast.NCBIXML.BlastParser.__init__
+Bio.Blast.NCBIXML._XMLparser.__init__
+Bio.Blast.ParseBlastTable.BlastTableEntry.__init__
+Bio.Blast.ParseBlastTable.BlastTableReader.__init__
+Bio.Blast.ParseBlastTable.BlastTableRec.__init__
+Bio.Blast.Record.Alignment.__init__
+Bio.Blast.Record.Blast.__init__
+Bio.Blast.Record.DatabaseReport.__init__
+Bio.Blast.Record.Description.__init__
+Bio.Blast.Record.HSP.__init__
+Bio.Blast.Record.Header.__init__
+Bio.Blast.Record.MultipleAlignment.__init__
+Bio.Blast.Record.PSIBlast.__init__
+Bio.Blast.Record.Parameters.__init__
+Bio.Blast.Record.Round.__init__
+Bio.CAPS.CAPSMap.__init__
+Bio.CAPS.DifferentialCutsite.__init__
+Bio.Cluster.Record.__init__
+Bio.Compass.Record.__init__
+Bio.Crystal.Chain.__init__
+Bio.Crystal.Crystal.__init__
+Bio.Crystal.Hetero.__init__
+Bio.Data.CodonTable.AmbiguousCodonTable.__init__
+Bio.Data.CodonTable.AmbiguousForwardTable.__init__
+Bio.Data.CodonTable.CodonTable.__init__
+Bio.Data.CodonTable.NCBICodonTable.__init__
+Bio.DocSQL.Create.__init__
+Bio.DocSQL.Insert.__init__
+Bio.DocSQL.IterationCursor.__init__
+Bio.DocSQL.Query.__init__
+Bio.DocSQL.QueryAll.__init__
+Bio.DocSQL.QueryGeneric.__init__
+Bio.DocSQL.QueryRow.__init__
+Bio.DocSQL.QuerySingle.__init__
+Bio.Emboss.Applications.DiffseqCommandline.__init__
+Bio.Emboss.Applications.EInvertedCommandline.__init__
+Bio.Emboss.Applications.ETandemCommandline.__init__
+Bio.Emboss.Applications.Est2GenomeCommandline.__init__
+Bio.Emboss.Applications.FConsenseCommandline.__init__
+Bio.Emboss.Applications.FDNADistCommandline.__init__
+Bio.Emboss.Applications.FDNAParsCommandline.__init__
+Bio.Emboss.Applications.FNeighborCommandline.__init__
+Bio.Emboss.Applications.FProtDistCommandline.__init__
+Bio.Emboss.Applications.FProtParsCommandline.__init__
+Bio.Emboss.Applications.FSeqBootCommandline.__init__
+Bio.Emboss.Applications.FTreeDistCommandline.__init__
+Bio.Emboss.Applications.FuzznucCommandline.__init__
+Bio.Emboss.Applications.IepCommandline.__init__
+Bio.Emboss.Applications.NeedleCommandline.__init__
+Bio.Emboss.Applications.NeedleallCommandline.__init__
+Bio.Emboss.Applications.PalindromeCommandline.__init__
+Bio.Emboss.Applications.Primer3Commandline.__init__
+Bio.Emboss.Applications.PrimerSearchCommandline.__init__
+Bio.Emboss.Applications.SeqmatchallCommandline.__init__
+Bio.Emboss.Applications.SeqretCommandline.__init__
+Bio.Emboss.Applications.StretcherCommandline.__init__
+Bio.Emboss.Applications.TranalignCommandline.__init__
+Bio.Emboss.Applications.WaterCommandline.__init__
+Bio.Emboss.Applications._EmbossCommandLine.__init__
+Bio.Emboss.Applications._EmbossMinimalCommandLine.__init__
+Bio.Emboss.Primer3.Primers.__init__
+Bio.Emboss.Primer3.Record.__init__
+Bio.Emboss.PrimerSearch.Amplifier.__init__
+Bio.Emboss.PrimerSearch.InputRecord.__init__
+Bio.Emboss.PrimerSearch.OutputRecord.__init__
+Bio.Entrez.Parser.CorruptedXMLError.__init__
+Bio.Entrez.Parser.DataHandler.__init__
+Bio.Entrez.Parser.NotXMLError.__init__
+Bio.Entrez.Parser.StructureElement.__init__
+Bio.Entrez.Parser.ValidationError.__init__
+Bio.ExPASy.Enzyme.Record.__init__
+Bio.ExPASy.Prodoc.Record.__init__
+Bio.ExPASy.Prodoc.Reference.__init__
+Bio.ExPASy.Prosite.Record.__init__
+Bio.ExPASy.ScanProsite.ContentHandler.__init__
+Bio.ExPASy.ScanProsite.Parser.__init__
+Bio.ExPASy.ScanProsite.Record.__init__
+Bio.FSSP.FSSPAlignDict.__init__
+Bio.FSSP.FSSPAlignRec.__init__
+Bio.FSSP.FSSPHeader.__init__
+Bio.FSSP.FSSPSumRec.__init__
+Bio.FSSP.FSSPTools.FSSPMultAlign.__init__
+Bio.FSSP.PosAlign.__init__
+Bio.FSSP.fssp_rec.fff_rec.__init__
+Bio.File.UndoHandle.__init__
+Bio.File._IndexedSeqFileDict.__init__
+Bio.File._SQLiteManySeqFilesDict.__init__
+Bio.GA.Crossover.General.SafeFitnessCrossover.__init__
+Bio.GA.Crossover.GeneralPoint.GeneralPointCrossover.__init__
+Bio.GA.Crossover.GeneralPoint.InterleaveCrossover.__init__
+Bio.GA.Crossover.Point.SinglePointCrossover.__init__
+Bio.GA.Crossover.TwoPoint.TwoPointCrossover.__init__
+Bio.GA.Crossover.Uniform.UniformCrossover.__init__
+Bio.GA.Evolver.GenerationEvolver.__init__
+Bio.GA.Evolver.SteadyStateEvolver.__init__
+Bio.GA.Mutation.General.SafeFitnessMutation.__init__
+Bio.GA.Mutation.Simple.ConversionMutation.__init__
+Bio.GA.Mutation.Simple.SinglePositionMutation.__init__
+Bio.GA.Organism.Organism.__init__
+Bio.GA.Repair.Stabilizing.AmbiguousRepair.__init__
+Bio.GA.Selection.Abstract.AbstractSelection.__init__
+Bio.GA.Selection.Diversity.DiversitySelection.__init__
+Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.__init__
+Bio.GA.Selection.Tournament.TournamentSelection.__init__
+Bio.GenBank.FeatureParser.__init__
+Bio.GenBank.Iterator.__init__
+Bio.GenBank.Record.Feature.__init__
+Bio.GenBank.Record.Qualifier.__init__
+Bio.GenBank.Record.Record.__init__
+Bio.GenBank.Record.Reference.__init__
+Bio.GenBank.RecordParser.__init__
+Bio.GenBank.Scanner.InsdcScanner.__init__
+Bio.GenBank._BaseGenBankConsumer.__init__
+Bio.GenBank._FeatureConsumer.__init__
+Bio.GenBank._RecordConsumer.__init__
+Bio.GenBank.utils.FeatureValueCleaner.__init__
+Bio.Geo.Record.Record.__init__
+Bio.Graphics.BasicChromosome.AnnotatedChromosomeSegment.__init__
+Bio.Graphics.BasicChromosome.Chromosome.__init__
+Bio.Graphics.BasicChromosome.ChromosomeSegment.__init__
+Bio.Graphics.BasicChromosome.Organism.__init__
+Bio.Graphics.BasicChromosome.TelomereSegment.__init__
+Bio.Graphics.BasicChromosome._ChromosomeComponent.__init__
+Bio.Graphics.ColorSpiral.ColorSpiral.__init__
+Bio.Graphics.Comparative.ComparativeScatterPlot.__init__
+Bio.Graphics.DisplayRepresentation.ChromosomeCounts.__init__
+Bio.Graphics.Distribution.BarChartDistribution.__init__
+Bio.Graphics.Distribution.DistributionPage.__init__
+Bio.Graphics.Distribution.LineDistribution.__init__
+Bio.Graphics.GenomeDiagram._AbstractDrawer.AbstractDrawer.__init__
+Bio.Graphics.GenomeDiagram._CircularDrawer.CircularDrawer.__init__
+Bio.Graphics.GenomeDiagram._Colors.ColorTranslator.__init__
+Bio.Graphics.GenomeDiagram._CrossLink.CrossLink.__init__
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.__init__
+Bio.Graphics.GenomeDiagram._Feature.Feature.__init__
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.__init__
+Bio.Graphics.GenomeDiagram._Graph.GraphData.__init__
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.__init__
+Bio.Graphics.GenomeDiagram._LinearDrawer.LinearDrawer.__init__
+Bio.Graphics.GenomeDiagram._Track.Track.__init__
+Bio.Graphics.KGML_vis.KGMLCanvas.__init__
+Bio.HMM.DynamicProgramming.AbstractDPAlgorithms.__init__
+Bio.HMM.DynamicProgramming.LogDPAlgorithms.__init__
+Bio.HMM.DynamicProgramming.ScaledDPAlgorithms.__init__
+Bio.HMM.MarkovModel.HiddenMarkovModel.__init__
+Bio.HMM.MarkovModel.MarkovModelBuilder.__init__
+Bio.HMM.Trainer.AbstractTrainer.__init__
+Bio.HMM.Trainer.BaumWelchTrainer.__init__
+Bio.HMM.Trainer.KnownStateTrainer.__init__
+Bio.HMM.Trainer.TrainingSequence.__init__
+Bio.Index._InMemoryIndex.__init__
+Bio.Index._ShelveIndex.__init__
+Bio.KDTree.KDTree'.KDTree.__init__
+Bio.KEGG.Compound.Record.__init__
+Bio.KEGG.Enzyme.Record.__init__
+Bio.KEGG.KGML.KGML_parser.KGMLParser.__init__
+Bio.KEGG.KGML.KGML_pathway.Component.__init__
+Bio.KEGG.KGML.KGML_pathway.Entry.__init__
+Bio.KEGG.KGML.KGML_pathway.Graphics.__init__
+Bio.KEGG.KGML.KGML_pathway.Pathway.__init__
+Bio.KEGG.KGML.KGML_pathway.Reaction.__init__
+Bio.KEGG.KGML.KGML_pathway.Relation.__init__
+Bio.LogisticRegression.LogisticRegression.__init__
+Bio.MarkovModel.MarkovModel.__init__
+Bio.MaxEntropy.MaxEntropy.__init__
+Bio.Motif.Parsers.AlignAce.Record.__init__
+Bio.Motif.Parsers.MAST.Record.__init__
+Bio.Motif.Parsers.MEME.MEMEInstance.__init__
+Bio.Motif.Parsers.MEME.MEMEMotif.__init__
+Bio.Motif.Parsers.MEME.MEMERecord.__init__
+Bio.Motif.Thresholds.ScoreDistribution.__init__
+Bio.Motif._Motif.Motif.__init__
+Bio.NMR.xpktools.Peaklist.__init__
+Bio.NMR.xpktools.XpkEntry.__init__
+Bio.NaiveBayes.NaiveBayes.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.AbstractLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Network.BasicNetwork.__init__
+Bio.NeuralNetwork.Gene.Motif.MotifCoder.__init__
+Bio.NeuralNetwork.Gene.Motif.MotifFinder.__init__
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.__init__
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.__init__
+Bio.NeuralNetwork.Gene.Schema.DifferentialSchemaFitness.__init__
+Bio.NeuralNetwork.Gene.Schema.GeneticAlgorithmFinder.__init__
+Bio.NeuralNetwork.Gene.Schema.MostCountSchemaFitness.__init__
+Bio.NeuralNetwork.Gene.Schema.RandomMotifGenerator.__init__
+Bio.NeuralNetwork.Gene.Schema.Schema.__init__
+Bio.NeuralNetwork.Gene.Schema.SchemaCoder.__init__
+Bio.NeuralNetwork.Gene.Schema.SchemaFactory.__init__
+Bio.NeuralNetwork.Gene.Schema.SchemaFinder.__init__
+Bio.NeuralNetwork.Gene.Schema.SimpleFinisher.__init__
+Bio.NeuralNetwork.Gene.Signature.SignatureCoder.__init__
+Bio.NeuralNetwork.Gene.Signature.SignatureFinder.__init__
+Bio.NeuralNetwork.StopTraining.ValidationIncreaseStop.__init__
+Bio.NeuralNetwork.Training.ExampleManager.__init__
+Bio.NeuralNetwork.Training.TrainingExample.__init__
+Bio.Nexus.Nexus.Block.__init__
+Bio.Nexus.Nexus.CharBuffer.__init__
+Bio.Nexus.Nexus.Commandline.__init__
+Bio.Nexus.Nexus.Nexus.__init__
+Bio.Nexus.Nexus.StepMatrix.__init__
+Bio.Nexus.Nodes.Chain.__init__
+Bio.Nexus.Nodes.Node.__init__
+Bio.Nexus.Trees.NodeData.__init__
+Bio.Nexus.Trees.Tree.__init__
+Bio.PDB.AbstractPropertyMap.AbstractAtomPropertyMap.__init__
+Bio.PDB.AbstractPropertyMap.AbstractPropertyMap.__init__
+Bio.PDB.AbstractPropertyMap.AbstractResiduePropertyMap.__init__
+Bio.PDB.Atom.Atom.__init__
+Bio.PDB.Atom.DisorderedAtom.__init__
+Bio.PDB.Chain.Chain.__init__
+Bio.PDB.DSSP'.DSSP.__init__
+Bio.PDB.Dice.ChainSelector.__init__
+Bio.PDB.Entity.DisorderedEntityWrapper.__init__
+Bio.PDB.Entity.Entity.__init__
+Bio.PDB.FragmentMapper'.Fragment.__init__
+Bio.PDB.FragmentMapper'.FragmentMapper.__init__
+Bio.PDB.HSExposure.ExposureCN.__init__
+Bio.PDB.HSExposure.HSExposureCA.__init__
+Bio.PDB.HSExposure.HSExposureCB.__init__
+Bio.PDB.HSExposure._AbstractHSExposure.__init__
+Bio.PDB.MMCIF2Dict.MMCIF2Dict.__init__
+Bio.PDB.MMCIFParser'.MMCIFParser.__init__
+Bio.PDB.Model.Model.__init__
+Bio.PDB.NACCESS.NACCESS.__init__
+Bio.PDB.NACCESS.NACCESS_atomic.__init__
+Bio.PDB.NeighborSearch'.NeighborSearch.__init__
+Bio.PDB.PDBIO'.PDBIO.__init__
+Bio.PDB.PDBList'.PDBList.__init__
+Bio.PDB.PDBParser'.PDBParser.__init__
+Bio.PDB.PSEA.PSEA.__init__
+Bio.PDB.Polypeptide.CaPPBuilder.__init__
+Bio.PDB.Polypeptide.PPBuilder.__init__
+Bio.PDB.Polypeptide._PPBuilder.__init__
+Bio.PDB.QCPSuperimposer.QCPSuperimposer.__init__
+Bio.PDB.Residue.DisorderedResidue.__init__
+Bio.PDB.Residue.Residue.__init__
+Bio.PDB.ResidueDepth'.ResidueDepth.__init__
+Bio.PDB.Structure.Structure.__init__
+Bio.PDB.StructureAlignment'.StructureAlignment.__init__
+Bio.PDB.StructureBuilder.StructureBuilder.__init__
+Bio.PDB.Superimposer'.Superimposer.__init__
+Bio.PDB.Vector'.Vector.__init__
+Bio.ParserSupport.EventGenerator.__init__
+Bio.ParserSupport.TaggingConsumer.__init__
+Bio.Pathway.Network.__init__
+Bio.Pathway.Reaction.__init__
+Bio.Pathway.Rep.Graph.Graph.__init__
+Bio.Pathway.Rep.MultiGraph.MultiGraph.__init__
+Bio.Pathway.System.__init__
+Bio.Phylo.Applications._Fasttree.FastTreeCommandline.__init__
+Bio.Phylo.Applications._Phyml.PhymlCommandline.__init__
+Bio.Phylo.Applications._Raxml.RaxmlCommandline.__init__
+Bio.Phylo.BaseTree.BranchColor.__init__
+Bio.Phylo.BaseTree.Clade.__init__
+Bio.Phylo.BaseTree.Tree.__init__
+Bio.Phylo.CDAO.Clade.__init__
+Bio.Phylo.CDAO.Tree.__init__
+Bio.Phylo.CDAOIO.Parser.__init__
+Bio.Phylo.CDAOIO.Writer.__init__
+Bio.Phylo.NeXML.Clade.__init__
+Bio.Phylo.NeXML.Tree.__init__
+Bio.Phylo.NeXMLIO.Parser.__init__
+Bio.Phylo.NeXMLIO.Writer.__init__
+Bio.Phylo.Newick.Clade.__init__
+Bio.Phylo.Newick.Tree.__init__
+Bio.Phylo.NewickIO.Parser.__init__
+Bio.Phylo.NewickIO.Writer.__init__
+Bio.Phylo.PAML._paml.Paml.__init__
+Bio.Phylo.PAML.baseml.Baseml.__init__
+Bio.Phylo.PAML.codeml.Codeml.__init__
+Bio.Phylo.PAML.yn00.Yn00.__init__
+Bio.Phylo.PhyloXML.Accession.__init__
+Bio.Phylo.PhyloXML.Annotation.__init__
+Bio.Phylo.PhyloXML.BinaryCharacters.__init__
+Bio.Phylo.PhyloXML.BranchColor.__init__
+Bio.Phylo.PhyloXML.Clade.__init__
+Bio.Phylo.PhyloXML.CladeRelation.__init__
+Bio.Phylo.PhyloXML.Confidence.__init__
+Bio.Phylo.PhyloXML.Date.__init__
+Bio.Phylo.PhyloXML.Distribution.__init__
+Bio.Phylo.PhyloXML.DomainArchitecture.__init__
+Bio.Phylo.PhyloXML.Events.__init__
+Bio.Phylo.PhyloXML.Id.__init__
+Bio.Phylo.PhyloXML.MolSeq.__init__
+Bio.Phylo.PhyloXML.Other.__init__
+Bio.Phylo.PhyloXML.Phylogeny.__init__
+Bio.Phylo.PhyloXML.Phyloxml.__init__
+Bio.Phylo.PhyloXML.Point.__init__
+Bio.Phylo.PhyloXML.Polygon.__init__
+Bio.Phylo.PhyloXML.Property.__init__
+Bio.Phylo.PhyloXML.ProteinDomain.__init__
+Bio.Phylo.PhyloXML.Reference.__init__
+Bio.Phylo.PhyloXML.Sequence.__init__
+Bio.Phylo.PhyloXML.SequenceRelation.__init__
+Bio.Phylo.PhyloXML.Taxonomy.__init__
+Bio.Phylo.PhyloXML.Uri.__init__
+Bio.Phylo.PhyloXMLIO.Parser.__init__
+Bio.Phylo.PhyloXMLIO.Writer.__init__
+Bio.Phylo.TreeConstruction.DistanceCalculator.__init__
+Bio.Phylo.TreeConstruction.DistanceTreeConstructor.__init__
+Bio.Phylo.TreeConstruction.NNITreeSearcher.__init__
+Bio.Phylo.TreeConstruction.ParsimonyScorer.__init__
+Bio.Phylo.TreeConstruction.ParsimonyTreeConstructor.__init__
+Bio.Phylo.TreeConstruction._DistanceMatrix.__init__
+Bio.Phylo.TreeConstruction._Matrix.__init__
+Bio.PopGen.Async.Async.__init__
+Bio.PopGen.Async.DirectoryRetriever.__init__
+Bio.PopGen.Async.FileRetriever.__init__
+Bio.PopGen.Async.Local.Local.__init__
+Bio.PopGen.FDist.Async.FDistAsync.__init__
+Bio.PopGen.FDist.Async.SplitFDist.__init__
+Bio.PopGen.FDist.Controller.FDistController.__init__
+Bio.PopGen.FDist.Record.__init__
+Bio.PopGen.GenePop.Controller.GenePopController.__init__
+Bio.PopGen.GenePop.Controller._FileIterator.__init__
+Bio.PopGen.GenePop.Controller._GenePopCommandline.__init__
+Bio.PopGen.GenePop.EasyController.EasyController.__init__
+Bio.PopGen.GenePop.FileParser.FileRecord.__init__
+Bio.PopGen.GenePop.LargeFileParser.Record.__init__
+Bio.PopGen.GenePop.Record.__init__
+Bio.PopGen.SimCoal.Async.SimCoalCache.__init__
+Bio.PopGen.SimCoal.Cache.SimCoalCache.__init__
+Bio.PopGen.SimCoal.Controller.FastSimCoalController.__init__
+Bio.PopGen.SimCoal.Controller.SimCoalController.__init__
+Bio.PopGen.SimCoal.Controller._FastSimCoalCommandLine.__init__
+Bio.Restriction.PrintFormat.PrintFormat.__init__
+Bio.Restriction.Restriction.Analysis.__init__
+Bio.Restriction.Restriction.FormattedSeq.__init__
+Bio.Restriction.Restriction.RestrictionBatch.__init__
+Bio.Restriction.Restriction.RestrictionType.__init__
+Bio.SCOP.Astral.__init__
+Bio.SCOP.Cla.Index.__init__
+Bio.SCOP.Cla.Record.__init__
+Bio.SCOP.Des.Record.__init__
+Bio.SCOP.Dom.Record.__init__
+Bio.SCOP.Domain.__init__
+Bio.SCOP.Hie.Record.__init__
+Bio.SCOP.Node.__init__
+Bio.SCOP.Raf.Res.__init__
+Bio.SCOP.Raf.SeqMap.__init__
+Bio.SCOP.Raf.SeqMapIndex.__init__
+Bio.SCOP.Residues.Residues.__init__
+Bio.SCOP.Scop.__init__
+Bio.SVDSuperimposer.SVDSuperimposer.__init__
+Bio.SearchIO.BlastIO.blast_tab.BlastTabIndexer.__init__
+Bio.SearchIO.BlastIO.blast_tab.BlastTabParser.__init__
+Bio.SearchIO.BlastIO.blast_tab.BlastTabWriter.__init__
+Bio.SearchIO.BlastIO.blast_text.BlastTextParser.__init__
+Bio.SearchIO.BlastIO.blast_xml.BlastXmlIndexer.__init__
+Bio.SearchIO.BlastIO.blast_xml.BlastXmlParser.__init__
+Bio.SearchIO.BlastIO.blast_xml.BlastXmlWriter.__init__
+Bio.SearchIO.BlastIO.blast_xml._BlastXmlGenerator.__init__
+Bio.SearchIO.BlatIO.BlatPslIndexer.__init__
+Bio.SearchIO.BlatIO.BlatPslParser.__init__
+Bio.SearchIO.BlatIO.BlatPslWriter.__init__
+Bio.SearchIO.ExonerateIO._base._BaseExonerateParser.__init__
+Bio.SearchIO.FastaIO.FastaM10Indexer.__init__
+Bio.SearchIO.FastaIO.FastaM10Parser.__init__
+Bio.SearchIO.HmmerIO._base._BaseHmmerTextIndexer.__init__
+Bio.SearchIO.HmmerIO.hmmer2_text.Hmmer2TextParser.__init__
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.__init__
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser.__init__
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter.__init__
+Bio.SearchIO.HmmerIO.hmmer3_text.Hmmer3TextParser.__init__
+Bio.SearchIO._index.SearchIndexer.__init__
+Bio.SearchIO._model.hit.Hit.__init__
+Bio.SearchIO._model.hsp.HSP.__init__
+Bio.SearchIO._model.hsp.HSPFragment.__init__
+Bio.SearchIO._model.query.QueryResult.__init__
+Bio.Seq.MutableSeq.__init__
+Bio.Seq.Seq.__init__
+Bio.Seq.UnknownSeq.__init__
+Bio.SeqFeature.CompoundLocation.__init__
+Bio.SeqFeature.FeatureLocation.__init__
+Bio.SeqFeature.PositionGap.__init__
+Bio.SeqFeature.Reference.__init__
+Bio.SeqFeature.SeqFeature.__init__
+Bio.SeqIO.FastaIO.FastaWriter.__init__
+Bio.SeqIO.Interfaces.SequenceIterator.__init__
+Bio.SeqIO.Interfaces.SequenceWriter.__init__
+Bio.SeqIO.Interfaces.SequentialSequenceWriter.__init__
+Bio.SeqIO.PhdIO.PhdWriter.__init__
+Bio.SeqIO.QualityIO.QualPhredWriter.__init__
+Bio.SeqIO.SeqXmlIO.SeqXmlIterator.__init__
+Bio.SeqIO.SeqXmlIO.SeqXmlWriter.__init__
+Bio.SeqIO.SeqXmlIO.XMLRecordIterator.__init__
+Bio.SeqIO.SffIO.SffWriter.__init__
+Bio.SeqIO.SffIO._AddTellHandle.__init__
+Bio.SeqIO.UniprotIO.Parser.__init__
+Bio.SeqIO._index.IntelliGeneticsRandomAccess.__init__
+Bio.SeqIO._index.SeqFileRandomAccess.__init__
+Bio.SeqIO._index.SequentialSeqFileRandomAccess.__init__
+Bio.SeqIO._index.SffRandomAccess.__init__
+Bio.SeqRecord.SeqRecord.__init__
+Bio.SeqRecord._RestrictedDict.__init__
+Bio.SeqUtils.CodonUsage.CodonAdaptationIndex.__init__
+Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint.__init__
+Bio.SeqUtils.ProtParam.ProteinAnalysis.__init__
+Bio.Sequencing.Ace.ACEFileRecord.__init__
+Bio.Sequencing.Ace.Contig.__init__
+Bio.Sequencing.Ace.Reads.__init__
+Bio.Sequencing.Ace.af.__init__
+Bio.Sequencing.Ace.bs.__init__
+Bio.Sequencing.Ace.ct.__init__
+Bio.Sequencing.Ace.ds.__init__
+Bio.Sequencing.Ace.qa.__init__
+Bio.Sequencing.Ace.rd.__init__
+Bio.Sequencing.Ace.rt.__init__
+Bio.Sequencing.Ace.wa.__init__
+Bio.Sequencing.Ace.wr.__init__
+Bio.Sequencing.Applications._Novoalign.NovoalignCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaAlignCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaBwaswCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaIndexCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaSampeCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaSamseCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsCalmdCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsCatCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsFaidxCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsFixmateCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsIdxstatsCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsIndexCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsMergeCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsMpileupCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsPhaseCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsReheaderCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsRmdupCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsSortCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsTargetcutCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsViewCommandline.__init__
+Bio.Sequencing.Phd.Record.__init__
+Bio.SubsMat.FreqTable.FreqTable.__init__
+Bio.SubsMat.SeqMat.__init__
+Bio.SwissProt.KeyWList.Record.__init__
+Bio.SwissProt.Record.__init__
+Bio.SwissProt.Reference.__init__
+Bio.UniGene.ProtsimLine.__init__
+Bio.UniGene.Record.__init__
+Bio.UniGene.STSLine.__init__
+Bio.UniGene.SequenceLine.__init__
+Bio.Wise.dnal.Statistics.__init__
+Bio.Wise.psw.AlignmentColumn.__init__
+Bio.Wise.psw.ColumnUnit.__init__
+Bio._py3k._ordereddict.OrderedDict.__init__
+Bio.bgzf.BgzfReader.__init__
+Bio.bgzf.BgzfWriter.__init__
+Bio.codonalign.codonalignment.CodonAlignment.__init__
+Bio.codonalign.codonseq.CodonSeq.__init__
+Bio.kNN.kNN.__init__
+Bio.motifs.Instances.__init__
+Bio.motifs.Motif.__init__
+Bio.motifs.alignace.Record.__init__
+Bio.motifs.applications._alignace.AlignAceCommandline.__init__
+Bio.motifs.applications._alignace.CompareAceCommandline.__init__
+Bio.motifs.applications._xxmotif.XXmotifCommandline.__init__
+Bio.motifs.jaspar.Motif.__init__
+Bio.motifs.jaspar.Record.__init__
+Bio.motifs.jaspar.db.JASPAR5.__init__
+Bio.motifs.mast.Record.__init__
+Bio.motifs.matrix.GenericPositionMatrix.__init__
+Bio.motifs.matrix.PositionWeightMatrix.__init__
+Bio.motifs.meme.Instance.__init__
+Bio.motifs.meme.Motif.__init__
+Bio.motifs.meme.Record.__init__
+Bio.motifs.thresholds.ScoreDistribution.__init__
+Bio.motifs.transfac.Record.__init__
+Bio.pairwise2.affine_penalty.__init__
+Bio.pairwise2.dictionary_match.__init__
+Bio.pairwise2.identity_match.__init__
+BioSQL.BioSeq.DBSeq.__init__
+BioSQL.BioSeq.DBSeqRecord.__init__
+BioSQL.BioSeqDatabase.Adaptor.__init__
+BioSQL.BioSeqDatabase.BioSeqDatabase.__init__
+BioSQL.BioSeqDatabase.DBServer.__init__
+BioSQL.BioSeqDatabase._CursorWrapper.__init__
+BioSQL.DBUtils.Generic_dbutils.__init__
+BioSQL.Loader.DatabaseLoader.__init__
+BioSQL.Loader.DatabaseRemover.__init__" class="py-name" href="#" onclick="return doclink('link-15', '__init__', 'link-15');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt id="link-16" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-16', 'id', 'link-16');">id</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">    <tt class="py-comment"># Special methods</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"> </tt>
+<a name="Residue.__repr__"></a><div id="Residue.__repr__-def"><a name="L32"></a><tt class="py-lineno"> 32</tt> <a class="py-toggle" href="#" id="Residue.__repr__-toggle" onclick="return toggle('Residue.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.__repr__-expanded"><a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-name">resname</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method Bio.PDB.Residue.Residue.get_resname()=Bio.PDB.Residue.Residue-class.html#get_resname"><a title="Bio.PDB.Residue.Residue.get_resname" class="py-name" href="#" onclick="return doclink('link-17', 'get_resname', 'link-17');">get_resname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">        <tt class="py-name">hetflag</tt><tt class="py-op">,</tt> <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.Nexus.Nodes.Node.get_id()=Bio.Nexus.Nodes.Node-class.html#get_id,Method Bio.PDB.Atom.Atom.get_id()=Bio.PDB.Atom.Atom-class.html#get_id,Method Bio.PDB.Entity.DisorderedEntityWrapper.get_id()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#get_id,Method Bio.PDB.Entity.Entity.get_id()=Bio.PDB.Entity.Entity-class.html#get_id,Method Bio.PDB.FragmentMapper'.Fragment.get_id()=Bio.PDB.FragmentMapper%27.Fragment-class.html#get_id"><a title="Bio.Nexus.Nodes.Node.get_id
+Bio.PDB.Atom.Atom.get_id
+Bio.PDB.Entity.DisorderedEntityWrapper.get_id
+Bio.PDB.Entity.Entity.get_id
+Bio.PDB.FragmentMapper'.Fragment.get_id" class="py-name" href="#" onclick="return doclink('link-18', 'get_id', 'link-18');">get_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-name">full_id</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">resname</tt><tt class="py-op">,</tt> <tt class="py-name">hetflag</tt><tt class="py-op">,</tt> <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"&lt;Residue %s het=%s resseq=%s icode=%s&gt;"</tt> <tt class="py-op">%</tt> <tt class="py-name">full_id</tt> </tt>
+</div><a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">    <tt class="py-comment"># Private methods</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="Residue._sort"></a><div id="Residue._sort-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="Residue._sort-toggle" onclick="return toggle('Residue._sort');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#_sort">_sort</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">a1</tt><tt class="py-op">,</tt> <tt class="py-param">a2</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue._sort-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue._sort-expanded"><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-docstring">"""Sort the Atom objects.</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">        Atoms are sorted alphabetically according to their name,</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">        but N, CA, C, O always come first.</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">        o a1, a2 - Atom objects</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">        <tt class="py-name">name1</tt> <tt class="py-op">=</tt> <tt class="py-name">a1</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_name()=Bio.PDB.Atom.Atom-class.html#get_name"><a title="Bio.PDB.Atom.Atom.get_name" class="py-name" href="#" onclick="return doclink('link-19', 'get_name', 'link-19');">get_name</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-name">name2</tt> <tt class="py-op">=</tt> <tt class="py-name">a2</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="Bio.PDB.Atom.Atom.get_name" class="py-name" href="#" onclick="return doclink('link-20', 'get_name', 'link-19');">get_name</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">name1</tt> <tt class="py-op">==</tt> <tt class="py-name">name2</tt><tt class="py-op">:</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt><tt class="py-op">(</tt><tt class="py-name">cmp</tt><tt class="py-op">(</tt><tt class="py-name">a1</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_altloc()=Bio.PDB.Atom.Atom-class.html#get_altloc"><a title="Bio.PDB.Atom.Atom.get_altloc" class="py-name" href="#" onclick="return doclink('link-21', 'get_altloc', 'link-21');">get_altloc</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">a2</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="Bio.PDB.Atom.Atom.get_altloc" class="py-name" href="#" onclick="return doclink('link-22', 'get_altloc', 'link-21');">get_altloc</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">name1</tt> <tt class="py-keyword">in</tt> <tt id="link-23" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-23', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">            <tt class="py-name">index1</tt> <tt class="py-op">=</tt> <tt id="link-24" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-24', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">[</tt><tt class="py-name">name1</tt><tt class="py-op">]</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">            <tt class="py-name">index1</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">name2</tt> <tt class="py-keyword">in</tt> <tt id="link-25" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-25', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">            <tt class="py-name">index2</tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name"><a title="Bio.PDB.Residue._atom_name_dict" class="py-name" href="#" onclick="return doclink('link-26', '_atom_name_dict', 'link-9');">_atom_name_dict</a></tt><tt class="py-op">[</tt><tt class="py-name">name2</tt><tt class="py-op">]</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-name">index2</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">index1</tt> <tt class="py-keyword">and</tt> <tt class="py-name">index2</tt><tt class="py-op">:</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">cmp</tt><tt class="py-op">(</tt><tt class="py-name">index1</tt><tt class="py-op">,</tt> <tt class="py-name">index2</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">index1</tt><tt class="py-op">:</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">-</tt><tt class="py-number">1</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">index2</tt><tt class="py-op">:</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-number">1</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">cmp</tt><tt class="py-op">(</tt><tt class="py-name">name1</tt><tt class="py-op">,</tt> <tt class="py-name">name2</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-comment"># Public methods</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"> </tt>
+<a name="Residue.add"></a><div id="Residue.add-def"><a name="L71"></a><tt class="py-lineno"> 71</tt> <a class="py-toggle" href="#" id="Residue.add-toggle" onclick="return toggle('Residue.add');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#add">add</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">atom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.add-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.add-expanded"><a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-docstring">"""Add an Atom object.</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring">        Checks for adding duplicate atoms, and raises a</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-docstring">        PDBConstructionException if so.</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">atom_id</tt> <tt class="py-op">=</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="Bio.Nexus.Nodes.Node.get_id
+Bio.PDB.Atom.Atom.get_id
+Bio.PDB.Entity.DisorderedEntityWrapper.get_id
+Bio.PDB.Entity.Entity.get_id
+Bio.PDB.FragmentMapper'.Fragment.get_id" class="py-name" href="#" onclick="return doclink('link-27', 'get_id', 'link-18');">get_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method Bio.PDB.Chain.Chain.has_id()=Bio.PDB.Chain.Chain-class.html#has_id,Method Bio.PDB.Entity.Entity.has_id()=Bio.PDB.Entity.Entity-class.html#has_id"><a title="Bio.PDB.Chain.Chain.has_id
+Bio.PDB.Entity.Entity.has_id" class="py-name" href="#" onclick="return doclink('link-28', 'has_id', 'link-28');">has_id</a></tt><tt class="py-op">(</tt><tt class="py-name">atom_id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-29" class="py-name"><a title="Bio.PDB.PDBExceptions.PDBConstructionException" class="py-name" href="#" onclick="return doclink('link-29', 'PDBConstructionException', 'link-3');">PDBConstructionException</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">                <tt class="py-string">"Atom %s defined twice in residue %s"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">atom_id</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt id="link-30" class="py-name"><a title="Bio.PDB.Entity
+Bio.PDB.Entity.Entity" class="py-name" href="#" onclick="return doclink('link-30', 'Entity', 'link-6');">Entity</a></tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Method Bio.Graphics.BasicChromosome._ChromosomeComponent.add()=Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html#add,Method Bio.Nexus.Nexus.StepMatrix.add()=Bio.Nexus.Nexus.StepMatrix-class.html#add,Method Bio.Nexus.Nodes.Chain.add()=Bio.Nexus.Nodes.Chain-class.html#add,Method Bio.PDB.Entity.Entity.add()=Bio.PDB.Entity.Entity-class.html#add,Method Bio.PDB.Residue.DisorderedResidue.add()=Bio.PDB.Residue.DisorderedResidue-class.html#add,Method Bio.PDB.Residue.Residue.add()=Bio.PDB.Residue.Residue-class.html#add,Method Bio.Restriction.Restriction.RestrictionBatch.add()=Bio.Restriction.Restriction.RestrictionBatch-class.html#add"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-31', 'add', 'link-31');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">atom</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"> </tt>
+<a name="Residue.sort"></a><div id="Residue.sort-def"><a name="L83"></a><tt class="py-lineno"> 83</tt> <a class="py-toggle" href="#" id="Residue.sort-toggle" onclick="return toggle('Residue.sort');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#sort">sort</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.sort-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.sort-expanded"><a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">child_list</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.sort()=Bio.Align.MultipleSeqAlignment-class.html#sort,Method Bio.PDB.Residue.DisorderedResidue.sort()=Bio.PDB.Residue.DisorderedResidue-class.html#sort,Method Bio.PDB.Residue.Residue.sort()=Bio.PDB.Residue.Residue-class.html#sort,Method Bio.SearchIO._model.hit.Hit.sort()=Bio.SearchIO._model.hit.Hit-class.html#sort,Method Bio.SearchIO._model.query.QueryResult.sort()=Bio.SearchIO._model.query.QueryResult-class.html#sort,Method Bio.Sequencing.Ace.ACEFileRecord.sort()=Bio.Sequencing.Ace.ACEFileRecord-class.html#sort"><a title="Bio.Align.MultipleSeqAlignment.sort
+Bio.PDB.Residue.DisorderedResidue.sort
+Bio.PDB.Residue.Residue.sort
+Bio.SearchIO._model.hit.Hit.sort
+Bio.SearchIO._model.query.QueryResult.sort
+Bio.Sequencing.Ace.ACEFileRecord.sort" class="py-name" href="#" onclick="return doclink('link-32', 'sort', 'link-32');">sort</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name" targets="Method Bio.PDB.Chain.Chain._sort()=Bio.PDB.Chain.Chain-class.html#_sort,Method Bio.PDB.Model.Model._sort()=Bio.PDB.Model.Model-class.html#_sort,Method Bio.PDB.Residue.Residue._sort()=Bio.PDB.Residue.Residue-class.html#_sort,Method Bio.PDB.Structure.Structure._sort()=Bio.PDB.Structure.Structure-class.html#_sort"><a title="Bio.PDB.Chain.Chain._sort
+Bio.PDB.Model.Model._sort
+Bio.PDB.Residue.Residue._sort
+Bio.PDB.Structure.Structure._sort" class="py-name" href="#" onclick="return doclink('link-33', '_sort', 'link-33');">_sort</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"> </tt>
+<a name="Residue.flag_disordered"></a><div id="Residue.flag_disordered-def"><a name="L86"></a><tt class="py-lineno"> 86</tt> <a class="py-toggle" href="#" id="Residue.flag_disordered-toggle" onclick="return toggle('Residue.flag_disordered');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#flag_disordered">flag_disordered</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.flag_disordered-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.flag_disordered-expanded"><a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-docstring">"Set the disordered flag."</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">disordered</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+</div><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"> </tt>
+<a name="Residue.is_disordered"></a><div id="Residue.is_disordered-def"><a name="L90"></a><tt class="py-lineno"> 90</tt> <a class="py-toggle" href="#" id="Residue.is_disordered-toggle" onclick="return toggle('Residue.is_disordered');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#is_disordered">is_disordered</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.is_disordered-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.is_disordered-expanded"><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-docstring">"Return 1 if the residue contains disordered atoms."</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">disordered</tt> </tt>
+</div><a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"> </tt>
+<a name="Residue.get_resname"></a><div id="Residue.get_resname-def"><a name="L94"></a><tt class="py-lineno"> 94</tt> <a class="py-toggle" href="#" id="Residue.get_resname-toggle" onclick="return toggle('Residue.get_resname');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#get_resname">get_resname</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.get_resname-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.get_resname-expanded"><a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">resname</tt> </tt>
+</div><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"> </tt>
+<a name="Residue.get_unpacked_list"></a><div id="Residue.get_unpacked_list-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="Residue.get_unpacked_list-toggle" onclick="return toggle('Residue.get_unpacked_list');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#get_unpacked_list">get_unpacked_list</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.get_unpacked_list-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.get_unpacked_list-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line"><tt class="py-docstring">        Returns the list of all atoms, unpack DisorderedAtoms."</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-name">atom_list</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name" targets="Method Bio.PDB.Entity.Entity.get_list()=Bio.PDB.Entity.Entity-class.html#get_list"><a title="Bio.PDB.Entity.Entity.get_list" class="py-name" href="#" onclick="return doclink('link-34', 'get_list', 'link-34');">get_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-name">undisordered_atom_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">atom</tt> <tt class="py-keyword">in</tt> <tt class="py-name">atom_list</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name" targets="Method Bio.PDB.Atom.Atom.is_disordered()=Bio.PDB.Atom.Atom-class.html#is_disordered,Method Bio.PDB.Entity.DisorderedEntityWrapper.is_disordered()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#is_disordered,Method Bio.PDB.Residue.Residue.is_disordered()=Bio.PDB.Residue.Residue-class.html#is_disordered"><a title="Bio.PDB.Atom.Atom.is_disordered
+Bio.PDB.Entity.DisorderedEntityWrapper.is_disordered
+Bio.PDB.Residue.Residue.is_disordered" class="py-name" href="#" onclick="return doclink('link-35', 'is_disordered', 'link-35');">is_disordered</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">                <tt class="py-name">undisordered_atom_list</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">undisordered_atom_list</tt> <tt class="py-op">+</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name" targets="Method Bio.PDB.Entity.DisorderedEntityWrapper.disordered_get_list()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#disordered_get_list"><a title="Bio.PDB.Entity.DisorderedEntityWrapper.disordered_get_list" class="py-name" href="#" onclick="return doclink('link-36', 'disordered_get_list', 'link-36');">disordered_get_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                <tt class="py-name">undisordered_atom_list</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-37', 'append', 'link-37');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">atom</tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">undisordered_atom_list</tt> </tt>
+</div><a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt>
+<a name="Residue.get_segid"></a><div id="Residue.get_segid-def"><a name="L110"></a><tt class="py-lineno">110</tt> <a class="py-toggle" href="#" id="Residue.get_segid-toggle" onclick="return toggle('Residue.get_segid');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#get_segid">get_segid</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.get_segid-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.get_segid-expanded"><a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">segid</tt> </tt>
+</div><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"> </tt>
+<a name="Residue.get_atom"></a><div id="Residue.get_atom-def"><a name="L113"></a><tt class="py-lineno">113</tt> <a class="py-toggle" href="#" id="Residue.get_atom-toggle" onclick="return toggle('Residue.get_atom');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.Residue-class.html#get_atom">get_atom</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Residue.get_atom-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Residue.get_atom-expanded"><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-38" class="py-name" targets="Variable Bio.Graphics.ColorSpiral.ColorSpiral.a=Bio.Graphics.ColorSpiral.ColorSpiral-class.html#a"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-38', 'a', 'link-38');">a</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt id="link-39" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-39', 'a', 'link-38');">a</a></tt> </tt>
+</div></div><a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"> </tt>
+<a name="DisorderedResidue"></a><div id="DisorderedResidue-def"><a name="L118"></a><tt class="py-lineno">118</tt> <a class="py-toggle" href="#" id="DisorderedResidue-toggle" onclick="return toggle('DisorderedResidue');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.Residue.DisorderedResidue-class.html">DisorderedResidue</a><tt class="py-op">(</tt><tt class="py-base-class">DisorderedEntityWrapper</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="DisorderedResidue-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="DisorderedResidue-expanded"><a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"><tt class="py-docstring">    DisorderedResidue is a wrapper around two or more Residue objects. It is</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line"><tt class="py-docstring">    used to represent point mutations (e.g. there is a Ser 60 and a Cys 60 residue,</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"><tt class="py-docstring">    each with 50 % occupancy).</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="DisorderedResidue.__init__"></a><div id="DisorderedResidue.__init__-def"><a name="L124"></a><tt class="py-lineno">124</tt> <a class="py-toggle" href="#" id="DisorderedResidue.__init__-toggle" onclick="return toggle('DisorderedResidue.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.DisorderedResidue-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">id</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="DisorderedResidue.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="DisorderedResidue.__init__-expanded"><a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt id="link-40" class="py-name"><a title="Bio.PDB.Entity.DisorderedEntityWrapper" class="py-name" href="#" onclick="return doclink('link-40', 'DisorderedEntityWrapper', 'link-8');">DisorderedEntityWrapper</a></tt><tt class="py-op">.</tt><tt id="link-41" class="py-name"><a title="Bio.Affy.CelFile.Record.__init__
+Bio.Align.AlignInfo.PSSM.__init__
+Bio.Align.AlignInfo.SummaryInfo.__init__
+Bio.Align.Applications._ClustalOmega.ClustalOmegaCommandline.__init__
+Bio.Align.Applications._Clustalw.ClustalwCommandline.__init__
+Bio.Align.Applications._Dialign.DialignCommandline.__init__
+Bio.Align.Applications._MSAProbs.MSAProbsCommandline.__init__
+Bio.Align.Applications._Mafft.MafftCommandline.__init__
+Bio.Align.Applications._Muscle.MuscleCommandline.__init__
+Bio.Align.Applications._Prank.PrankCommandline.__init__
+Bio.Align.Applications._Probcons.ProbconsCommandline.__init__
+Bio.Align.Applications._TCoffee.TCoffeeCommandline.__init__
+Bio.Align.Generic.Alignment.__init__
+Bio.Align.MultipleSeqAlignment.__init__
+Bio.AlignIO.Interfaces.AlignmentIterator.__init__
+Bio.AlignIO.Interfaces.AlignmentWriter.__init__
+Bio.AlignIO.Interfaces.SequentialAlignmentWriter.__init__
+Bio.Alphabet.AlphabetEncoder.__init__
+Bio.Alphabet.Gapped.__init__
+Bio.Alphabet.HasStopCodon.__init__
+Bio.Application.AbstractCommandline.__init__
+Bio.Application.ApplicationError.__init__
+Bio.Application._AbstractParameter.__init__
+Bio.Application._Argument.__init__
+Bio.Application._Option.__init__
+Bio.Application._StaticArgument.__init__
+Bio.Application._Switch.__init__
+Bio.Blast.Applications.NcbiblastformatterCommandline.__init__
+Bio.Blast.Applications.NcbiblastnCommandline.__init__
+Bio.Blast.Applications.NcbiblastpCommandline.__init__
+Bio.Blast.Applications.NcbiblastxCommandline.__init__
+Bio.Blast.Applications.NcbideltablastCommandline.__init__
+Bio.Blast.Applications.NcbipsiblastCommandline.__init__
+Bio.Blast.Applications.NcbirpsblastCommandline.__init__
+Bio.Blast.Applications.NcbirpstblastnCommandline.__init__
+Bio.Blast.Applications.NcbitblastnCommandline.__init__
+Bio.Blast.Applications.NcbitblastxCommandline.__init__
+Bio.Blast.Applications._NcbibaseblastCommandline.__init__
+Bio.Blast.Applications._Ncbiblast2SeqCommandline.__init__
+Bio.Blast.Applications._NcbiblastCommandline.__init__
+Bio.Blast.Applications._NcbiblastMain2SeqCommandline.__init__
+Bio.Blast.NCBIStandalone.BlastErrorParser.__init__
+Bio.Blast.NCBIStandalone.BlastParser.__init__
+Bio.Blast.NCBIStandalone.Iterator.__init__
+Bio.Blast.NCBIStandalone.PSIBlastParser.__init__
+Bio.Blast.NCBIStandalone._BlastConsumer.__init__
+Bio.Blast.NCBIStandalone._BlastErrorConsumer.__init__
+Bio.Blast.NCBIStandalone._PSIBlastConsumer.__init__
+Bio.Blast.NCBIXML.BlastParser.__init__
+Bio.Blast.NCBIXML._XMLparser.__init__
+Bio.Blast.ParseBlastTable.BlastTableEntry.__init__
+Bio.Blast.ParseBlastTable.BlastTableReader.__init__
+Bio.Blast.ParseBlastTable.BlastTableRec.__init__
+Bio.Blast.Record.Alignment.__init__
+Bio.Blast.Record.Blast.__init__
+Bio.Blast.Record.DatabaseReport.__init__
+Bio.Blast.Record.Description.__init__
+Bio.Blast.Record.HSP.__init__
+Bio.Blast.Record.Header.__init__
+Bio.Blast.Record.MultipleAlignment.__init__
+Bio.Blast.Record.PSIBlast.__init__
+Bio.Blast.Record.Parameters.__init__
+Bio.Blast.Record.Round.__init__
+Bio.CAPS.CAPSMap.__init__
+Bio.CAPS.DifferentialCutsite.__init__
+Bio.Cluster.Record.__init__
+Bio.Compass.Record.__init__
+Bio.Crystal.Chain.__init__
+Bio.Crystal.Crystal.__init__
+Bio.Crystal.Hetero.__init__
+Bio.Data.CodonTable.AmbiguousCodonTable.__init__
+Bio.Data.CodonTable.AmbiguousForwardTable.__init__
+Bio.Data.CodonTable.CodonTable.__init__
+Bio.Data.CodonTable.NCBICodonTable.__init__
+Bio.DocSQL.Create.__init__
+Bio.DocSQL.Insert.__init__
+Bio.DocSQL.IterationCursor.__init__
+Bio.DocSQL.Query.__init__
+Bio.DocSQL.QueryAll.__init__
+Bio.DocSQL.QueryGeneric.__init__
+Bio.DocSQL.QueryRow.__init__
+Bio.DocSQL.QuerySingle.__init__
+Bio.Emboss.Applications.DiffseqCommandline.__init__
+Bio.Emboss.Applications.EInvertedCommandline.__init__
+Bio.Emboss.Applications.ETandemCommandline.__init__
+Bio.Emboss.Applications.Est2GenomeCommandline.__init__
+Bio.Emboss.Applications.FConsenseCommandline.__init__
+Bio.Emboss.Applications.FDNADistCommandline.__init__
+Bio.Emboss.Applications.FDNAParsCommandline.__init__
+Bio.Emboss.Applications.FNeighborCommandline.__init__
+Bio.Emboss.Applications.FProtDistCommandline.__init__
+Bio.Emboss.Applications.FProtParsCommandline.__init__
+Bio.Emboss.Applications.FSeqBootCommandline.__init__
+Bio.Emboss.Applications.FTreeDistCommandline.__init__
+Bio.Emboss.Applications.FuzznucCommandline.__init__
+Bio.Emboss.Applications.IepCommandline.__init__
+Bio.Emboss.Applications.NeedleCommandline.__init__
+Bio.Emboss.Applications.NeedleallCommandline.__init__
+Bio.Emboss.Applications.PalindromeCommandline.__init__
+Bio.Emboss.Applications.Primer3Commandline.__init__
+Bio.Emboss.Applications.PrimerSearchCommandline.__init__
+Bio.Emboss.Applications.SeqmatchallCommandline.__init__
+Bio.Emboss.Applications.SeqretCommandline.__init__
+Bio.Emboss.Applications.StretcherCommandline.__init__
+Bio.Emboss.Applications.TranalignCommandline.__init__
+Bio.Emboss.Applications.WaterCommandline.__init__
+Bio.Emboss.Applications._EmbossCommandLine.__init__
+Bio.Emboss.Applications._EmbossMinimalCommandLine.__init__
+Bio.Emboss.Primer3.Primers.__init__
+Bio.Emboss.Primer3.Record.__init__
+Bio.Emboss.PrimerSearch.Amplifier.__init__
+Bio.Emboss.PrimerSearch.InputRecord.__init__
+Bio.Emboss.PrimerSearch.OutputRecord.__init__
+Bio.Entrez.Parser.CorruptedXMLError.__init__
+Bio.Entrez.Parser.DataHandler.__init__
+Bio.Entrez.Parser.NotXMLError.__init__
+Bio.Entrez.Parser.StructureElement.__init__
+Bio.Entrez.Parser.ValidationError.__init__
+Bio.ExPASy.Enzyme.Record.__init__
+Bio.ExPASy.Prodoc.Record.__init__
+Bio.ExPASy.Prodoc.Reference.__init__
+Bio.ExPASy.Prosite.Record.__init__
+Bio.ExPASy.ScanProsite.ContentHandler.__init__
+Bio.ExPASy.ScanProsite.Parser.__init__
+Bio.ExPASy.ScanProsite.Record.__init__
+Bio.FSSP.FSSPAlignDict.__init__
+Bio.FSSP.FSSPAlignRec.__init__
+Bio.FSSP.FSSPHeader.__init__
+Bio.FSSP.FSSPSumRec.__init__
+Bio.FSSP.FSSPTools.FSSPMultAlign.__init__
+Bio.FSSP.PosAlign.__init__
+Bio.FSSP.fssp_rec.fff_rec.__init__
+Bio.File.UndoHandle.__init__
+Bio.File._IndexedSeqFileDict.__init__
+Bio.File._SQLiteManySeqFilesDict.__init__
+Bio.GA.Crossover.General.SafeFitnessCrossover.__init__
+Bio.GA.Crossover.GeneralPoint.GeneralPointCrossover.__init__
+Bio.GA.Crossover.GeneralPoint.InterleaveCrossover.__init__
+Bio.GA.Crossover.Point.SinglePointCrossover.__init__
+Bio.GA.Crossover.TwoPoint.TwoPointCrossover.__init__
+Bio.GA.Crossover.Uniform.UniformCrossover.__init__
+Bio.GA.Evolver.GenerationEvolver.__init__
+Bio.GA.Evolver.SteadyStateEvolver.__init__
+Bio.GA.Mutation.General.SafeFitnessMutation.__init__
+Bio.GA.Mutation.Simple.ConversionMutation.__init__
+Bio.GA.Mutation.Simple.SinglePositionMutation.__init__
+Bio.GA.Organism.Organism.__init__
+Bio.GA.Repair.Stabilizing.AmbiguousRepair.__init__
+Bio.GA.Selection.Abstract.AbstractSelection.__init__
+Bio.GA.Selection.Diversity.DiversitySelection.__init__
+Bio.GA.Selection.RouletteWheel.RouletteWheelSelection.__init__
+Bio.GA.Selection.Tournament.TournamentSelection.__init__
+Bio.GenBank.FeatureParser.__init__
+Bio.GenBank.Iterator.__init__
+Bio.GenBank.Record.Feature.__init__
+Bio.GenBank.Record.Qualifier.__init__
+Bio.GenBank.Record.Record.__init__
+Bio.GenBank.Record.Reference.__init__
+Bio.GenBank.RecordParser.__init__
+Bio.GenBank.Scanner.InsdcScanner.__init__
+Bio.GenBank._BaseGenBankConsumer.__init__
+Bio.GenBank._FeatureConsumer.__init__
+Bio.GenBank._RecordConsumer.__init__
+Bio.GenBank.utils.FeatureValueCleaner.__init__
+Bio.Geo.Record.Record.__init__
+Bio.Graphics.BasicChromosome.AnnotatedChromosomeSegment.__init__
+Bio.Graphics.BasicChromosome.Chromosome.__init__
+Bio.Graphics.BasicChromosome.ChromosomeSegment.__init__
+Bio.Graphics.BasicChromosome.Organism.__init__
+Bio.Graphics.BasicChromosome.TelomereSegment.__init__
+Bio.Graphics.BasicChromosome._ChromosomeComponent.__init__
+Bio.Graphics.ColorSpiral.ColorSpiral.__init__
+Bio.Graphics.Comparative.ComparativeScatterPlot.__init__
+Bio.Graphics.DisplayRepresentation.ChromosomeCounts.__init__
+Bio.Graphics.Distribution.BarChartDistribution.__init__
+Bio.Graphics.Distribution.DistributionPage.__init__
+Bio.Graphics.Distribution.LineDistribution.__init__
+Bio.Graphics.GenomeDiagram._AbstractDrawer.AbstractDrawer.__init__
+Bio.Graphics.GenomeDiagram._CircularDrawer.CircularDrawer.__init__
+Bio.Graphics.GenomeDiagram._Colors.ColorTranslator.__init__
+Bio.Graphics.GenomeDiagram._CrossLink.CrossLink.__init__
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.__init__
+Bio.Graphics.GenomeDiagram._Feature.Feature.__init__
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.__init__
+Bio.Graphics.GenomeDiagram._Graph.GraphData.__init__
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.__init__
+Bio.Graphics.GenomeDiagram._LinearDrawer.LinearDrawer.__init__
+Bio.Graphics.GenomeDiagram._Track.Track.__init__
+Bio.Graphics.KGML_vis.KGMLCanvas.__init__
+Bio.HMM.DynamicProgramming.AbstractDPAlgorithms.__init__
+Bio.HMM.DynamicProgramming.LogDPAlgorithms.__init__
+Bio.HMM.DynamicProgramming.ScaledDPAlgorithms.__init__
+Bio.HMM.MarkovModel.HiddenMarkovModel.__init__
+Bio.HMM.MarkovModel.MarkovModelBuilder.__init__
+Bio.HMM.Trainer.AbstractTrainer.__init__
+Bio.HMM.Trainer.BaumWelchTrainer.__init__
+Bio.HMM.Trainer.KnownStateTrainer.__init__
+Bio.HMM.Trainer.TrainingSequence.__init__
+Bio.Index._InMemoryIndex.__init__
+Bio.Index._ShelveIndex.__init__
+Bio.KDTree.KDTree'.KDTree.__init__
+Bio.KEGG.Compound.Record.__init__
+Bio.KEGG.Enzyme.Record.__init__
+Bio.KEGG.KGML.KGML_parser.KGMLParser.__init__
+Bio.KEGG.KGML.KGML_pathway.Component.__init__
+Bio.KEGG.KGML.KGML_pathway.Entry.__init__
+Bio.KEGG.KGML.KGML_pathway.Graphics.__init__
+Bio.KEGG.KGML.KGML_pathway.Pathway.__init__
+Bio.KEGG.KGML.KGML_pathway.Reaction.__init__
+Bio.KEGG.KGML.KGML_pathway.Relation.__init__
+Bio.LogisticRegression.LogisticRegression.__init__
+Bio.MarkovModel.MarkovModel.__init__
+Bio.MaxEntropy.MaxEntropy.__init__
+Bio.Motif.Parsers.AlignAce.Record.__init__
+Bio.Motif.Parsers.MAST.Record.__init__
+Bio.Motif.Parsers.MEME.MEMEInstance.__init__
+Bio.Motif.Parsers.MEME.MEMEMotif.__init__
+Bio.Motif.Parsers.MEME.MEMERecord.__init__
+Bio.Motif.Thresholds.ScoreDistribution.__init__
+Bio.Motif._Motif.Motif.__init__
+Bio.NMR.xpktools.Peaklist.__init__
+Bio.NMR.xpktools.XpkEntry.__init__
+Bio.NaiveBayes.NaiveBayes.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.AbstractLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.__init__
+Bio.NeuralNetwork.BackPropagation.Network.BasicNetwork.__init__
+Bio.NeuralNetwork.Gene.Motif.MotifCoder.__init__
+Bio.NeuralNetwork.Gene.Motif.MotifFinder.__init__
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.__init__
+Bio.NeuralNetwork.Gene.Pattern.PatternRepository.__init__
+Bio.NeuralNetwork.Gene.Schema.DifferentialSchemaFitness.__init__
+Bio.NeuralNetwork.Gene.Schema.GeneticAlgorithmFinder.__init__
+Bio.NeuralNetwork.Gene.Schema.MostCountSchemaFitness.__init__
+Bio.NeuralNetwork.Gene.Schema.RandomMotifGenerator.__init__
+Bio.NeuralNetwork.Gene.Schema.Schema.__init__
+Bio.NeuralNetwork.Gene.Schema.SchemaCoder.__init__
+Bio.NeuralNetwork.Gene.Schema.SchemaFactory.__init__
+Bio.NeuralNetwork.Gene.Schema.SchemaFinder.__init__
+Bio.NeuralNetwork.Gene.Schema.SimpleFinisher.__init__
+Bio.NeuralNetwork.Gene.Signature.SignatureCoder.__init__
+Bio.NeuralNetwork.Gene.Signature.SignatureFinder.__init__
+Bio.NeuralNetwork.StopTraining.ValidationIncreaseStop.__init__
+Bio.NeuralNetwork.Training.ExampleManager.__init__
+Bio.NeuralNetwork.Training.TrainingExample.__init__
+Bio.Nexus.Nexus.Block.__init__
+Bio.Nexus.Nexus.CharBuffer.__init__
+Bio.Nexus.Nexus.Commandline.__init__
+Bio.Nexus.Nexus.Nexus.__init__
+Bio.Nexus.Nexus.StepMatrix.__init__
+Bio.Nexus.Nodes.Chain.__init__
+Bio.Nexus.Nodes.Node.__init__
+Bio.Nexus.Trees.NodeData.__init__
+Bio.Nexus.Trees.Tree.__init__
+Bio.PDB.AbstractPropertyMap.AbstractAtomPropertyMap.__init__
+Bio.PDB.AbstractPropertyMap.AbstractPropertyMap.__init__
+Bio.PDB.AbstractPropertyMap.AbstractResiduePropertyMap.__init__
+Bio.PDB.Atom.Atom.__init__
+Bio.PDB.Atom.DisorderedAtom.__init__
+Bio.PDB.Chain.Chain.__init__
+Bio.PDB.DSSP'.DSSP.__init__
+Bio.PDB.Dice.ChainSelector.__init__
+Bio.PDB.Entity.DisorderedEntityWrapper.__init__
+Bio.PDB.Entity.Entity.__init__
+Bio.PDB.FragmentMapper'.Fragment.__init__
+Bio.PDB.FragmentMapper'.FragmentMapper.__init__
+Bio.PDB.HSExposure.ExposureCN.__init__
+Bio.PDB.HSExposure.HSExposureCA.__init__
+Bio.PDB.HSExposure.HSExposureCB.__init__
+Bio.PDB.HSExposure._AbstractHSExposure.__init__
+Bio.PDB.MMCIF2Dict.MMCIF2Dict.__init__
+Bio.PDB.MMCIFParser'.MMCIFParser.__init__
+Bio.PDB.Model.Model.__init__
+Bio.PDB.NACCESS.NACCESS.__init__
+Bio.PDB.NACCESS.NACCESS_atomic.__init__
+Bio.PDB.NeighborSearch'.NeighborSearch.__init__
+Bio.PDB.PDBIO'.PDBIO.__init__
+Bio.PDB.PDBList'.PDBList.__init__
+Bio.PDB.PDBParser'.PDBParser.__init__
+Bio.PDB.PSEA.PSEA.__init__
+Bio.PDB.Polypeptide.CaPPBuilder.__init__
+Bio.PDB.Polypeptide.PPBuilder.__init__
+Bio.PDB.Polypeptide._PPBuilder.__init__
+Bio.PDB.QCPSuperimposer.QCPSuperimposer.__init__
+Bio.PDB.Residue.DisorderedResidue.__init__
+Bio.PDB.Residue.Residue.__init__
+Bio.PDB.ResidueDepth'.ResidueDepth.__init__
+Bio.PDB.Structure.Structure.__init__
+Bio.PDB.StructureAlignment'.StructureAlignment.__init__
+Bio.PDB.StructureBuilder.StructureBuilder.__init__
+Bio.PDB.Superimposer'.Superimposer.__init__
+Bio.PDB.Vector'.Vector.__init__
+Bio.ParserSupport.EventGenerator.__init__
+Bio.ParserSupport.TaggingConsumer.__init__
+Bio.Pathway.Network.__init__
+Bio.Pathway.Reaction.__init__
+Bio.Pathway.Rep.Graph.Graph.__init__
+Bio.Pathway.Rep.MultiGraph.MultiGraph.__init__
+Bio.Pathway.System.__init__
+Bio.Phylo.Applications._Fasttree.FastTreeCommandline.__init__
+Bio.Phylo.Applications._Phyml.PhymlCommandline.__init__
+Bio.Phylo.Applications._Raxml.RaxmlCommandline.__init__
+Bio.Phylo.BaseTree.BranchColor.__init__
+Bio.Phylo.BaseTree.Clade.__init__
+Bio.Phylo.BaseTree.Tree.__init__
+Bio.Phylo.CDAO.Clade.__init__
+Bio.Phylo.CDAO.Tree.__init__
+Bio.Phylo.CDAOIO.Parser.__init__
+Bio.Phylo.CDAOIO.Writer.__init__
+Bio.Phylo.NeXML.Clade.__init__
+Bio.Phylo.NeXML.Tree.__init__
+Bio.Phylo.NeXMLIO.Parser.__init__
+Bio.Phylo.NeXMLIO.Writer.__init__
+Bio.Phylo.Newick.Clade.__init__
+Bio.Phylo.Newick.Tree.__init__
+Bio.Phylo.NewickIO.Parser.__init__
+Bio.Phylo.NewickIO.Writer.__init__
+Bio.Phylo.PAML._paml.Paml.__init__
+Bio.Phylo.PAML.baseml.Baseml.__init__
+Bio.Phylo.PAML.codeml.Codeml.__init__
+Bio.Phylo.PAML.yn00.Yn00.__init__
+Bio.Phylo.PhyloXML.Accession.__init__
+Bio.Phylo.PhyloXML.Annotation.__init__
+Bio.Phylo.PhyloXML.BinaryCharacters.__init__
+Bio.Phylo.PhyloXML.BranchColor.__init__
+Bio.Phylo.PhyloXML.Clade.__init__
+Bio.Phylo.PhyloXML.CladeRelation.__init__
+Bio.Phylo.PhyloXML.Confidence.__init__
+Bio.Phylo.PhyloXML.Date.__init__
+Bio.Phylo.PhyloXML.Distribution.__init__
+Bio.Phylo.PhyloXML.DomainArchitecture.__init__
+Bio.Phylo.PhyloXML.Events.__init__
+Bio.Phylo.PhyloXML.Id.__init__
+Bio.Phylo.PhyloXML.MolSeq.__init__
+Bio.Phylo.PhyloXML.Other.__init__
+Bio.Phylo.PhyloXML.Phylogeny.__init__
+Bio.Phylo.PhyloXML.Phyloxml.__init__
+Bio.Phylo.PhyloXML.Point.__init__
+Bio.Phylo.PhyloXML.Polygon.__init__
+Bio.Phylo.PhyloXML.Property.__init__
+Bio.Phylo.PhyloXML.ProteinDomain.__init__
+Bio.Phylo.PhyloXML.Reference.__init__
+Bio.Phylo.PhyloXML.Sequence.__init__
+Bio.Phylo.PhyloXML.SequenceRelation.__init__
+Bio.Phylo.PhyloXML.Taxonomy.__init__
+Bio.Phylo.PhyloXML.Uri.__init__
+Bio.Phylo.PhyloXMLIO.Parser.__init__
+Bio.Phylo.PhyloXMLIO.Writer.__init__
+Bio.Phylo.TreeConstruction.DistanceCalculator.__init__
+Bio.Phylo.TreeConstruction.DistanceTreeConstructor.__init__
+Bio.Phylo.TreeConstruction.NNITreeSearcher.__init__
+Bio.Phylo.TreeConstruction.ParsimonyScorer.__init__
+Bio.Phylo.TreeConstruction.ParsimonyTreeConstructor.__init__
+Bio.Phylo.TreeConstruction._DistanceMatrix.__init__
+Bio.Phylo.TreeConstruction._Matrix.__init__
+Bio.PopGen.Async.Async.__init__
+Bio.PopGen.Async.DirectoryRetriever.__init__
+Bio.PopGen.Async.FileRetriever.__init__
+Bio.PopGen.Async.Local.Local.__init__
+Bio.PopGen.FDist.Async.FDistAsync.__init__
+Bio.PopGen.FDist.Async.SplitFDist.__init__
+Bio.PopGen.FDist.Controller.FDistController.__init__
+Bio.PopGen.FDist.Record.__init__
+Bio.PopGen.GenePop.Controller.GenePopController.__init__
+Bio.PopGen.GenePop.Controller._FileIterator.__init__
+Bio.PopGen.GenePop.Controller._GenePopCommandline.__init__
+Bio.PopGen.GenePop.EasyController.EasyController.__init__
+Bio.PopGen.GenePop.FileParser.FileRecord.__init__
+Bio.PopGen.GenePop.LargeFileParser.Record.__init__
+Bio.PopGen.GenePop.Record.__init__
+Bio.PopGen.SimCoal.Async.SimCoalCache.__init__
+Bio.PopGen.SimCoal.Cache.SimCoalCache.__init__
+Bio.PopGen.SimCoal.Controller.FastSimCoalController.__init__
+Bio.PopGen.SimCoal.Controller.SimCoalController.__init__
+Bio.PopGen.SimCoal.Controller._FastSimCoalCommandLine.__init__
+Bio.Restriction.PrintFormat.PrintFormat.__init__
+Bio.Restriction.Restriction.Analysis.__init__
+Bio.Restriction.Restriction.FormattedSeq.__init__
+Bio.Restriction.Restriction.RestrictionBatch.__init__
+Bio.Restriction.Restriction.RestrictionType.__init__
+Bio.SCOP.Astral.__init__
+Bio.SCOP.Cla.Index.__init__
+Bio.SCOP.Cla.Record.__init__
+Bio.SCOP.Des.Record.__init__
+Bio.SCOP.Dom.Record.__init__
+Bio.SCOP.Domain.__init__
+Bio.SCOP.Hie.Record.__init__
+Bio.SCOP.Node.__init__
+Bio.SCOP.Raf.Res.__init__
+Bio.SCOP.Raf.SeqMap.__init__
+Bio.SCOP.Raf.SeqMapIndex.__init__
+Bio.SCOP.Residues.Residues.__init__
+Bio.SCOP.Scop.__init__
+Bio.SVDSuperimposer.SVDSuperimposer.__init__
+Bio.SearchIO.BlastIO.blast_tab.BlastTabIndexer.__init__
+Bio.SearchIO.BlastIO.blast_tab.BlastTabParser.__init__
+Bio.SearchIO.BlastIO.blast_tab.BlastTabWriter.__init__
+Bio.SearchIO.BlastIO.blast_text.BlastTextParser.__init__
+Bio.SearchIO.BlastIO.blast_xml.BlastXmlIndexer.__init__
+Bio.SearchIO.BlastIO.blast_xml.BlastXmlParser.__init__
+Bio.SearchIO.BlastIO.blast_xml.BlastXmlWriter.__init__
+Bio.SearchIO.BlastIO.blast_xml._BlastXmlGenerator.__init__
+Bio.SearchIO.BlatIO.BlatPslIndexer.__init__
+Bio.SearchIO.BlatIO.BlatPslParser.__init__
+Bio.SearchIO.BlatIO.BlatPslWriter.__init__
+Bio.SearchIO.ExonerateIO._base._BaseExonerateParser.__init__
+Bio.SearchIO.FastaIO.FastaM10Indexer.__init__
+Bio.SearchIO.FastaIO.FastaM10Parser.__init__
+Bio.SearchIO.HmmerIO._base._BaseHmmerTextIndexer.__init__
+Bio.SearchIO.HmmerIO.hmmer2_text.Hmmer2TextParser.__init__
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.__init__
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser.__init__
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter.__init__
+Bio.SearchIO.HmmerIO.hmmer3_text.Hmmer3TextParser.__init__
+Bio.SearchIO._index.SearchIndexer.__init__
+Bio.SearchIO._model.hit.Hit.__init__
+Bio.SearchIO._model.hsp.HSP.__init__
+Bio.SearchIO._model.hsp.HSPFragment.__init__
+Bio.SearchIO._model.query.QueryResult.__init__
+Bio.Seq.MutableSeq.__init__
+Bio.Seq.Seq.__init__
+Bio.Seq.UnknownSeq.__init__
+Bio.SeqFeature.CompoundLocation.__init__
+Bio.SeqFeature.FeatureLocation.__init__
+Bio.SeqFeature.PositionGap.__init__
+Bio.SeqFeature.Reference.__init__
+Bio.SeqFeature.SeqFeature.__init__
+Bio.SeqIO.FastaIO.FastaWriter.__init__
+Bio.SeqIO.Interfaces.SequenceIterator.__init__
+Bio.SeqIO.Interfaces.SequenceWriter.__init__
+Bio.SeqIO.Interfaces.SequentialSequenceWriter.__init__
+Bio.SeqIO.PhdIO.PhdWriter.__init__
+Bio.SeqIO.QualityIO.QualPhredWriter.__init__
+Bio.SeqIO.SeqXmlIO.SeqXmlIterator.__init__
+Bio.SeqIO.SeqXmlIO.SeqXmlWriter.__init__
+Bio.SeqIO.SeqXmlIO.XMLRecordIterator.__init__
+Bio.SeqIO.SffIO.SffWriter.__init__
+Bio.SeqIO.SffIO._AddTellHandle.__init__
+Bio.SeqIO.UniprotIO.Parser.__init__
+Bio.SeqIO._index.IntelliGeneticsRandomAccess.__init__
+Bio.SeqIO._index.SeqFileRandomAccess.__init__
+Bio.SeqIO._index.SequentialSeqFileRandomAccess.__init__
+Bio.SeqIO._index.SffRandomAccess.__init__
+Bio.SeqRecord.SeqRecord.__init__
+Bio.SeqRecord._RestrictedDict.__init__
+Bio.SeqUtils.CodonUsage.CodonAdaptationIndex.__init__
+Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint.__init__
+Bio.SeqUtils.ProtParam.ProteinAnalysis.__init__
+Bio.Sequencing.Ace.ACEFileRecord.__init__
+Bio.Sequencing.Ace.Contig.__init__
+Bio.Sequencing.Ace.Reads.__init__
+Bio.Sequencing.Ace.af.__init__
+Bio.Sequencing.Ace.bs.__init__
+Bio.Sequencing.Ace.ct.__init__
+Bio.Sequencing.Ace.ds.__init__
+Bio.Sequencing.Ace.qa.__init__
+Bio.Sequencing.Ace.rd.__init__
+Bio.Sequencing.Ace.rt.__init__
+Bio.Sequencing.Ace.wa.__init__
+Bio.Sequencing.Ace.wr.__init__
+Bio.Sequencing.Applications._Novoalign.NovoalignCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaAlignCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaBwaswCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaIndexCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaSampeCommandline.__init__
+Bio.Sequencing.Applications._bwa.BwaSamseCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsCalmdCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsCatCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsFaidxCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsFixmateCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsIdxstatsCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsIndexCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsMergeCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsMpileupCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsPhaseCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsReheaderCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsRmdupCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsSortCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsTargetcutCommandline.__init__
+Bio.Sequencing.Applications._samtools.SamtoolsViewCommandline.__init__
+Bio.Sequencing.Phd.Record.__init__
+Bio.SubsMat.FreqTable.FreqTable.__init__
+Bio.SubsMat.SeqMat.__init__
+Bio.SwissProt.KeyWList.Record.__init__
+Bio.SwissProt.Record.__init__
+Bio.SwissProt.Reference.__init__
+Bio.UniGene.ProtsimLine.__init__
+Bio.UniGene.Record.__init__
+Bio.UniGene.STSLine.__init__
+Bio.UniGene.SequenceLine.__init__
+Bio.Wise.dnal.Statistics.__init__
+Bio.Wise.psw.AlignmentColumn.__init__
+Bio.Wise.psw.ColumnUnit.__init__
+Bio._py3k._ordereddict.OrderedDict.__init__
+Bio.bgzf.BgzfReader.__init__
+Bio.bgzf.BgzfWriter.__init__
+Bio.codonalign.codonalignment.CodonAlignment.__init__
+Bio.codonalign.codonseq.CodonSeq.__init__
+Bio.kNN.kNN.__init__
+Bio.motifs.Instances.__init__
+Bio.motifs.Motif.__init__
+Bio.motifs.alignace.Record.__init__
+Bio.motifs.applications._alignace.AlignAceCommandline.__init__
+Bio.motifs.applications._alignace.CompareAceCommandline.__init__
+Bio.motifs.applications._xxmotif.XXmotifCommandline.__init__
+Bio.motifs.jaspar.Motif.__init__
+Bio.motifs.jaspar.Record.__init__
+Bio.motifs.jaspar.db.JASPAR5.__init__
+Bio.motifs.mast.Record.__init__
+Bio.motifs.matrix.GenericPositionMatrix.__init__
+Bio.motifs.matrix.PositionWeightMatrix.__init__
+Bio.motifs.meme.Instance.__init__
+Bio.motifs.meme.Motif.__init__
+Bio.motifs.meme.Record.__init__
+Bio.motifs.thresholds.ScoreDistribution.__init__
+Bio.motifs.transfac.Record.__init__
+Bio.pairwise2.affine_penalty.__init__
+Bio.pairwise2.dictionary_match.__init__
+Bio.pairwise2.identity_match.__init__
+BioSQL.BioSeq.DBSeq.__init__
+BioSQL.BioSeq.DBSeqRecord.__init__
+BioSQL.BioSeqDatabase.Adaptor.__init__
+BioSQL.BioSeqDatabase.BioSeqDatabase.__init__
+BioSQL.BioSeqDatabase.DBServer.__init__
+BioSQL.BioSeqDatabase._CursorWrapper.__init__
+BioSQL.DBUtils.Generic_dbutils.__init__
+BioSQL.Loader.DatabaseLoader.__init__
+BioSQL.Loader.DatabaseRemover.__init__" class="py-name" href="#" onclick="return doclink('link-41', '__init__', 'link-15');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt id="link-42" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-42', 'id', 'link-16');">id</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"> </tt>
+<a name="DisorderedResidue.__repr__"></a><div id="DisorderedResidue.__repr__-def"><a name="L127"></a><tt class="py-lineno">127</tt> <a class="py-toggle" href="#" id="DisorderedResidue.__repr__-toggle" onclick="return toggle('DisorderedResidue.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.DisorderedResidue-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="DisorderedResidue.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="DisorderedResidue.__repr__-expanded"><a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-name">resname</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="Bio.PDB.Residue.Residue.get_resname" class="py-name" href="#" onclick="return doclink('link-43', 'get_resname', 'link-17');">get_resname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">        <tt class="py-name">hetflag</tt><tt class="py-op">,</tt> <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="Bio.Nexus.Nodes.Node.get_id
+Bio.PDB.Atom.Atom.get_id
+Bio.PDB.Entity.DisorderedEntityWrapper.get_id
+Bio.PDB.Entity.Entity.get_id
+Bio.PDB.FragmentMapper'.Fragment.get_id" class="py-name" href="#" onclick="return doclink('link-44', 'get_id', 'link-18');">get_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-name">full_id</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">resname</tt><tt class="py-op">,</tt> <tt class="py-name">hetflag</tt><tt class="py-op">,</tt> <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt><tt class="py-op">)</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"&lt;DisorderedResidue %s het=%s resseq=%i icode=%s&gt;"</tt> <tt class="py-op">%</tt> <tt class="py-name">full_id</tt> </tt>
+</div><a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"> </tt>
+<a name="DisorderedResidue.add"></a><div id="DisorderedResidue.add-def"><a name="L133"></a><tt class="py-lineno">133</tt> <a class="py-toggle" href="#" id="DisorderedResidue.add-toggle" onclick="return toggle('DisorderedResidue.add');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.DisorderedResidue-class.html#add">add</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">atom</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="DisorderedResidue.add-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="DisorderedResidue.add-expanded"><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">        <tt class="py-name">residue</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-45" class="py-name" targets="Method Bio.PDB.Entity.DisorderedEntityWrapper.disordered_get()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#disordered_get"><a title="Bio.PDB.Entity.DisorderedEntityWrapper.disordered_get" class="py-name" href="#" onclick="return doclink('link-45', 'disordered_get', 'link-45');">disordered_get</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="Bio.PDB.Atom.Atom.is_disordered
+Bio.PDB.Entity.DisorderedEntityWrapper.is_disordered
+Bio.PDB.Residue.Residue.is_disordered" class="py-name" href="#" onclick="return doclink('link-46', 'is_disordered', 'link-35');">is_disordered</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">2</tt><tt class="py-op">:</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">            <tt class="py-comment"># Atoms in disordered residues should have non-blank</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">            <tt class="py-comment"># altlocs, and are thus represented by DisorderedAtom objects.</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">            <tt class="py-name">resname</tt> <tt class="py-op">=</tt> <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name"><a title="Bio.PDB.Residue.Residue.get_resname" class="py-name" href="#" onclick="return doclink('link-47', 'get_resname', 'link-17');">get_resname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">            <tt class="py-name">het</tt><tt class="py-op">,</tt> <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt> <tt class="py-op">=</tt> <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.Nexus.Nodes.Node.get_id
+Bio.PDB.Atom.Atom.get_id
+Bio.PDB.Entity.DisorderedEntityWrapper.get_id
+Bio.PDB.Entity.Entity.get_id
+Bio.PDB.FragmentMapper'.Fragment.get_id" class="py-name" href="#" onclick="return doclink('link-48', 'get_id', 'link-18');">get_id</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-comment"># add atom anyway, if PDBParser ignores exception the atom will be part of the residue</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">            <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-49', 'add', 'link-31');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">atom</tt><tt class="py-op">)</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-50" class="py-name"><a title="Bio.PDB.PDBExceptions.PDBConstructionException" class="py-name" href="#" onclick="return doclink('link-50', 'PDBConstructionException', 'link-3');">PDBConstructionException</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">                <tt class="py-string">"Blank altlocs in duplicate residue %s (%s, %i, %s)"</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">                <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">resname</tt><tt class="py-op">,</tt> <tt class="py-name">het</tt><tt class="py-op">,</tt> <tt class="py-name">resseq</tt><tt class="py-op">,</tt> <tt class="py-name">icode</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-51" class="py-name"><a title="Bio.Graphics.BasicChromosome._ChromosomeComponent.add
+Bio.Nexus.Nexus.StepMatrix.add
+Bio.Nexus.Nodes.Chain.add
+Bio.PDB.Entity.Entity.add
+Bio.PDB.Residue.DisorderedResidue.add
+Bio.PDB.Residue.Residue.add
+Bio.Restriction.Restriction.RestrictionBatch.add" class="py-name" href="#" onclick="return doclink('link-51', 'add', 'link-31');">add</a></tt><tt class="py-op">(</tt><tt class="py-name">atom</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line"> </tt>
+<a name="DisorderedResidue.sort"></a><div id="DisorderedResidue.sort-def"><a name="L147"></a><tt class="py-lineno">147</tt> <a class="py-toggle" href="#" id="DisorderedResidue.sort-toggle" onclick="return toggle('DisorderedResidue.sort');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.DisorderedResidue-class.html#sort">sort</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="DisorderedResidue.sort-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="DisorderedResidue.sort-expanded"><a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">        <tt class="py-docstring">"Sort the atoms in the child Residue objects."</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">residue</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="Bio.PDB.Entity.DisorderedEntityWrapper.disordered_get_list" class="py-name" href="#" onclick="return doclink('link-52', 'disordered_get_list', 'link-36');">disordered_get_list</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">            <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-53" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.sort
+Bio.PDB.Residue.DisorderedResidue.sort
+Bio.PDB.Residue.Residue.sort
+Bio.SearchIO._model.hit.Hit.sort
+Bio.SearchIO._model.query.QueryResult.sort
+Bio.Sequencing.Ace.ACEFileRecord.sort" class="py-name" href="#" onclick="return doclink('link-53', 'sort', 'link-32');">sort</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line"> </tt>
+<a name="DisorderedResidue.disordered_add"></a><div id="DisorderedResidue.disordered_add-def"><a name="L152"></a><tt class="py-lineno">152</tt> <a class="py-toggle" href="#" id="DisorderedResidue.disordered_add-toggle" onclick="return toggle('DisorderedResidue.disordered_add');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Residue.DisorderedResidue-class.html#disordered_add">disordered_add</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">residue</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="DisorderedResidue.disordered_add-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="DisorderedResidue.disordered_add-expanded"><a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line">        <tt class="py-docstring">"""Add a residue object and use its resname as key.</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring">        o residue - Residue object</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-name">resname</tt> <tt class="py-op">=</tt> <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="Bio.PDB.Residue.Residue.get_resname" class="py-name" href="#" onclick="return doclink('link-54', 'get_resname', 'link-17');">get_resname</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">        <tt class="py-comment"># add chain parent to residue</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">        <tt class="py-name">chain</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-55" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_parent()=Bio.PDB.Atom.Atom-class.html#get_parent,Method Bio.PDB.Entity.DisorderedEntityWrapper.get_parent()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#get_parent,Method Bio.PDB.Entity.Entity.get_parent()=Bio.PDB.Entity.Entity-class.html#get_parent"><a title="Bio.PDB.Atom.Atom.get_parent
+Bio.PDB.Entity.DisorderedEntityWrapper.get_parent
+Bio.PDB.Entity.Entity.get_parent" class="py-name" href="#" onclick="return doclink('link-55', 'get_parent', 'link-55');">get_parent</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">        <tt class="py-name">residue</tt><tt class="py-op">.</tt><tt id="link-56" class="py-name" targets="Method Bio.PDB.Atom.Atom.set_parent()=Bio.PDB.Atom.Atom-class.html#set_parent,Method Bio.PDB.Entity.DisorderedEntityWrapper.set_parent()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#set_parent,Method Bio.PDB.Entity.Entity.set_parent()=Bio.PDB.Entity.Entity-class.html#set_parent"><a title="Bio.PDB.Atom.Atom.set_parent
+Bio.PDB.Entity.DisorderedEntityWrapper.set_parent
+Bio.PDB.Entity.Entity.set_parent" class="py-name" href="#" onclick="return doclink('link-56', 'set_parent', 'link-56');">set_parent</a></tt><tt class="py-op">(</tt><tt class="py-name">chain</tt><tt class="py-op">)</tt> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt><tt class="py-op">(</tt><tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name" targets="Method Bio.PDB.Entity.DisorderedEntityWrapper.disordered_has_id()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#disordered_has_id"><a title="Bio.PDB.Entity.DisorderedEntityWrapper.disordered_has_id" class="py-name" href="#" onclick="return doclink('link-57', 'disordered_has_id', 'link-57');">disordered_has_id</a></tt><tt class="py-op">(</tt><tt class="py-name">resname</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">[</tt><tt class="py-name">resname</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">residue</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-58" class="py-name" targets="Method Bio.PDB.Entity.DisorderedEntityWrapper.disordered_select()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#disordered_select"><a title="Bio.PDB.Entity.DisorderedEntityWrapper.disordered_select" class="py-name" href="#" onclick="return doclink('link-58', 'disordered_select', 'link-58');">disordered_select</a></tt><tt class="py-op">(</tt><tt class="py-name">resname</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:44 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

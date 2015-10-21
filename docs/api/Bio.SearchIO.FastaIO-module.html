@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO.FastaIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SearchIO-module.html">Package&nbsp;SearchIO</a> ::
+        Module&nbsp;FastaIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO.FastaIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module FastaIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SearchIO.FastaIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Bio.SearchIO support for Bill Pearson's FASTA tools.</p>
+<p>This module adds support for parsing FASTA outputs. FASTA is a suite of
+programs that finds regions of local or global similarity between protein
+or nucleotide sequences, either by searching databases or identifying
+local duplications.</p>
+<p>Bio.SearchIO.FastaIO was tested on the following FASTA flavors and versions:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>flavors: fasta, ssearch, tfastx</li>
+<li>versions: 35, 36</li>
+</ul>
+</blockquote>
+<p>Other flavors and/or versions may introduce some bugs. Please file a bug report
+if you see such problems to Biopython's bug tracker.</p>
+<p>More information on FASTA are available through these links:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>Website: <a class="rst-reference external" href="http://fasta.bioch.virginia.edu/fasta_www2/fasta_list2.shtml" target="_top">http://fasta.bioch.virginia.edu/fasta_www2/fasta_list2.shtml</a></li>
+<li>User guide: <a class="rst-reference external" href="http://fasta.bioch.virginia.edu/fasta_www2/fasta_guide.pdf" target="_top">http://fasta.bioch.virginia.edu/fasta_www2/fasta_guide.pdf</a></li>
+</ul>
+</blockquote>
+<div class="rst-section" id="rst-supported-formats">
+<h1 class="heading">Supported Formats</h1>
+<p>Bio.SearchIO.FastaIO supports parsing and indexing FASTA outputs triggered by
+the -m 10 flag. Other formats that mimic other programs (e.g. the BLAST tabular
+format using the -m 8 flag) may be parseable but using SearchIO's other parsers
+(in this case, using the 'blast-tab' parser).</p>
+</div>
+<div class="rst-section" id="rst-fasta-m10">
+<h1 class="heading">fasta-m10</h1>
+<p>Note that in FASTA -m 10 outputs, HSPs from different strands are considered to
+be from different hits. They are listed as two separate entries in the hit
+table. FastaIO recognizes this and will group HSPs with the same hit ID into a
+single Hit object, regardless of strand.</p>
+<p>FASTA also sometimes output extra sequences adjacent to the HSP match. These
+extra sequences are discarded by FastaIO. Only regions containing the actual
+sequence match are extracted.</p>
+<p>The following object attributes are provided:</p>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="22%" />
+<col width="33%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Object</th>
+<th class="rst-head">Attribute</th>
+<th class="rst-head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td rowspan="6">QueryResult</td>
+<td>description</td>
+<td>query sequence description</td>
+</tr>
+<tr><td>id</td>
+<td>query sequence ID</td>
+</tr>
+<tr><td>program</td>
+<td>FASTA flavor</td>
+</tr>
+<tr><td>seq_len</td>
+<td>full length of query sequence</td>
+</tr>
+<tr><td>target</td>
+<td>target search database</td>
+</tr>
+<tr><td>version</td>
+<td>FASTA version</td>
+</tr>
+<tr><td>Hit</td>
+<td>seq_len</td>
+<td>full length of the hit sequence</td>
+</tr>
+<tr><td rowspan="9">HSP</td>
+<td>bitscore</td>
+<td>*_bits line</td>
+</tr>
+<tr><td>evalue</td>
+<td>*_expect line</td>
+</tr>
+<tr><td>ident_pct</td>
+<td>*_ident line</td>
+</tr>
+<tr><td>init1_score</td>
+<td>*_init1 line</td>
+</tr>
+<tr><td>initn_score</td>
+<td>*_initn line</td>
+</tr>
+<tr><td>opt_score</td>
+<td>*_opt line, *_s-w opt line</td>
+</tr>
+<tr><td>pos_pct</td>
+<td>*_sim line</td>
+</tr>
+<tr><td>sw_score</td>
+<td>*_score line</td>
+</tr>
+<tr><td>z_score</td>
+<td>*_z-score line</td>
+</tr>
+<tr><td rowspan="9">HSPFragment
+(also via HSP)</td>
+<td>aln_annotation</td>
+<td>al_cons block, if present</td>
+</tr>
+<tr><td>hit</td>
+<td>hit sequence</td>
+</tr>
+<tr><td>hit_end</td>
+<td>hit sequence end coordinate</td>
+</tr>
+<tr><td>hit_start</td>
+<td>hit sequence start coordinate</td>
+</tr>
+<tr><td>hit_strand</td>
+<td>hit sequence strand</td>
+</tr>
+<tr><td>query</td>
+<td>query sequence</td>
+</tr>
+<tr><td>query_end</td>
+<td>query sequence end coordinate</td>
+</tr>
+<tr><td>query_start</td>
+<td>query sequence start coordinate</td>
+</tr>
+<tr><td>query_strand</td>
+<td>query sequence strand</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.FastaIO.FastaM10Parser-class.html" class="summary-name">FastaM10Parser</a><br />
+      Parser for Bill Pearson's FASTA suite's -m 10 output.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.FastaIO.FastaM10Indexer-class.html" class="summary-name">FastaM10Indexer</a><br />
+      Indexer class for Bill Pearson's FASTA suite's -m 10 output.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_set_qresult_hits"></a><span class="summary-sig-name">_set_qresult_hits</span>(<span class="summary-sig-arg">qresult</span>,
+        <span class="summary-sig-arg">hit_rows</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>)</span><br />
+      Helper function for appending Hits without alignments into QueryResults.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.FastaIO-pysrc.html#_set_qresult_hits">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO.FastaIO-module.html#_set_hsp_seqs" class="summary-sig-name" onclick="show_private();">_set_hsp_seqs</a>(<span class="summary-sig-arg">hsp</span>,
+        <span class="summary-sig-arg">parsed</span>,
+        <span class="summary-sig-arg">program</span>)</span><br />
+      Helper function for the main parsing code.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.FastaIO-pysrc.html#_set_hsp_seqs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO.FastaIO-module.html#_get_aln_slice_coords" class="summary-sig-name" onclick="show_private();">_get_aln_slice_coords</a>(<span class="summary-sig-arg">parsed_hsp</span>)</span><br />
+      Helper function for the main parsing code.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO.FastaIO-pysrc.html#_get_aln_slice_coords">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.FastaIO-module.html#_RE_FLAVS" class="summary-name" onclick="show_private();">_RE_FLAVS</a> = <code title="re.compile(r't?fast[afmsxy]|pr[sf][sx]|lalign|[gs]?[glso]search')">re.compile(r't<code class="re-op">?</code>fast<code class="re-group">[</code>afmsxy<code class="re-group">]</code><code class="re-op">|</code>pr<code class="re-group">[</code>sf<code class="re-group">]</code><code class="re-group">[</code>sx<code class="re-group">]</code><code class="re-op">|</code>lalign<code class="re-op">|</code><code class="re-group">[</code>gs<code class="re-group">]</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.FastaIO-module.html#_PTR_ID_DESC_SEQLEN" class="summary-name" onclick="show_private();">_PTR_ID_DESC_SEQLEN</a> = <code title="'&gt;&gt;&gt;(.+?)\\s+(.*?) *- (\\d+) (?:aa|nt)\\s*$'"><code class="variable-quote">'</code><code class="variable-string">&gt;&gt;&gt;(.+?)\\s+(.*?) *- (\\d+) (?:aa|nt)\\</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.FastaIO-module.html#_RE_ID_DESC_SEQLEN" class="summary-name" onclick="show_private();">_RE_ID_DESC_SEQLEN</a> = <code title="re.compile(r'&gt;&gt;&gt;(.+?)\s+(.*?) *- (\d+) (?:aa|nt)\s*$')">re.compile(r'&gt;&gt;&gt;<code class="re-group">(</code>.<code class="re-op">+?</code><code class="re-group">)</code>\s<code class="re-op">+</code><code class="re-group">(</code>.<code class="re-op">*?</code><code class="re-group">)</code> <code class="re-op">*</code>- <code class="re-group">(</code>\d<code class="re-op">+</code><code class="re-group">)</code> <code class="re-group">(?</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.FastaIO-module.html#_RE_ID_DESC_SEQLEN_IDX" class="summary-name" onclick="show_private();">_RE_ID_DESC_SEQLEN_IDX</a> = <code title="re.compile(r'&gt;&gt;&gt;(.+?)\s+(.*?) *- (\d+) (?:aa|nt)\s*$')">re.compile(r'&gt;&gt;&gt;<code class="re-group">(</code>.<code class="re-op">+?</code><code class="re-group">)</code>\s<code class="re-op">+</code><code class="re-group">(</code>.<code class="re-op">*?</code><code class="re-group">)</code> <code class="re-op">*</code>- <code class="re-group">(</code>\d<code class="re-op">+</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_RE_ATTR"></a><span class="summary-name">_RE_ATTR</span> = <code title="re.compile(r'^; [a-z]+(_[ \w-]+):\s+(.*)$')">re.compile(r'^; <code class="re-group">[</code>a<code class="re-op">-</code>z<code class="re-group">]</code><code class="re-op">+</code><code class="re-group">(</code>_<code class="re-group">[</code> \w-<code class="re-group">]</code><code class="re-op">+</code><code class="re-group">)</code>:\s<code class="re-op">+</code><code class="re-group">(</code>.<code class="re-op">*</code><code class="re-group">)</code>$')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_RE_START_EXC"></a><span class="summary-name">_RE_START_EXC</span> = <code title="re.compile(r'^-*')">re.compile(r'^-<code class="re-op">*</code>')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_RE_END_EXC"></a><span class="summary-name">_RE_END_EXC</span> = <code title="re.compile(r'-*$')">re.compile(r'-<code class="re-op">*</code>$')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO.FastaIO-module.html#_HSP_ATTR_MAP" class="summary-name" onclick="show_private();">_HSP_ATTR_MAP</a> = <code title="{'_bits': ('bitscore', &lt;type 'float'&gt;),
+ '_expect': ('evalue', &lt;type 'float'&gt;),
+ '_ident': ('ident_pct', &lt;type 'float'&gt;),
+ '_init1': ('init1_score', &lt;type 'int'&gt;),
+ '_initn': ('initn_score', &lt;type 'int'&gt;),
+ '_opt': ('opt_score', &lt;type 'int'&gt;),
+ '_s-w opt': ('opt_score', &lt;type 'int'&gt;),
+ '_score': ('sw_score', &lt;type 'int'&gt;),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">_bits</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">bitscore</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'float'&gt;<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">_expe</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_STATE_NONE"></a><span class="summary-name">_STATE_NONE</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_STATE_QUERY_BLOCK"></a><span class="summary-name">_STATE_QUERY_BLOCK</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_STATE_HIT_BLOCK"></a><span class="summary-name">_STATE_HIT_BLOCK</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_STATE_CONS_BLOCK"></a><span class="summary-name">_STATE_CONS_BLOCK</span> = <code title="3">3</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.SearchIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.SearchIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_set_hsp_seqs"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_set_hsp_seqs</span>(<span class="sig-arg">hsp</span>,
+        <span class="sig-arg">parsed</span>,
+        <span class="sig-arg">program</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO.FastaIO-pysrc.html#_set_hsp_seqs">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Helper function for the main parsing code.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hsp</code></strong> (HSP) - HSP whose properties will be set</li>
+        <li><strong class="pname"><code>parsed</code></strong> (dictionary {string: object}) - parsed values of the HSP attributes</li>
+        <li><strong class="pname"><code>program</code></strong> (string) - program name</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_get_aln_slice_coords"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_get_aln_slice_coords</span>(<span class="sig-arg">parsed_hsp</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO.FastaIO-pysrc.html#_get_aln_slice_coords">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Helper function for the main parsing code.</p>
+<p>To get the actual pairwise alignment sequences, we must first
+translate the un-gapped sequence based coordinates into positions
+in the gapped sequence (which may have a flanking region shown
+using leading - characters).  To date, I have never seen any
+trailing flanking region shown in the m10 file, but the
+following code should also cope with that.</p>
+<p>Note that this code seems to work fine even when the &quot;sq_offset&quot;
+entries are prsent as a result of using the -X command line option.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_RE_FLAVS"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_RE_FLAVS</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r't<code class="re-op">?</code>fast<code class="re-group">[</code>afmsxy<code class="re-group">]</code><code class="re-op">|</code>pr<code class="re-group">[</code>sf<code class="re-group">]</code><code class="re-group">[</code>sx<code class="re-group">]</code><code class="re-op">|</code>lalign<code class="re-op">|</code><code class="re-group">[</code>gs<code class="re-group">]</code><code class="re-op">?</code><code class="re-group">[</code>glso<code class="re-group">]</code>search')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_PTR_ID_DESC_SEQLEN"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_PTR_ID_DESC_SEQLEN</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'</code><code class="variable-string">&gt;&gt;&gt;(.+?)\\s+(.*?) *- (\\d+) (?:aa|nt)\\s*$</code><code class="variable-quote">'</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_RE_ID_DESC_SEQLEN"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_RE_ID_DESC_SEQLEN</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'&gt;&gt;&gt;<code class="re-group">(</code>.<code class="re-op">+?</code><code class="re-group">)</code>\s<code class="re-op">+</code><code class="re-group">(</code>.<code class="re-op">*?</code><code class="re-group">)</code> <code class="re-op">*</code>- <code class="re-group">(</code>\d<code class="re-op">+</code><code class="re-group">)</code> <code class="re-group">(?:</code>aa<code class="re-op">|</code>nt<code class="re-group">)</code>\s<code class="re-op">*</code>$')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_RE_ID_DESC_SEQLEN_IDX"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_RE_ID_DESC_SEQLEN_IDX</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'&gt;&gt;&gt;<code class="re-group">(</code>.<code class="re-op">+?</code><code class="re-group">)</code>\s<code class="re-op">+</code><code class="re-group">(</code>.<code class="re-op">*?</code><code class="re-group">)</code> <code class="re-op">*</code>- <code class="re-group">(</code>\d<code class="re-op">+</code><code class="re-group">)</code> <code class="re-group">(?:</code>aa<code class="re-op">|</code>nt<code class="re-group">)</code>\s<code class="re-op">*</code>$')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_HSP_ATTR_MAP"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_HSP_ATTR_MAP</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">_bits</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">bitscore</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'float'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">_expect</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">evalue</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'float'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">_ident</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">ident_pct</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'float'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">_init1</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">init1_score</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'int'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">_initn</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">initn_score</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'int'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">_opt</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">opt_score</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'int'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">_s-w opt</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">opt_score</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'int'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">_score</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">sw_score</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;type 'int'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:25 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

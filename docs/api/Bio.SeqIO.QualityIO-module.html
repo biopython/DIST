@@ -1,0 +1,1822 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SeqIO.QualityIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SeqIO-module.html">Package&nbsp;SeqIO</a> ::
+        Module&nbsp;QualityIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SeqIO.QualityIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module QualityIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Bio.SeqIO support for the FASTQ and QUAL file formats.</p>
+<p>Note that you are expected to use this code via the Bio.SeqIO interface, as
+shown below.</p>
+<p>The FASTQ file format is used frequently at the Wellcome Trust Sanger Institute
+to bundle a FASTA sequence and its PHRED quality data (integers between 0 and
+90).  Rather than using a single FASTQ file, often paired FASTA and QUAL files
+are used containing the sequence and the quality information separately.</p>
+<p>The PHRED software reads DNA sequencing trace files, calls bases, and
+assigns a non-negative quality value to each called base using a logged
+transformation of the error probability, Q = -10 log10( Pe ), for example:</p>
+<pre class="rst-literal-block">
+Pe = 1.0,         Q =  0
+Pe = 0.1,         Q = 10
+Pe = 0.01,        Q = 20
+...
+Pe = 0.00000001,  Q = 80
+Pe = 0.000000001, Q = 90
+</pre>
+<p>In typical raw sequence reads, the PHRED quality valuea will be from 0 to 40.
+In the QUAL format these quality values are held as space separated text in
+a FASTA like file format.  In the FASTQ format, each quality values is encoded
+with a single ASCI character using chr(Q+33), meaning zero maps to the
+character &quot;!&quot; and for example 80 maps to &quot;q&quot;.  For the Sanger FASTQ standard
+the allowed range of PHRED scores is 0 to 93 inclusive. The sequences and
+quality are then stored in pairs in a FASTA like format.</p>
+<p>Unfortunately there is no official document describing the FASTQ file format,
+and worse, several related but different variants exist. For more details,
+please read this open access publication:</p>
+<pre class="rst-literal-block">
+The Sanger FASTQ file format for sequences with quality scores, and the
+Solexa/Illumina FASTQ variants.
+P.J.A.Cock (Biopython), C.J.Fields (BioPerl), N.Goto (BioRuby),
+M.L.Heuer (BioJava) and P.M. Rice (EMBOSS).
+Nucleic Acids Research 2010 38(6):1767-1771
+http://dx.doi.org/10.1093/nar/gkp1137
+</pre>
+<p>The good news is that Roche 454 sequencers can output files in the QUAL format,
+and sensibly they use PHREP style scores like Sanger.  Converting a pair of
+FASTA and QUAL files into a Sanger style FASTQ file is easy. To extract QUAL
+files from a Roche 454 SFF binary file, use the Roche off instrument command
+line tool &quot;sffinfo&quot; with the -q or -qual argument.  You can extract a matching
+FASTA file using the -s or -seq argument instead.</p>
+<p>The bad news is that Solexa/Illumina did things differently - they have their
+own scoring system AND their own incompatible versions of the FASTQ format.
+Solexa/Illumina quality scores use Q = - 10 log10 ( Pe / (1-Pe) ), which can
+be negative.  PHRED scores and Solexa scores are NOT interchangeable (but a
+reasonable mapping can be achieved between them, and they are approximately
+equal for higher quality reads).</p>
+<p>Confusingly early Solexa pipelines produced a FASTQ like file but using their
+own score mapping and an ASCII offset of 64. To make things worse, for the
+Solexa/Illumina pipeline 1.3 onwards, they introduced a third variant of the
+FASTQ file format, this time using PHRED scores (which is more consistent) but
+with an ASCII offset of 64.</p>
+<p>i.e. There are at least THREE different and INCOMPATIBLE variants of the FASTQ
+file format: The original Sanger PHRED standard, and two from Solexa/Illumina.</p>
+<p>The good news is that as of CASAVA version 1.8, Illumina sequencers will
+produce FASTQ files using the standard Sanger encoding.</p>
+<p>You are expected to use this module via the Bio.SeqIO functions, with the
+following format names:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>&quot;qual&quot; means simple quality files using PHRED scores (e.g. from Roche 454)</li>
+<li>&quot;fastq&quot; means Sanger style FASTQ files using PHRED scores and an ASCII
+offset of 33 (e.g. from the NCBI Short Read Archive and Illumina 1.8+).
+These can potentially hold PHRED scores from 0 to 93.</li>
+<li>&quot;fastq-sanger&quot; is an alias for &quot;fastq&quot;.</li>
+<li>&quot;fastq-solexa&quot; means old Solexa (and also very early Illumina) style FASTQ
+files, using Solexa scores with an ASCII offset 64. These can hold Solexa
+scores from -5 to 62.</li>
+<li>&quot;fastq-illumina&quot; means newer Illumina 1.3 to 1.7 style FASTQ files, using
+PHRED scores but with an ASCII offset 64, allowing PHRED scores from 0
+to 62.</li>
+</ul>
+</blockquote>
+<p>We could potentially add support for &quot;qual-solexa&quot; meaning QUAL files which
+contain Solexa scores, but thus far there isn't any reason to use such files.</p>
+<p>For example, consider the following short FASTQ file:</p>
+<pre class="rst-literal-block">
+&#64;EAS54_6_R1_2_1_413_324
+CCCTTCTTGTCTTCAGCGTTTCTCC
++
+;;3;;;;;;;;;;;;7;;;;;;;88
+&#64;EAS54_6_R1_2_1_540_792
+TTGGCAGGCCAAGGCCGATGGATCA
++
+;;;;;;;;;;;7;;;;;-;;;3;83
+&#64;EAS54_6_R1_2_1_443_348
+GTTGCTTCTGGCGTGGGTGGGGGGG
++
+;;;;;;;;;;;9;7;;.7;393333
+</pre>
+<p>This contains three reads of length 25.  From the read length these were
+probably originally from an early Solexa/Illumina sequencer but this file
+follows the Sanger FASTQ convention (PHRED style qualities with an ASCII
+offet of 33).  This means we can parse this file using Bio.SeqIO using
+&quot;fastq&quot; as the format name:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG</span></pre>
+<p>The qualities are held as a list of integers in each record's annotation:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record)
+<span class="py-output">ID: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Name: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Description: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Per letter annotation for: phred_quality</span>
+<span class="py-output">Seq('GTTGCTTCTGGCGTGGGTGGGGGGG', SingleLetterAlphabet())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]</span></pre>
+<p>You can use the SeqRecord format method to show this in the QUAL format:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;qual&quot;</span>))
+<span class="py-output">&gt;EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18</span>
+<span class="py-output">24 18 18 18 18</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>Or go back to the FASTQ format, use &quot;fastq&quot; (or &quot;fastq-sanger&quot;):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-output">@EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">GTTGCTTCTGGCGTGGGTGGGGGGG</span>
+<span class="py-output">+</span>
+<span class="py-output">;;;;;;;;;;;9;7;;.7;393333</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>Or, using the Illumina 1.3+ FASTQ encoding (PHRED values with an ASCII offset
+of 64):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fastq-illumina&quot;</span>))
+<span class="py-output">@EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">GTTGCTTCTGGCGTGGGTGGGGGGG</span>
+<span class="py-output">+</span>
+<span class="py-output">ZZZZZZZZZZZXZVZZMVZRXRRRR</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>You can also get Biopython to convert the scores and show a Solexa style
+FASTQ file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fastq-solexa&quot;</span>))
+<span class="py-output">@EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">GTTGCTTCTGGCGTGGGTGGGGGGG</span>
+<span class="py-output">+</span>
+<span class="py-output">ZZZZZZZZZZZXZVZZMVZRXRRRR</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>Notice that this is actually the same output as above using &quot;fastq-illumina&quot;
+as the format! The reason for this is all these scores are high enough that
+the PHRED and Solexa scores are almost equal. The differences become apparent
+for poor quality reads. See the functions solexa_quality_from_phred and
+phred_quality_from_solexa for more details.</p>
+<p>If you wanted to trim your sequences (perhaps to remove low quality regions,
+or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_rec = record[5:15]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_rec)
+<span class="py-output">ID: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Name: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Description: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Per letter annotation for: phred_quality</span>
+<span class="py-output">Seq('TTCTGGCGTG', SingleLetterAlphabet())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_rec.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">[26, 26, 26, 26, 26, 26, 24, 26, 22, 26]</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_rec.format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-output">@EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">TTCTGGCGTG</span>
+<span class="py-output">+</span>
+<span class="py-output">;;;;;;9;7;</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>If you wanted to, you could read in this FASTQ file, and save it as a QUAL file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record_iterator = SeqIO.parse(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/temp.qual&quot;</span>, <span class="py-string">&quot;w&quot;</span>) <span class="py-keyword">as</span> out_handle:
+<span class="py-more">... </span>    SeqIO.write(record_iterator, out_handle, <span class="py-string">&quot;qual&quot;</span>)
+<span class="py-output">3</span></pre>
+<p>You can of course read in a QUAL file, such as the one we just created:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Quality/temp.qual&quot;</span>, <span class="py-string">&quot;qual&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">EAS54_6_R1_2_1_413_324 ?????????????????????????</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 ?????????????????????????</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 ?????????????????????????</span></pre>
+<p>Notice that QUAL files don't have a proper sequence present!  But the quality
+information is there:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record)
+<span class="py-output">ID: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Name: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Description: EAS54_6_R1_2_1_443_348</span>
+<span class="py-output">Number of features: 0</span>
+<span class="py-output">Per letter annotation for: phred_quality</span>
+<span class="py-output">UnknownSeq(25, alphabet = SingleLetterAlphabet(), character = '?')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]</span></pre>
+<p>Just to keep things tidy, if you are following this example yourself, you can
+delete this temporary file now:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> os
+<span class="py-prompt">&gt;&gt;&gt; </span>os.remove(<span class="py-string">&quot;Quality/temp.qual&quot;</span>)</pre>
+<p>Sometimes you won't have a FASTQ file, but rather just a pair of FASTA and QUAL
+files.  Because the Bio.SeqIO system is designed for reading single files, you
+would have to read the two in separately and then combine the data.  However,
+since this is such a common thing to want to do, there is a helper iterator
+defined in this module that does this for you - PairedFastaQualIterator.</p>
+<p>Alternatively, if you have enough RAM to hold all the records in memory at once,
+then a simple dictionary approach would work:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>reads = SeqIO.to_dict(SeqIO.parse(<span class="py-string">&quot;Quality/example.fasta&quot;</span>, <span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> rec <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Quality/example.qual&quot;</span>, <span class="py-string">&quot;qual&quot;</span>):
+<span class="py-more">... </span>    reads[rec.id].letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>]=rec.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>]</pre>
+<p>You can then access any record by its key, and get both the sequence and the
+quality scores.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(reads[<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>].format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-output">@EAS54_6_R1_2_1_540_792</span>
+<span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">+</span>
+<span class="py-output">;;;;;;;;;;;7;;;;;-;;;3;83</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>It is important that you explicitly tell Bio.SeqIO which FASTQ variant you are
+using (&quot;fastq&quot; or &quot;fastq-sanger&quot; for the Sanger standard using PHRED values,
+&quot;fastq-solexa&quot; for the original Solexa/Illumina variant, or &quot;fastq-illumina&quot;
+for the more recent variant), as this cannot be detected reliably
+automatically.</p>
+<p>To illustrate this problem, let's consider an artifical example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span>test = SeqRecord(Seq(<span class="py-string">&quot;NACGTACGTA&quot;</span>, generic_dna), id=<span class="py-string">&quot;Test&quot;</span>,
+<span class="py-more">... </span>description=<span class="py-string">&quot;Made up!&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(test.format(<span class="py-string">&quot;fasta&quot;</span>))
+<span class="py-output">&gt;Test Made up!</span>
+<span class="py-output">NACGTACGTA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(test.format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except"> ...</span>
+<span class="py-except">ValueError: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).</span></pre>
+<p>We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
+or FASTQ format we need to provide some quality scores. These are held as a
+list of integers (one for each base) in the letter_annotations dictionary:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>test.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>] = [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(test.format(<span class="py-string">&quot;qual&quot;</span>))
+<span class="py-output">&gt;Test Made up!</span>
+<span class="py-output">0 1 2 3 4 5 10 20 30 40</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(test.format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-output">@Test Made up!</span>
+<span class="py-output">NACGTACGTA</span>
+<span class="py-output">+</span>
+<span class="py-output">!&quot;#$%&amp;+5?I</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>We can check this FASTQ encoding - the first PHRED quality was zero, and this
+mapped to a exclamation mark, while the final score was 40 and this mapped to
+the letter &quot;I&quot;:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>ord(<span class="py-string">'!'</span>) - 33
+<span class="py-output">0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>ord(<span class="py-string">'I'</span>) - 33
+<span class="py-output">40</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>[ord(letter)-33 <span class="py-keyword">for</span> letter <span class="py-keyword">in</span> <span class="py-string">'!&quot;#$%&amp;+5?I'</span>]
+<span class="py-output">[0, 1, 2, 3, 4, 5, 10, 20, 30, 40]</span></pre>
+<p>Similarly, we could produce an Illumina 1.3 to 1.7 style FASTQ file using PHRED
+scores with an offset of 64:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(test.format(<span class="py-string">&quot;fastq-illumina&quot;</span>))
+<span class="py-output">@Test Made up!</span>
+<span class="py-output">NACGTACGTA</span>
+<span class="py-output">+</span>
+<span class="py-output">@ABCDEJT^h</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>And we can check this too - the first PHRED score was zero, and this mapped to
+&quot;&#64;&quot;, while the final score was 40 and this mapped to &quot;h&quot;:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>ord(<span class="py-string">&quot;@&quot;</span>) - 64
+<span class="py-output">0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>ord(<span class="py-string">&quot;h&quot;</span>) - 64
+<span class="py-output">40</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>[ord(letter)-64 <span class="py-keyword">for</span> letter <span class="py-keyword">in</span> <span class="py-string">&quot;@ABCDEJT^h&quot;</span>]
+<span class="py-output">[0, 1, 2, 3, 4, 5, 10, 20, 30, 40]</span></pre>
+<p>Notice how different the standard Sanger FASTQ and the Illumina 1.3 to 1.7 style
+FASTQ files look for the same data! Then we have the older Solexa/Illumina
+format to consider which encodes Solexa scores instead of PHRED scores.</p>
+<p>First let's see what Biopython says if we convert the PHRED scores into Solexa
+scores (rounding to one decimal place):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> q <span class="py-keyword">in</span> [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;PHRED %i maps to Solexa %0.1f&quot;</span> % (q, solexa_quality_from_phred(q)))
+<span class="py-output">PHRED 0 maps to Solexa -5.0</span>
+<span class="py-output">PHRED 1 maps to Solexa -5.0</span>
+<span class="py-output">PHRED 2 maps to Solexa -2.3</span>
+<span class="py-output">PHRED 3 maps to Solexa -0.0</span>
+<span class="py-output">PHRED 4 maps to Solexa 1.8</span>
+<span class="py-output">PHRED 5 maps to Solexa 3.3</span>
+<span class="py-output">PHRED 10 maps to Solexa 9.5</span>
+<span class="py-output">PHRED 20 maps to Solexa 20.0</span>
+<span class="py-output">PHRED 30 maps to Solexa 30.0</span>
+<span class="py-output">PHRED 40 maps to Solexa 40.0</span></pre>
+<p>Now here is the record using the old Solexa style FASTQ file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(test.format(<span class="py-string">&quot;fastq-solexa&quot;</span>))
+<span class="py-output">@Test Made up!</span>
+<span class="py-output">NACGTACGTA</span>
+<span class="py-output">+</span>
+<span class="py-output">;;&gt;@BCJT^h</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>Again, this is using an ASCII offset of 64, so we can check the Solexa scores:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>[ord(letter)-64 <span class="py-keyword">for</span> letter <span class="py-keyword">in</span> <span class="py-string">&quot;;;&gt;@BCJT^h&quot;</span>]
+<span class="py-output">[-5, -5, -2, 0, 2, 3, 10, 20, 30, 40]</span></pre>
+<p>This explains why the last few letters of this FASTQ output matched that using
+the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
+are approximately equal.</p>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO.FastqPhredWriter-class.html" class="summary-name">FastqPhredWriter</a><br />
+      Class to write standard FASTQ format files (using PHRED quality scores).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO.QualPhredWriter-class.html" class="summary-name">QualPhredWriter</a><br />
+      Class to write QUAL format files (using PHRED quality scores).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO.FastqSolexaWriter-class.html" class="summary-name">FastqSolexaWriter</a><br />
+      Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO.FastqIlluminaWriter-class.html" class="summary-name">FastqIlluminaWriter</a><br />
+      Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#solexa_quality_from_phred" class="summary-sig-name">solexa_quality_from_phred</a>(<span class="summary-sig-arg">phred_quality</span>)</span><br />
+      Covert a PHRED quality (range 0 to about 90) to a Solexa quality.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#solexa_quality_from_phred">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#phred_quality_from_solexa" class="summary-sig-name">phred_quality_from_solexa</a>(<span class="summary-sig-arg">solexa_quality</span>)</span><br />
+      Convert a Solexa quality (which can be negative) to a PHRED quality.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#phred_quality_from_solexa">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#_get_phred_quality" class="summary-sig-name" onclick="show_private();">_get_phred_quality</a>(<span class="summary-sig-arg">record</span>)</span><br />
+      Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_phred_quality">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#_get_sanger_quality_str" class="summary-sig-name" onclick="show_private();">_get_sanger_quality_str</a>(<span class="summary-sig-arg">record</span>)</span><br />
+      Returns a Sanger FASTQ encoded quality string (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_sanger_quality_str">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#_get_illumina_quality_str" class="summary-sig-name" onclick="show_private();">_get_illumina_quality_str</a>(<span class="summary-sig-arg">record</span>)</span><br />
+      Returns an Illumina 1.3 to 1.7 FASTQ encoded quality string (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_illumina_quality_str">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#_get_solexa_quality_str" class="summary-sig-name" onclick="show_private();">_get_solexa_quality_str</a>(<span class="summary-sig-arg">record</span>)</span><br />
+      Returns a Solexa FASTQ encoded quality string (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_solexa_quality_str">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#FastqGeneralIterator" class="summary-sig-name">FastqGeneralIterator</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Iterate over Fastq records as string tuples (not as SeqRecord objects).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqGeneralIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#FastqPhredIterator" class="summary-sig-name">FastqPhredIterator</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">SingleLetterAlphabet()</span>,
+        <span class="summary-sig-arg">title2ids</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Generator function to iterate over FASTQ records (as SeqRecord objects).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqPhredIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#FastqSolexaIterator" class="summary-sig-name">FastqSolexaIterator</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">SingleLetterAlphabet()</span>,
+        <span class="summary-sig-arg">title2ids</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Parsing old Solexa/Illumina FASTQ like files (which differ in the quality mapping).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqSolexaIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#FastqIlluminaIterator" class="summary-sig-name">FastqIlluminaIterator</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">SingleLetterAlphabet()</span>,
+        <span class="summary-sig-arg">title2ids</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Parse Illumina 1.3 to 1.7 FASTQ like files (which differ in the quality mapping).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqIlluminaIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#QualPhredIterator" class="summary-sig-name">QualPhredIterator</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">SingleLetterAlphabet()</span>,
+        <span class="summary-sig-arg">title2ids</span>=<span class="summary-sig-default">None</span>)</span><br />
+      For QUAL files which include PHRED quality scores, but no sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#QualPhredIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.QualityIO-module.html#PairedFastaQualIterator" class="summary-sig-name">PairedFastaQualIterator</a>(<span class="summary-sig-arg">fasta_handle</span>,
+        <span class="summary-sig-arg">qual_handle</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">SingleLetterAlphabet()</span>,
+        <span class="summary-sig-arg">title2ids</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Iterate over matched FASTA and QUAL files as SeqRecord objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#PairedFastaQualIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SANGER_SCORE_OFFSET"></a><span class="summary-name">SANGER_SCORE_OFFSET</span> = <code title="33">33</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="SOLEXA_SCORE_OFFSET"></a><span class="summary-name">SOLEXA_SCORE_OFFSET</span> = <code title="64">64</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO-module.html#_phred_to_sanger_quality_str" class="summary-name" onclick="show_private();">_phred_to_sanger_quality_str</a> = <code title="{0: '!',
+ 1: '&quot;',
+ 2: '#',
+ 3: '$',
+ 4: '%',
+ 5: '&amp;',
+ 6: '\'',
+ 7: '(',
+..."><code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">!</code><code class="variable-quote">'</code><code class="variable-op">, </code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&quot;</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">#</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">$</code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO-module.html#_solexa_to_sanger_quality_str" class="summary-name" onclick="show_private();">_solexa_to_sanger_quality_str</a> = <code title="{-5: '&quot;',
+ -4: '&quot;',
+ -3: '#',
+ -2: '#',
+ -1: '$',
+ 0: '$',
+ 1: '%',
+ 2: '%',
+..."><code class="variable-group">{</code>-5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&quot;</code><code class="variable-quote">'</code><code class="variable-op">, </code>-4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&quot;</code><code class="variable-quote">'</code><code class="variable-op">, </code>-3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">#</code><code class="variable-quote">'</code><code class="variable-op">, </code>-2<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO-module.html#_phred_to_illumina_quality_str" class="summary-name" onclick="show_private();">_phred_to_illumina_quality_str</a> = <code title="{0: '@',
+ 1: 'A',
+ 2: 'B',
+ 3: 'C',
+ 4: 'D',
+ 5: 'E',
+ 6: 'F',
+ 7: 'G',
+..."><code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">@</code><code class="variable-quote">'</code><code class="variable-op">, </code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">A</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO-module.html#_solexa_to_illumina_quality_str" class="summary-name" onclick="show_private();">_solexa_to_illumina_quality_str</a> = <code title="{-5: 'A',
+ -4: 'A',
+ -3: 'B',
+ -2: 'B',
+ -1: 'C',
+ 0: 'C',
+ 1: 'D',
+ 2: 'D',
+..."><code class="variable-group">{</code>-5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">A</code><code class="variable-quote">'</code><code class="variable-op">, </code>-4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">A</code><code class="variable-quote">'</code><code class="variable-op">, </code>-3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO-module.html#_solexa_to_solexa_quality_str" class="summary-name" onclick="show_private();">_solexa_to_solexa_quality_str</a> = <code title="{-5: ';',
+ -4: '&lt;',
+ -3: '=',
+ -2: '&gt;',
+ -1: '?',
+ 0: '@',
+ 1: 'A',
+ 2: 'B',
+..."><code class="variable-group">{</code>-5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">;</code><code class="variable-quote">'</code><code class="variable-op">, </code>-4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&lt;</code><code class="variable-quote">'</code><code class="variable-op">, </code>-3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">=</code><code class="variable-quote">'</code><code class="variable-op">, </code>-2<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.QualityIO-module.html#_phred_to_solexa_quality_str" class="summary-name" onclick="show_private();">_phred_to_solexa_quality_str</a> = <code title="{0: ';',
+ 1: ';',
+ 2: '&gt;',
+ 3: '@',
+ 4: 'B',
+ 5: 'C',
+ 6: 'E',
+ 7: 'F',
+..."><code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">;</code><code class="variable-quote">'</code><code class="variable-op">, </code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">;</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&gt;</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">@</code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.SeqIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.SeqIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="solexa_quality_from_phred"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">solexa_quality_from_phred</span>(<span class="sig-arg">phred_quality</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#solexa_quality_from_phred">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Covert a PHRED quality (range 0 to about 90) to a Solexa quality.</p>
+<p>PHRED and Solexa quality scores are both log transformations of a
+probality of error (high score = low probability of error). This function
+takes a PHRED score, transforms it back to a probability of error, and
+then re-expresses it as a Solexa score. This assumes the error estimates
+are equivalent.</p>
+<p>How does this work exactly? Well the PHRED quality is minus ten times the
+base ten logarithm of the probability of error:</p>
+<pre class="rst-literal-block">
+phred_quality = -10*log(error,10)
+</pre>
+<p>Therefore, turning this round:</p>
+<pre class="rst-literal-block">
+error = 10 ** (- phred_quality / 10)
+</pre>
+<p>Now, Solexa qualities use a different log transformation:</p>
+<pre class="rst-literal-block">
+solexa_quality = -10*log(error/(1-error),10)
+</pre>
+<p>After substitution and a little manipulation we get:</p>
+<pre class="rst-literal-block">
+solexa_quality = 10*log(10**(phred_quality/10.0) - 1, 10)
+</pre>
+<p>However, real Solexa files use a minimum quality of -5. This does have a
+good reason - a random base call would be correct 25% of the time,
+and thus have a probability of error of 0.75, which gives 1.25 as the PHRED
+quality, or -4.77 as the Solexa quality. Thus (after rounding), a random
+nucleotide read would have a PHRED quality of 1, or a Solexa quality of -5.</p>
+<p>Taken literally, this logarithic formula would map a PHRED quality of zero
+to a Solexa quality of minus infinity. Of course, taken literally, a PHRED
+score of zero means a probability of error of one (i.e. the base call is
+definitely wrong), which is worse than random! In practice, a PHRED quality
+of zero usually means a default value, or perhaps random - and therefore
+mapping it to the minimum Solexa score of -5 is reasonable.</p>
+<p>In conclusion, we follow EMBOSS, and take this logarithmic formula but also
+apply a minimum value of -5.0 for the Solexa quality, and also map a PHRED
+quality of zero to -5.0 as well.</p>
+<p>Note this function will return a floating point number, it is up to you to
+round this to the nearest integer if appropriate.  e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(80), 2))
+<span class="py-output">80.00</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(50), 2))
+<span class="py-output">50.00</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(20), 2))
+<span class="py-output">19.96</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(10), 2))
+<span class="py-output">9.54</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(5), 2))
+<span class="py-output">3.35</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(4), 2))
+<span class="py-output">1.80</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(3), 2))
+<span class="py-output">-0.02</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(2), 2))
+<span class="py-output">-2.33</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(1), 2))
+<span class="py-output">-5.00</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(solexa_quality_from_phred(0), 2))
+<span class="py-output">-5.00</span></pre>
+<p>Notice that for high quality reads PHRED and Solexa scores are numerically
+equal. The differences are important for poor quality reads, where PHRED
+has a minimum of zero but Solexa scores can be negative.</p>
+<p>Finally, as a special case where None is used for a &quot;missing value&quot;, None
+is returned:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(solexa_quality_from_phred(None))
+<span class="py-output">None</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="phred_quality_from_solexa"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">phred_quality_from_solexa</span>(<span class="sig-arg">solexa_quality</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#phred_quality_from_solexa">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a Solexa quality (which can be negative) to a PHRED quality.</p>
+<p>PHRED and Solexa quality scores are both log transformations of a
+probality of error (high score = low probability of error). This function
+takes a Solexa score, transforms it back to a probability of error, and
+then re-expresses it as a PHRED score. This assumes the error estimates
+are equivalent.</p>
+<p>The underlying formulas are given in the documentation for the sister
+function solexa_quality_from_phred, in this case the operation is:</p>
+<pre class="rst-literal-block">
+phred_quality = 10*log(10**(solexa_quality/10.0) + 1, 10)
+</pre>
+<p>This will return a floating point number, it is up to you to round this to
+the nearest integer if appropriate.  e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(phred_quality_from_solexa(80), 2))
+<span class="py-output">80.00</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(phred_quality_from_solexa(20), 2))
+<span class="py-output">20.04</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(phred_quality_from_solexa(10), 2))
+<span class="py-output">10.41</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(phred_quality_from_solexa(0), 2))
+<span class="py-output">3.01</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % round(phred_quality_from_solexa(-5), 2))
+<span class="py-output">1.19</span></pre>
+<p>Note that a solexa_quality less then -5 is not expected, will trigger a
+warning, but will still be converted as per the logarithmic mapping
+(giving a number between 0 and 1.19 back).</p>
+<p>As a special case where None is used for a &quot;missing value&quot;, None is
+returned:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(phred_quality_from_solexa(None))
+<span class="py-output">None</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_get_phred_quality"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_get_phred_quality</span>(<span class="sig-arg">record</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_phred_quality">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).</p>
+<p>If there are no PHRED qualities, but there are Solexa qualities, those are
+used instead after conversion.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_get_sanger_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_get_sanger_quality_str</span>(<span class="sig-arg">record</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_sanger_quality_str">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a Sanger FASTQ encoded quality string (PRIVATE).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span>r = SeqRecord(Seq(<span class="py-string">&quot;ACGTAN&quot;</span>), id=<span class="py-string">&quot;Test&quot;</span>,
+<span class="py-more">... </span>              letter_annotations = {<span class="py-string">&quot;phred_quality&quot;</span>:[50, 40, 30, 20, 10, 0]})
+<span class="py-prompt">&gt;&gt;&gt; </span>_get_sanger_quality_str(r)
+<span class="py-output">'SI?5+!'</span></pre>
+<p>If as in the above example (or indeed a SeqRecord parser with Bio.SeqIO),
+the PHRED qualities are integers, this function is able to use a very fast
+pre-cached mapping. However, if they are floats which differ slightly, then
+it has to do the appropriate rounding - which is slower:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>r2 = SeqRecord(Seq(<span class="py-string">&quot;ACGTAN&quot;</span>), id=<span class="py-string">&quot;Test2&quot;</span>,
+<span class="py-more">... </span>     letter_annotations = {<span class="py-string">&quot;phred_quality&quot;</span>:[50.0, 40.05, 29.99, 20, 9.55, 0.01]})
+<span class="py-prompt">&gt;&gt;&gt; </span>_get_sanger_quality_str(r2)
+<span class="py-output">'SI?5+!'</span></pre>
+<p>If your scores include a None value, this raises an exception:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>r3 = SeqRecord(Seq(<span class="py-string">&quot;ACGTAN&quot;</span>), id=<span class="py-string">&quot;Test3&quot;</span>,
+<span class="py-more">... </span>              letter_annotations = {<span class="py-string">&quot;phred_quality&quot;</span>:[50, 40, 30, 20, 10, None]})
+<span class="py-prompt">&gt;&gt;&gt; </span>_get_sanger_quality_str(r3)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">   ...</span>
+<span class="py-except">TypeError: A quality value of None was found</span></pre>
+<p>If (strangely) your record has both PHRED and Solexa scores, then the PHRED
+scores are used in preference:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>r4 = SeqRecord(Seq(<span class="py-string">&quot;ACGTAN&quot;</span>), id=<span class="py-string">&quot;Test4&quot;</span>,
+<span class="py-more">... </span>              letter_annotations = {<span class="py-string">&quot;phred_quality&quot;</span>:[50, 40, 30, 20, 10, 0],
+<span class="py-more">... </span>                                    <span class="py-string">&quot;solexa_quality&quot;</span>:[-5, -4, 0, None, 0, 40]})
+<span class="py-prompt">&gt;&gt;&gt; </span>_get_sanger_quality_str(r4)
+<span class="py-output">'SI?5+!'</span></pre>
+<p>If there are no PHRED scores, but there are Solexa scores, these are used
+instead (after the appropriate conversion):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>r5 = SeqRecord(Seq(<span class="py-string">&quot;ACGTAN&quot;</span>), id=<span class="py-string">&quot;Test5&quot;</span>,
+<span class="py-more">... </span>     letter_annotations = {<span class="py-string">&quot;solexa_quality&quot;</span>:[40, 30, 20, 10, 0, -5]})
+<span class="py-prompt">&gt;&gt;&gt; </span>_get_sanger_quality_str(r5)
+<span class="py-output">'I?5+$&quot;'</span></pre>
+<p>Again, integer Solexa scores can be looked up in a pre-cached mapping making
+this very fast. You can still use approximate floating point scores:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>r6 = SeqRecord(Seq(<span class="py-string">&quot;ACGTAN&quot;</span>), id=<span class="py-string">&quot;Test6&quot;</span>,
+<span class="py-more">... </span>     letter_annotations = {<span class="py-string">&quot;solexa_quality&quot;</span>:[40.1, 29.7, 20.01, 10, 0.0, -4.9]})
+<span class="py-prompt">&gt;&gt;&gt; </span>_get_sanger_quality_str(r6)
+<span class="py-output">'I?5+$&quot;'</span></pre>
+<p>Notice that due to the limited range of printable ASCII characters, a
+PHRED quality of 93 is the maximum that can be held in an Illumina FASTQ
+file (using ASCII 126, the tilde). This function will issue a warning
+in this situation.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_get_illumina_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_get_illumina_quality_str</span>(<span class="sig-arg">record</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_illumina_quality_str">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns an Illumina 1.3 to 1.7 FASTQ encoded quality string (PRIVATE).</p>
+<p>Notice that due to the limited range of printable ASCII characters, a
+PHRED quality of 62 is the maximum that can be held in an Illumina FASTQ
+file (using ASCII 126, the tilde). This function will issue a warning
+in this situation.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_get_solexa_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_get_solexa_quality_str</span>(<span class="sig-arg">record</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#_get_solexa_quality_str">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a Solexa FASTQ encoded quality string (PRIVATE).</p>
+<p>Notice that due to the limited range of printable ASCII characters, a
+Solexa quality of 62 is the maximum that can be held in a Solexa FASTQ
+file (using ASCII 126, the tilde). This function will issue a warning
+in this situation.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="FastqGeneralIterator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">FastqGeneralIterator</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqGeneralIterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over Fastq records as string tuples (not as SeqRecord objects).</p>
+<p>This code does not try to interpret the quality string numerically.  It
+just returns tuples of the title, sequence and quality as strings.  For
+the sequence and quality, any whitespace (such as new lines) is removed.</p>
+<p>Our SeqRecord based FASTQ iterators call this function internally, and then
+turn the strings into a SeqRecord objects, mapping the quality string into
+a list of numerical scores.  If you want to do a custom quality mapping,
+then you might consider calling this function directly.</p>
+<p>For parsing FASTQ files, the title string from the &quot;&#64;&quot; line at the start
+of each record can optionally be omitted on the &quot;+&quot; lines.  If it is
+repeated, it must be identical.</p>
+<p>The sequence string and the quality string can optionally be split over
+multiple lines, although several sources discourage this.  In comparison,
+for the FASTA file format line breaks between 60 and 80 characters are
+the norm.</p>
+<p><strong>WARNING</strong> - Because the &quot;&#64;&quot; character can appear in the quality string,
+this can cause problems as this is also the marker for the start of
+a new sequence.  In fact, the &quot;+&quot; sign can also appear as well.  Some
+sources recommended having no line breaks in the  quality to avoid this,
+but even that is not enough, consider this example:</p>
+<pre class="rst-literal-block">
+&#64;071113_EAS56_0053:1:1:998:236
+TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA
++071113_EAS56_0053:1:1:998:236
+IIIIIIIIIIIIIIIIIIIIIIIIIIIIICII+III
+&#64;071113_EAS56_0053:1:1:182:712
+ACCCAGCTAATTTTTGTATTTTTGTTAGAGACAGTG
++
+&#64;IIIIIIIIIIIIIIICDIIIII&lt;%&lt;6&amp;-*).(*%+
+&#64;071113_EAS56_0053:1:1:153:10
+TGTTCTGAAGGAAGGTGTGCGTGCGTGTGTGTGTGT
++
+IIIIIIIIIIIICIIGIIIII&gt;IAIIIE65I=II:6
+&#64;071113_EAS56_0053:1:3:990:501
+TGGGAGGTTTTATGTGGA
+AAGCAGCAATGTACAAGA
++
+IIIIIII.IIIIII1&#64;44
+&#64;-7.%&lt;&amp;+/$/%4(++(%
+</pre>
+<p>This is four PHRED encoded FASTQ entries originally from an NCBI source
+(given the read length of 36, these are probably Solexa Illumina reads where
+the quality has been mapped onto the PHRED values).</p>
+<p>This example has been edited to illustrate some of the nasty things allowed
+in the FASTQ format.  Firstly, on the &quot;+&quot; lines most but not all of the
+(redundant) identifiers are omitted.  In real files it is likely that all or
+none of these extra identifiers will be present.</p>
+<p>Secondly, while the first three sequences have been shown without line
+breaks, the last has been split over multiple lines.  In real files any line
+breaks are likely to be consistent.</p>
+<p>Thirdly, some of the quality string lines start with an &quot;&#64;&quot; character.  For
+the second record this is unavoidable.  However for the fourth sequence this
+only happens because its quality string is split over two lines.  A naive
+parser could wrongly treat any line starting with an &quot;&#64;&quot; as the beginning of
+a new sequence!  This code copes with this possible ambiguity by keeping
+track of the length of the sequence which gives the expected length of the
+quality string.</p>
+<p>Using this tricky example file as input, this short bit of code demonstrates
+what this parsing function would return:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/tricky.fastq&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> (title, sequence, quality) <span class="py-keyword">in</span> FastqGeneralIterator(handle):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(title)
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (sequence, quality))
+<span class="py-more">...</span>
+<span class="py-output">071113_EAS56_0053:1:1:998:236</span>
+<span class="py-output">TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA IIIIIIIIIIIIIIIIIIIIIIIIIIIIICII+III</span>
+<span class="py-output">071113_EAS56_0053:1:1:182:712</span>
+<span class="py-output">ACCCAGCTAATTTTTGTATTTTTGTTAGAGACAGTG @IIIIIIIIIIIIIIICDIIIII&lt;%&lt;6&amp;-*).(*%+</span>
+<span class="py-output">071113_EAS56_0053:1:1:153:10</span>
+<span class="py-output">TGTTCTGAAGGAAGGTGTGCGTGCGTGTGTGTGTGT IIIIIIIIIIIICIIGIIIII&gt;IAIIIE65I=II:6</span>
+<span class="py-output">071113_EAS56_0053:1:3:990:501</span>
+<span class="py-output">TGGGAGGTTTTATGTGGAAAGCAGCAATGTACAAGA IIIIIII.IIIIII1@44@-7.%&lt;&amp;+/$/%4(++(%</span></pre>
+<p>Finally we note that some sources state that the quality string should
+start with &quot;!&quot; (which using the PHRED mapping means the first letter always
+has a quality score of zero).  This rather restrictive rule is not widely
+observed, so is therefore ignored here.  One plus point about this &quot;!&quot; rule
+is that (provided there are no line breaks in the quality sequence) it
+would prevent the above problem with the &quot;&#64;&quot; character.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="FastqPhredIterator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">FastqPhredIterator</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">SingleLetterAlphabet()</span>,
+        <span class="sig-arg">title2ids</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqPhredIterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generator function to iterate over FASTQ records (as SeqRecord objects).</p>
+<blockquote>
+<ul class="rst-simple">
+<li>handle - input file</li>
+<li>alphabet - optional alphabet</li>
+<li>title2ids - A function that, when given the title line from the FASTQ
+file (without the beginning &gt;), will return the id, name and
+description (in that order) for the record as a tuple of
+strings.  If this is not given, then the entire title line
+will be used as the description, and the first word as the
+id and name.</li>
+</ul>
+</blockquote>
+<p>Note that use of title2ids matches that of Bio.SeqIO.FastaIO.</p>
+<p>For each sequence in a (Sanger style) FASTQ file there is a matching string
+encoding the PHRED qualities (integers between 0 and about 90) using ASCII
+values with an offset of 33.</p>
+<p>For example, consider a file containing three short reads:</p>
+<pre class="rst-literal-block">
+&#64;EAS54_6_R1_2_1_413_324
+CCCTTCTTGTCTTCAGCGTTTCTCC
++
+;;3;;;;;;;;;;;;7;;;;;;;88
+&#64;EAS54_6_R1_2_1_540_792
+TTGGCAGGCCAAGGCCGATGGATCA
++
+;;;;;;;;;;;7;;;;;-;;;3;83
+&#64;EAS54_6_R1_2_1_443_348
+GTTGCTTCTGGCGTGGGTGGGGGGG
++
+;;;;;;;;;;;9;7;;.7;393333
+</pre>
+<p>For each sequence (e.g. &quot;CCCTTCTTGTCTTCAGCGTTTCTCC&quot;) there is a matching
+string encoding the PHRED qualities using a ASCII values with an offset of
+33 (e.g. &quot;;;3;;;;;;;;;;;;7;;;;;;;88&quot;).</p>
+<p>Using this module directly you might run:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> FastqPhredIterator(handle):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG</span></pre>
+<p>Typically however, you would call this via Bio.SeqIO instead with &quot;fastq&quot;
+(or &quot;fastq-sanger&quot;) as the format:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(handle, <span class="py-string">&quot;fastq&quot;</span>):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG</span></pre>
+<p>If you want to look at the qualities, they are record in each record's
+per-letter-annotation dictionary as a simple list of integers:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="FastqSolexaIterator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">FastqSolexaIterator</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">SingleLetterAlphabet()</span>,
+        <span class="sig-arg">title2ids</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqSolexaIterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Parsing old Solexa/Illumina FASTQ like files (which differ in the quality mapping).</p>
+<p>The optional arguments are the same as those for the FastqPhredIterator.</p>
+<p>For each sequence in Solexa/Illumina FASTQ files there is a matching string
+encoding the Solexa integer qualities using ASCII values with an offset
+of 64.  Solexa scores are scaled differently to PHRED scores, and Biopython
+will NOT perform any automatic conversion when loading.</p>
+<p>NOTE - This file format is used by the OLD versions of the Solexa/Illumina
+pipeline. See also the FastqIlluminaIterator function for the NEW version.</p>
+<p>For example, consider a file containing these five records:</p>
+<pre class="rst-literal-block">
+&#64;SLXA-B3_649_FC8437_R1_1_1_610_79
+GATGTGCAATACCTTTGTAGAGGAA
++SLXA-B3_649_FC8437_R1_1_1_610_79
+YYYYYYYYYYYYYYYYYYWYWYYSU
+&#64;SLXA-B3_649_FC8437_R1_1_1_397_389
+GGTTTGAGAAAGAGAAATGAGATAA
++SLXA-B3_649_FC8437_R1_1_1_397_389
+YYYYYYYYYWYYYYWWYYYWYWYWW
+&#64;SLXA-B3_649_FC8437_R1_1_1_850_123
+GAGGGTGTTGATCATGATGATGGCG
++SLXA-B3_649_FC8437_R1_1_1_850_123
+YYYYYYYYYYYYYWYYWYYSYYYSY
+&#64;SLXA-B3_649_FC8437_R1_1_1_362_549
+GGAAACAAAGTTTTTCTCAACATAG
++SLXA-B3_649_FC8437_R1_1_1_362_549
+YYYYYYYYYYYYYYYYYYWWWWYWY
+&#64;SLXA-B3_649_FC8437_R1_1_1_183_714
+GTATTATTTAATGGCATACACTCAA
++SLXA-B3_649_FC8437_R1_1_1_183_714
+YYYYYYYYYYWYYYYWYWWUWWWQQ
+</pre>
+<p>Using this module directly you might run:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/solexa_example.fastq&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> FastqSolexaIterator(handle):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_362_549 GGAAACAAAGTTTTTCTCAACATAG</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA</span></pre>
+<p>Typically however, you would call this via Bio.SeqIO instead with
+&quot;fastq-solexa&quot; as the format:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/solexa_example.fastq&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(handle, <span class="py-string">&quot;fastq-solexa&quot;</span>):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_362_549 GGAAACAAAGTTTTTCTCAACATAG</span>
+<span class="py-output">SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA</span></pre>
+<p>If you want to look at the qualities, they are recorded in each record's
+per-letter-annotation dictionary as a simple list of integers:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>])
+<span class="py-output">[25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 23, 25, 25, 25, 25, 23, 25, 23, 23, 21, 23, 23, 23, 17, 17]</span></pre>
+<p>These scores aren't very good, but they are high enough that they map
+almost exactly onto PHRED scores:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % phred_quality_from_solexa(25))
+<span class="py-output">25.01</span></pre>
+<p>Let's look at faked example read which is even worse, where there are
+more noticeable differences between the Solexa and PHRED scores:</p>
+<pre class="rst-literal-block">
+&#64;slxa_0001_1_0001_01
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
++slxa_0001_1_0001_01
+hgfedcba`_^]\[ZYXWVUTSRQPONMLKJIHGFEDCBA&#64;?&gt;=&lt;;
+</pre>
+<p>Again, you would typically use Bio.SeqIO to read this file in (rather than
+calling the Bio.SeqIO.QualtityIO module directly).  Most FASTQ files will
+contain thousands of reads, so you would normally use Bio.SeqIO.parse()
+as shown above.  This example has only as one entry, so instead we can
+use the Bio.SeqIO.read() function:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/solexa_faked.fastq&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    record = SeqIO.read(handle, <span class="py-string">&quot;fastq-solexa&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;solexa_quality&quot;</span>])
+<span class="py-output">[40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</span></pre>
+<p>These quality scores are so low that when converted from the Solexa scheme
+into PHRED scores they look quite different:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % phred_quality_from_solexa(-1))
+<span class="py-output">2.54</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%0.2f&quot;</span> % phred_quality_from_solexa(-5))
+<span class="py-output">1.19</span></pre>
+<p>Note you can use the Bio.SeqIO.write() function or the SeqRecord's format
+method to output the record(s):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fastq-solexa&quot;</span>))
+<span class="py-output">@slxa_0001_1_0001_01</span>
+<span class="py-output">ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output">+</span>
+<span class="py-output">hgfedcba`_^]\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?&gt;=&lt;;</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>Note this output is slightly different from the input file as Biopython
+has left out the optional repetition of the sequence identifier on the &quot;+&quot;
+line.  If you want the to use PHRED scores, use &quot;fastq&quot; or &quot;qual&quot; as the
+output format instead, and Biopython will do the conversion for you:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;fastq&quot;</span>))
+<span class="py-output">@slxa_0001_1_0001_01</span>
+<span class="py-output">ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN</span>
+<span class="py-output">+</span>
+<span class="py-output">IHGFEDCBA@?&gt;=&lt;;:9876543210/.-,++*)('&amp;&amp;%%$$##&quot;&quot;</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.format(<span class="py-string">&quot;qual&quot;</span>))
+<span class="py-output">&gt;slxa_0001_1_0001_01</span>
+<span class="py-output">40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21</span>
+<span class="py-output">20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 5 4 4 3 3 2 2</span>
+<span class="py-output">1 1</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+<p>As shown above, the poor quality Solexa reads have been mapped to the
+equivalent PHRED score (e.g. -5 to 1 as shown earlier).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="FastqIlluminaIterator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">FastqIlluminaIterator</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">SingleLetterAlphabet()</span>,
+        <span class="sig-arg">title2ids</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#FastqIlluminaIterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Parse Illumina 1.3 to 1.7 FASTQ like files (which differ in the quality mapping).</p>
+<p>The optional arguments are the same as those for the FastqPhredIterator.</p>
+<p>For each sequence in Illumina 1.3+ FASTQ files there is a matching string
+encoding PHRED integer qualities using ASCII values with an offset of 64.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SeqIO.read(<span class="py-string">&quot;Quality/illumina_faked.fastq&quot;</span>, <span class="py-string">&quot;fastq-illumina&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">Test ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>max(record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">40</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>min(record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">0</span></pre>
+<p>NOTE - Older versions of the Solexa/Illumina pipeline encoded Solexa scores
+with an ASCII offset of 64. They are approximately equal but only for high
+quality reads. If you have an old Solexa/Illumina file with negative
+Solexa scores, and try and read this as an Illumina 1.3+ file it will fail:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>record2 = SeqIO.read(<span class="py-string">&quot;Quality/solexa_faked.fastq&quot;</span>, <span class="py-string">&quot;fastq-illumina&quot;</span>)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">   ...</span>
+<span class="py-except">ValueError: Invalid character in quality string</span></pre>
+<p>NOTE - True Sanger style FASTQ files use PHRED scores with an offset of 33.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="QualPhredIterator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">QualPhredIterator</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">SingleLetterAlphabet()</span>,
+        <span class="sig-arg">title2ids</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#QualPhredIterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>For QUAL files which include PHRED quality scores, but no sequence.</p>
+<p>For example, consider this short QUAL file:</p>
+<pre class="rst-literal-block">
+&gt;EAS54_6_R1_2_1_413_324
+26 26 18 26 26 26 26 26 26 26 26 26 26 26 26 22 26 26 26 26
+26 26 26 23 23
+&gt;EAS54_6_R1_2_1_540_792
+26 26 26 26 26 26 26 26 26 26 26 22 26 26 26 26 26 12 26 26
+26 18 26 23 18
+&gt;EAS54_6_R1_2_1_443_348
+26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
+24 18 18 18 18
+</pre>
+<p>Using this module directly you might run:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/example.qual&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> QualPhredIterator(handle):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">EAS54_6_R1_2_1_413_324 ?????????????????????????</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 ?????????????????????????</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 ?????????????????????????</span></pre>
+<p>Typically however, you would call this via Bio.SeqIO instead with &quot;qual&quot;
+as the format:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/example.qual&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(handle, <span class="py-string">&quot;qual&quot;</span>):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">EAS54_6_R1_2_1_413_324 ?????????????????????????</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 ?????????????????????????</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 ?????????????????????????</span></pre>
+<p>Becase QUAL files don't contain the sequence string itself, the seq
+property is set to an UnknownSeq object.  As no alphabet was given, this
+has defaulted to a generic single letter alphabet and the character &quot;?&quot;
+used.</p>
+<p>By specifying a nucleotide alphabet, &quot;N&quot; is used instead:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/example.qual&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(handle, <span class="py-string">&quot;qual&quot;</span>, alphabet=generic_dna):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-output">EAS54_6_R1_2_1_413_324 NNNNNNNNNNNNNNNNNNNNNNNNN</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 NNNNNNNNNNNNNNNNNNNNNNNNN</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 NNNNNNNNNNNNNNNNNNNNNNNNN</span></pre>
+<p>However, the quality scores themselves are available as a list of integers
+in each record's per-letter-annotation:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]</span></pre>
+<p>You can still slice one of these SeqRecord objects with an UnknownSeq:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_record = record[5:10]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (sub_record.id, sub_record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>]))
+<span class="py-output">EAS54_6_R1_2_1_443_348 [26, 26, 26, 26, 26]</span></pre>
+<p>As of Biopython 1.59, this parser will accept files with negatives quality
+scores but will replace them with the lowest possible PHRED score of zero.
+This will trigger a warning, previously it raised a ValueError exception.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="PairedFastaQualIterator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">PairedFastaQualIterator</span>(<span class="sig-arg">fasta_handle</span>,
+        <span class="sig-arg">qual_handle</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">SingleLetterAlphabet()</span>,
+        <span class="sig-arg">title2ids</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.QualityIO-pysrc.html#PairedFastaQualIterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over matched FASTA and QUAL files as SeqRecord objects.</p>
+<p>For example, consider this short QUAL file with PHRED quality scores:</p>
+<pre class="rst-literal-block">
+&gt;EAS54_6_R1_2_1_413_324
+26 26 18 26 26 26 26 26 26 26 26 26 26 26 26 22 26 26 26 26
+26 26 26 23 23
+&gt;EAS54_6_R1_2_1_540_792
+26 26 26 26 26 26 26 26 26 26 26 22 26 26 26 26 26 12 26 26
+26 18 26 23 18
+&gt;EAS54_6_R1_2_1_443_348
+26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
+24 18 18 18 18
+</pre>
+<p>And a matching FASTA file:</p>
+<pre class="rst-literal-block">
+&gt;EAS54_6_R1_2_1_413_324
+CCCTTCTTGTCTTCAGCGTTTCTCC
+&gt;EAS54_6_R1_2_1_540_792
+TTGGCAGGCCAAGGCCGATGGATCA
+&gt;EAS54_6_R1_2_1_443_348
+GTTGCTTCTGGCGTGGGTGGGGGGG
+</pre>
+<p>You can parse these separately using Bio.SeqIO with the &quot;qual&quot; and
+&quot;fasta&quot; formats, but then you'll get a group of SeqRecord objects with
+no sequence, and a matching group with the sequence but not the
+qualities.  Because it only deals with one input file handle, Bio.SeqIO
+can't be used to read the two files together - but this function can!
+For example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/example.fasta&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> f:
+<span class="py-more">... </span>    with open(<span class="py-string">&quot;Quality/example.qual&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> q:
+<span class="py-more">... </span>        <span class="py-keyword">for</span> record <span class="py-keyword">in</span> PairedFastaQualIterator(f, q):
+<span class="py-more">... </span>            <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (record.id, record.seq))
+<span class="py-more">...</span>
+<span class="py-output">EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC</span>
+<span class="py-output">EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA</span>
+<span class="py-output">EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG</span></pre>
+<p>As with the FASTQ or QUAL parsers, if you want to look at the qualities,
+they are in each record's per-letter-annotation dictionary as a simple
+list of integers:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>])
+<span class="py-output">[26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]</span></pre>
+<p>If you have access to data as a FASTQ format file, using that directly
+would be simpler and more straight forward.  Note that you can easily use
+this function to convert paired FASTA and QUAL files into FASTQ files:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Quality/example.fasta&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> f:
+<span class="py-more">... </span>    with open(<span class="py-string">&quot;Quality/example.qual&quot;</span>, <span class="py-string">&quot;rU&quot;</span>) <span class="py-keyword">as</span> q:
+<span class="py-more">... </span>        SeqIO.write(PairedFastaQualIterator(f, q), <span class="py-string">&quot;Quality/temp.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>)
+<span class="py-more">...</span>
+<span class="py-output">3</span></pre>
+<p>And don't forget to clean up the temp file if you don't need it anymore:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> os
+<span class="py-prompt">&gt;&gt;&gt; </span>os.remove(<span class="py-string">&quot;Quality/temp.fastq&quot;</span>)</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_phred_to_sanger_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_phred_to_sanger_quality_str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">!</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&quot;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">#</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">$</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">%</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&amp;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 6<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">\'</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 7<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">(</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_solexa_to_sanger_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_solexa_to_sanger_quality_str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>-5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&quot;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&quot;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">#</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">#</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">$</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">$</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">%</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">%</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_phred_to_illumina_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_phred_to_illumina_quality_str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">@</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">A</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">C</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">D</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">E</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 6<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">F</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 7<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">G</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_solexa_to_illumina_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_solexa_to_illumina_quality_str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>-5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">A</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">A</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">C</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">C</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">D</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">D</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_solexa_to_solexa_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_solexa_to_solexa_quality_str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>-5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&lt;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">=</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&gt;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ -1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">?</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">@</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">A</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_phred_to_solexa_quality_str"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_phred_to_solexa_quality_str</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>0<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">&gt;</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">@</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">C</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 6<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">E</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 7<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">F</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:27 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

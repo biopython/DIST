@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO.HmmerIO.hmmer3_domtab</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SearchIO-module.html">Package&nbsp;SearchIO</a> ::
+        <a href="Bio.SearchIO.HmmerIO-module.html">Package&nbsp;HmmerIO</a> ::
+        Module&nbsp;hmmer3_domtab
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO.HmmerIO.hmmer3_domtab-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.SearchIO.HmmerIO.hmmer3_domtab-module.html">Module Bio.SearchIO.HmmerIO.hmmer3_domtab</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2012 by Wibowo Arindrarto.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Bio.SearchIO parser for HMMER domain table output format."""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">itertools</tt> <tt class="py-keyword">import</tt> <tt class="py-name">chain</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.Alphabet=Bio.Alphabet-module.html,Class Bio.Alphabet.Alphabet=Bio.Alphabet.Alphabet-class.html"><a title="Bio.Alphabet
+Bio.Alphabet.Alphabet" class="py-name" href="#" onclick="return doclink('link-1', 'Alphabet', 'link-1');">Alphabet</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Variable Bio.Alphabet.generic_protein=Bio.Alphabet-module.html#generic_protein"><a title="Bio.Alphabet.generic_protein" class="py-name" href="#" onclick="return doclink('link-2', 'generic_protein', 'link-2');">generic_protein</a></tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package Bio.SearchIO=Bio.SearchIO-module.html"><a title="Bio.SearchIO" class="py-name" href="#" onclick="return doclink('link-4', 'SearchIO', 'link-4');">SearchIO</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Package Bio.SearchIO._model=Bio.SearchIO._model-module.html"><a title="Bio.SearchIO._model" class="py-name" href="#" onclick="return doclink('link-5', '_model', 'link-5');">_model</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Class Bio.SearchIO._model.query.QueryResult=Bio.SearchIO._model.query.QueryResult-class.html"><a title="Bio.SearchIO._model.query.QueryResult" class="py-name" href="#" onclick="return doclink('link-6', 'QueryResult', 'link-6');">QueryResult</a></tt><tt class="py-op">,</tt> <tt id="link-7" class="py-name" targets="Class Bio.SearchIO._model.hit.Hit=Bio.SearchIO._model.hit.Hit-class.html"><a title="Bio.SearchIO._model.hit.Hit" class="py-name" href="#" onclick="return doclink('link-7', 'Hit', 'link-7');">Hit</a></tt><tt class="py-op">,</tt> <tt id="link-8" class="py-name" targets="Class Bio.Blast.Record.HSP=Bio.Blast.Record.HSP-class.html,Class Bio.SearchIO._model.hsp.HSP=Bio.SearchIO._model.hsp.HSP-class.html"><a title="Bio.Blast.Record.HSP
+Bio.SearchIO._model.hsp.HSP" class="py-name" href="#" onclick="return doclink('link-8', 'HSP', 'link-8');">HSP</a></tt><tt class="py-op">,</tt> <tt id="link-9" class="py-name" targets="Class Bio.SearchIO._model.hsp.HSPFragment=Bio.SearchIO._model.hsp.HSPFragment-class.html"><a title="Bio.SearchIO._model.hsp.HSPFragment" class="py-name" href="#" onclick="return doclink('link-9', 'HSPFragment', 'link-9');">HSPFragment</a></tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Module Bio.SearchIO.HmmerIO.hmmer3_tab=Bio.SearchIO.HmmerIO.hmmer3_tab-module.html"><a title="Bio.SearchIO.HmmerIO.hmmer3_tab" class="py-name" href="#" onclick="return doclink('link-10', 'hmmer3_tab', 'link-10');">hmmer3_tab</a></tt> <tt class="py-keyword">import</tt> <tt id="link-11" class="py-name" targets="Class Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser-class.html"><a title="Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser" class="py-name" href="#" onclick="return doclink('link-11', 'Hmmer3TabParser', 'link-11');">Hmmer3TabParser</a></tt><tt class="py-op">,</tt> <tt id="link-12" class="py-name" targets="Class Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabIndexer=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabIndexer-class.html"><a title="Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabIndexer" class="py-name" href="#" onclick="return doclink('link-12', 'Hmmer3TabIndexer', 'link-12');">Hmmer3TabIndexer</a></tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabParser"></a><div id="Hmmer3DomtabParser-def"><a name="L19"></a><tt class="py-lineno"> 19</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabParser-toggle" onclick="return toggle('Hmmer3DomtabParser');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabParser-class.html">Hmmer3DomtabParser</a><tt class="py-op">(</tt><tt class="py-base-class">Hmmer3TabParser</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabParser-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Hmmer3DomtabParser-expanded"><a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">    <tt class="py-docstring">"""Base hmmer3-domtab iterator."""</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabParser._parse_row"></a><div id="Hmmer3DomtabParser._parse_row-def"><a name="L23"></a><tt class="py-lineno"> 23</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabParser._parse_row-toggle" onclick="return toggle('Hmmer3DomtabParser._parse_row');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabParser-class.html#_parse_row">_parse_row</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabParser._parse_row-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Hmmer3DomtabParser._parse_row-expanded"><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a dictionary of parsed row values."""</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">line</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line">        <tt class="py-name">cols</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt id="link-13" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.x=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#x"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-13', 'x', 'link-13');">x</a></tt> <tt class="py-keyword">for</tt> <tt id="link-14" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-14', 'x', 'link-13');">x</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.Seq.Seq.strip()=Bio.Seq.Seq-class.html#strip"><a title="Bio.Seq.Seq.strip" class="py-name" href="#" onclick="return doclink('link-15', 'strip', 'link-15');">strip</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-16', 'split', 'link-16');">split</a></tt><tt class="py-op">(</tt><tt class="py-string">' '</tt><tt class="py-op">)</tt> <tt class="py-keyword">if</tt> <tt id="link-17" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.x" class="py-name" href="#" onclick="return doclink('link-17', 'x', 'link-13');">x</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">        <tt class="py-comment"># if len(cols) &gt; 23, we have extra description columns</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-comment"># combine them all into one string in the 19th column</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">23</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">            <tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">22</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-string">' '</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">22</tt><tt class="py-op">:</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">)</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">23</tt><tt class="py-op">:</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">            <tt class="py-name">cols</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-18', 'append', 'link-18');">append</a></tt><tt class="py-op">(</tt><tt class="py-string">''</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">            <tt class="py-keyword">assert</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">23</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-comment"># assign parsed column data into qresult, hit, and hsp dicts</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-name">qresult</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-name">qresult</tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">3</tt><tt class="py-op">]</tt>                 <tt class="py-comment"># query name</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-name">qresult</tt><tt class="py-op">[</tt><tt class="py-string">'accession'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">4</tt><tt class="py-op">]</tt>          <tt class="py-comment"># query accession</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt class="py-name">qresult</tt><tt class="py-op">[</tt><tt class="py-string">'seq_len'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">5</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>       <tt class="py-comment"># qlen</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt id="link-19" class="py-name" targets="Module Bio.SearchIO._model.hit=Bio.SearchIO._model.hit-module.html,Variable Bio.SearchIO._model.hsp.HSP.hit=Bio.SearchIO._model.hsp.HSP-class.html#hit,Variable Bio.SearchIO._model.hsp.HSPFragment.hit=Bio.SearchIO._model.hsp.HSPFragment-class.html#hit"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-19', 'hit', 'link-19');">hit</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt id="link-20" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-20', 'hit', 'link-19');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt>                     <tt class="py-comment"># target name</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">        <tt id="link-21" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-21', 'hit', 'link-19');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'accession'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt>              <tt class="py-comment"># target accession</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">        <tt id="link-22" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-22', 'hit', 'link-19');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'seq_len'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>           <tt class="py-comment"># tlen</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt id="link-23" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-23', 'hit', 'link-19');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'evalue'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">6</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>          <tt class="py-comment"># evalue</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt id="link-24" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-24', 'hit', 'link-19');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'bitscore'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">7</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>        <tt class="py-comment"># score</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">        <tt id="link-25" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-25', 'hit', 'link-19');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'bias'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">8</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>            <tt class="py-comment"># bias</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">        <tt id="link-26" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-26', 'hit', 'link-19');">hit</a></tt><tt class="py-op">[</tt><tt class="py-string">'description'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">22</tt><tt class="py-op">]</tt>           <tt class="py-comment"># description of target</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt id="link-27" class="py-name" targets="Module Bio.SearchIO._model.hsp=Bio.SearchIO._model.hsp-module.html"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-27', 'hsp', 'link-27');">hsp</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">        <tt id="link-28" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-28', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'domain_index'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">9</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>      <tt class="py-comment"># # (domain number)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-comment"># not parsing cols[10] since it's basically len(hit)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt id="link-29" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-29', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'evalue_cond'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">11</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>    <tt class="py-comment"># c-evalue</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">        <tt id="link-30" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-30', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'evalue'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">12</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>         <tt class="py-comment"># i-evalue</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt id="link-31" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-31', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'bitscore'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">13</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>       <tt class="py-comment"># score</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt id="link-32" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-32', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'bias'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">14</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>           <tt class="py-comment"># bias</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt id="link-33" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-33', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'env_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">19</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt>    <tt class="py-comment"># env from</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt id="link-34" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-34', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'env_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">20</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>          <tt class="py-comment"># env to</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt id="link-35" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-35', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">[</tt><tt class="py-string">'acc_avg'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">21</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>        <tt class="py-comment"># acc</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-name">frag</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-comment"># strand is always 0, since HMMER now only handles protein</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'hit_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'query_strand'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">15</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt>    <tt class="py-comment"># hmm from</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">        <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">16</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>          <tt class="py-comment"># hmm to</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">17</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt>  <tt class="py-comment"># ali from</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">int</tt><tt class="py-op">(</tt><tt class="py-name">cols</tt><tt class="py-op">[</tt><tt class="py-number">18</tt><tt class="py-op">]</tt><tt class="py-op">)</tt>        <tt class="py-comment"># ali to</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-comment"># HMMER alphabets are always protein</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'alphabet'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-36" class="py-name"><a title="Bio.Alphabet.generic_protein" class="py-name" href="#" onclick="return doclink('link-36', 'generic_protein', 'link-2');">generic_protein</a></tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-comment"># switch hmm&lt;--&gt;ali coordinates if hmm is not hit</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Variable Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser.hmm_as_hit=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser-class.html#hmm_as_hit,Variable Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.hmm_as_hit=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#hmm_as_hit,Variable Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser.hmm_as_hit=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser-class.html#hmm_as_hit,Variable Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter.hmm_as_hit=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter-class.html#hmm_as_hit"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter.hmm_as_hit" class="py-name" href="#" onclick="return doclink('link-37', 'hmm_as_hit', 'link-37');">hmm_as_hit</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">            <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> \ </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">                    <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'query_end'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'hit_end'</tt><tt class="py-op">]</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">            <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> \ </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">                    <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'query_start'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">frag</tt><tt class="py-op">[</tt><tt class="py-string">'hit_start'</tt><tt class="py-op">]</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-op">{</tt><tt class="py-string">'qresult'</tt><tt class="py-op">:</tt> <tt class="py-name">qresult</tt><tt class="py-op">,</tt> <tt class="py-string">'hit'</tt><tt class="py-op">:</tt> <tt id="link-38" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-38', 'hit', 'link-19');">hit</a></tt><tt class="py-op">,</tt> <tt class="py-string">'hsp'</tt><tt class="py-op">:</tt> <tt id="link-39" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-39', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">,</tt> <tt class="py-string">'frag'</tt><tt class="py-op">:</tt> <tt class="py-name">frag</tt><tt class="py-op">}</tt> </tt>
+</div><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabParser._parse_qresult"></a><div id="Hmmer3DomtabParser._parse_qresult-def"><a name="L77"></a><tt class="py-lineno"> 77</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabParser._parse_qresult-toggle" onclick="return toggle('Hmmer3DomtabParser._parse_qresult');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabParser-class.html#_parse_qresult">_parse_qresult</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabParser._parse_qresult-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Hmmer3DomtabParser._parse_qresult-expanded"><a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-docstring">"""Generator function that returns QueryResult objects."""</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-comment"># state values, determines what to do for each line</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-name">state_EOF</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt class="py-name">state_QRES_NEW</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-name">state_QRES_SAME</tt> <tt class="py-op">=</tt> <tt class="py-number">3</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-name">state_HIT_NEW</tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">state_HIT_SAME</tt> <tt class="py-op">=</tt> <tt class="py-number">4</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-comment"># dummies for initial states</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-name">qres_state</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-name">hit_state</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-name">file_state</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-comment"># dummies for initial id caches</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-name">prev_qid</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">prev_hid</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-comment"># dummies for initial parsed value containers</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-name">cur</tt><tt class="py-op">,</tt> <tt class="py-name">prev</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-name">hit_list</tt><tt class="py-op">,</tt> <tt class="py-name">hsp_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">True</tt><tt class="py-op">:</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">            <tt class="py-comment"># store previous line's parsed values, for every line after the 1st</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">cur</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">                <tt class="py-name">prev</tt> <tt class="py-op">=</tt> <tt class="py-name">cur</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">                <tt class="py-name">prev_qid</tt> <tt class="py-op">=</tt> <tt class="py-name">cur_qid</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">                <tt class="py-name">prev_hid</tt> <tt class="py-op">=</tt> <tt class="py-name">cur_hid</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">            <tt class="py-comment"># only parse the line if it's not EOF</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">line</tt> <tt class="py-keyword">and</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">line</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name" targets="Method Bio.Seq.Seq.startswith()=Bio.Seq.Seq-class.html#startswith"><a title="Bio.Seq.Seq.startswith" class="py-name" href="#" onclick="return doclink('link-40', 'startswith', 'link-40');">startswith</a></tt><tt class="py-op">(</tt><tt class="py-string">'#'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">                <tt class="py-name">cur</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name" targets="Method Bio.SearchIO.BlatIO.BlatPslParser._parse_row()=Bio.SearchIO.BlatIO.BlatPslParser-class.html#_parse_row,Method Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabParser._parse_row()=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabParser-class.html#_parse_row,Method Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser._parse_row()=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser-class.html#_parse_row"><a title="Bio.SearchIO.BlatIO.BlatPslParser._parse_row
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabParser._parse_row
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabParser._parse_row" class="py-name" href="#" onclick="return doclink('link-41', '_parse_row', 'link-41');">_parse_row</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">                <tt class="py-name">cur_qid</tt> <tt class="py-op">=</tt> <tt class="py-name">cur</tt><tt class="py-op">[</tt><tt class="py-string">'qresult'</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">                <tt class="py-name">cur_hid</tt> <tt class="py-op">=</tt> <tt class="py-name">cur</tt><tt class="py-op">[</tt><tt class="py-string">'hit'</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-string">'id'</tt><tt class="py-op">]</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">                <tt class="py-name">file_state</tt> <tt class="py-op">=</tt> <tt class="py-name">state_EOF</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">                <tt class="py-comment"># mock ID values since the line is empty</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">                <tt class="py-name">cur_qid</tt><tt class="py-op">,</tt> <tt class="py-name">cur_hid</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">None</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">            <tt class="py-comment"># get the state of hit and qresult</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">prev_qid</tt> <tt class="py-op">!=</tt> <tt class="py-name">cur_qid</tt><tt class="py-op">:</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">                <tt class="py-name">qres_state</tt> <tt class="py-op">=</tt> <tt class="py-name">state_QRES_NEW</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">                <tt class="py-name">qres_state</tt> <tt class="py-op">=</tt> <tt class="py-name">state_QRES_SAME</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">            <tt class="py-comment"># new hits are hits with different ids or hits in a new qresult</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">prev_hid</tt> <tt class="py-op">!=</tt> <tt class="py-name">cur_hid</tt> <tt class="py-keyword">or</tt> <tt class="py-name">qres_state</tt> <tt class="py-op">==</tt> <tt class="py-name">state_QRES_NEW</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">                <tt class="py-name">hit_state</tt> <tt class="py-op">=</tt> <tt class="py-name">state_HIT_NEW</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">                <tt class="py-name">hit_state</tt> <tt class="py-op">=</tt> <tt class="py-name">state_HIT_SAME</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line"> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">            <tt class="py-comment"># start creating objects after the first line (i.e. prev is filled)</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">prev</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">                <tt class="py-comment"># each line is basically an HSP with one HSPFragment</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">                <tt class="py-name">frag</tt> <tt class="py-op">=</tt> <tt id="link-42" class="py-name"><a title="Bio.SearchIO._model.hsp.HSPFragment" class="py-name" href="#" onclick="return doclink('link-42', 'HSPFragment', 'link-9');">HSPFragment</a></tt><tt class="py-op">(</tt><tt class="py-name">prev_hid</tt><tt class="py-op">,</tt> <tt class="py-name">prev_qid</tt><tt class="py-op">)</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-43" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.value()=Bio.Phylo.PhyloXMLIO.Writer-class.html#value"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-43', 'value', 'link-43');">value</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">prev</tt><tt class="py-op">[</tt><tt class="py-string">'frag'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name" targets="Method Bio.Crystal.Crystal.items()=Bio.Crystal.Crystal-class.html#items,Method Bio.File._IndexedSeqFileDict.items()=Bio.File._IndexedSeqFileDict-class.html#items,Method Bio.Phylo.PhyloXML.Events.items()=Bio.Phylo.PhyloXML.Events-class.html#items,Variable Bio.SearchIO._model.query.QueryResult.items=Bio.SearchIO._model.query.QueryResult-class.html#items,Method Bio._py3k._ordereddict.OrderedDict.items()=Bio._py3k._ordereddict.OrderedDict-class.html#items,Method BioSQL.BioSeqDatabase.BioSeqDatabase.items()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#items,Method BioSQL.BioSeqDatabase.DBServer.items()=BioSQL.BioSeqDatabase.DBServer-class.html#items"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-44', 'items', 'link-44');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">                    <tt class="py-name">setattr</tt><tt class="py-op">(</tt><tt class="py-name">frag</tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-45" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-45', 'value', 'link-43');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                <tt id="link-46" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-46', 'hsp', 'link-27');">hsp</a></tt> <tt class="py-op">=</tt> <tt id="link-47" class="py-name"><a title="Bio.Blast.Record.HSP
+Bio.SearchIO._model.hsp.HSP" class="py-name" href="#" onclick="return doclink('link-47', 'HSP', 'link-8');">HSP</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">frag</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-48" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-48', 'value', 'link-43');">value</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">prev</tt><tt class="py-op">[</tt><tt class="py-string">'hsp'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-49', 'items', 'link-44');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">                    <tt class="py-name">setattr</tt><tt class="py-op">(</tt><tt id="link-50" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-50', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-51" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-51', 'value', 'link-43');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">                <tt class="py-name">hsp_list</tt><tt class="py-op">.</tt><tt id="link-52" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-52', 'append', 'link-18');">append</a></tt><tt class="py-op">(</tt><tt id="link-53" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-53', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line"> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line">                <tt class="py-comment"># create hit object when we've finished parsing all its hsps</tt> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">                <tt class="py-comment"># i.e. when hit state is state_HIT_NEW</tt> </tt>
+<a name="L136"></a><tt class="py-lineno">136</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">hit_state</tt> <tt class="py-op">==</tt> <tt class="py-name">state_HIT_NEW</tt><tt class="py-op">:</tt> </tt>
+<a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">                    <tt id="link-54" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-54', 'hit', 'link-19');">hit</a></tt> <tt class="py-op">=</tt> <tt id="link-55" class="py-name"><a title="Bio.SearchIO._model.hit.Hit" class="py-name" href="#" onclick="return doclink('link-55', 'Hit', 'link-7');">Hit</a></tt><tt class="py-op">(</tt><tt class="py-name">hsp_list</tt><tt class="py-op">)</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line">                    <tt class="py-keyword">for</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-56" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-56', 'value', 'link-43');">value</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">prev</tt><tt class="py-op">[</tt><tt class="py-string">'hit'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-57', 'items', 'link-44');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line">                        <tt class="py-name">setattr</tt><tt class="py-op">(</tt><tt id="link-58" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-58', 'hit', 'link-19');">hit</a></tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-59" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-59', 'value', 'link-43');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">                    <tt class="py-name">hit_list</tt><tt class="py-op">.</tt><tt id="link-60" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-60', 'append', 'link-18');">append</a></tt><tt class="py-op">(</tt><tt id="link-61" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-61', 'hit', 'link-19');">hit</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line">                    <tt class="py-name">hsp_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">                <tt class="py-comment"># create qresult and yield if we're at a new qresult or EOF</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">qres_state</tt> <tt class="py-op">==</tt> <tt class="py-name">state_QRES_NEW</tt> <tt class="py-keyword">or</tt> <tt class="py-name">file_state</tt> <tt class="py-op">==</tt> <tt class="py-name">state_EOF</tt><tt class="py-op">:</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">                    <tt class="py-name">qresult</tt> <tt class="py-op">=</tt> <tt id="link-62" class="py-name"><a title="Bio.SearchIO._model.query.QueryResult" class="py-name" href="#" onclick="return doclink('link-62', 'QueryResult', 'link-6');">QueryResult</a></tt><tt class="py-op">(</tt><tt class="py-name">hit_list</tt><tt class="py-op">,</tt> <tt class="py-name">prev_qid</tt><tt class="py-op">)</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">                    <tt class="py-keyword">for</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-63" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-63', 'value', 'link-43');">value</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">prev</tt><tt class="py-op">[</tt><tt class="py-string">'qresult'</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-64" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-64', 'items', 'link-44');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">                        <tt class="py-name">setattr</tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">,</tt> <tt class="py-name">attr</tt><tt class="py-op">,</tt> <tt id="link-65" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-65', 'value', 'link-43');">value</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line">                    <tt class="py-keyword">yield</tt> <tt class="py-name">qresult</tt> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">                    <tt class="py-comment"># if current line is EOF, break</tt> </tt>
+<a name="L150"></a><tt class="py-lineno">150</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">file_state</tt> <tt class="py-op">==</tt> <tt class="py-name">state_EOF</tt><tt class="py-op">:</tt> </tt>
+<a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">                        <tt class="py-keyword">break</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line">                    <tt class="py-name">hit_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">line</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-66" class="py-name" targets="Method Bio.File.UndoHandle.readline()=Bio.File.UndoHandle-class.html#readline,Method Bio.bgzf.BgzfReader.readline()=Bio.bgzf.BgzfReader-class.html#readline"><a title="Bio.File.UndoHandle.readline
+Bio.bgzf.BgzfReader.readline" class="py-name" href="#" onclick="return doclink('link-66', 'readline', 'link-66');">readline</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmhitParser"></a><div id="Hmmer3DomtabHmmhitParser-def"><a name="L157"></a><tt class="py-lineno">157</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmhitParser-toggle" onclick="return toggle('Hmmer3DomtabHmmhitParser');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser-class.html">Hmmer3DomtabHmmhitParser</a><tt class="py-op">(</tt><tt class="py-base-class">Hmmer3DomtabParser</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmhitParser-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Hmmer3DomtabHmmhitParser-expanded"><a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line"> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parser for the HMMER domain table format that assumes HMM profile</tt> </tt>
+<a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line"><tt class="py-docstring">    coordinates are hit coordinates."""</tt> </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line"> </tt>
+<a name="L162"></a><tt class="py-lineno">162</tt>  <tt class="py-line">    <tt id="link-67" class="py-name"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter.hmm_as_hit" class="py-name" href="#" onclick="return doclink('link-67', 'hmm_as_hit', 'link-37');">hmm_as_hit</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+</div><a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line"> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmqueryParser"></a><div id="Hmmer3DomtabHmmqueryParser-def"><a name="L165"></a><tt class="py-lineno">165</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmqueryParser-toggle" onclick="return toggle('Hmmer3DomtabHmmqueryParser');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser-class.html">Hmmer3DomtabHmmqueryParser</a><tt class="py-op">(</tt><tt class="py-base-class">Hmmer3DomtabParser</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmqueryParser-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Hmmer3DomtabHmmqueryParser-expanded"><a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line">    <tt class="py-docstring">"""Parser for the HMMER domain table format that assumes HMM profile</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"><tt class="py-docstring">    coordinates are query coordinates."""</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line"> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">    <tt id="link-68" class="py-name"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter.hmm_as_hit" class="py-name" href="#" onclick="return doclink('link-68', 'hmm_as_hit', 'link-37');">hmm_as_hit</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"> </tt>
+<a name="L172"></a><tt class="py-lineno">172</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmhitIndexer"></a><div id="Hmmer3DomtabHmmhitIndexer-def"><a name="L173"></a><tt class="py-lineno">173</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmhitIndexer-toggle" onclick="return toggle('Hmmer3DomtabHmmhitIndexer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitIndexer-class.html">Hmmer3DomtabHmmhitIndexer</a><tt class="py-op">(</tt><tt class="py-base-class">Hmmer3TabIndexer</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmhitIndexer-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Hmmer3DomtabHmmhitIndexer-expanded"><a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line">    <tt class="py-docstring">"""Indexer class for HMMER domain table output that assumes HMM profile</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring">    coordinates are hit coordinates."""</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line"> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">    <tt id="link-69" class="py-name" targets="Variable Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._parser=Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer-class.html#_parser"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._parser" class="py-name" href="#" onclick="return doclink('link-69', '_parser', 'link-69');">_parser</a></tt> <tt class="py-op">=</tt> <tt id="link-70" class="py-name" targets="Class Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser-class.html"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser" class="py-name" href="#" onclick="return doclink('link-70', 'Hmmer3DomtabHmmhitParser', 'link-70');">Hmmer3DomtabHmmhitParser</a></tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">    <tt id="link-71" class="py-name" targets="Variable Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitIndexer._query_id_idx=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitIndexer-class.html#_query_id_idx,Variable Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryIndexer._query_id_idx=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryIndexer-class.html#_query_id_idx,Variable Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabIndexer._query_id_idx=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabIndexer-class.html#_query_id_idx"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitIndexer._query_id_idx
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryIndexer._query_id_idx
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabIndexer._query_id_idx" class="py-name" href="#" onclick="return doclink('link-71', '_query_id_idx', 'link-71');">_query_id_idx</a></tt> <tt class="py-op">=</tt> <tt class="py-number">3</tt> </tt>
+</div><a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"> </tt>
+<a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmqueryIndexer"></a><div id="Hmmer3DomtabHmmqueryIndexer-def"><a name="L182"></a><tt class="py-lineno">182</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmqueryIndexer-toggle" onclick="return toggle('Hmmer3DomtabHmmqueryIndexer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryIndexer-class.html">Hmmer3DomtabHmmqueryIndexer</a><tt class="py-op">(</tt><tt class="py-base-class">Hmmer3TabIndexer</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmqueryIndexer-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Hmmer3DomtabHmmqueryIndexer-expanded"><a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line"> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line">    <tt class="py-docstring">"""Indexer class for HMMER domain table output that assumes HMM profile</tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"><tt class="py-docstring">    coordinates are query coordinates."""</tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line"> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line">    <tt id="link-72" class="py-name"><a title="Bio.SearchIO.ExonerateIO._base._BaseExonerateIndexer._parser" class="py-name" href="#" onclick="return doclink('link-72', '_parser', 'link-69');">_parser</a></tt> <tt class="py-op">=</tt> <tt id="link-73" class="py-name" targets="Class Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser-class.html"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser" class="py-name" href="#" onclick="return doclink('link-73', 'Hmmer3DomtabHmmqueryParser', 'link-73');">Hmmer3DomtabHmmqueryParser</a></tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line">    <tt id="link-74" class="py-name"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitIndexer._query_id_idx
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryIndexer._query_id_idx
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabIndexer._query_id_idx" class="py-name" href="#" onclick="return doclink('link-74', '_query_id_idx', 'link-71');">_query_id_idx</a></tt> <tt class="py-op">=</tt> <tt class="py-number">3</tt> </tt>
+</div><a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmhitWriter"></a><div id="Hmmer3DomtabHmmhitWriter-def"><a name="L191"></a><tt class="py-lineno">191</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmhitWriter-toggle" onclick="return toggle('Hmmer3DomtabHmmhitWriter');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html">Hmmer3DomtabHmmhitWriter</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmhitWriter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Hmmer3DomtabHmmhitWriter-expanded"><a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line">    <tt class="py-docstring">"""Writer for hmmer3-domtab output format which writes hit coordinates</tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">    as HMM profile coordinates."""</tt> </tt>
+<a name="L195"></a><tt class="py-lineno">195</tt>  <tt class="py-line"> </tt>
+<a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">    <tt id="link-75" class="py-name"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter.hmm_as_hit" class="py-name" href="#" onclick="return doclink('link-75', 'hmm_as_hit', 'link-37');">hmm_as_hit</a></tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmhitWriter.__init__"></a><div id="Hmmer3DomtabHmmhitWriter.__init__-def"><a name="L198"></a><tt class="py-lineno">198</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmhitWriter.__init__-toggle" onclick="return toggle('Hmmer3DomtabHmmhitWriter.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmhitWriter.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Hmmer3DomtabHmmhitWriter.__init__-expanded"><a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">handle</tt> </tt>
+</div><a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmhitWriter.write_file"></a><div id="Hmmer3DomtabHmmhitWriter.write_file-def"><a name="L201"></a><tt class="py-lineno">201</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmhitWriter.write_file-toggle" onclick="return toggle('Hmmer3DomtabHmmhitWriter.write_file');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#write_file">write_file</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">qresults</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmhitWriter.write_file-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Hmmer3DomtabHmmhitWriter.write_file-expanded"><a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">        <tt class="py-docstring">"""Writes to the handle.</tt> </tt>
+<a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line"><tt class="py-docstring">        Returns a tuple of how many QueryResult, Hit, and HSP objects were written.</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">        <tt class="py-name">handle</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">handle</tt> </tt>
+<a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">        <tt class="py-name">qresult_counter</tt><tt class="py-op">,</tt> <tt class="py-name">hit_counter</tt><tt class="py-op">,</tt> <tt class="py-name">hsp_counter</tt><tt class="py-op">,</tt> <tt class="py-name">frag_counter</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt> </tt>
+<a name="L209"></a><tt class="py-lineno">209</tt>  <tt class="py-line"> </tt>
+<a name="L210"></a><tt class="py-lineno">210</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L211"></a><tt class="py-lineno">211</tt>  <tt class="py-line">            <tt class="py-name">first_qresult</tt> <tt class="py-op">=</tt> <tt id="link-76" class="py-name" targets="Method Bio.AlignIO.Interfaces.AlignmentIterator.next()=Bio.AlignIO.Interfaces.AlignmentIterator-class.html#next,Method Bio.Blast.NCBIStandalone.Iterator.next()=Bio.Blast.NCBIStandalone.Iterator-class.html#next,Method Bio.Blast.ParseBlastTable.BlastTableReader.next()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#next,Method Bio.DocSQL.IterationCursor.next()=Bio.DocSQL.IterationCursor-class.html#next,Method Bio.File.UndoHandle.next()=Bio.File.UndoHandle-class.html#next,Method Bio.GenBank.Iterator.next()=Bio.GenBank.Iterator-class.html#next,Method Bio.Nexus.Nexus.CharBuffer.next()=Bio.Nexus.Nexus.CharBuffer-class.html#next,Method Bio.PopGen.GenePop.Controller._FileIterator.next()=Bio.PopGen.GenePop.Controller._FileIterator-class.html#next,Method Bio.SeqIO.Interfaces.SequenceIterator.next()=Bio.SeqIO.Interfaces.SequenceIterator-class.html#next,Method Bio.bgzf.BgzfReader.next()=Bio.bgzf.BgzfReader-class.html#next"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-76', 'next', 'link-76');">next</a></tt><tt class="py-op">(</tt><tt class="py-name">qresults</tt><tt class="py-op">)</tt> </tt>
+<a name="L212"></a><tt class="py-lineno">212</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">StopIteration</tt><tt class="py-op">:</tt> </tt>
+<a name="L213"></a><tt class="py-lineno">213</tt>  <tt class="py-line">            <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-77" class="py-name" targets="Function Bio.AlignIO.write()=Bio.AlignIO-module.html#write,Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.write()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write,Method Bio.NeuralNetwork.Gene.Pattern.PatternIO.write()=Bio.NeuralNetwork.Gene.Pattern.PatternIO-class.html#write,Method Bio.Phylo.CDAOIO.Writer.write()=Bio.Phylo.CDAOIO.Writer-class.html#write,Function Bio.Phylo.CDAOIO.write()=Bio.Phylo.CDAOIO-module.html#write,Method Bio.Phylo.NeXMLIO.Writer.write()=Bio.Phylo.NeXMLIO.Writer-class.html#write,Function Bio.Phylo.NeXMLIO.write()=Bio.Phylo.NeXMLIO-module.html#write,Method Bio.Phylo.NewickIO.Writer.write()=Bio.Phylo.NewickIO.Writer-class.html#write,Function Bio.Phylo.NewickIO.write()=Bio.Phylo.NewickIO-module.html#write,Function Bio.Phylo.NexusIO.write()=Bio.Phylo.NexusIO-module.html#write,Method Bio.Phylo.PhyloXMLIO.Writer.write()=Bio.Phylo.PhyloXMLIO.Writer-class.html#write,Function Bio.Phylo.PhyloXMLIO.write()=Bio.Phylo.PhyloXMLIO-module.html#write,Function Bio.Phylo._io.write()=Bio.Phylo._io-module.html#write,Function Bio.SearchIO.write()=Bio.SearchIO-module.html#write,Function Bio.SeqIO.write()=Bio.SeqIO-module.html#write,Method Bio.bgzf.BgzfWriter.write()=Bio.bgzf.BgzfWriter-class.html#write,Function Bio.motifs.jaspar.write()=Bio.motifs.jaspar-module.html#write,Function Bio.motifs.transfac.write()=Bio.motifs.transfac-module.html#write,Function Bio.motifs.write()=Bio.motifs-module.html#write"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-77', 'write', 'link-77');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-78" class="py-name" targets="Method Bio.SearchIO.BlatIO.BlatPslWriter._build_header()=Bio.SearchIO.BlatIO.BlatPslWriter-class.html#_build_header,Method Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter._build_header()=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#_build_header,Method Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter._build_header()=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter-class.html#_build_header"><a title="Bio.SearchIO.BlatIO.BlatPslWriter._build_header
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter._build_header
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter._build_header" class="py-name" href="#" onclick="return doclink('link-78', '_build_header', 'link-78');">_build_header</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L214"></a><tt class="py-lineno">214</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">            <tt class="py-comment"># write header</tt> </tt>
+<a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line">            <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-79" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-79', 'write', 'link-77');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-80" class="py-name"><a title="Bio.SearchIO.BlatIO.BlatPslWriter._build_header
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter._build_header
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter._build_header" class="py-name" href="#" onclick="return doclink('link-80', '_build_header', 'link-78');">_build_header</a></tt><tt class="py-op">(</tt><tt class="py-name">first_qresult</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">            <tt class="py-comment"># and then the qresults</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">qresult</tt> <tt class="py-keyword">in</tt> <tt class="py-name">chain</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">first_qresult</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">qresults</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">qresult</tt><tt class="py-op">:</tt> </tt>
+<a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">                    <tt class="py-name">handle</tt><tt class="py-op">.</tt><tt id="link-81" class="py-name"><a title="Bio.AlignIO.write
+Bio.Graphics.GenomeDiagram._Diagram.Diagram.write
+Bio.NeuralNetwork.Gene.Pattern.PatternIO.write
+Bio.Phylo.CDAOIO.Writer.write
+Bio.Phylo.CDAOIO.write
+Bio.Phylo.NeXMLIO.Writer.write
+Bio.Phylo.NeXMLIO.write
+Bio.Phylo.NewickIO.Writer.write
+Bio.Phylo.NewickIO.write
+Bio.Phylo.NexusIO.write
+Bio.Phylo.PhyloXMLIO.Writer.write
+Bio.Phylo.PhyloXMLIO.write
+Bio.Phylo._io.write
+Bio.SearchIO.write
+Bio.SeqIO.write
+Bio.bgzf.BgzfWriter.write
+Bio.motifs.jaspar.write
+Bio.motifs.transfac.write
+Bio.motifs.write" class="py-name" href="#" onclick="return doclink('link-81', 'write', 'link-77');">write</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-82" class="py-name" targets="Method Bio.SearchIO.BlatIO.BlatPslWriter._build_row()=Bio.SearchIO.BlatIO.BlatPslWriter-class.html#_build_row,Method Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter._build_row()=Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#_build_row,Method Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter._build_row()=Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter-class.html#_build_row"><a title="Bio.SearchIO.BlatIO.BlatPslWriter._build_row
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter._build_row
+Bio.SearchIO.HmmerIO.hmmer3_tab.Hmmer3TabWriter._build_row" class="py-name" href="#" onclick="return doclink('link-82', '_build_row', 'link-82');">_build_row</a></tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line">                    <tt class="py-name">qresult_counter</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L222"></a><tt class="py-lineno">222</tt>  <tt class="py-line">                    <tt class="py-name">hit_counter</tt> <tt class="py-op">+=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">)</tt> </tt>
+<a name="L223"></a><tt class="py-lineno">223</tt>  <tt class="py-line">                    <tt class="py-name">hsp_counter</tt> <tt class="py-op">+=</tt> <tt id="link-83" class="py-name" targets="Method Bio.Nexus.Nexus.StepMatrix.sum()=Bio.Nexus.Nexus.StepMatrix-class.html#sum,Method Bio.SubsMat.SeqMat.sum()=Bio.SubsMat.SeqMat-class.html#sum"><a title="Bio.Nexus.Nexus.StepMatrix.sum
+Bio.SubsMat.SeqMat.sum" class="py-name" href="#" onclick="return doclink('link-83', 'sum', 'link-83');">sum</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-84" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-84', 'hit', 'link-19');">hit</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-85" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-85', 'hit', 'link-19');">hit</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">qresult</tt><tt class="py-op">)</tt> </tt>
+<a name="L224"></a><tt class="py-lineno">224</tt>  <tt class="py-line">                    <tt class="py-name">frag_counter</tt> <tt class="py-op">+=</tt> <tt id="link-86" class="py-name"><a title="Bio.Nexus.Nexus.StepMatrix.sum
+Bio.SubsMat.SeqMat.sum" class="py-name" href="#" onclick="return doclink('link-86', 'sum', 'link-83');">sum</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-87" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-87', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt id="link-88" class="py-name" targets="Variable Bio.SearchIO._model.hit.Hit.fragments=Bio.SearchIO._model.hit.Hit-class.html#fragments,Variable Bio.SearchIO._model.hsp.HSP.fragments=Bio.SearchIO._model.hsp.HSP-class.html#fragments,Variable Bio.SearchIO._model.query.QueryResult.fragments=Bio.SearchIO._model.query.QueryResult-class.html#fragments"><a title="Bio.SearchIO._model.hit.Hit.fragments
+Bio.SearchIO._model.hsp.HSP.fragments
+Bio.SearchIO._model.query.QueryResult.fragments" class="py-name" href="#" onclick="return doclink('link-88', 'fragments', 'link-88');">fragments</a></tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-89" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-89', 'hit', 'link-19');">hit</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">qresult</tt><tt class="py-op">)</tt> </tt>
+<a name="L225"></a><tt class="py-lineno">225</tt>  <tt class="py-line"> </tt>
+<a name="L226"></a><tt class="py-lineno">226</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">qresult_counter</tt><tt class="py-op">,</tt> <tt class="py-name">hit_counter</tt><tt class="py-op">,</tt> <tt class="py-name">hsp_counter</tt><tt class="py-op">,</tt> <tt class="py-name">frag_counter</tt> </tt>
+</div><a name="L227"></a><tt class="py-lineno">227</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmhitWriter._build_header"></a><div id="Hmmer3DomtabHmmhitWriter._build_header-def"><a name="L228"></a><tt class="py-lineno">228</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmhitWriter._build_header-toggle" onclick="return toggle('Hmmer3DomtabHmmhitWriter._build_header');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#_build_header">_build_header</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">first_qresult</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmhitWriter._build_header-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Hmmer3DomtabHmmhitWriter._build_header-expanded"><a name="L229"></a><tt class="py-lineno">229</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns the header string of a domain HMMER table output."""</tt> </tt>
+<a name="L230"></a><tt class="py-lineno">230</tt>  <tt class="py-line"> </tt>
+<a name="L231"></a><tt class="py-lineno">231</tt>  <tt class="py-line">        <tt class="py-comment"># calculate whitespace required</tt> </tt>
+<a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line">        <tt class="py-comment"># adapted from HMMER's source: src/p7_tophits.c#L1157</tt> </tt>
+<a name="L233"></a><tt class="py-lineno">233</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">first_qresult</tt><tt class="py-op">:</tt> </tt>
+<a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">            <tt class="py-comment"># qnamew = max(20, len(first_qresult.id))</tt> </tt>
+<a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">            <tt class="py-name">qnamew</tt> <tt class="py-op">=</tt> <tt class="py-number">20</tt> </tt>
+<a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line">            <tt class="py-name">tnamew</tt> <tt class="py-op">=</tt> <tt id="link-90" class="py-name" targets="Variable Bio.motifs.matrix.PositionSpecificScoringMatrix.max=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#max"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-90', 'max', 'link-90');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">20</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">first_qresult</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-91" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.id=Bio.KEGG.KGML.KGML_pathway.Component-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Entry.id=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#id,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.id=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#id,Method Bio.Phylo.PhyloXMLIO.Parser.id()=Bio.Phylo.PhyloXMLIO.Parser-class.html#id,Method Bio.Phylo.PhyloXMLIO.Writer.id()=Bio.Phylo.PhyloXMLIO.Writer-class.html#id,Variable Bio.SearchIO._model.hit.Hit.id=Bio.SearchIO._model.hit.Hit-class.html#id,Variable Bio.SearchIO._model.query.QueryResult.id=Bio.SearchIO._model.query.QueryResult-class.html#id"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-91', 'id', 'link-91');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line">                <tt class="py-name">qaccw</tt> <tt class="py-op">=</tt> <tt id="link-92" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-92', 'max', 'link-90');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">first_qresult</tt><tt class="py-op">.</tt><tt id="link-93" class="py-name" targets="Variable Bio.FSSP.fssp_rec.align.acc=Bio.FSSP.fssp_rec.align-class.html#acc"><a title="Bio.FSSP.fssp_rec.align.acc" class="py-name" href="#" onclick="return doclink('link-93', 'acc', 'link-93');">acc</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L239"></a><tt class="py-lineno">239</tt>  <tt class="py-line">                <tt class="py-name">taccw</tt> <tt class="py-op">=</tt> <tt id="link-94" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-94', 'max', 'link-90');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">first_qresult</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-95" class="py-name"><a title="Bio.FSSP.fssp_rec.align.acc" class="py-name" href="#" onclick="return doclink('link-95', 'acc', 'link-93');">acc</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L240"></a><tt class="py-lineno">240</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L241"></a><tt class="py-lineno">241</tt>  <tt class="py-line">                <tt class="py-name">qaccw</tt><tt class="py-op">,</tt> <tt class="py-name">taccw</tt> <tt class="py-op">=</tt> <tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-number">10</tt> </tt>
+<a name="L242"></a><tt class="py-lineno">242</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L243"></a><tt class="py-lineno">243</tt>  <tt class="py-line">            <tt class="py-name">qnamew</tt><tt class="py-op">,</tt> <tt class="py-name">tnamew</tt><tt class="py-op">,</tt> <tt class="py-name">qaccw</tt><tt class="py-op">,</tt> <tt class="py-name">taccw</tt> <tt class="py-op">=</tt> <tt class="py-number">20</tt><tt class="py-op">,</tt> <tt class="py-number">20</tt><tt class="py-op">,</tt> <tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-number">10</tt> </tt>
+<a name="L244"></a><tt class="py-lineno">244</tt>  <tt class="py-line"> </tt>
+<a name="L245"></a><tt class="py-lineno">245</tt>  <tt class="py-line">        <tt id="link-96" class="py-name" targets="Variable Bio.Wise.dnal.Statistics.header=Bio.Wise.dnal.Statistics-class.html#header"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-96', 'header', 'link-96');">header</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"#%*s %22s %40s %11s %11s %11s\n"</tt> <tt class="py-op">%</tt> \ </tt>
+<a name="L246"></a><tt class="py-lineno">246</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt class="py-name">tnamew</tt> <tt class="py-op">+</tt> <tt class="py-name">qnamew</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt> <tt class="py-op">+</tt> <tt class="py-number">15</tt> <tt class="py-op">+</tt> <tt class="py-name">taccw</tt> <tt class="py-op">+</tt> <tt class="py-name">qaccw</tt><tt class="py-op">,</tt> <tt class="py-string">""</tt><tt class="py-op">,</tt> <tt class="py-string">"--- full sequence ---"</tt><tt class="py-op">,</tt> </tt>
+<a name="L247"></a><tt class="py-lineno">247</tt>  <tt class="py-line">                <tt class="py-string">"-------------- this domain -------------"</tt><tt class="py-op">,</tt> <tt class="py-string">"hmm coord"</tt><tt class="py-op">,</tt> </tt>
+<a name="L248"></a><tt class="py-lineno">248</tt>  <tt class="py-line">                <tt class="py-string">"ali coord"</tt><tt class="py-op">,</tt> <tt class="py-string">"env coord"</tt><tt class="py-op">)</tt> </tt>
+<a name="L249"></a><tt class="py-lineno">249</tt>  <tt class="py-line">        <tt id="link-97" class="py-name"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-97', 'header', 'link-96');">header</a></tt> <tt class="py-op">+=</tt> <tt class="py-string">"#%-*s %-*s %5s %-*s %-*s %5s %9s %6s %5s %3s %3s %9s "</tt> \ </tt>
+<a name="L250"></a><tt class="py-lineno">250</tt>  <tt class="py-line">                <tt class="py-string">"%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">tnamew</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> </tt>
+<a name="L251"></a><tt class="py-lineno">251</tt>  <tt class="py-line">                <tt class="py-string">" target name"</tt><tt class="py-op">,</tt> <tt class="py-name">taccw</tt><tt class="py-op">,</tt> <tt class="py-string">"accession"</tt><tt class="py-op">,</tt> <tt class="py-string">"tlen"</tt><tt class="py-op">,</tt> <tt class="py-name">qnamew</tt><tt class="py-op">,</tt> </tt>
+<a name="L252"></a><tt class="py-lineno">252</tt>  <tt class="py-line">                <tt class="py-string">"query name"</tt><tt class="py-op">,</tt> <tt class="py-name">qaccw</tt><tt class="py-op">,</tt> <tt class="py-string">"accession"</tt><tt class="py-op">,</tt> <tt class="py-string">"qlen"</tt><tt class="py-op">,</tt> <tt class="py-string">"E-value"</tt><tt class="py-op">,</tt> <tt class="py-string">"score"</tt><tt class="py-op">,</tt> </tt>
+<a name="L253"></a><tt class="py-lineno">253</tt>  <tt class="py-line">                <tt class="py-string">"bias"</tt><tt class="py-op">,</tt> <tt class="py-string">"#"</tt><tt class="py-op">,</tt> <tt class="py-string">"of"</tt><tt class="py-op">,</tt> <tt class="py-string">"c-Evalue"</tt><tt class="py-op">,</tt> <tt class="py-string">"i-Evalue"</tt><tt class="py-op">,</tt> <tt class="py-string">"score"</tt><tt class="py-op">,</tt> <tt class="py-string">"bias"</tt><tt class="py-op">,</tt> </tt>
+<a name="L254"></a><tt class="py-lineno">254</tt>  <tt class="py-line">                <tt class="py-string">"from"</tt><tt class="py-op">,</tt> <tt class="py-string">"to"</tt><tt class="py-op">,</tt> <tt class="py-string">"from"</tt><tt class="py-op">,</tt> <tt class="py-string">"to"</tt><tt class="py-op">,</tt> <tt class="py-string">"from"</tt><tt class="py-op">,</tt> <tt class="py-string">"to"</tt><tt class="py-op">,</tt> <tt class="py-string">"acc"</tt><tt class="py-op">,</tt> </tt>
+<a name="L255"></a><tt class="py-lineno">255</tt>  <tt class="py-line">                <tt class="py-string">"description of target"</tt><tt class="py-op">)</tt> </tt>
+<a name="L256"></a><tt class="py-lineno">256</tt>  <tt class="py-line">        <tt id="link-98" class="py-name"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-98', 'header', 'link-96');">header</a></tt> <tt class="py-op">+=</tt> <tt class="py-string">"#%*s %*s %5s %*s %*s %5s %9s %6s %5s %3s %3s %9s %9s "</tt> \ </tt>
+<a name="L257"></a><tt class="py-lineno">257</tt>  <tt class="py-line">                <tt class="py-string">"%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">tnamew</tt> <tt class="py-op">-</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> </tt>
+<a name="L258"></a><tt class="py-lineno">258</tt>  <tt class="py-line">                <tt class="py-string">"-------------------"</tt><tt class="py-op">,</tt> <tt class="py-name">taccw</tt><tt class="py-op">,</tt> <tt class="py-string">"----------"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> </tt>
+<a name="L259"></a><tt class="py-lineno">259</tt>  <tt class="py-line">                <tt class="py-name">qnamew</tt><tt class="py-op">,</tt> <tt class="py-string">"--------------------"</tt><tt class="py-op">,</tt> <tt class="py-name">qaccw</tt><tt class="py-op">,</tt> <tt class="py-string">"----------"</tt><tt class="py-op">,</tt> </tt>
+<a name="L260"></a><tt class="py-lineno">260</tt>  <tt class="py-line">                <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"---------"</tt><tt class="py-op">,</tt> <tt class="py-string">"------"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"---"</tt><tt class="py-op">,</tt> <tt class="py-string">"---"</tt><tt class="py-op">,</tt> </tt>
+<a name="L261"></a><tt class="py-lineno">261</tt>  <tt class="py-line">                <tt class="py-string">"---------"</tt><tt class="py-op">,</tt> <tt class="py-string">"---------"</tt><tt class="py-op">,</tt> <tt class="py-string">"------"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> </tt>
+<a name="L262"></a><tt class="py-lineno">262</tt>  <tt class="py-line">                <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"-----"</tt><tt class="py-op">,</tt> <tt class="py-string">"----"</tt><tt class="py-op">,</tt> </tt>
+<a name="L263"></a><tt class="py-lineno">263</tt>  <tt class="py-line">                <tt class="py-string">"---------------------"</tt><tt class="py-op">)</tt> </tt>
+<a name="L264"></a><tt class="py-lineno">264</tt>  <tt class="py-line"> </tt>
+<a name="L265"></a><tt class="py-lineno">265</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-99" class="py-name"><a title="Bio.Wise.dnal.Statistics.header" class="py-name" href="#" onclick="return doclink('link-99', 'header', 'link-96');">header</a></tt> </tt>
+</div><a name="L266"></a><tt class="py-lineno">266</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmhitWriter._build_row"></a><div id="Hmmer3DomtabHmmhitWriter._build_row-def"><a name="L267"></a><tt class="py-lineno">267</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmhitWriter._build_row-toggle" onclick="return toggle('Hmmer3DomtabHmmhitWriter._build_row');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter-class.html#_build_row">_build_row</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">qresult</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmhitWriter._build_row-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Hmmer3DomtabHmmhitWriter._build_row-expanded"><a name="L268"></a><tt class="py-lineno">268</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns a string or one row or more of the QueryResult object."""</tt> </tt>
+<a name="L269"></a><tt class="py-lineno">269</tt>  <tt class="py-line">        <tt class="py-name">rows</tt> <tt class="py-op">=</tt> <tt class="py-string">''</tt> </tt>
+<a name="L270"></a><tt class="py-lineno">270</tt>  <tt class="py-line"> </tt>
+<a name="L271"></a><tt class="py-lineno">271</tt>  <tt class="py-line">        <tt class="py-comment"># calculate whitespace required</tt> </tt>
+<a name="L272"></a><tt class="py-lineno">272</tt>  <tt class="py-line">        <tt class="py-comment"># adapted from HMMER's source: src/p7_tophits.c#L1083</tt> </tt>
+<a name="L273"></a><tt class="py-lineno">273</tt>  <tt class="py-line">        <tt class="py-name">qnamew</tt> <tt class="py-op">=</tt> <tt id="link-100" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-100', 'max', 'link-90');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">20</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">.</tt><tt id="link-101" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-101', 'id', 'link-91');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L274"></a><tt class="py-lineno">274</tt>  <tt class="py-line">        <tt class="py-name">tnamew</tt> <tt class="py-op">=</tt> <tt id="link-102" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-102', 'max', 'link-90');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">20</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-103" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-103', 'id', 'link-91');">id</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L275"></a><tt class="py-lineno">275</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L276"></a><tt class="py-lineno">276</tt>  <tt class="py-line">            <tt class="py-name">qaccw</tt> <tt class="py-op">=</tt> <tt id="link-104" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-104', 'max', 'link-90');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">.</tt><tt id="link-105" class="py-name" targets="Method Bio.GenBank._FeatureConsumer.accession()=Bio.GenBank._FeatureConsumer-class.html#accession,Method Bio.GenBank._RecordConsumer.accession()=Bio.GenBank._RecordConsumer-class.html#accession,Method Bio.Phylo.PhyloXMLIO.Parser.accession()=Bio.Phylo.PhyloXMLIO.Parser-class.html#accession,Method Bio.Phylo.PhyloXMLIO.Writer.accession()=Bio.Phylo.PhyloXMLIO.Writer-class.html#accession"><a title="Bio.GenBank._FeatureConsumer.accession
+Bio.GenBank._RecordConsumer.accession
+Bio.Phylo.PhyloXMLIO.Parser.accession
+Bio.Phylo.PhyloXMLIO.Writer.accession" class="py-name" href="#" onclick="return doclink('link-105', 'accession', 'link-105');">accession</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L277"></a><tt class="py-lineno">277</tt>  <tt class="py-line">            <tt class="py-name">taccw</tt> <tt class="py-op">=</tt> <tt id="link-106" class="py-name"><a title="Bio.motifs.matrix.PositionSpecificScoringMatrix.max" class="py-name" href="#" onclick="return doclink('link-106', 'max', 'link-90');">max</a></tt><tt class="py-op">(</tt><tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">qresult</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-107" class="py-name"><a title="Bio.GenBank._FeatureConsumer.accession
+Bio.GenBank._RecordConsumer.accession
+Bio.Phylo.PhyloXMLIO.Parser.accession
+Bio.Phylo.PhyloXMLIO.Writer.accession" class="py-name" href="#" onclick="return doclink('link-107', 'accession', 'link-105');">accession</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L278"></a><tt class="py-lineno">278</tt>  <tt class="py-line">            <tt class="py-name">qresult_acc</tt> <tt class="py-op">=</tt> <tt class="py-name">qresult</tt><tt class="py-op">.</tt><tt id="link-108" class="py-name"><a title="Bio.GenBank._FeatureConsumer.accession
+Bio.GenBank._RecordConsumer.accession
+Bio.Phylo.PhyloXMLIO.Parser.accession
+Bio.Phylo.PhyloXMLIO.Writer.accession" class="py-name" href="#" onclick="return doclink('link-108', 'accession', 'link-105');">accession</a></tt> </tt>
+<a name="L279"></a><tt class="py-lineno">279</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L280"></a><tt class="py-lineno">280</tt>  <tt class="py-line">            <tt class="py-name">qaccw</tt><tt class="py-op">,</tt> <tt class="py-name">taccw</tt> <tt class="py-op">=</tt> <tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-number">10</tt> </tt>
+<a name="L281"></a><tt class="py-lineno">281</tt>  <tt class="py-line">            <tt class="py-name">qresult_acc</tt> <tt class="py-op">=</tt> <tt class="py-string">'-'</tt> </tt>
+<a name="L282"></a><tt class="py-lineno">282</tt>  <tt class="py-line"> </tt>
+<a name="L283"></a><tt class="py-lineno">283</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-109" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-109', 'hit', 'link-19');">hit</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">qresult</tt><tt class="py-op">:</tt> </tt>
+<a name="L284"></a><tt class="py-lineno">284</tt>  <tt class="py-line"> </tt>
+<a name="L285"></a><tt class="py-lineno">285</tt>  <tt class="py-line">            <tt class="py-comment"># try to get hit accession</tt> </tt>
+<a name="L286"></a><tt class="py-lineno">286</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L287"></a><tt class="py-lineno">287</tt>  <tt class="py-line">                <tt class="py-name">hit_acc</tt> <tt class="py-op">=</tt> <tt id="link-110" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-110', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt id="link-111" class="py-name"><a title="Bio.GenBank._FeatureConsumer.accession
+Bio.GenBank._RecordConsumer.accession
+Bio.Phylo.PhyloXMLIO.Parser.accession
+Bio.Phylo.PhyloXMLIO.Writer.accession" class="py-name" href="#" onclick="return doclink('link-111', 'accession', 'link-105');">accession</a></tt> </tt>
+<a name="L288"></a><tt class="py-lineno">288</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L289"></a><tt class="py-lineno">289</tt>  <tt class="py-line">                <tt class="py-name">hit_acc</tt> <tt class="py-op">=</tt> <tt class="py-string">'-'</tt> </tt>
+<a name="L290"></a><tt class="py-lineno">290</tt>  <tt class="py-line"> </tt>
+<a name="L291"></a><tt class="py-lineno">291</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt id="link-112" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-112', 'hsp', 'link-27');">hsp</a></tt> <tt class="py-keyword">in</tt> <tt id="link-113" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-113', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt id="link-114" class="py-name" targets="Variable Bio.SearchIO._model.hit.Hit.hsps=Bio.SearchIO._model.hit.Hit-class.html#hsps,Variable Bio.SearchIO._model.query.QueryResult.hsps=Bio.SearchIO._model.query.QueryResult-class.html#hsps"><a title="Bio.SearchIO._model.hit.Hit.hsps
+Bio.SearchIO._model.query.QueryResult.hsps" class="py-name" href="#" onclick="return doclink('link-114', 'hsps', 'link-114');">hsps</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L292"></a><tt class="py-lineno">292</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-115" class="py-name"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter.hmm_as_hit" class="py-name" href="#" onclick="return doclink('link-115', 'hmm_as_hit', 'link-37');">hmm_as_hit</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L293"></a><tt class="py-lineno">293</tt>  <tt class="py-line">                    <tt class="py-name">hmm_to</tt> <tt class="py-op">=</tt> <tt id="link-116" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-116', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-117" class="py-name" targets="Variable Bio.SearchIO._model.hsp.HSP.hit_end=Bio.SearchIO._model.hsp.HSP-class.html#hit_end,Variable Bio.SearchIO._model.hsp.HSPFragment.hit_end=Bio.SearchIO._model.hsp.HSPFragment-class.html#hit_end"><a title="Bio.SearchIO._model.hsp.HSP.hit_end
+Bio.SearchIO._model.hsp.HSPFragment.hit_end" class="py-name" href="#" onclick="return doclink('link-117', 'hit_end', 'link-117');">hit_end</a></tt> </tt>
+<a name="L294"></a><tt class="py-lineno">294</tt>  <tt class="py-line">                    <tt class="py-name">hmm_from</tt> <tt class="py-op">=</tt> <tt id="link-118" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-118', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-119" class="py-name" targets="Variable Bio.SearchIO._model.hsp.HSP.hit_start=Bio.SearchIO._model.hsp.HSP-class.html#hit_start,Variable Bio.SearchIO._model.hsp.HSPFragment.hit_start=Bio.SearchIO._model.hsp.HSPFragment-class.html#hit_start"><a title="Bio.SearchIO._model.hsp.HSP.hit_start
+Bio.SearchIO._model.hsp.HSPFragment.hit_start" class="py-name" href="#" onclick="return doclink('link-119', 'hit_start', 'link-119');">hit_start</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L295"></a><tt class="py-lineno">295</tt>  <tt class="py-line">                    <tt class="py-name">ali_to</tt> <tt class="py-op">=</tt> <tt id="link-120" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-120', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-121" class="py-name" targets="Variable Bio.SearchIO._model.hsp.HSP.query_end=Bio.SearchIO._model.hsp.HSP-class.html#query_end,Variable Bio.SearchIO._model.hsp.HSPFragment.query_end=Bio.SearchIO._model.hsp.HSPFragment-class.html#query_end"><a title="Bio.SearchIO._model.hsp.HSP.query_end
+Bio.SearchIO._model.hsp.HSPFragment.query_end" class="py-name" href="#" onclick="return doclink('link-121', 'query_end', 'link-121');">query_end</a></tt> </tt>
+<a name="L296"></a><tt class="py-lineno">296</tt>  <tt class="py-line">                    <tt class="py-name">ali_from</tt> <tt class="py-op">=</tt> <tt id="link-122" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-122', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-123" class="py-name" targets="Variable Bio.SearchIO._model.hsp.HSP.query_start=Bio.SearchIO._model.hsp.HSP-class.html#query_start,Variable Bio.SearchIO._model.hsp.HSPFragment.query_start=Bio.SearchIO._model.hsp.HSPFragment-class.html#query_start"><a title="Bio.SearchIO._model.hsp.HSP.query_start
+Bio.SearchIO._model.hsp.HSPFragment.query_start" class="py-name" href="#" onclick="return doclink('link-123', 'query_start', 'link-123');">query_start</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L297"></a><tt class="py-lineno">297</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L298"></a><tt class="py-lineno">298</tt>  <tt class="py-line">                    <tt class="py-name">hmm_to</tt> <tt class="py-op">=</tt> <tt id="link-124" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-124', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-125" class="py-name"><a title="Bio.SearchIO._model.hsp.HSP.query_end
+Bio.SearchIO._model.hsp.HSPFragment.query_end" class="py-name" href="#" onclick="return doclink('link-125', 'query_end', 'link-121');">query_end</a></tt> </tt>
+<a name="L299"></a><tt class="py-lineno">299</tt>  <tt class="py-line">                    <tt class="py-name">hmm_from</tt> <tt class="py-op">=</tt> <tt id="link-126" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-126', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-127" class="py-name"><a title="Bio.SearchIO._model.hsp.HSP.query_start
+Bio.SearchIO._model.hsp.HSPFragment.query_start" class="py-name" href="#" onclick="return doclink('link-127', 'query_start', 'link-123');">query_start</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L300"></a><tt class="py-lineno">300</tt>  <tt class="py-line">                    <tt class="py-name">ali_to</tt> <tt class="py-op">=</tt> <tt id="link-128" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-128', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-129" class="py-name"><a title="Bio.SearchIO._model.hsp.HSP.hit_end
+Bio.SearchIO._model.hsp.HSPFragment.hit_end" class="py-name" href="#" onclick="return doclink('link-129', 'hit_end', 'link-117');">hit_end</a></tt> </tt>
+<a name="L301"></a><tt class="py-lineno">301</tt>  <tt class="py-line">                    <tt class="py-name">ali_from</tt> <tt class="py-op">=</tt> <tt id="link-130" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-130', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt id="link-131" class="py-name"><a title="Bio.SearchIO._model.hsp.HSP.hit_start
+Bio.SearchIO._model.hsp.HSPFragment.hit_start" class="py-name" href="#" onclick="return doclink('link-131', 'hit_start', 'link-119');">hit_start</a></tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L302"></a><tt class="py-lineno">302</tt>  <tt class="py-line"> </tt>
+<a name="L303"></a><tt class="py-lineno">303</tt>  <tt class="py-line">                <tt class="py-name">rows</tt> <tt class="py-op">+=</tt> <tt class="py-string">"%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d %3d"</tt> \ </tt>
+<a name="L304"></a><tt class="py-lineno">304</tt>  <tt class="py-line">                <tt class="py-string">" %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld %5d %5d %4.2f %s\n"</tt> <tt class="py-op">%</tt> \ </tt>
+<a name="L305"></a><tt class="py-lineno">305</tt>  <tt class="py-line">                <tt class="py-op">(</tt><tt class="py-name">tnamew</tt><tt class="py-op">,</tt> <tt id="link-132" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-132', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt id="link-133" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-133', 'id', 'link-91');">id</a></tt><tt class="py-op">,</tt> <tt class="py-name">taccw</tt><tt class="py-op">,</tt> <tt class="py-name">hit_acc</tt><tt class="py-op">,</tt> <tt id="link-134" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-134', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt class="py-name">seq_len</tt><tt class="py-op">,</tt> <tt class="py-name">qnamew</tt><tt class="py-op">,</tt> <tt class="py-name">qresult</tt><tt class="py-op">.</tt><tt id="link-135" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.id
+Bio.KEGG.KGML.KGML_pathway.Entry.id
+Bio.KEGG.KGML.KGML_pathway.Reaction.id
+Bio.Phylo.PhyloXMLIO.Parser.id
+Bio.Phylo.PhyloXMLIO.Writer.id
+Bio.SearchIO._model.hit.Hit.id
+Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="return doclink('link-135', 'id', 'link-91');">id</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L306"></a><tt class="py-lineno">306</tt>  <tt class="py-line">                <tt class="py-name">qaccw</tt><tt class="py-op">,</tt> <tt class="py-name">qresult_acc</tt><tt class="py-op">,</tt> <tt class="py-name">qresult</tt><tt class="py-op">.</tt><tt class="py-name">seq_len</tt><tt class="py-op">,</tt> <tt id="link-136" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-136', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt class="py-name">evalue</tt><tt class="py-op">,</tt> <tt id="link-137" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-137', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt class="py-name">bitscore</tt><tt class="py-op">,</tt> </tt>
+<a name="L307"></a><tt class="py-lineno">307</tt>  <tt class="py-line">                <tt id="link-138" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-138', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt class="py-name">bias</tt><tt class="py-op">,</tt> <tt id="link-139" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-139', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">domain_index</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-140" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-140', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt id="link-141" class="py-name"><a title="Bio.SearchIO._model.hit.Hit.hsps
+Bio.SearchIO._model.query.QueryResult.hsps" class="py-name" href="#" onclick="return doclink('link-141', 'hsps', 'link-114');">hsps</a></tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-142" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-142', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">evalue_cond</tt><tt class="py-op">,</tt> <tt id="link-143" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-143', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">evalue</tt><tt class="py-op">,</tt> </tt>
+<a name="L308"></a><tt class="py-lineno">308</tt>  <tt class="py-line">                <tt id="link-144" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-144', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">bitscore</tt><tt class="py-op">,</tt> <tt id="link-145" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-145', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">bias</tt><tt class="py-op">,</tt> <tt class="py-name">hmm_from</tt><tt class="py-op">,</tt> <tt class="py-name">hmm_to</tt><tt class="py-op">,</tt> <tt class="py-name">ali_from</tt><tt class="py-op">,</tt> <tt class="py-name">ali_to</tt><tt class="py-op">,</tt> </tt>
+<a name="L309"></a><tt class="py-lineno">309</tt>  <tt class="py-line">                <tt id="link-146" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-146', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">env_start</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt id="link-147" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-147', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">env_end</tt><tt class="py-op">,</tt> <tt id="link-148" class="py-name"><a title="Bio.SearchIO._model.hsp" class="py-name" href="#" onclick="return doclink('link-148', 'hsp', 'link-27');">hsp</a></tt><tt class="py-op">.</tt><tt class="py-name">acc_avg</tt><tt class="py-op">,</tt> <tt id="link-149" class="py-name"><a title="Bio.SearchIO._model.hit
+Bio.SearchIO._model.hsp.HSP.hit
+Bio.SearchIO._model.hsp.HSPFragment.hit" class="py-name" href="#" onclick="return doclink('link-149', 'hit', 'link-19');">hit</a></tt><tt class="py-op">.</tt><tt id="link-150" class="py-name" targets="Method Bio.Blast.NCBIStandalone._DescriptionConsumer.description()=Bio.Blast.NCBIStandalone._DescriptionConsumer-class.html#description,Method Bio.Phylo.PhyloXMLIO.Writer.description()=Bio.Phylo.PhyloXMLIO.Writer-class.html#description,Variable Bio.SearchIO._model.hit.Hit.description=Bio.SearchIO._model.hit.Hit-class.html#description,Variable Bio.SearchIO._model.query.QueryResult.description=Bio.SearchIO._model.query.QueryResult-class.html#description"><a title="Bio.Blast.NCBIStandalone._DescriptionConsumer.description
+Bio.Phylo.PhyloXMLIO.Writer.description
+Bio.SearchIO._model.hit.Hit.description
+Bio.SearchIO._model.query.QueryResult.description" class="py-name" href="#" onclick="return doclink('link-150', 'description', 'link-150');">description</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L310"></a><tt class="py-lineno">310</tt>  <tt class="py-line"> </tt>
+<a name="L311"></a><tt class="py-lineno">311</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">rows</tt> </tt>
+</div></div><a name="L312"></a><tt class="py-lineno">312</tt>  <tt class="py-line"> </tt>
+<a name="L313"></a><tt class="py-lineno">313</tt>  <tt class="py-line"> </tt>
+<a name="Hmmer3DomtabHmmqueryWriter"></a><div id="Hmmer3DomtabHmmqueryWriter-def"><a name="L314"></a><tt class="py-lineno">314</tt> <a class="py-toggle" href="#" id="Hmmer3DomtabHmmqueryWriter-toggle" onclick="return toggle('Hmmer3DomtabHmmqueryWriter');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter-class.html">Hmmer3DomtabHmmqueryWriter</a><tt class="py-op">(</tt><tt class="py-base-class">Hmmer3DomtabHmmhitWriter</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Hmmer3DomtabHmmqueryWriter-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Hmmer3DomtabHmmqueryWriter-expanded"><a name="L315"></a><tt class="py-lineno">315</tt>  <tt class="py-line"> </tt>
+<a name="L316"></a><tt class="py-lineno">316</tt>  <tt class="py-line">    <tt class="py-docstring">"""Writer for hmmer3-domtab output format which writes query coordinates</tt> </tt>
+<a name="L317"></a><tt class="py-lineno">317</tt>  <tt class="py-line"><tt class="py-docstring">    as HMM profile coordinates."""</tt> </tt>
+<a name="L318"></a><tt class="py-lineno">318</tt>  <tt class="py-line"> </tt>
+<a name="L319"></a><tt class="py-lineno">319</tt>  <tt class="py-line">    <tt id="link-151" class="py-name"><a title="Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmhitWriter.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryParser.hmm_as_hit
+Bio.SearchIO.HmmerIO.hmmer3_domtab.Hmmer3DomtabHmmqueryWriter.hmm_as_hit" class="py-name" href="#" onclick="return doclink('link-151', 'hmm_as_hit', 'link-37');">hmm_as_hit</a></tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+</div><a name="L320"></a><tt class="py-lineno">320</tt>  <tt class="py-line"> </tt>
+<a name="L321"></a><tt class="py-lineno">321</tt>  <tt class="py-line"> </tt>
+<a name="L322"></a><tt class="py-lineno">322</tt>  <tt class="py-line"><tt class="py-comment"># if not used as a module, run the doctest</tt> </tt>
+<a name="L323"></a><tt class="py-lineno">323</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L324"></a><tt class="py-lineno">324</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-152" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-152', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-153" class="py-name" targets="Module Bio.Phylo._utils=Bio.Phylo._utils-module.html,Module Bio.SearchIO._utils=Bio.SearchIO._utils-module.html,Module Bio._utils=Bio._utils-module.html"><a title="Bio.Phylo._utils
+Bio.SearchIO._utils
+Bio._utils" class="py-name" href="#" onclick="return doclink('link-153', '_utils', 'link-153');">_utils</a></tt> <tt class="py-keyword">import</tt> <tt id="link-154" class="py-name" targets="Function Bio._utils.run_doctest()=Bio._utils-module.html#run_doctest"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-154', 'run_doctest', 'link-154');">run_doctest</a></tt> </tt>
+<a name="L325"></a><tt class="py-lineno">325</tt>  <tt class="py-line">    <tt id="link-155" class="py-name"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-155', 'run_doctest', 'link-154');">run_doctest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L326"></a><tt class="py-lineno">326</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:05:03 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

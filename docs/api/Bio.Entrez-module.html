@@ -1,0 +1,940 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Entrez</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;Entrez
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Entrez-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package Entrez</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.Entrez-pysrc.html">source&nbsp;code</a></span></p>
+<p>Provides code to access NCBI over the WWW.</p>
+<p>The main Entrez web page is available at:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/Entrez/" target="_top">http://www.ncbi.nlm.nih.gov/Entrez/</a></p>
+<p>A list of the Entrez utilities is available at:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html</a></p>
+<p>Variables:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>email        Set the Entrez email parameter (default is not set).</li>
+<li>tool         Set the Entrez tool parameter (default is  biopython).</li>
+</ul>
+</blockquote>
+<p>Functions:</p>
+<blockquote>
+<ul>
+<li><p class="rst-first">efetch       Retrieves records in the requested format from a list of one or
+more primary IDs or from the user's environment</p>
+</li>
+<li><p class="rst-first">epost        Posts a file containing a list of primary IDs for future use in
+the user's environment to use with subsequent search strategies</p>
+</li>
+<li><p class="rst-first">esearch      Searches and retrieves primary IDs (for use in EFetch, ELink,
+and ESummary) and term translations and optionally retains
+results for future use in the user's environment.</p>
+</li>
+<li><p class="rst-first">elink        Checks for the existence of an external or Related Articles link
+from a list of one or more primary IDs.  Retrieves primary IDs
+and relevancy scores for links to Entrez databases or Related
+Articles;  creates a hyperlink to the primary LinkOut provider
+for a specific ID and database, or lists LinkOut URLs
+and Attributes for multiple IDs.</p>
+</li>
+<li><p class="rst-first">einfo        Provides field index term counts, last update, and available
+links for each database.</p>
+</li>
+<li><p class="rst-first">esummary     Retrieves document summaries from a list of primary IDs or from
+the user's environment.</p>
+</li>
+<li><p class="rst-first">egquery      Provides Entrez database counts in XML for a single search
+using Global Query.</p>
+</li>
+<li><p class="rst-first">espell       Retrieves spelling suggestions.</p>
+</li>
+<li><p class="rst-first">ecitmatch    Retrieves PubMed IDs (PMIDs) that correspond to a set of
+input citation strings.</p>
+</li>
+<li><p class="rst-first">read         Parses the XML results returned by any of the above functions.
+Typical usage is:</p>
+<blockquote>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.einfo() <span class="py-comment"># or esearch, efetch, ...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+</blockquote>
+<p>where record is now a Python dictionary or list.</p>
+</blockquote>
+</li>
+<li><p class="rst-first">parse        Parses the XML results returned by those of the above functions
+which can return multiple records - such as efetch, esummary
+and elink. Typical usage is:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.efetch(<span class="py-string">&quot;pubmed&quot;</span>, id=<span class="py-string">&quot;19304878,14630660&quot;</span>, retmode=<span class="py-string">&quot;xml&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>records = Entrez.parse(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> records:
+<span class="py-more">... </span>    <span class="py-comment"># each record is a Python dictionary or list.</span>
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record[<span class="py-string">'MedlineCitation'</span>][<span class="py-string">'Article'</span>][<span class="py-string">'ArticleTitle'</span>])
+<span class="py-output">Biopython: freely available Python tools for computational molecular biology and bioinformatics.</span>
+<span class="py-output">PDB file parser and structure class implemented in Python.</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+</blockquote>
+<p>This function is appropriate only if the XML file contains
+multiple records, and is particular useful for large files.</p>
+</li>
+<li><p class="rst-first">_open        Internally used function.</p>
+</li>
+</ul>
+</blockquote>
+
+<!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="Bio.Entrez.Parser-module.html">Bio.Entrez.Parser</a></strong>: <em class="summary">Parser for XML results returned by NCBI's Entrez Utilities.</em>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#epost" class="summary-sig-name">epost</a>(<span class="summary-sig-arg">db</span>,
+        <span class="summary-sig-arg">**keywds</span>)</span><br />
+      Post a file of identifiers for future use.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#epost">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#efetch" class="summary-sig-name">efetch</a>(<span class="summary-sig-arg">db</span>,
+        <span class="summary-sig-arg">**keywords</span>)</span><br />
+      Fetches Entrez results which are returned as a handle.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#efetch">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#esearch" class="summary-sig-name">esearch</a>(<span class="summary-sig-arg">db</span>,
+        <span class="summary-sig-arg">term</span>,
+        <span class="summary-sig-arg">**keywds</span>)</span><br />
+      ESearch runs an Entrez search and returns a handle to the results.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#esearch">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#elink" class="summary-sig-name">elink</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
+      ELink checks for linked external articles and returns a handle.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#elink">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#einfo" class="summary-sig-name">einfo</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
+      EInfo returns a summary of the Entez databases as a results handle.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#einfo">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#esummary" class="summary-sig-name">esummary</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
+      ESummary retrieves document summaries as a results handle.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#esummary">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#egquery" class="summary-sig-name">egquery</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
+      EGQuery provides Entrez database counts for a global search.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#egquery">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#espell" class="summary-sig-name">espell</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
+      ESpell retrieves spelling suggestions, returned in a results handle.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#espell">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#ecitmatch" class="summary-sig-name">ecitmatch</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
+      ECitMatch retrieves PMIDs-Citation linking</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#ecitmatch">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">validate</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Parses an XML file from the NCBI Entrez Utilities into python objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#read">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#parse" class="summary-sig-name">parse</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">validate</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Parses an XML file from the NCBI Entrez Utilities into python objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#parse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Entrez-module.html#_open" class="summary-sig-name" onclick="show_private();">_open</a>(<span class="summary-sig-arg">cgi</span>,
+        <span class="summary-sig-arg">params</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">post</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">ecitmatch</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Helper function to build the URL and open a handle to it (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#_open">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_test"></a><span class="summary-sig-name">_test</span>()</span><br />
+      Run the module's doctests (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Entrez-pysrc.html#_test">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="email"></a><span class="summary-name">email</span> = <code title="None">None</code><br />
+      hash(x)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="tool"></a><span class="summary-name">tool</span> = <code title="'biopython'"><code class="variable-quote">'</code><code class="variable-string">biopython</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.Entrez'"><code class="variable-quote">'</code><code class="variable-string">Bio.Entrez</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="epost"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">epost</span>(<span class="sig-arg">db</span>,
+        <span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#epost">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Post a file of identifiers for future use.</p>
+<p>Posts a file containing a list of UIs for future use in the user's
+environment to use with subsequent search strategies.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html</a></p>
+<p>Return a handle to the results.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="efetch"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">efetch</span>(<span class="sig-arg">db</span>,
+        <span class="sig-arg">**keywords</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#efetch">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Fetches Entrez results which are returned as a handle.</p>
+<p>EFetch retrieves records in the requested format from a list of one or
+more UIs or from user's environment.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html</a></p>
+<p>Return a handle to the results.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>Short example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.efetch(db=<span class="py-string">&quot;nucleotide&quot;</span>, id=<span class="py-string">&quot;57240072&quot;</span>, rettype=<span class="py-string">&quot;gb&quot;</span>, retmode=<span class="py-string">&quot;text&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().strip())
+<span class="py-output">LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+<p><strong>Warning:</strong> The NCBI changed the default retmode in Feb 2012, so many
+databases which previously returned text output now give XML.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="esearch"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">esearch</span>(<span class="sig-arg">db</span>,
+        <span class="sig-arg">term</span>,
+        <span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#esearch">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>ESearch runs an Entrez search and returns a handle to the results.</p>
+<p>ESearch searches and retrieves primary IDs (for use in EFetch, ELink
+and ESummary) and term translations, and optionally retains results
+for future use in the user's environment.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html</a></p>
+<p>Return a handle to the results which are always in XML format.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>Short example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.esearch(db=<span class="py-string">&quot;nucleotide&quot;</span>, retmax=10, term=<span class="py-string">&quot;opuntia[ORGN] accD&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
+<span class="py-prompt">&gt;&gt;&gt; </span>record[<span class="py-string">&quot;Count&quot;</span>] &gt;= 2
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;156535671&quot;</span> <span class="py-keyword">in</span> record[<span class="py-string">&quot;IdList&quot;</span>]
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;156535673&quot;</span> <span class="py-keyword">in</span> record[<span class="py-string">&quot;IdList&quot;</span>]
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="elink"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">elink</span>(<span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#elink">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>ELink checks for linked external articles and returns a handle.</p>
+<p>ELink checks for the existence of an external or Related Articles link
+from a list of one or more primary IDs;  retrieves IDs and relevancy
+scores for links to Entrez databases or Related Articles; creates a
+hyperlink to the primary LinkOut provider for a specific ID and
+database, or lists LinkOut URLs and attributes for multiple IDs.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html</a></p>
+<p>Return a handle to the results, by default in XML format.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>This example finds articles related to the Biopython application
+note's entry in the PubMed database:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>pmid = <span class="py-string">&quot;19304878&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.elink(dbfrom=<span class="py-string">&quot;pubmed&quot;</span>, id=pmid, linkname=<span class="py-string">&quot;pubmed_pubmed&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[0][<span class="py-string">&quot;LinkSetDb&quot;</span>][0][<span class="py-string">&quot;LinkName&quot;</span>])
+<span class="py-output">pubmed_pubmed</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>linked = [link[<span class="py-string">&quot;Id&quot;</span>] <span class="py-keyword">for</span> link <span class="py-keyword">in</span> record[0][<span class="py-string">&quot;LinkSetDb&quot;</span>][0][<span class="py-string">&quot;Link&quot;</span>]]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;17121776&quot;</span> <span class="py-keyword">in</span> linked
+<span class="py-output">True</span></pre>
+<p>This is explained in much more detail in the Biopython Tutorial.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="einfo"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">einfo</span>(<span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#einfo">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>EInfo returns a summary of the Entez databases as a results handle.</p>
+<p>EInfo provides field names, index term counts, last update, and
+available links for each Entrez database.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/einfo_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/einfo_help.html</a></p>
+<p>Return a handle to the results, by default in XML format.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>Short example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(Entrez.einfo())
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">'pubmed'</span> <span class="py-keyword">in</span> record[<span class="py-string">'DbList'</span>]
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="esummary"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">esummary</span>(<span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#esummary">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>ESummary retrieves document summaries as a results handle.</p>
+<p>ESummary retrieves document summaries from a list of primary IDs or
+from the user's environment.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary_help.html</a></p>
+<p>Return a handle to the results, by default in XML format.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>This example discovers more about entry 30367 in the journals database:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.esummary(db=<span class="py-string">&quot;journals&quot;</span>, id=<span class="py-string">&quot;30367&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[0][<span class="py-string">&quot;Id&quot;</span>])
+<span class="py-output">30367</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[0][<span class="py-string">&quot;Title&quot;</span>])
+<span class="py-output">Computational biology and chemistry</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="egquery"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">egquery</span>(<span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#egquery">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>EGQuery provides Entrez database counts for a global search.</p>
+<p>EGQuery provides Entrez database counts in XML for a single search
+using Global Query.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery_help.html</a></p>
+<p>Return a handle to the results in XML format.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>This quick example based on a longer version from the Biopython
+Tutorial just checks there are over 60 matches for 'Biopython'
+in PubMedCentral:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.egquery(term=<span class="py-string">&quot;biopython&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> row <span class="py-keyword">in</span> record[<span class="py-string">&quot;eGQueryResult&quot;</span>]:
+<span class="py-more">... </span>    <span class="py-keyword">if</span> <span class="py-string">&quot;pmc&quot;</span> <span class="py-keyword">in</span> row[<span class="py-string">&quot;DbName&quot;</span>]:
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(row[<span class="py-string">&quot;Count&quot;</span>] &gt; 60)
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="espell"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">espell</span>(<span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#espell">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>ESpell retrieves spelling suggestions, returned in a results handle.</p>
+<p>ESpell retrieves spelling suggestions, if available.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/espell_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/espell_help.html</a></p>
+<p>Return a handle to the results, by default in XML format.</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>Short example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(Entrez.espell(term=<span class="py-string">&quot;biopythooon&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[<span class="py-string">&quot;Query&quot;</span>])
+<span class="py-output">biopythooon</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[<span class="py-string">&quot;CorrectedQuery&quot;</span>])
+<span class="py-output">biopython</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="ecitmatch"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ecitmatch</span>(<span class="sig-arg">**keywds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#ecitmatch">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>ECitMatch retrieves PMIDs-Citation linking</p>
+<p>ECitMatch retrieves PubMed IDs (PMIDs) that correspond to a set of input citation strings.</p>
+<p>See the online documentation for an explanation of the parameters:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch</a></p>
+<p>Return a handle to the results, by default in plain text</p>
+<p>Raises an IOError exception if there's a network error.</p>
+<p>Short example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
+<span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>citation_1 = {
+<span class="py-more">... </span>   <span class="py-string">&quot;journal_title&quot;</span>: <span class="py-string">&quot;proc natl acad sci u s a&quot;</span>,
+<span class="py-more">... </span>   <span class="py-string">&quot;year&quot;</span>: <span class="py-string">&quot;1991&quot;</span>, <span class="py-string">&quot;volume&quot;</span>: <span class="py-string">&quot;88&quot;</span>, <span class="py-string">&quot;first_page&quot;</span>: <span class="py-string">&quot;3248&quot;</span>,
+<span class="py-more">... </span>   <span class="py-string">&quot;author_name&quot;</span>: <span class="py-string">&quot;mann bj&quot;</span>, <span class="py-string">&quot;key&quot;</span>: <span class="py-string">&quot;citation_1&quot;</span>}
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.ecitmatch(db=<span class="py-string">&quot;pubmed&quot;</span>, bdata=[citation_1])
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[<span class="py-string">&quot;Query&quot;</span>])</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="read"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">validate</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#read">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Parses an XML file from the NCBI Entrez Utilities into python objects.</p>
+<p>This function parses an XML file created by NCBI's Entrez Utilities,
+returning a multilevel data structure of Python lists and dictionaries.
+Most XML files returned by NCBI's Entrez Utilities can be parsed by
+this function, provided its DTD is available. Biopython includes the
+DTDs for most commonly used Entrez Utilities.</p>
+<p>If validate is True (default), the parser will validate the XML file
+against the DTD, and raise an error if the XML file contains tags that
+are not represented in the DTD. If validate is False, the parser will
+simply skip such tags.</p>
+<p>Whereas the data structure seems to consist of generic Python lists,
+dictionaries, strings, and so on, each of these is actually a class
+derived from the base type. This allows us to store the attributes
+(if any) of each element in a dictionary my_element.attributes, and
+the tag name in my_element.tag.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="parse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">validate</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#parse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Parses an XML file from the NCBI Entrez Utilities into python objects.</p>
+<p>This function parses an XML file created by NCBI's Entrez Utilities,
+returning a multilevel data structure of Python lists and dictionaries.
+This function is suitable for XML files that (in Python) can be represented
+as a list of individual records. Whereas 'read' reads the complete file
+and returns a single Python list, 'parse' is a generator function that
+returns the records one by one. This function is therefore particularly
+useful for parsing large files.</p>
+<p>Most XML files returned by NCBI's Entrez Utilities can be parsed by
+this function, provided its DTD is available. Biopython includes the
+DTDs for most commonly used Entrez Utilities.</p>
+<p>If validate is True (default), the parser will validate the XML file
+against the DTD, and raise an error if the XML file contains tags that
+are not represented in the DTD. If validate is False, the parser will
+simply skip such tags.</p>
+<p>Whereas the data structure seems to consist of generic Python lists,
+dictionaries, strings, and so on, each of these is actually a class
+derived from the base type. This allows us to store the attributes
+(if any) of each element in a dictionary my_element.attributes, and
+the tag name in my_element.tag.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_open"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_open</span>(<span class="sig-arg">cgi</span>,
+        <span class="sig-arg">params</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">post</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">ecitmatch</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Entrez-pysrc.html#_open">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Helper function to build the URL and open a handle to it (PRIVATE).</p>
+<p>Open a handle to Entrez.  cgi is the URL for the cgi script to access.
+params is a dictionary with the options to pass to it.  Does some
+simple error checking, and will raise an IOError if it encounters one.</p>
+<p>This function also enforces the &quot;up to three queries per second rule&quot;
+to avoid abusing the NCBI servers.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:14 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

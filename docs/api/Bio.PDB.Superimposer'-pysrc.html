@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.PDB.Superimposer'</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.PDB-module.html">Package&nbsp;PDB</a> ::
+        Module&nbsp;Superimposer'
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.PDB.Superimposer%27-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.PDB.Superimposer%27-module.html">Module Bio.PDB.Superimposer'</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">"""Superimpose two structures."""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">numpy</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.SVDSuperimposer=Bio.SVDSuperimposer-module.html,Class Bio.SVDSuperimposer.SVDSuperimposer=Bio.SVDSuperimposer.SVDSuperimposer-class.html"><a title="Bio.SVDSuperimposer
+Bio.SVDSuperimposer.SVDSuperimposer" class="py-name" href="#" onclick="return doclink('link-1', 'SVDSuperimposer', 'link-1');">SVDSuperimposer</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name"><a title="Bio.SVDSuperimposer
+Bio.SVDSuperimposer.SVDSuperimposer" class="py-name" href="#" onclick="return doclink('link-2', 'SVDSuperimposer', 'link-1');">SVDSuperimposer</a></tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package Bio.PDB=Bio.PDB-module.html"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-4', 'PDB', 'link-4');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Module Bio.PDB.PDBExceptions=Bio.PDB.PDBExceptions-module.html"><a title="Bio.PDB.PDBExceptions" class="py-name" href="#" onclick="return doclink('link-5', 'PDBExceptions', 'link-5');">PDBExceptions</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Class Bio.PDB.PDBExceptions.PDBException=Bio.PDB.PDBExceptions.PDBException-class.html"><a title="Bio.PDB.PDBExceptions.PDBException" class="py-name" href="#" onclick="return doclink('link-6', 'PDBException', 'link-6');">PDBException</a></tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"> </tt>
+<a name="Superimposer"></a><div id="Superimposer-def"><a name="L16"></a><tt class="py-lineno">16</tt> <a class="py-toggle" href="#" id="Superimposer-toggle" onclick="return toggle('Superimposer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.Superimposer'.Superimposer-class.html">Superimposer</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Superimposer-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Superimposer-expanded"><a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">    Rotate/translate one set of atoms on top of another,</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">    thereby minimizing the RMSD.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="Superimposer.__init__"></a><div id="Superimposer.__init__-def"><a name="L21"></a><tt class="py-lineno">21</tt> <a class="py-toggle" href="#" id="Superimposer.__init__-toggle" onclick="return toggle('Superimposer.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Superimposer'.Superimposer-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Superimposer.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Superimposer.__init__-expanded"><a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rotran</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rms</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"> </tt>
+<a name="Superimposer.set_atoms"></a><div id="Superimposer.set_atoms-def"><a name="L25"></a><tt class="py-lineno">25</tt> <a class="py-toggle" href="#" id="Superimposer.set_atoms-toggle" onclick="return toggle('Superimposer.set_atoms');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Superimposer'.Superimposer-class.html#set_atoms">set_atoms</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">fixed</tt><tt class="py-op">,</tt> <tt class="py-param">moving</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Superimposer.set_atoms-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Superimposer.set_atoms-expanded"><a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-docstring">        Put (translate/rotate) the atoms in fixed on the atoms in</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-docstring">        moving, in such a way that the RMSD is minimized.</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-docstring">        @param fixed: list of (fixed) atoms</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-docstring">        @param moving: list of (moving) atoms</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-docstring">        @type fixed,moving: [L{Atom}, L{Atom},...]</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fixed</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">moving</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-7" class="py-name"><a title="Bio.PDB.PDBExceptions.PDBException" class="py-name" href="#" onclick="return doclink('link-7', 'PDBException', 'link-6');">PDBException</a></tt><tt class="py-op">(</tt><tt class="py-string">"Fixed and moving atom lists differ in size"</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-name">l</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fixed</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-name">fixed_coord</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">zeros</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-name">moving_coord</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">zeros</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">l</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-8" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-8', 'i', 'link-8');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-9" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-9', 'range', 'link-9');">range</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fixed</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">            <tt class="py-name">fixed_coord</tt><tt class="py-op">[</tt><tt id="link-10" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-10', 'i', 'link-8');">i</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">fixed</tt><tt class="py-op">[</tt><tt id="link-11" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-11', 'i', 'link-8');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_coord()=Bio.PDB.Atom.Atom-class.html#get_coord"><a title="Bio.PDB.Atom.Atom.get_coord" class="py-name" href="#" onclick="return doclink('link-12', 'get_coord', 'link-12');">get_coord</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">            <tt class="py-name">moving_coord</tt><tt class="py-op">[</tt><tt id="link-13" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-13', 'i', 'link-8');">i</a></tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">moving</tt><tt class="py-op">[</tt><tt id="link-14" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-14', 'i', 'link-8');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="Bio.PDB.Atom.Atom.get_coord" class="py-name" href="#" onclick="return doclink('link-15', 'get_coord', 'link-12');">get_coord</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">        <tt class="py-name">sup</tt> <tt class="py-op">=</tt> <tt id="link-16" class="py-name"><a title="Bio.SVDSuperimposer
+Bio.SVDSuperimposer.SVDSuperimposer" class="py-name" href="#" onclick="return doclink('link-16', 'SVDSuperimposer', 'link-1');">SVDSuperimposer</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">        <tt class="py-name">sup</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Method Bio.Nexus.Nexus.StepMatrix.set()=Bio.Nexus.Nexus.StepMatrix-class.html#set,Method Bio.PDB.QCPSuperimposer.QCPSuperimposer.set()=Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html#set,Method Bio.SVDSuperimposer.SVDSuperimposer.set()=Bio.SVDSuperimposer.SVDSuperimposer-class.html#set"><a title="Bio.Nexus.Nexus.StepMatrix.set
+Bio.PDB.QCPSuperimposer.QCPSuperimposer.set
+Bio.SVDSuperimposer.SVDSuperimposer.set" class="py-name" href="#" onclick="return doclink('link-17', 'set', 'link-17');">set</a></tt><tt class="py-op">(</tt><tt class="py-name">fixed_coord</tt><tt class="py-op">,</tt> <tt class="py-name">moving_coord</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-name">sup</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.PDB.QCPSuperimposer.QCPSuperimposer.run()=Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html#run,Method Bio.Phylo.PAML._paml.Paml.run()=Bio.Phylo.PAML._paml.Paml-class.html#run,Method Bio.Phylo.PAML.baseml.Baseml.run()=Bio.Phylo.PAML.baseml.Baseml-class.html#run,Method Bio.Phylo.PAML.codeml.Codeml.run()=Bio.Phylo.PAML.codeml.Codeml-class.html#run,Method Bio.Phylo.PAML.yn00.Yn00.run()=Bio.Phylo.PAML.yn00.Yn00-class.html#run,Method Bio.SVDSuperimposer.SVDSuperimposer.run()=Bio.SVDSuperimposer.SVDSuperimposer-class.html#run"><a title="Bio.PDB.QCPSuperimposer.QCPSuperimposer.run
+Bio.Phylo.PAML._paml.Paml.run
+Bio.Phylo.PAML.baseml.Baseml.run
+Bio.Phylo.PAML.codeml.Codeml.run
+Bio.Phylo.PAML.yn00.Yn00.run
+Bio.SVDSuperimposer.SVDSuperimposer.run" class="py-name" href="#" onclick="return doclink('link-18', 'run', 'link-18');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rms</tt> <tt class="py-op">=</tt> <tt class="py-name">sup</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method Bio.PDB.QCPSuperimposer.QCPSuperimposer.get_rms()=Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html#get_rms,Method Bio.SVDSuperimposer.SVDSuperimposer.get_rms()=Bio.SVDSuperimposer.SVDSuperimposer-class.html#get_rms"><a title="Bio.PDB.QCPSuperimposer.QCPSuperimposer.get_rms
+Bio.SVDSuperimposer.SVDSuperimposer.get_rms" class="py-name" href="#" onclick="return doclink('link-19', 'get_rms', 'link-19');">get_rms</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rotran</tt> <tt class="py-op">=</tt> <tt class="py-name">sup</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Method Bio.PDB.QCPSuperimposer.QCPSuperimposer.get_rotran()=Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html#get_rotran,Method Bio.SVDSuperimposer.SVDSuperimposer.get_rotran()=Bio.SVDSuperimposer.SVDSuperimposer-class.html#get_rotran"><a title="Bio.PDB.QCPSuperimposer.QCPSuperimposer.get_rotran
+Bio.SVDSuperimposer.SVDSuperimposer.get_rotran" class="py-name" href="#" onclick="return doclink('link-20', 'get_rotran', 'link-20');">get_rotran</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt>
+<a name="Superimposer.apply"></a><div id="Superimposer.apply-def"><a name="L48"></a><tt class="py-lineno">48</tt> <a class="py-toggle" href="#" id="Superimposer.apply-toggle" onclick="return toggle('Superimposer.apply');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.Superimposer'.Superimposer-class.html#apply">apply</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">atom_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Superimposer.apply-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Superimposer.apply-expanded"><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"><tt class="py-docstring">        Rotate/translate a list of atoms.</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rotran</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-21" class="py-name"><a title="Bio.PDB.PDBExceptions.PDBException" class="py-name" href="#" onclick="return doclink('link-21', 'PDBException', 'link-6');">PDBException</a></tt><tt class="py-op">(</tt><tt class="py-string">"No transformation has been calculated yet"</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-name">rot</tt><tt class="py-op">,</tt> <tt class="py-name">tran</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rotran</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">        <tt class="py-name">rot</tt> <tt class="py-op">=</tt> <tt class="py-name">rot</tt><tt class="py-op">.</tt><tt class="py-name">astype</tt><tt class="py-op">(</tt><tt class="py-string">'f'</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">        <tt class="py-name">tran</tt> <tt class="py-op">=</tt> <tt class="py-name">tran</tt><tt class="py-op">.</tt><tt class="py-name">astype</tt><tt class="py-op">(</tt><tt class="py-string">'f'</tt><tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">atom</tt> <tt class="py-keyword">in</tt> <tt class="py-name">atom_list</tt><tt class="py-op">:</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">            <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method Bio.PDB.Atom.Atom.transform()=Bio.PDB.Atom.Atom-class.html#transform,Method Bio.PDB.Entity.Entity.transform()=Bio.PDB.Entity.Entity-class.html#transform"><a title="Bio.PDB.Atom.Atom.transform
+Bio.PDB.Entity.Entity.transform" class="py-name" href="#" onclick="return doclink('link-22', 'transform', 'link-22');">transform</a></tt><tt class="py-op">(</tt><tt class="py-name">rot</tt><tt class="py-op">,</tt> <tt class="py-name">tran</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">    <tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line"> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-23" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-23', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-24', 'PDB', 'link-4');">PDB</a></tt> <tt class="py-keyword">import</tt> <tt id="link-25" class="py-name" targets="Class Bio.PDB.PDBParser'.PDBParser=Bio.PDB.PDBParser%27.PDBParser-class.html"><a title="Bio.PDB.PDBParser'.PDBParser" class="py-name" href="#" onclick="return doclink('link-25', 'PDBParser', 'link-25');">PDBParser</a></tt><tt class="py-op">,</tt> <tt id="link-26" class="py-name" targets="Package Bio.GA.Selection=Bio.GA.Selection-module.html,Module Bio.PDB.Selection=Bio.PDB.Selection-module.html"><a title="Bio.GA.Selection
+Bio.PDB.Selection" class="py-name" href="#" onclick="return doclink('link-26', 'Selection', 'link-26');">Selection</a></tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">    <tt class="py-name">p</tt> <tt class="py-op">=</tt> <tt id="link-27" class="py-name"><a title="Bio.PDB.PDBParser'.PDBParser" class="py-name" href="#" onclick="return doclink('link-27', 'PDBParser', 'link-25');">PDBParser</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">    <tt class="py-name">s1</tt> <tt class="py-op">=</tt> <tt class="py-name">p</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method Bio.PDB.MMCIFParser'.MMCIFParser.get_structure()=Bio.PDB.MMCIFParser%27.MMCIFParser-class.html#get_structure,Method Bio.PDB.PDBParser'.PDBParser.get_structure()=Bio.PDB.PDBParser%27.PDBParser-class.html#get_structure,Method Bio.PDB.StructureBuilder.StructureBuilder.get_structure()=Bio.PDB.StructureBuilder.StructureBuilder-class.html#get_structure"><a title="Bio.PDB.MMCIFParser'.MMCIFParser.get_structure
+Bio.PDB.PDBParser'.PDBParser.get_structure
+Bio.PDB.StructureBuilder.StructureBuilder.get_structure" class="py-name" href="#" onclick="return doclink('link-28', 'get_structure', 'link-28');">get_structure</a></tt><tt class="py-op">(</tt><tt class="py-string">"FIXED"</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">    <tt class="py-name">fixed</tt> <tt class="py-op">=</tt> <tt id="link-29" class="py-name"><a title="Bio.GA.Selection
+Bio.PDB.Selection" class="py-name" href="#" onclick="return doclink('link-29', 'Selection', 'link-26');">Selection</a></tt><tt class="py-op">.</tt><tt id="link-30" class="py-name" targets="Function Bio.PDB.Selection.unfold_entities()=Bio.PDB.Selection-module.html#unfold_entities"><a title="Bio.PDB.Selection.unfold_entities" class="py-name" href="#" onclick="return doclink('link-30', 'unfold_entities', 'link-30');">unfold_entities</a></tt><tt class="py-op">(</tt><tt class="py-name">s1</tt><tt class="py-op">,</tt> <tt class="py-string">"A"</tt><tt class="py-op">)</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line"> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">    <tt class="py-name">s2</tt> <tt class="py-op">=</tt> <tt class="py-name">p</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="Bio.PDB.MMCIFParser'.MMCIFParser.get_structure
+Bio.PDB.PDBParser'.PDBParser.get_structure
+Bio.PDB.StructureBuilder.StructureBuilder.get_structure" class="py-name" href="#" onclick="return doclink('link-31', 'get_structure', 'link-28');">get_structure</a></tt><tt class="py-op">(</tt><tt class="py-string">"MOVING"</tt><tt class="py-op">,</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">argv</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">    <tt class="py-name">moving</tt> <tt class="py-op">=</tt> <tt id="link-32" class="py-name"><a title="Bio.GA.Selection
+Bio.PDB.Selection" class="py-name" href="#" onclick="return doclink('link-32', 'Selection', 'link-26');">Selection</a></tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="Bio.PDB.Selection.unfold_entities" class="py-name" href="#" onclick="return doclink('link-33', 'unfold_entities', 'link-30');">unfold_entities</a></tt><tt class="py-op">(</tt><tt class="py-name">s2</tt><tt class="py-op">,</tt> <tt class="py-string">"A"</tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line"> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">    <tt class="py-name">rot</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">identity</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">astype</tt><tt class="py-op">(</tt><tt class="py-string">'f'</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">    <tt class="py-name">tran</tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">array</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">1.0</tt><tt class="py-op">,</tt> <tt class="py-number">2.0</tt><tt class="py-op">,</tt> <tt class="py-number">3.0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'f'</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line"> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt class="py-name">atom</tt> <tt class="py-keyword">in</tt> <tt class="py-name">moving</tt><tt class="py-op">:</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">        <tt class="py-name">atom</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.PDB.Atom.Atom.transform
+Bio.PDB.Entity.Entity.transform" class="py-name" href="#" onclick="return doclink('link-34', 'transform', 'link-22');">transform</a></tt><tt class="py-op">(</tt><tt class="py-name">rot</tt><tt class="py-op">,</tt> <tt class="py-name">tran</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line"> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">    <tt class="py-name">sup</tt> <tt class="py-op">=</tt> <tt id="link-35" class="py-name" targets="Class Bio.PDB.Superimposer'.Superimposer=Bio.PDB.Superimposer%27.Superimposer-class.html"><a title="Bio.PDB.Superimposer'.Superimposer" class="py-name" href="#" onclick="return doclink('link-35', 'Superimposer', 'link-35');">Superimposer</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line"> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">    <tt class="py-name">sup</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name" targets="Method Bio.PDB.Superimposer'.Superimposer.set_atoms()=Bio.PDB.Superimposer%27.Superimposer-class.html#set_atoms"><a title="Bio.PDB.Superimposer'.Superimposer.set_atoms" class="py-name" href="#" onclick="return doclink('link-36', 'set_atoms', 'link-36');">set_atoms</a></tt><tt class="py-op">(</tt><tt class="py-name">fixed</tt><tt class="py-op">,</tt> <tt class="py-name">moving</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line"> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">sup</tt><tt class="py-op">.</tt><tt class="py-name">rotran</tt><tt class="py-op">)</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">    <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-name">sup</tt><tt class="py-op">.</tt><tt class="py-name">rms</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line"> </tt>
+<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line">    <tt class="py-name">sup</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Method Bio.PDB.Superimposer'.Superimposer.apply()=Bio.PDB.Superimposer%27.Superimposer-class.html#apply"><a title="Bio.PDB.Superimposer'.Superimposer.apply" class="py-name" href="#" onclick="return doclink('link-37', 'apply', 'link-37');">apply</a></tt><tt class="py-op">(</tt><tt class="py-name">moving</tt><tt class="py-op">)</tt> </tt>
+<a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:50 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

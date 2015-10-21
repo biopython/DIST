@@ -1,0 +1,979 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Align.MultipleSeqAlignment</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Align-module.html">Package&nbsp;Align</a> ::
+        Class&nbsp;MultipleSeqAlignment
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Align.MultipleSeqAlignment-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class MultipleSeqAlignment</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+       object --+    
+                |    
+<a href="Bio.Align.Generic.Alignment-class.html">Generic.Alignment</a> --+
+                    |
+                   <strong class="uidshort">MultipleSeqAlignment</strong>
+</pre>
+
+<dl><dt>Known Subclasses:</dt>
+<dd>
+      <ul class="subclass-list">
+<li><a href="Bio.codonalign.codonalignment.CodonAlignment-class.html">codonalign.codonalignment.CodonAlignment</a></li><li>, <a href="Bio.FSSP.FSSPTools.FSSPAlign-class.html">FSSP.FSSPTools.FSSPAlign</a></li>  </ul>
+</dd></dl>
+
+<hr />
+<p>Represents a classical multiple sequence alignment (MSA).</p>
+<p>By this we mean a collection of sequences (usually shown as rows) which
+are all the same length (usually with gap characters for insertions or
+padding). The data can then be regarded as a matrix of letters, with well
+defined columns.</p>
+<p>You would typically create an MSA by loading an alignment file with the
+AlignIO module:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>align = AlignIO.read(<span class="py-string">&quot;Clustalw/opuntia.aln&quot;</span>, <span class="py-string">&quot;clustal&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">SingleLetterAlphabet() alignment with 7 rows and 156 columns</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191</span>
+<span class="py-output">TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191</span></pre>
+<p>In some respects you can treat these objects as lists of SeqRecord objects,
+each representing a row of the alignment. Iterating over an alignment gives
+the SeqRecord object for each row:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>len(align)
+<span class="py-output">7</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> align:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">gi|6273285|gb|AF191659.1|AF191 156</span>
+<span class="py-output">gi|6273284|gb|AF191658.1|AF191 156</span>
+<span class="py-output">gi|6273287|gb|AF191661.1|AF191 156</span>
+<span class="py-output">gi|6273286|gb|AF191660.1|AF191 156</span>
+<span class="py-output">gi|6273290|gb|AF191664.1|AF191 156</span>
+<span class="py-output">gi|6273289|gb|AF191663.1|AF191 156</span>
+<span class="py-output">gi|6273291|gb|AF191665.1|AF191 156</span></pre>
+<p>You can also access individual rows as SeqRecord objects via their index:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align[0].id)
+<span class="py-output">gi|6273285|gb|AF191659.1|AF191</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align[-1].id)
+<span class="py-output">gi|6273291|gb|AF191665.1|AF191</span></pre>
+<p>And extract columns as strings:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align[:, 1])
+<span class="py-output">AAAAAAA</span></pre>
+<p>Or, take just the first ten columns as a sub-alignment:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align[:, :10])
+<span class="py-output">SingleLetterAlphabet() alignment with 7 rows and 10 columns</span>
+<span class="py-output">TATACATTAA gi|6273285|gb|AF191659.1|AF191</span>
+<span class="py-output">TATACATTAA gi|6273284|gb|AF191658.1|AF191</span>
+<span class="py-output">TATACATTAA gi|6273287|gb|AF191661.1|AF191</span>
+<span class="py-output">TATACATAAA gi|6273286|gb|AF191660.1|AF191</span>
+<span class="py-output">TATACATTAA gi|6273290|gb|AF191664.1|AF191</span>
+<span class="py-output">TATACATTAA gi|6273289|gb|AF191663.1|AF191</span>
+<span class="py-output">TATACATTAA gi|6273291|gb|AF191665.1|AF191</span></pre>
+<p>Combining this alignment slicing with alignment addition allows you to
+remove a section of the alignment. For example, taking just the first
+and last ten columns:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align[:, :10] + align[:, -10:])
+<span class="py-output">SingleLetterAlphabet() alignment with 7 rows and 20 columns</span>
+<span class="py-output">TATACATTAAGTGTACCAGA gi|6273285|gb|AF191659.1|AF191</span>
+<span class="py-output">TATACATTAAGTGTACCAGA gi|6273284|gb|AF191658.1|AF191</span>
+<span class="py-output">TATACATTAAGTGTACCAGA gi|6273287|gb|AF191661.1|AF191</span>
+<span class="py-output">TATACATAAAGTGTACCAGA gi|6273286|gb|AF191660.1|AF191</span>
+<span class="py-output">TATACATTAAGTGTACCAGA gi|6273290|gb|AF191664.1|AF191</span>
+<span class="py-output">TATACATTAAGTATACCAGA gi|6273289|gb|AF191663.1|AF191</span>
+<span class="py-output">TATACATTAAGTGTACCAGA gi|6273291|gb|AF191665.1|AF191</span></pre>
+<p>Note - This object is intended to replace the existing Alignment object
+defined in module Bio.Align.Generic but is not fully backwards compatible
+with it.</p>
+<p>Note - This object does NOT attempt to model the kind of alignments used
+in next generation sequencing with multiple sequencing reads which are
+much shorter than the alignment, and where there is usually a consensus or
+reference sequence with special status.</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">records</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">annotations</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Initialize a new MultipleSeqAlignment object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#extend" class="summary-sig-name">extend</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">records</span>)</span><br />
+      Add more SeqRecord objects to the alignment as rows.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.extend">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#append" class="summary-sig-name">append</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">record</span>)</span><br />
+      Add one more SeqRecord object to the alignment as a new row.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.append">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_append"></a><span class="summary-sig-name">_append</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">record</span>,
+        <span class="summary-sig-arg">expected_length</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Helper function (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment._append">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#__add__" class="summary-sig-name">__add__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      Combines to alignments with the same number of rows by adding them.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.__add__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      Access part of the alignment.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#sort" class="summary-sig-name">sort</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Sort the rows (SeqRecord objects) of the alignment in place.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.sort">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#get_column" class="summary-sig-name">get_column</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">col</span>)</span><br />
+      Returns a string containing a given column (DEPRECATED).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.get_column">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#add_sequence" class="summary-sig-name">add_sequence</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">descriptor</span>,
+        <span class="summary-sig-arg">sequence</span>,
+        <span class="summary-sig-arg">start</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">end</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">weight</span>=<span class="summary-sig-default">1.0</span>)</span><br />
+      Add a sequence to the alignment (DEPRECATED).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.add_sequence">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.Align.Generic.Alignment-class.html">Generic.Alignment</a></code></b>:
+      <code><a href="Bio.Align.Generic.Alignment-class.html#__format__">__format__</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#__iter__">__iter__</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#__len__">__len__</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#__repr__">__repr__</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#__str__">__str__</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#format">format</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#get_alignment_length">get_alignment_length</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#get_all_seqs">get_all_seqs</a></code>,
+      <code><a href="Bio.Align.Generic.Alignment-class.html#get_seq_by_num">get_seq_by_num</a></code>
+      </p>
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.Align.Generic.Alignment-class.html">Generic.Alignment</a></code></b> (private):
+      <code><a href="Bio.Align.Generic.Alignment-class.html#_str_line" onclick="show_private();">_str_line</a></code>
+      </p></div>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">records</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">annotations</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Initialize a new MultipleSeqAlignment object.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last">
+<li><dl class="rst-first rst-docutils">
+<dt>records - A list (or iterator) of SeqRecord objects, whose</dt>
+<dd><p class="rst-first rst-last">sequences are all the same length.  This may be an be an
+empty list.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>alphabet - The alphabet for the whole alignment, typically a gapped</dt>
+<dd><p class="rst-first rst-last">alphabet, which should be a super-set of the individual
+record alphabets.  If omitted, a consensus alphabet is
+used.</p>
+</dd>
+</dl>
+</li>
+<li><p class="rst-first">annotations - Information about the whole alignment (dictionary).</p>
+</li>
+</ul>
+</dd>
+</dl>
+<p>You would normally load a MSA from a file using Bio.AlignIO, but you
+can do this from a list of SeqRecord objects too:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span>a = SeqRecord(Seq(<span class="py-string">&quot;AAAACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Alpha&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>b = SeqRecord(Seq(<span class="py-string">&quot;AAA-CGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>c = SeqRecord(Seq(<span class="py-string">&quot;AAAAGGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>align = MultipleSeqAlignment([a, b, c], annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>})
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 7 columns</span>
+<span class="py-output">AAAACGT Alpha</span>
+<span class="py-output">AAA-CGT Beta</span>
+<span class="py-output">AAAAGGT Gamma</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>align.annotations
+<span class="py-output">{'tool': 'demo'}</span></pre>
+<p>NOTE - The older Bio.Align.Generic.Alignment class only accepted a
+single argument, an alphabet.  This is still supported via a backwards
+compatible &quot;hack&quot; so as not to disrupt existing scripts and users, but
+is deprecated and will be removed in a future release.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="extend"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">extend</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">records</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.extend">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add more SeqRecord objects to the alignment as rows.</p>
+<p>They must all have the same length as the original alignment, and have
+alphabets compatible with the alignment's alphabet. For example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Align <span class="py-keyword">import</span> MultipleSeqAlignment
+<span class="py-prompt">&gt;&gt;&gt; </span>a = SeqRecord(Seq(<span class="py-string">&quot;AAAACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Alpha&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>b = SeqRecord(Seq(<span class="py-string">&quot;AAA-CGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>c = SeqRecord(Seq(<span class="py-string">&quot;AAAAGGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>d = SeqRecord(Seq(<span class="py-string">&quot;AAAACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Delta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>e = SeqRecord(Seq(<span class="py-string">&quot;AAA-GGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Epsilon&quot;</span>)</pre>
+<p>First we create a small alignment (three rows):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align = MultipleSeqAlignment([a, b, c])
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 7 columns</span>
+<span class="py-output">AAAACGT Alpha</span>
+<span class="py-output">AAA-CGT Beta</span>
+<span class="py-output">AAAAGGT Gamma</span></pre>
+<p>Now we can extend this alignment with another two rows:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align.extend([d, e])
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">DNAAlphabet() alignment with 5 rows and 7 columns</span>
+<span class="py-output">AAAACGT Alpha</span>
+<span class="py-output">AAA-CGT Beta</span>
+<span class="py-output">AAAAGGT Gamma</span>
+<span class="py-output">AAAACGT Delta</span>
+<span class="py-output">AAA-GGT Epsilon</span></pre>
+<p>Because the alignment object allows iteration over the rows as
+SeqRecords, you can use the extend method with a second alignment
+(provided its sequences have the same length as the original alignment).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="append"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">append</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">record</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.append">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add one more SeqRecord object to the alignment as a new row.</p>
+<p>This must have the same length as the original alignment (unless this is
+the first record), and have an alphabet compatible with the alignment's
+alphabet.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>align = AlignIO.read(<span class="py-string">&quot;Clustalw/opuntia.aln&quot;</span>, <span class="py-string">&quot;clustal&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">SingleLetterAlphabet() alignment with 7 rows and 156 columns</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191</span>
+<span class="py-output">TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(align)
+<span class="py-output">7</span></pre>
+<p>We'll now construct a dummy record to append as an example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span>dummy = SeqRecord(Seq(<span class="py-string">&quot;N&quot;</span>*156), id=<span class="py-string">&quot;dummy&quot;</span>)</pre>
+<p>Now append this to the alignment,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align.append(dummy)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
+<span class="py-output">SingleLetterAlphabet() alignment with 8 rows and 156 columns</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191</span>
+<span class="py-output">TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191</span>
+<span class="py-output">TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191</span>
+<span class="py-output">TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191</span>
+<span class="py-output">NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNN dummy</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(align)
+<span class="py-output">8</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__add__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__add__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+    <br /><em class="fname">(Addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.__add__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Combines to alignments with the same number of rows by adding them.</p>
+<p>If you have two multiple sequence alignments (MSAs), there are two ways to think
+about adding them - by row or by column. Using the extend method adds by row.
+Using the addition operator adds by column. For example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Align <span class="py-keyword">import</span> MultipleSeqAlignment
+<span class="py-prompt">&gt;&gt;&gt; </span>a1 = SeqRecord(Seq(<span class="py-string">&quot;AAAAC&quot;</span>, generic_dna), id=<span class="py-string">&quot;Alpha&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>b1 = SeqRecord(Seq(<span class="py-string">&quot;AAA-C&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>c1 = SeqRecord(Seq(<span class="py-string">&quot;AAAAG&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>a2 = SeqRecord(Seq(<span class="py-string">&quot;GT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Alpha&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>b2 = SeqRecord(Seq(<span class="py-string">&quot;GT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>c2 = SeqRecord(Seq(<span class="py-string">&quot;GT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>left = MultipleSeqAlignment([a1, b1, c1],
+<span class="py-more">... </span>                            annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>, <span class="py-string">&quot;name&quot;</span>: <span class="py-string">&quot;start&quot;</span>})
+<span class="py-prompt">&gt;&gt;&gt; </span>right = MultipleSeqAlignment([a2, b2, c2],
+<span class="py-more">... </span>                            annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>, <span class="py-string">&quot;name&quot;</span>: <span class="py-string">&quot;end&quot;</span>})</pre>
+<p>Now, let's look at these two alignments:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(left)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 5 columns</span>
+<span class="py-output">AAAAC Alpha</span>
+<span class="py-output">AAA-C Beta</span>
+<span class="py-output">AAAAG Gamma</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(right)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 2 columns</span>
+<span class="py-output">GT Alpha</span>
+<span class="py-output">GT Beta</span>
+<span class="py-output">GT Gamma</span></pre>
+<p>And add them:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>combined = left + right
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(combined)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 7 columns</span>
+<span class="py-output">AAAACGT Alpha</span>
+<span class="py-output">AAA-CGT Beta</span>
+<span class="py-output">AAAAGGT Gamma</span></pre>
+<p>For this to work, both alignments must have the same number of records (here
+they both have 3 rows):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>len(left)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(right)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(combined)
+<span class="py-output">3</span></pre>
+<p>The individual rows are SeqRecord objects, and these can be added together. Refer
+to the SeqRecord documentation for details of how the annotation is handled. This
+example is a special case in that both original alignments shared the same names,
+meaning when the rows are added they also get the same name.</p>
+<p>Any common annotations are preserved, but differing annotation is lost. This is
+the same behaviour used in the SeqRecord annotations and is designed to prevent
+accidental propagation of inappropriate values:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>combined.annotations
+<span class="py-output">{'tool': 'demo'}</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.__getitem__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Access part of the alignment.</p>
+<p>Depending on the indices, you can get a SeqRecord object
+(representing a single row), a Seq object (for a single columns),
+a string (for a single characters) or another alignment
+(representing some part or all of the alignment).</p>
+<p>align[r,c] gives a single character as a string
+align[r] gives a row as a SeqRecord
+align[r,:] gives a row as a SeqRecord
+align[:,c] gives a column as a Seq (using the alignment's alphabet)</p>
+<p>align[:] and align[:,:] give a copy of the alignment</p>
+<p>Anything else gives a sub alignment, e.g.
+align[0:2] or align[0:2,:] uses only row 0 and 1
+align[:,1:3] uses only columns 1 and 2
+align[0:2,1:3] uses only rows 0 &amp; 1 and only cols 1 &amp; 2</p>
+<p>We'll use the following example alignment here for illustration:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Align <span class="py-keyword">import</span> MultipleSeqAlignment
+<span class="py-prompt">&gt;&gt;&gt; </span>a = SeqRecord(Seq(<span class="py-string">&quot;AAAACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Alpha&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>b = SeqRecord(Seq(<span class="py-string">&quot;AAA-CGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>c = SeqRecord(Seq(<span class="py-string">&quot;AAAAGGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>d = SeqRecord(Seq(<span class="py-string">&quot;AAAACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Delta&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>e = SeqRecord(Seq(<span class="py-string">&quot;AAA-GGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Epsilon&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>align = MultipleSeqAlignment([a, b, c, d, e], generic_dna)</pre>
+<p>You can access a row of the alignment as a SeqRecord using an integer
+index (think of the alignment as a list of SeqRecord objects here):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>first_record = align[0]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (first_record.id, first_record.seq))
+<span class="py-output">Alpha AAAACGT</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>last_record = align[-1]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (last_record.id, last_record.seq))
+<span class="py-output">Epsilon AAA-GGT</span></pre>
+<p>You can also access use python's slice notation to create a sub-alignment
+containing only some of the SeqRecord objects:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_alignment = align[2:5]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_alignment)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 7 columns</span>
+<span class="py-output">AAAAGGT Gamma</span>
+<span class="py-output">AAAACGT Delta</span>
+<span class="py-output">AAA-GGT Epsilon</span></pre>
+<p>This includes support for a step, i.e. align[start:end:step], which
+can be used to select every second sequence:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sub_alignment = align[::2]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_alignment)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 7 columns</span>
+<span class="py-output">AAAACGT Alpha</span>
+<span class="py-output">AAAAGGT Gamma</span>
+<span class="py-output">AAA-GGT Epsilon</span></pre>
+<p>Or to get a copy of the alignment with the rows in reverse order:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>rev_alignment = align[::-1]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rev_alignment)
+<span class="py-output">DNAAlphabet() alignment with 5 rows and 7 columns</span>
+<span class="py-output">AAA-GGT Epsilon</span>
+<span class="py-output">AAAACGT Delta</span>
+<span class="py-output">AAAAGGT Gamma</span>
+<span class="py-output">AAA-CGT Beta</span>
+<span class="py-output">AAAACGT Alpha</span></pre>
+<p>You can also use two indices to specify both rows and columns. Using simple
+integers gives you the entry as a single character string. e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align[3, 4]
+<span class="py-output">'C'</span></pre>
+<p>This is equivalent to:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align[3][4]
+<span class="py-output">'C'</span></pre>
+<p>or:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align[3].seq[4]
+<span class="py-output">'C'</span></pre>
+<p>To get a single column (as a string) use this syntax:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align[:, 4]
+<span class="py-output">'CCGCG'</span></pre>
+<p>Or, to get part of a column,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align[1:3, 4]
+<span class="py-output">'CG'</span></pre>
+<p>However, in general you get a sub-alignment,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align[1:5, 3:6])
+<span class="py-output">DNAAlphabet() alignment with 4 rows and 3 columns</span>
+<span class="py-output">-CG Beta</span>
+<span class="py-output">AGG Gamma</span>
+<span class="py-output">ACG Delta</span>
+<span class="py-output">-GG Epsilon</span></pre>
+<p>This should all seem familiar to anyone who has used the NumPy
+array or matrix objects.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Align.Generic.Alignment-class.html#__getitem__">Generic.Alignment.__getitem__</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="sort"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sort</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.sort">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sort the rows (SeqRecord objects) of the alignment in place.</p>
+<p>This sorts the rows alphabetically using the SeqRecord object id by
+default. The sorting can be controlled by supplying a key function
+which must map each SeqRecord to a sort value.</p>
+<p>This is useful if you want to add two alignments which use the same
+record identifiers, but in a different order. For example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Align <span class="py-keyword">import</span> MultipleSeqAlignment
+<span class="py-prompt">&gt;&gt;&gt; </span>align1 = MultipleSeqAlignment([
+<span class="py-more">... </span>             SeqRecord(Seq(<span class="py-string">&quot;ACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Human&quot;</span>),
+<span class="py-more">... </span>             SeqRecord(Seq(<span class="py-string">&quot;ACGG&quot;</span>, generic_dna), id=<span class="py-string">&quot;Mouse&quot;</span>),
+<span class="py-more">... </span>             SeqRecord(Seq(<span class="py-string">&quot;ACGC&quot;</span>, generic_dna), id=<span class="py-string">&quot;Chicken&quot;</span>),
+<span class="py-more">... </span>         ])
+<span class="py-prompt">&gt;&gt;&gt; </span>align2 = MultipleSeqAlignment([
+<span class="py-more">... </span>             SeqRecord(Seq(<span class="py-string">&quot;CGGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Mouse&quot;</span>),
+<span class="py-more">... </span>             SeqRecord(Seq(<span class="py-string">&quot;CGTT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Human&quot;</span>),
+<span class="py-more">... </span>             SeqRecord(Seq(<span class="py-string">&quot;CGCT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Chicken&quot;</span>),
+<span class="py-more">... </span>         ])</pre>
+<p>If you simple try and add these without sorting, you get this:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align1 + align2)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 8 columns</span>
+<span class="py-output">ACGTCGGT &lt;unknown id&gt;</span>
+<span class="py-output">ACGGCGTT &lt;unknown id&gt;</span>
+<span class="py-output">ACGCCGCT Chicken</span></pre>
+<p>Consult the SeqRecord documentation which explains why you get a
+default value when annotation like the identifier doesn't match up.
+However, if we sort the alignments first, then add them we get the
+desired result:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align1.sort()
+<span class="py-prompt">&gt;&gt;&gt; </span>align2.sort()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align1 + align2)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 8 columns</span>
+<span class="py-output">ACGCCGCT Chicken</span>
+<span class="py-output">ACGTCGTT Human</span>
+<span class="py-output">ACGGCGGT Mouse</span></pre>
+<p>As an example using a different sort order, you could sort on the
+GC content of each sequence.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> GC
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align1)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 4 columns</span>
+<span class="py-output">ACGC Chicken</span>
+<span class="py-output">ACGT Human</span>
+<span class="py-output">ACGG Mouse</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>align1.sort(key = <span class="py-keyword">lambda</span> record: GC(record.seq))
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align1)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 4 columns</span>
+<span class="py-output">ACGT Human</span>
+<span class="py-output">ACGC Chicken</span>
+<span class="py-output">ACGG Mouse</span></pre>
+<p>There is also a reverse argument, so if you wanted to sort by ID
+but backwards:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>align1.sort(reverse=True)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align1)
+<span class="py-output">DNAAlphabet() alignment with 3 rows and 4 columns</span>
+<span class="py-output">ACGG Mouse</span>
+<span class="py-output">ACGT Human</span>
+<span class="py-output">ACGC Chicken</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_column"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_column</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">col</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.get_column">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a string containing a given column (DEPRECATED).</p>
+<p>This is a method provided for backwards compatibility with the old
+Bio.Align.Generic.Alignment object. Please use the slice notation
+instead, since get_column is likely to be removed in a future release
+of Biopython..</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Align.Generic.Alignment-class.html#get_column">Generic.Alignment.get_column</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="add_sequence"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_sequence</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">descriptor</span>,
+        <span class="sig-arg">sequence</span>,
+        <span class="sig-arg">start</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">end</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">weight</span>=<span class="sig-default">1.0</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.add_sequence">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add a sequence to the alignment (DEPRECATED).</p>
+<p>The start, end, and weight arguments are not supported! This method
+only provides limited backwards compatibility with the old
+Bio.Align.Generic.Alignment object. Please use the append method with
+a SeqRecord instead, since add_sequence is likely to be removed in a
+future release of Biopython.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Align.Generic.Alignment-class.html#add_sequence">Generic.Alignment.add_sequence</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:32 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

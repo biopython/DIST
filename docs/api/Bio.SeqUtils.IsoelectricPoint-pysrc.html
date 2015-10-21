@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SeqUtils.IsoelectricPoint</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SeqUtils-module.html">Package&nbsp;SeqUtils</a> ::
+        Module&nbsp;IsoelectricPoint
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SeqUtils.IsoelectricPoint-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.SeqUtils.IsoelectricPoint-module.html">Module Bio.SeqUtils.IsoelectricPoint</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright Yair Benita Y.Benita@pharm.uu.nl</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Biopython (http://biopython.org) license applies</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-docstring">"""Calculate isoelectric points of polypeptides using methods of Bjellqvist.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">pK values and the methos are taken from::</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">    * Bjellqvist, B.,Hughes, G.J., Pasquali, Ch., Paquet, N., Ravier, F., Sanchez,</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">    J.-Ch., Frutiger, S. &amp; Hochstrasser, D.F.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">    The focusing positions of polypeptides in immobilized pH gradients can be predicted</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">    from their amino acid sequences. Electrophoresis 1993, 14, 1023-1031.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-docstring">    * Bjellqvist, B., Basse, B., Olsen, E. and Celis, J.E.</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-docstring">    Reference points for comparisons of two-dimensional maps of proteins from</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">    different human cell types defined in a pH scale where isoelectric points correlate</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring">    with polypeptide compositions. Electrophoresis 1994, 15, 529-539.</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">I designed the algorithm according to a note by David L. Tabb, available at:</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">http://fields.scripps.edu/DTASelect/20010710-pI-Algorithm.pdf</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable Bio.SeqUtils.IsoelectricPoint.positive_pKs=Bio.SeqUtils.IsoelectricPoint-module.html#positive_pKs"><a title="Bio.SeqUtils.IsoelectricPoint.positive_pKs" class="py-name" href="#" onclick="return doclink('link-0', 'positive_pKs', 'link-0');">positive_pKs</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">'Nterm'</tt><tt class="py-op">:</tt> <tt class="py-number">7.5</tt><tt class="py-op">,</tt> <tt class="py-string">'K'</tt><tt class="py-op">:</tt> <tt class="py-number">10.0</tt><tt class="py-op">,</tt> <tt class="py-string">'R'</tt><tt class="py-op">:</tt> <tt class="py-number">12.0</tt><tt class="py-op">,</tt> <tt class="py-string">'H'</tt><tt class="py-op">:</tt> <tt class="py-number">5.98</tt><tt class="py-op">}</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable Bio.SeqUtils.IsoelectricPoint.negative_pKs=Bio.SeqUtils.IsoelectricPoint-module.html#negative_pKs"><a title="Bio.SeqUtils.IsoelectricPoint.negative_pKs" class="py-name" href="#" onclick="return doclink('link-1', 'negative_pKs', 'link-1');">negative_pKs</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">'Cterm'</tt><tt class="py-op">:</tt> <tt class="py-number">3.55</tt><tt class="py-op">,</tt> <tt class="py-string">'D'</tt><tt class="py-op">:</tt> <tt class="py-number">4.05</tt><tt class="py-op">,</tt> <tt class="py-string">'E'</tt><tt class="py-op">:</tt> <tt class="py-number">4.45</tt><tt class="py-op">,</tt> <tt class="py-string">'C'</tt><tt class="py-op">:</tt> <tt class="py-number">9.0</tt><tt class="py-op">,</tt> <tt class="py-string">'Y'</tt><tt class="py-op">:</tt> <tt class="py-number">10.0</tt><tt class="py-op">}</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt id="link-2" class="py-name" targets="Variable Bio.SeqUtils.IsoelectricPoint.pKcterminal=Bio.SeqUtils.IsoelectricPoint-module.html#pKcterminal"><a title="Bio.SeqUtils.IsoelectricPoint.pKcterminal" class="py-name" href="#" onclick="return doclink('link-2', 'pKcterminal', 'link-2');">pKcterminal</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">'D'</tt><tt class="py-op">:</tt> <tt class="py-number">4.55</tt><tt class="py-op">,</tt> <tt class="py-string">'E'</tt><tt class="py-op">:</tt> <tt class="py-number">4.75</tt><tt class="py-op">}</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable Bio.SeqUtils.IsoelectricPoint.pKnterminal=Bio.SeqUtils.IsoelectricPoint-module.html#pKnterminal"><a title="Bio.SeqUtils.IsoelectricPoint.pKnterminal" class="py-name" href="#" onclick="return doclink('link-3', 'pKnterminal', 'link-3');">pKnterminal</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">'A'</tt><tt class="py-op">:</tt> <tt class="py-number">7.59</tt><tt class="py-op">,</tt> <tt class="py-string">'M'</tt><tt class="py-op">:</tt> <tt class="py-number">7.0</tt><tt class="py-op">,</tt> <tt class="py-string">'S'</tt><tt class="py-op">:</tt> <tt class="py-number">6.93</tt><tt class="py-op">,</tt> <tt class="py-string">'P'</tt><tt class="py-op">:</tt> <tt class="py-number">8.36</tt><tt class="py-op">,</tt> <tt class="py-string">'T'</tt><tt class="py-op">:</tt> <tt class="py-number">6.82</tt><tt class="py-op">,</tt> <tt class="py-string">'V'</tt><tt class="py-op">:</tt> <tt class="py-number">7.44</tt><tt class="py-op">,</tt> <tt class="py-string">'E'</tt><tt class="py-op">:</tt> <tt class="py-number">7.7</tt><tt class="py-op">}</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable Bio.SeqUtils.IsoelectricPoint.charged_aas=Bio.SeqUtils.IsoelectricPoint-module.html#charged_aas"><a title="Bio.SeqUtils.IsoelectricPoint.charged_aas" class="py-name" href="#" onclick="return doclink('link-4', 'charged_aas', 'link-4');">charged_aas</a></tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-string">'K'</tt><tt class="py-op">,</tt> <tt class="py-string">'R'</tt><tt class="py-op">,</tt> <tt class="py-string">'H'</tt><tt class="py-op">,</tt> <tt class="py-string">'D'</tt><tt class="py-op">,</tt> <tt class="py-string">'E'</tt><tt class="py-op">,</tt> <tt class="py-string">'C'</tt><tt class="py-op">,</tt> <tt class="py-string">'Y'</tt><tt class="py-op">)</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-comment"># access this module through ProtParam.ProteinAnalysis class.</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-comment"># first make a ProteinAnalysis object and then call its isoelectric_point method.</tt> </tt>
+<a name="IsoelectricPoint"></a><div id="IsoelectricPoint-def"><a name="L34"></a><tt class="py-lineno"> 34</tt> <a class="py-toggle" href="#" id="IsoelectricPoint-toggle" onclick="return toggle('IsoelectricPoint');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html">IsoelectricPoint</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="IsoelectricPoint-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="IsoelectricPoint-expanded"><a name="IsoelectricPoint.__init__"></a><div id="IsoelectricPoint.__init__-def"><a name="L35"></a><tt class="py-lineno"> 35</tt> <a class="py-toggle" href="#" id="IsoelectricPoint.__init__-toggle" onclick="return toggle('IsoelectricPoint.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">ProteinSequence</tt><tt class="py-op">,</tt> <tt class="py-param">AminoAcidsContent</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="IsoelectricPoint.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="IsoelectricPoint.__init__-expanded"><a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method Bio.FSSP.FSSPAlignDict.sequence()=Bio.FSSP.FSSPAlignDict-class.html#sequence,Method Bio.GenBank._FeatureConsumer.sequence()=Bio.GenBank._FeatureConsumer-class.html#sequence,Method Bio.GenBank._RecordConsumer.sequence()=Bio.GenBank._RecordConsumer-class.html#sequence,Method Bio.Phylo.PhyloXMLIO.Writer.sequence()=Bio.Phylo.PhyloXMLIO.Writer-class.html#sequence"><a title="Bio.FSSP.FSSPAlignDict.sequence
+Bio.GenBank._FeatureConsumer.sequence
+Bio.GenBank._RecordConsumer.sequence
+Bio.Phylo.PhyloXMLIO.Writer.sequence" class="py-name" href="#" onclick="return doclink('link-5', 'sequence', 'link-5');">sequence</a></tt> <tt class="py-op">=</tt> <tt class="py-name">ProteinSequence</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">charged_aas_content</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint._select_charged()=Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#_select_charged"><a title="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint._select_charged" class="py-name" href="#" onclick="return doclink('link-6', '_select_charged', 'link-6');">_select_charged</a></tt><tt class="py-op">(</tt><tt class="py-name">AminoAcidsContent</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">    <tt class="py-comment"># This function creates a dictionary with the contents of each charged aa,</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">    <tt class="py-comment"># plus Cterm and Nterm.</tt> </tt>
+<a name="IsoelectricPoint._select_charged"></a><div id="IsoelectricPoint._select_charged-def"><a name="L41"></a><tt class="py-lineno"> 41</tt> <a class="py-toggle" href="#" id="IsoelectricPoint._select_charged-toggle" onclick="return toggle('IsoelectricPoint._select_charged');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#_select_charged">_select_charged</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">AminoAcidsContent</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="IsoelectricPoint._select_charged-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="IsoelectricPoint._select_charged-expanded"><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">        <tt class="py-name">charged</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">aa</tt> <tt class="py-keyword">in</tt> <tt id="link-7" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.charged_aas" class="py-name" href="#" onclick="return doclink('link-7', 'charged_aas', 'link-4');">charged_aas</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">            <tt class="py-name">charged</tt><tt class="py-op">[</tt><tt class="py-name">aa</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">AminoAcidsContent</tt><tt class="py-op">[</tt><tt class="py-name">aa</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-name">charged</tt><tt class="py-op">[</tt><tt class="py-string">'Nterm'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">        <tt class="py-name">charged</tt><tt class="py-op">[</tt><tt class="py-string">'Cterm'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">charged</tt> </tt>
+</div><a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt class="py-comment"># This function calculates the total charge of the protein at a given pH.</tt> </tt>
+<a name="IsoelectricPoint._chargeR"></a><div id="IsoelectricPoint._chargeR-def"><a name="L50"></a><tt class="py-lineno"> 50</tt> <a class="py-toggle" href="#" id="IsoelectricPoint._chargeR-toggle" onclick="return toggle('IsoelectricPoint._chargeR');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#_chargeR">_chargeR</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pH</tt><tt class="py-op">,</tt> <tt class="py-param">pos_pKs</tt><tt class="py-op">,</tt> <tt class="py-param">neg_pKs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="IsoelectricPoint._chargeR-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="IsoelectricPoint._chargeR-expanded"><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-name">PositiveCharge</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">aa</tt><tt class="py-op">,</tt> <tt class="py-name">pK</tt> <tt class="py-keyword">in</tt> <tt class="py-name">pos_pKs</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method Bio.Crystal.Crystal.items()=Bio.Crystal.Crystal-class.html#items,Method Bio.File._IndexedSeqFileDict.items()=Bio.File._IndexedSeqFileDict-class.html#items,Method Bio.Phylo.PhyloXML.Events.items()=Bio.Phylo.PhyloXML.Events-class.html#items,Variable Bio.SearchIO._model.query.QueryResult.items=Bio.SearchIO._model.query.QueryResult-class.html#items,Method Bio._py3k._ordereddict.OrderedDict.items()=Bio._py3k._ordereddict.OrderedDict-class.html#items,Method BioSQL.BioSeqDatabase.BioSeqDatabase.items()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#items,Method BioSQL.BioSeqDatabase.DBServer.items()=BioSQL.BioSeqDatabase.DBServer-class.html#items"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-8', 'items', 'link-8');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">            <tt class="py-name">CR</tt> <tt class="py-op">=</tt> <tt class="py-number">10</tt> <tt class="py-op">**</tt> <tt class="py-op">(</tt><tt class="py-name">pK</tt> <tt class="py-op">-</tt> <tt class="py-name">pH</tt><tt class="py-op">)</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">            <tt class="py-name">partial_charge</tt> <tt class="py-op">=</tt> <tt class="py-name">CR</tt> <tt class="py-op">/</tt> <tt class="py-op">(</tt><tt class="py-name">CR</tt> <tt class="py-op">+</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">            <tt class="py-name">PositiveCharge</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">charged_aas_content</tt><tt class="py-op">[</tt><tt class="py-name">aa</tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">partial_charge</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-name">NegativeCharge</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">aa</tt><tt class="py-op">,</tt> <tt class="py-name">pK</tt> <tt class="py-keyword">in</tt> <tt class="py-name">neg_pKs</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-9', 'items', 'link-8');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">            <tt class="py-name">CR</tt> <tt class="py-op">=</tt> <tt class="py-number">10</tt> <tt class="py-op">**</tt> <tt class="py-op">(</tt><tt class="py-name">pH</tt> <tt class="py-op">-</tt> <tt class="py-name">pK</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-name">partial_charge</tt> <tt class="py-op">=</tt> <tt class="py-name">CR</tt> <tt class="py-op">/</tt> <tt class="py-op">(</tt><tt class="py-name">CR</tt> <tt class="py-op">+</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">            <tt class="py-name">NegativeCharge</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">charged_aas_content</tt><tt class="py-op">[</tt><tt class="py-name">aa</tt><tt class="py-op">]</tt> <tt class="py-op">*</tt> <tt class="py-name">partial_charge</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">PositiveCharge</tt> <tt class="py-op">-</tt> <tt class="py-name">NegativeCharge</tt> </tt>
+</div><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">    <tt class="py-comment"># This is the action function, it tries different pH until the charge of the protein is 0 (or close).</tt> </tt>
+<a name="IsoelectricPoint.pi"></a><div id="IsoelectricPoint.pi-def"><a name="L66"></a><tt class="py-lineno"> 66</tt> <a class="py-toggle" href="#" id="IsoelectricPoint.pi-toggle" onclick="return toggle('IsoelectricPoint.pi');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#pi">pi</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="IsoelectricPoint.pi-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="IsoelectricPoint.pi-expanded"><a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">pos_pKs</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt id="link-10" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.positive_pKs" class="py-name" href="#" onclick="return doclink('link-10', 'positive_pKs', 'link-0');">positive_pKs</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-name">neg_pKs</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt id="link-11" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.negative_pKs" class="py-name" href="#" onclick="return doclink('link-11', 'negative_pKs', 'link-1');">negative_pKs</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">        <tt class="py-name">nterm</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="Bio.FSSP.FSSPAlignDict.sequence
+Bio.GenBank._FeatureConsumer.sequence
+Bio.GenBank._RecordConsumer.sequence
+Bio.Phylo.PhyloXMLIO.Writer.sequence" class="py-name" href="#" onclick="return doclink('link-12', 'sequence', 'link-5');">sequence</a></tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-name">cterm</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="Bio.FSSP.FSSPAlignDict.sequence
+Bio.GenBank._FeatureConsumer.sequence
+Bio.GenBank._RecordConsumer.sequence
+Bio.Phylo.PhyloXMLIO.Writer.sequence" class="py-name" href="#" onclick="return doclink('link-13', 'sequence', 'link-5');">sequence</a></tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">nterm</tt> <tt class="py-keyword">in</tt> <tt id="link-14" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.pKnterminal" class="py-name" href="#" onclick="return doclink('link-14', 'pKnterminal', 'link-3');">pKnterminal</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">            <tt class="py-name">pos_pKs</tt><tt class="py-op">[</tt><tt class="py-string">'Nterm'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-15" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.pKnterminal" class="py-name" href="#" onclick="return doclink('link-15', 'pKnterminal', 'link-3');">pKnterminal</a></tt><tt class="py-op">[</tt><tt class="py-name">nterm</tt><tt class="py-op">]</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">cterm</tt> <tt class="py-keyword">in</tt> <tt id="link-16" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.pKcterminal" class="py-name" href="#" onclick="return doclink('link-16', 'pKcterminal', 'link-2');">pKcterminal</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt class="py-name">neg_pKs</tt><tt class="py-op">[</tt><tt class="py-string">'Cterm'</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-17" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.pKcterminal" class="py-name" href="#" onclick="return doclink('link-17', 'pKcterminal', 'link-2');">pKcterminal</a></tt><tt class="py-op">[</tt><tt class="py-name">cterm</tt><tt class="py-op">]</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-comment"># Bracket between pH1 and pH2</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">pH</tt> <tt class="py-op">=</tt> <tt class="py-number">7.0</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-name">Charge</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Method Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint._chargeR()=Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#_chargeR"><a title="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint._chargeR" class="py-name" href="#" onclick="return doclink('link-18', '_chargeR', 'link-18');">_chargeR</a></tt><tt class="py-op">(</tt><tt class="py-name">pH</tt><tt class="py-op">,</tt> <tt class="py-name">pos_pKs</tt><tt class="py-op">,</tt> <tt class="py-name">neg_pKs</tt><tt class="py-op">)</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">Charge</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">            <tt class="py-name">pH1</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">            <tt class="py-name">Charge1</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">            <tt class="py-keyword">while</tt> <tt class="py-name">Charge1</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">                <tt class="py-name">pH</tt> <tt class="py-op">=</tt> <tt class="py-name">pH1</tt> <tt class="py-op">+</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">                <tt class="py-name">Charge</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint._chargeR" class="py-name" href="#" onclick="return doclink('link-19', '_chargeR', 'link-18');">_chargeR</a></tt><tt class="py-op">(</tt><tt class="py-name">pH</tt><tt class="py-op">,</tt> <tt class="py-name">pos_pKs</tt><tt class="py-op">,</tt> <tt class="py-name">neg_pKs</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">Charge</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">                    <tt class="py-name">pH1</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">                    <tt class="py-name">Charge1</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">                    <tt class="py-name">pH2</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">                    <tt class="py-name">Charge2</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">                    <tt class="py-keyword">break</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-name">pH2</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">            <tt class="py-name">Charge2</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-keyword">while</tt> <tt class="py-name">Charge2</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">0.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">                <tt class="py-name">pH</tt> <tt class="py-op">=</tt> <tt class="py-name">pH2</tt> <tt class="py-op">-</tt> <tt class="py-number">1.0</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">                <tt class="py-name">Charge</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint._chargeR" class="py-name" href="#" onclick="return doclink('link-20', '_chargeR', 'link-18');">_chargeR</a></tt><tt class="py-op">(</tt><tt class="py-name">pH</tt><tt class="py-op">,</tt> <tt class="py-name">pos_pKs</tt><tt class="py-op">,</tt> <tt class="py-name">neg_pKs</tt><tt class="py-op">)</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">Charge</tt> <tt class="py-op">&lt;</tt> <tt class="py-number">0.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">                    <tt class="py-name">pH2</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">                    <tt class="py-name">Charge2</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">                <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">                    <tt class="py-name">pH1</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">                    <tt class="py-name">Charge1</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">                    <tt class="py-keyword">break</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">        <tt class="py-comment"># Bisection</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">pH2</tt> <tt class="py-op">-</tt> <tt class="py-name">pH1</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0.0001</tt> <tt class="py-keyword">and</tt> <tt class="py-name">Charge</tt> <tt class="py-op">!=</tt> <tt class="py-number">0.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">            <tt class="py-name">pH</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">pH1</tt> <tt class="py-op">+</tt> <tt class="py-name">pH2</tt><tt class="py-op">)</tt> <tt class="py-op">/</tt> <tt class="py-number">2.0</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">            <tt class="py-name">Charge</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint._chargeR" class="py-name" href="#" onclick="return doclink('link-21', '_chargeR', 'link-18');">_chargeR</a></tt><tt class="py-op">(</tt><tt class="py-name">pH</tt><tt class="py-op">,</tt> <tt class="py-name">pos_pKs</tt><tt class="py-op">,</tt> <tt class="py-name">neg_pKs</tt><tt class="py-op">)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">Charge</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">0.0</tt><tt class="py-op">:</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">                <tt class="py-name">pH1</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">                <tt class="py-name">Charge1</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">                <tt class="py-name">pH2</tt> <tt class="py-op">=</tt> <tt class="py-name">pH</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">                <tt class="py-name">Charge2</tt> <tt class="py-op">=</tt> <tt class="py-name">Charge</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">pH</tt> </tt>
+</div></div><a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:33 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

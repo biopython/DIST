@@ -1,0 +1,1205 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        Package&nbsp;SearchIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package SearchIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SearchIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Biopython interface for sequence search program outputs.</p>
+<p>The SearchIO submodule provides parsers, indexers, and writers for outputs from
+various sequence search programs. It provides an API similar to SeqIO and
+AlignIO, with the following main functions: <a href="Bio.SearchIO-module.html#parse" class="link">parse</a>, <a href="Bio.SearchIO-module.html#read" class="link">read</a>, <a href="Bio.SearchIO-module.html#to_dict" class="link">to_dict</a>, <a href="Bio.SearchIO-module.html#index" class="link">index</a>,
+<a href="Bio.SearchIO-module.html#index_db" class="link">index_db</a>, <a href="Bio.SearchIO-module.html#write" class="link">write</a>, and <a href="Bio.SearchIO-module.html#convert" class="link">convert</a>.</p>
+<p>SearchIO parses a search output file's contents into a hierarchy of four nested
+objects: QueryResult, Hit, HSP, and HSPFragment. Each of them models a part of
+the search output file:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>QueryResult represents a search query. This is the main object returned
+by the input functions and it contains all other objects.</li>
+<li>Hit represents a database hit,</li>
+<li>HSP represents high-scoring alignment region(s) in the hit,</li>
+<li>HSPFragment represents a contiguous alignment within the HSP</li>
+</ul>
+</blockquote>
+<p>In addition to the four objects above, SearchIO is also tightly integrated with
+the SeqRecord objects (see SeqIO) and MultipleSeqAlignment objects (see
+AlignIO). SeqRecord objects are used to store the actual matching hit and query
+sequences, while MultipleSeqAlignment objects stores the alignment between them.</p>
+<p>A detailed description of these objects' features and their example usages are
+available in their respective documentations.</p>
+<div class="rst-section" id="rst-input">
+<h1 class="heading">Input</h1>
+<p>The main function for parsing search output files is Bio.SearchIO.parse(...).
+This function parses a given search output file and returns a generator object
+that yields one QueryResult object per iteration.</p>
+<p><a href="Bio.SearchIO-module.html#parse" class="link">parse</a> takes two arguments: 1) a file handle or a filename of the input file
+(the search output file) and 2) the format name.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> qresult <span class="py-keyword">in</span> SearchIO.parse(<span class="py-string">'Blast/mirna.xml'</span>, <span class="py-string">'blast-xml'</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (qresult.id, qresult.description))
+<span class="py-more">...</span>
+<span class="py-output">33211 mir_1</span>
+<span class="py-output">33212 mir_2</span>
+<span class="py-output">33213 mir_3</span></pre>
+</blockquote>
+<p>SearchIO also provides the Bio.SearchIO.read(...) function, which is intended
+for use on search output files containing only one query. <a href="Bio.SearchIO-module.html#read" class="link">read</a> returns one
+QueryResult object and will raise an exception if the source file contains more
+than one queries:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = SearchIO.read(<span class="py-string">'Blast/xml_2226_blastp_004.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (qresult.id, qresult.description))
+<span class="py-more">...</span>
+<span class="py-output">gi|11464971:4-101 pleckstrin [Mus musculus]</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>SearchIO.read(<span class="py-string">'Blast/mirna.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">...</span>
+<span class="py-except">ValueError: ...</span></pre>
+</blockquote>
+<p>For accessing search results of large output files, you may use the indexing
+functions Bio.SearchIO.index(...) or Bio.SearchIO.index_db(...). They have a
+similar interface to their counterparts in SeqIO and AlignIO, with the addition
+of optional, format-specific keyword arguments.</p>
+</div>
+<div class="rst-section" id="rst-output">
+<h1 class="heading">Output</h1>
+<p>SearchIO has writing support for several formats, accessible from the
+Bio.SearchIO.write(...) function. This function returns a tuple of four
+numbers: the number of QueryResult, Hit, HSP, and HSPFragment written:</p>
+<pre class="rst-literal-block">
+qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+SearchIO.write(qresults, 'results.tab', 'blast-tab')
+&lt;stdout&gt; (3, 239, 277, 277)
+</pre>
+<p>Note that different writers may require different attribute values of the
+SearchIO objects. This limits the scope of writable search results to search
+results possessing the required attributes.</p>
+<p>For example, the writer for HMMER domain table output requires
+the conditional e-value attribute from each HSP object, among others. If you
+try to write to the HMMER domain table format and your HSPs do not have this
+attribute, an exception will be raised.</p>
+</div>
+<div class="rst-section" id="rst-conversion">
+<h1 class="heading">Conversion</h1>
+<p>SearchIO provides a shortcut function Bio.SearchIO.convert(...) to convert a
+given file into another format. Under the hood, <a href="Bio.SearchIO-module.html#convert" class="link">convert</a> simply parses a given
+output file and writes it to another using the <a href="Bio.SearchIO-module.html#parse" class="link">parse</a> and <a href="Bio.SearchIO-module.html#write" class="link">write</a> functions.</p>
+<p>Note that the same restrictions found in Bio.SearchIO.write(...) applies to the
+convert function as well.</p>
+</div>
+<div class="rst-section" id="rst-conventions">
+<h1 class="heading">Conventions</h1>
+<p>The main goal of creating SearchIO is to have a common, easy to use interface
+across different search output files. As such, we have also created some
+conventions / standards for SearchIO that extend beyond the common object model.
+These conventions apply to all files parsed by SearchIO, regardless of their
+individual formats.</p>
+<div class="rst-section" id="rst-python-style-sequence-coordinates">
+<h2 class="heading">Python-style sequence coordinates</h2>
+<p>When storing sequence coordinates (start and end values), SearchIO uses
+the Python-style slice convention: zero-based and half-open intervals. For
+example, if in a BLAST XML output file the start and end coordinates of an
+HSP are 10 and 28, they would become 9 and 28 in SearchIO. The start
+coordinate becomes 9 because Python indices start from zero, while the end
+coordinate remains 28 as Python slices omit the last item in an interval.</p>
+<p>Beside giving you the benefits of standardization, this convention also
+makes the coordinates usable for slicing sequences. For example, given a
+full query sequence and the start and end coordinates of an HSP, one can
+use the coordinates to extract part of the query sequence that results in
+the database hit.</p>
+<p>When these objects are written to an output file using
+SearchIO.write(...), the coordinate values are restored to their
+respective format's convention. Using the example above, if the HSP would
+be written to an XML file, the start and end coordinates would become 10
+and 28 again.</p>
+</div>
+<div class="rst-section" id="rst-sequence-coordinate-order">
+<h2 class="heading">Sequence coordinate order</h2>
+<p>Some search output format reverses the start and end coordinate sequences
+according to the sequence's strand. For example, in BLAST plain text
+format if the matching strand lies in the minus orientation, then the
+start coordinate will always be bigger than the end coordinate.</p>
+<p>In SearchIO, start coordinates are always smaller than the end
+coordinates, regardless of their originating strand. This ensures
+consistency when using the coordinates to slice full sequences.</p>
+<p>Note that this coordinate order convention is only enforced in the
+HSPFragment level. If an HSP object has several HSPFragment objects, each
+individual fragment will conform to this convention. But the order of the
+fragments within the HSP object follows what the search output file uses.</p>
+<p>Similar to the coordinate style convention, the start and end coordinates'
+order are restored to their respective formats when the objects are
+written using Bio.SearchIO.write(...).</p>
+</div>
+<div class="rst-section" id="rst-frames-and-strand-values">
+<h2 class="heading">Frames and strand values</h2>
+<p>SearchIO only allows -1, 0, 1 and None as strand values. For frames, the
+only allowed values are integers from -3 to 3 (inclusive) and None. Both
+of these are standard Biopython conventions.</p>
+</div>
+</div>
+<div class="rst-section" id="rst-supported-formats">
+<h1 class="heading">Supported Formats</h1>
+<p>Below is a list of search program output formats supported by SearchIO.</p>
+<p>Support for parsing, indexing, and writing:</p>
+<blockquote>
+<ul>
+<li><dl class="rst-first rst-docutils">
+<dt>blast-tab        - BLAST+ tabular output. Both variants without comments</dt>
+<dd><p class="rst-first rst-last">(-m 6 flag) and with comments (-m 7 flag) are supported.</p>
+</dd>
+</dl>
+</li>
+<li><p class="rst-first">blast-xml        - BLAST+ XML output.</p>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>blat-psl         - The default output of BLAT (PSL format). Variants with or</dt>
+<dd><p class="rst-first rst-last">without header are both supported. PSLX (PSL + sequences)
+is also supported.</p>
+</dd>
+</dl>
+</li>
+<li><p class="rst-first">hmmer3-tab       - HMMER3 table output.</p>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>hmmer3-domtab    - HMMER3 domain table output. When using this format, the</dt>
+<dd><p class="rst-first rst-last">program name has to be specified. For example, for parsing
+hmmscan output, the name would be 'hmmscan-domtab'.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p>Support for parsing and indexing:</p>
+<blockquote>
+<ul>
+<li><p class="rst-first">exonerate-text   - Exonerate plain text output.</p>
+</li>
+<li><p class="rst-first">exonerate-vulgar - Exonerate vulgar line.</p>
+</li>
+<li><p class="rst-first">exonerate-cigar  - Exonerate cigar line.</p>
+</li>
+<li><p class="rst-first">fasta-m10        - Bill Pearson's FASTA -m 10 output.</p>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>hmmer3-text      - HMMER3 regular text output format. Supported HMMER3</dt>
+<dd><p class="rst-first rst-last">subprograms are hmmscan, hmmsearch, and phmmer.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>hmmer2-text      - HMMER2 regular text output format. Supported HMMER2</dt>
+<dd><p class="rst-first rst-last">subprograms are hmmpfam, hmmsearch.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p>Support for parsing:</p>
+<blockquote>
+<ul class="rst-simple">
+<li>blast-text       - BLAST+ plain text output.</li>
+</ul>
+</blockquote>
+<p>Each of these formats have different keyword arguments available for use with
+the main SearchIO functions. More details and examples are available in each
+of the format's documentation.</p>
+</div>
+
+<!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.BlastIO-module.html">Bio.SearchIO.BlastIO</a></strong>: <em class="summary">Bio.SearchIO support for BLAST+ output formats.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.BlastIO.blast_tab-module.html">Bio.SearchIO.BlastIO.blast_tab</a></strong>: <em class="summary">Bio.SearchIO parser for BLAST+ tab output format, with or without comments.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.BlastIO.blast_text-module.html">Bio.SearchIO.BlastIO.blast_text</a></strong>: <em class="summary">Bio.SearchIO parser for BLAST+ plain text output formats.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.BlastIO.blast_xml-module.html">Bio.SearchIO.BlastIO.blast_xml</a></strong>: <em class="summary">Bio.SearchIO parser for BLAST+ XML output formats.</em>    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.BlatIO-module.html">Bio.SearchIO.BlatIO</a></strong>: <em class="summary">Bio.SearchIO parser for BLAT output formats.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.ExonerateIO-module.html">Bio.SearchIO.ExonerateIO</a></strong>: <em class="summary">Bio.SearchIO support for Exonerate output formats.</em>
+    <ul>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO.ExonerateIO._base-module.html" onclick="show_private();">Bio.SearchIO.ExonerateIO._base</a></strong>: <em class="summary">Bio.SearchIO abstract base parser for Exonerate standard output format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.ExonerateIO.exonerate_cigar-module.html">Bio.SearchIO.ExonerateIO.exonerate_cigar</a></strong>: <em class="summary">Bio.SearchIO parser for Exonerate cigar output format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.ExonerateIO.exonerate_text-module.html">Bio.SearchIO.ExonerateIO.exonerate_text</a></strong>: <em class="summary">Bio.SearchIO parser for Exonerate plain text output format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.ExonerateIO.exonerate_vulgar-module.html">Bio.SearchIO.ExonerateIO.exonerate_vulgar</a></strong>: <em class="summary">Bio.SearchIO parser for Exonerate vulgar output format.</em>    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.FastaIO-module.html">Bio.SearchIO.FastaIO</a></strong>: <em class="summary">Bio.SearchIO support for Bill Pearson's FASTA tools.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.HmmerIO-module.html">Bio.SearchIO.HmmerIO</a></strong>: <em class="summary">Bio.SearchIO support for HMMER output formats.</em>
+    <ul>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO.HmmerIO._base-module.html" onclick="show_private();">Bio.SearchIO.HmmerIO._base</a></strong>: <em class="summary">Bio.SearchIO base classes for HMMER-related code.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.HmmerIO.hmmer2_text-module.html">Bio.SearchIO.HmmerIO.hmmer2_text</a></strong>: <em class="summary">Bio.SearchIO parser for HMMER 2 text output.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.HmmerIO.hmmer3_domtab-module.html">Bio.SearchIO.HmmerIO.hmmer3_domtab</a></strong>: <em class="summary">Bio.SearchIO parser for HMMER domain table output format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.HmmerIO.hmmer3_tab-module.html">Bio.SearchIO.HmmerIO.hmmer3_tab</a></strong>: <em class="summary">Bio.SearchIO parser for HMMER table output format.</em>    </li>
+    <li> <strong class="uidlink"><a href="Bio.SearchIO.HmmerIO.hmmer3_text-module.html">Bio.SearchIO.HmmerIO.hmmer3_text</a></strong>: <em class="summary">Bio.SearchIO parser for HMMER plain text output format.</em>    </li>
+    </ul>
+    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO._index-module.html">Bio.SearchIO._index</a></strong>: <em class="summary">Custom indexing for Bio.SearchIO objects.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO._model-module.html" onclick="show_private();">Bio.SearchIO._model</a></strong>: <em class="summary">Bio.SearchIO objects to model similarity search program outputs.</em>
+    <ul class="private">
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO._model._base-module.html" onclick="show_private();">Bio.SearchIO._model._base</a></strong>: <em class="summary">Abstract base classes for the SearchIO object model.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO._model.hit-module.html" onclick="show_private();">Bio.SearchIO._model.hit</a></strong>: <em class="summary">Bio.SearchIO object to model a single database hit.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO._model.hsp-module.html" onclick="show_private();">Bio.SearchIO._model.hsp</a></strong>: <em class="summary">Bio.SearchIO objects to model high scoring regions between query and hit.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO._model.query-module.html" onclick="show_private();">Bio.SearchIO._model.query</a></strong>: <em class="summary">Bio.SearchIO object to model search results from a single query.</em>    </li>
+    </ul>
+    </li>
+    <li class="private"> <strong class="uidlink"><a href="Bio.SearchIO._utils-module.html" onclick="show_private();">Bio.SearchIO._utils</a></strong>: <em class="summary">Common SearchIO utility functions.</em>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO-module.html#parse" class="summary-sig-name">parse</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Turns a search output file into a generator that yields QueryResult
+objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO-pysrc.html#parse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO-module.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Turns a search output file containing one query into a single QueryResult.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO-pysrc.html#read">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO-module.html#to_dict" class="summary-sig-name">to_dict</a>(<span class="summary-sig-arg">qresults</span>,
+        <span class="summary-sig-arg">key_function</span>=<span class="summary-sig-default">&lt;function &lt;lambda&gt; at 0x4ebfa28&gt;</span>)</span><br />
+      Turns a QueryResult iterator or list into a dictionary.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO-pysrc.html#to_dict">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO-module.html#index" class="summary-sig-name">index</a>(<span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">key_function</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Indexes a search output file and returns a dictionary-like object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO-pysrc.html#index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO-module.html#index_db" class="summary-sig-name">index_db</a>(<span class="summary-sig-arg">index_filename</span>,
+        <span class="summary-sig-arg">filenames</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">key_function</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Indexes several search output files into an SQLite database.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO-pysrc.html#index_db">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO-module.html#write" class="summary-sig-name">write</a>(<span class="summary-sig-arg">qresults</span>,
+        <span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Writes QueryResult objects to a file in the given format.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO-pysrc.html#write">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO-module.html#convert" class="summary-sig-name">convert</a>(<span class="summary-sig-arg">in_file</span>,
+        <span class="summary-sig-arg">in_format</span>,
+        <span class="summary-sig-arg">out_file</span>,
+        <span class="summary-sig-arg">out_format</span>,
+        <span class="summary-sig-arg">in_kwargs</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">out_kwargs</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Convert between two search output formats, return number of records.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO-pysrc.html#convert">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO-module.html#_ITERATOR_MAP" class="summary-name" onclick="show_private();">_ITERATOR_MAP</a> = <code title="{'blast-tab': ('BlastIO', 'BlastTabParser'),
+ 'blast-text': ('BlastIO', 'BlastTextParser'),
+ 'blast-xml': ('BlastIO', 'BlastXmlParser'),
+ 'blat-psl': ('BlatIO', 'BlatPslParser'),
+ 'exonerate-cigar': ('ExonerateIO', 'ExonerateCigarParser'),
+ 'exonerate-text': ('ExonerateIO', 'ExonerateTextParser'),
+ 'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarParser'),
+ 'fasta-m10': ('FastaIO', 'FastaM10Parser'),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">blast-tab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastTabParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO-module.html#_INDEXER_MAP" class="summary-name" onclick="show_private();">_INDEXER_MAP</a> = <code title="{'blast-tab': ('BlastIO', 'BlastTabIndexer'),
+ 'blast-xml': ('BlastIO', 'BlastXmlIndexer'),
+ 'blat-psl': ('BlatIO', 'BlatPslIndexer'),
+ 'exonerate-cigar': ('ExonerateIO', 'ExonerateCigarIndexer'),
+ 'exonerate-text': ('ExonerateIO', 'ExonerateTextIndexer'),
+ 'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarIndexer'),
+ 'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
+ 'hmmer2-text': ('HmmerIO', 'Hmmer2TextIndexer'),
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">blast-tab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastTabIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO-module.html#_WRITER_MAP" class="summary-name" onclick="show_private();">_WRITER_MAP</a> = <code title="{'blast-tab': ('BlastIO', 'BlastTabWriter'),
+ 'blast-xml': ('BlastIO', 'BlastXmlWriter'),
+ 'blat-psl': ('BlatIO', 'BlatPslWriter'),
+ 'hmmer3-tab': ('HmmerIO', 'Hmmer3TabWriter'),
+ 'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitWriter'),
+ 'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter'),
+ 'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter')}"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">blast-tab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastTabWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">bl</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.SearchIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.SearchIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO-module.html#__warningregistry__" class="summary-name" onclick="show_private();">__warningregistry__</a> = <code title="{('Bio.SearchIO is an experimental submodule which may undergo signifi\
+cant changes prior to its future official release.',
+  &lt;class 'Bio.BiopythonExperimentalWarning'&gt;,
+  211): True}"><code class="variable-group">{</code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Bio.SearchIO is an experimental submo</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="parse"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">parse</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO-pysrc.html#parse">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turns a search output file into a generator that yields QueryResult
+objects.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>handle - Handle to the file, or the filename as a string.</li>
+<li>format - Lower case string denoting one of the supported formats.</li>
+<li>kwargs - Format-specific keyword arguments.</li>
+</ul>
+</blockquote>
+<p>This function is used to iterate over each query in a given search output
+file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresults = SearchIO.parse(<span class="py-string">'Blast/mirna.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>qresults
+<span class="py-output">&lt;generator object ...&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> qresult <span class="py-keyword">in</span> qresults:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Search %s has %i hits&quot;</span> % (qresult.id, len(qresult)))
+<span class="py-more">...</span>
+<span class="py-output">Search 33211 has 100 hits</span>
+<span class="py-output">Search 33212 has 44 hits</span>
+<span class="py-output">Search 33213 has 95 hits</span></pre>
+<p>Depending on the file format, <a href="Bio.SearchIO-module.html#parse" class="link">parse</a> may also accept additional keyword
+argument(s) that modifies the behavior of the format parser. Here is a
+simple example, where the keyword argument enables parsing of a commented
+BLAST tabular output file:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> qresult <span class="py-keyword">in</span> SearchIO.parse(<span class="py-string">'Blast/mirna.tab'</span>, <span class="py-string">'blast-tab'</span>, comments=True):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;Search %s has %i hits&quot;</span> % (qresult.id, len(qresult)))
+<span class="py-more">...</span>
+<span class="py-output">Search 33211 has 100 hits</span>
+<span class="py-output">Search 33212 has 44 hits</span>
+<span class="py-output">Search 33213 has 95 hits</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="read"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO-pysrc.html#read">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turns a search output file containing one query into a single QueryResult.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>handle - Handle to the file, or the filename as a string.</li>
+<li>format - Lower case string denoting one of the supported formats.</li>
+<li>kwargs - Format-specific keyword arguments.</li>
+</ul>
+</blockquote>
+<p><a href="Bio.SearchIO-module.html#read" class="link">read</a> is used for parsing search output files containing exactly one query:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = SearchIO.read(<span class="py-string">'Blast/xml_2226_blastp_004.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (qresult.id, qresult.description))
+<span class="py-more">...</span>
+<span class="py-output">gi|11464971:4-101 pleckstrin [Mus musculus]</span></pre>
+<p>If the given handle has no results, an exception will be raised:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = SearchIO.read(<span class="py-string">'Blast/tab_2226_tblastn_002.txt'</span>, <span class="py-string">'blast-tab'</span>)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">...</span>
+<span class="py-except">ValueError: No query results found in handle</span></pre>
+<p>Similarly, if the given handle has more than one results, an exception will
+also be raised:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = SearchIO.read(<span class="py-string">'Blast/tab_2226_tblastn_001.txt'</span>, <span class="py-string">'blast-tab'</span>)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">...</span>
+<span class="py-except">ValueError: More than one query results found in handle</span></pre>
+<p>Like <a href="Bio.SearchIO-module.html#parse" class="link">parse</a>, <a href="Bio.SearchIO-module.html#read" class="link">read</a> may also accept keyword argument(s) depending on the
+search output file format.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="to_dict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">to_dict</span>(<span class="sig-arg">qresults</span>,
+        <span class="sig-arg">key_function</span>=<span class="sig-default">&lt;function &lt;lambda&gt; at 0x4ebfa28&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO-pysrc.html#to_dict">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Turns a QueryResult iterator or list into a dictionary.</p>
+<blockquote>
+<ul>
+<li><p class="rst-first">qresults     - Iterable returning QueryResult objects.</p>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>key_function - Optional callback function which when given a</dt>
+<dd><p class="rst-first rst-last">QueryResult object should return a unique key for the
+dictionary.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p>This function enables access of QueryResult objects from a single search
+output file using its identifier.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresults = SearchIO.parse(<span class="py-string">'Blast/wnts.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>search_dict = SearchIO.to_dict(qresults)
+<span class="py-prompt">&gt;&gt;&gt; </span>sorted(search_dict)
+<span class="py-output">['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_dict[<span class="py-string">'gi|156630997:105-1160'</span>]
+<span class="py-output">QueryResult(id='gi|156630997:105-1160', 5 hits)</span></pre>
+<p>By default, the dictionary key is the QueryResult's string ID. This may be
+changed by supplying a callback function that returns the desired identifier.
+Here is an example using a function that removes the 'gi|' part in the
+beginning of the QueryResult ID.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresults = SearchIO.parse(<span class="py-string">'Blast/wnts.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>key_func = <span class="py-keyword">lambda</span> qresult: qresult.id.split(<span class="py-string">'|'</span>)[1]
+<span class="py-prompt">&gt;&gt;&gt; </span>search_dict = SearchIO.to_dict(qresults, key_func)
+<span class="py-prompt">&gt;&gt;&gt; </span>sorted(search_dict)
+<span class="py-output">['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_dict[<span class="py-string">'156630997:105-1160'</span>]
+<span class="py-output">QueryResult(id='gi|156630997:105-1160', 5 hits)</span></pre>
+<p>Note that the callback function does not change the QueryResult's ID value.
+It only changes the key value used to retrieve the associated QueryResult.</p>
+<p>As this function loads all QueryResult objects into memory, it may be
+unsuitable for dealing with files containing many queries. In that case, it
+is recommended that you use either <a href="Bio.SearchIO-module.html#index" class="link">index</a> or <a href="Bio.SearchIO-module.html#index_db" class="link">index_db</a>.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="index"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">index</span>(<span class="sig-arg">filename</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">key_function</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO-pysrc.html#index">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Indexes a search output file and returns a dictionary-like object.</p>
+<blockquote>
+<ul>
+<li><p class="rst-first">filename     - string giving name of file to be indexed</p>
+</li>
+<li><p class="rst-first">format       - Lower case string denoting one of the supported formats.</p>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>key_function - Optional callback function which when given a</dt>
+<dd><p class="rst-first rst-last">QueryResult should return a unique key for the dictionary.</p>
+</dd>
+</dl>
+</li>
+<li><p class="rst-first">kwargs       - Format-specific keyword arguments.</p>
+</li>
+</ul>
+</blockquote>
+<p>Index returns a pseudo-dictionary object with QueryResult objects as its
+values and a string identifier as its keys. The function is mainly useful
+for dealing with large search output files, as it enables access to any
+given QueryResult object much faster than using parse or read.</p>
+<p>Index works by storing in-memory the start locations of all queries in a
+file. When a user requested access to the query, this function will jump
+to its start position, parse the whole query, and return it as a
+QueryResult object:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>search_idx = SearchIO.index(<span class="py-string">'Blast/wnts.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>search_idx
+<span class="py-output">SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=None)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(search_idx)
+<span class="py-output">['gi|156630997:105-1160', 'gi|195230749:301-1383', ..., 'gi|53729353:216-1313']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_idx[<span class="py-string">'gi|195230749:301-1383'</span>]
+<span class="py-output">QueryResult(id='gi|195230749:301-1383', 5 hits)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_idx.close()</pre>
+<p>If the file is BGZF compressed, this is detected automatically. Ordinary
+GZIP files are not supported:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>search_idx = SearchIO.index(<span class="py-string">'Blast/wnts.xml.bgz'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>search_idx
+<span class="py-output">SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml', key_function=None)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_idx[<span class="py-string">'gi|195230749:301-1383'</span>]
+<span class="py-output">QueryResult(id='gi|195230749:301-1383', 5 hits)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_idx.close()</pre>
+<p>You can supply a custom callback function to alter the default identifier
+string. This function should accept as its input the QueryResult ID string
+and return a modified version of it.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>key_func = <span class="py-keyword">lambda</span> id: id.split(<span class="py-string">'|'</span>)[1]
+<span class="py-prompt">&gt;&gt;&gt; </span>search_idx = SearchIO.index(<span class="py-string">'Blast/wnts.xml'</span>, <span class="py-string">'blast-xml'</span>, key_func)
+<span class="py-prompt">&gt;&gt;&gt; </span>search_idx
+<span class="py-output">SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=&lt;function &lt;lambda&gt; at ...&gt;)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(search_idx)
+<span class="py-output">['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_idx[<span class="py-string">'156630997:105-1160'</span>]
+<span class="py-output">QueryResult(id='gi|156630997:105-1160', 5 hits)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>search_idx.close()</pre>
+<p>Note that the callback function does not change the QueryResult's ID value.
+It only changes the key value used to retrieve the associated QueryResult.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="index_db"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">index_db</span>(<span class="sig-arg">index_filename</span>,
+        <span class="sig-arg">filenames</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">key_function</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO-pysrc.html#index_db">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Indexes several search output files into an SQLite database.</p>
+<blockquote>
+<ul>
+<li><p class="rst-first">index_filename - The SQLite filename.</p>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>filenames    - List of strings specifying file(s) to be indexed, or when</dt>
+<dd><p class="rst-first rst-last">indexing a single file this can be given as a string.
+(optional if reloading an existing index, but must match)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>format       - Lower case string denoting one of the supported formats.</dt>
+<dd><p class="rst-first rst-last">(optional if reloading an existing index, but must match)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>key_function - Optional callback function which when given a</dt>
+<dd><p class="rst-first rst-last">QueryResult identifier string should return a unique
+key for the dictionary.</p>
+</dd>
+</dl>
+</li>
+<li><p class="rst-first">kwargs       - Format-specific keyword arguments.</p>
+</li>
+</ul>
+</blockquote>
+<p>The <a href="Bio.SearchIO-module.html#index_db" class="link">index_db</a> function is similar to <a href="Bio.SearchIO-module.html#index" class="link">index</a> in that it indexes the start
+position of all queries from search output files. The main difference is
+instead of storing these indices in-memory, they are written to disk as an
+SQLite database file. This allows the indices to persist between Python
+sessions. This enables access to any queries in the file without any
+indexing overhead, provided it has been indexed at least once.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>idx_filename = <span class="py-string">&quot;:memory:&quot;</span> <span class="py-comment"># Use a real filename, this is in RAM only!</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>db_idx = SearchIO.index_db(idx_filename, <span class="py-string">'Blast/mirna.xml'</span>, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>sorted(db_idx)
+<span class="py-output">['33211', '33212', '33213']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>db_idx[<span class="py-string">'33212'</span>]
+<span class="py-output">QueryResult(id='33212', 44 hits)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>db_idx.close()</pre>
+<p><a href="Bio.SearchIO-module.html#index_db" class="link">index_db</a> can also index multiple files and store them in the same
+database, making it easier to group multiple search files and access them
+from a single interface.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>idx_filename = <span class="py-string">&quot;:memory:&quot;</span> <span class="py-comment"># Use a real filename, this is in RAM only!</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>files = [<span class="py-string">'Blast/mirna.xml'</span>, <span class="py-string">'Blast/wnts.xml'</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span>db_idx = SearchIO.index_db(idx_filename, files, <span class="py-string">'blast-xml'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>sorted(db_idx)
+<span class="py-output">['33211', '33212', '33213', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>db_idx[<span class="py-string">'33212'</span>]
+<span class="py-output">QueryResult(id='33212', 44 hits)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>db_idx.close()</pre>
+<p>One common example where this is helpful is if you had a large set of
+query sequences (say ten thousand) which you split into ten query files
+of one thousand sequences each in order to run as ten separate BLAST jobs
+on a cluster. You could use <a href="Bio.SearchIO-module.html#index_db" class="link">index_db</a> to index the ten BLAST output
+files together for seamless access to all the results as one dictionary.</p>
+<p>Note that ':memory:' rather than an index filename tells SQLite to hold
+the index database in memory. This is useful for quick tests, but using
+the Bio.SearchIO.index(...) function instead would use less memory.</p>
+<p>BGZF compressed files are supported, and detected automatically. Ordinary
+GZIP compressed files are not supported.</p>
+<p>See also Bio.SearchIO.index(), Bio.SearchIO.to_dict(), and the Python module
+glob which is useful for building lists of files.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="write"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write</span>(<span class="sig-arg">qresults</span>,
+        <span class="sig-arg">handle</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO-pysrc.html#write">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Writes QueryResult objects to a file in the given format.</p>
+<blockquote>
+<ul>
+<li><dl class="rst-first rst-docutils">
+<dt>qresults - An iterator returning QueryResult objects or a single</dt>
+<dd><p class="rst-first rst-last">QueryResult object.</p>
+</dd>
+</dl>
+</li>
+<li><p class="rst-first">handle   - Handle to the file, or the filename as a string.</p>
+</li>
+<li><p class="rst-first">format   - Lower case string denoting one of the supported formats.</p>
+</li>
+<li><p class="rst-first">kwargs   - Format-specific keyword arguments.</p>
+</li>
+</ul>
+</blockquote>
+<p>The <a href="Bio.SearchIO-module.html#write" class="link">write</a> function writes QueryResult object(s) into the given output
+handle / filename. You can supply it with a single QueryResult object or an
+iterable returning one or more QueryResult objects. In both cases, the
+function will return a tuple of four values: the number of QueryResult, Hit,
+HSP, and HSPFragment objects it writes to the output file:</p>
+<pre class="rst-literal-block">
+from Bio import SearchIO
+qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+SearchIO.write(qresults, 'results.tab', 'blast-tab')
+&lt;stdout&gt; (3, 239, 277, 277)
+</pre>
+<p>The output of different formats may be adjusted using the format-specific
+keyword arguments. Here is an example that writes BLAT PSL output file with
+a header:</p>
+<pre class="rst-literal-block">
+from Bio import SearchIO
+qresults = SearchIO.parse('Blat/psl_34_001.psl', 'blat-psl')
+SearchIO.write(qresults, 'results.tab', 'blat-psl', header=True)
+&lt;stdout&gt; (2, 13, 22, 26)
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="convert"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">convert</span>(<span class="sig-arg">in_file</span>,
+        <span class="sig-arg">in_format</span>,
+        <span class="sig-arg">out_file</span>,
+        <span class="sig-arg">out_format</span>,
+        <span class="sig-arg">in_kwargs</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">out_kwargs</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO-pysrc.html#convert">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert between two search output formats, return number of records.</p>
+<blockquote>
+<ul class="rst-simple">
+<li>in_file    - Handle to the input file, or the filename as string.</li>
+<li>in_format  - Lower case string denoting the format of the input file.</li>
+<li>out_file   - Handle to the output file, or the filename as string.</li>
+<li>out_format - Lower case string denoting the format of the output file.</li>
+<li>in_kwargs  - Dictionary of keyword arguments for the input function.</li>
+<li>out_kwargs - Dictionary of keyword arguments for the output function.</li>
+</ul>
+</blockquote>
+<p>The convert function is a shortcut function for <a href="Bio.SearchIO-module.html#parse" class="link">parse</a> and <a href="Bio.SearchIO-module.html#write" class="link">write</a>. It has
+the same return type as <a href="Bio.SearchIO-module.html#write" class="link">write</a>. Format-specific arguments may be passed to
+the convert function, but only as dictionaries.</p>
+<p>Here is an example of using <a href="Bio.SearchIO-module.html#convert" class="link">convert</a> to convert from a BLAST+ XML file
+into a tabular file with comments:</p>
+<pre class="rst-literal-block">
+from Bio import SearchIO
+in_file = 'Blast/mirna.xml'
+in_fmt = 'blast-xml'
+out_file = 'results.tab'
+out_fmt = 'blast-tab'
+out_kwarg = {'comments': True}
+SearchIO.convert(in_file, in_fmt, out_file, out_fmt, out_kwargs=out_kwarg)
+&lt;stdout&gt; (3, 239, 277, 277)
+</pre>
+<p>Given that different search output file provide different statistics and
+different level of details, the convert function is limited only to
+converting formats that have the same statistics and for conversion to
+formats with the same level of detail, or less.</p>
+<p>For example, converting from a BLAST+ XML output to a HMMER table file
+is not possible, as these are two search programs with different kinds of
+statistics. In theory, you may provide the necessary values required by the
+HMMER table file (e.g. conditional e-values, envelope coordinates, etc).
+However, these values are likely to hold little meaning as they are not true
+HMMER-computed values.</p>
+<p>Another example is converting from BLAST+ XML to BLAST+ tabular file. This
+is possible, as BLAST+ XML provide all the values necessary to create a
+BLAST+ tabular file. However, the reverse conversion may not be possible.
+There are more details covered in the XML file that are not found in a
+tabular file (e.g. the lambda and kappa values)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_ITERATOR_MAP"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_ITERATOR_MAP</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">blast-tab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastTabParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">blast-text</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastTextParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">blast-xml</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastXmlParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">blat-psl</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlatIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlatPslParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">exonerate-cigar</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">ExonerateIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ExonerateCigarParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">exonerate-text</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">ExonerateIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ExonerateTextParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">exonerate-vulgar</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">ExonerateIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ExonerateVulgarParser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fasta-m10</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">FastaIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">FastaM10Parser</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_INDEXER_MAP"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_INDEXER_MAP</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">blast-tab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastTabIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">blast-xml</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastXmlIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">blat-psl</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlatIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlatPslIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">exonerate-cigar</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">ExonerateIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ExonerateCigarIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">exonerate-text</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">ExonerateIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ExonerateTextIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">exonerate-vulgar</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">ExonerateIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">ExonerateVulgarIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fasta-m10</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">FastaIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">FastaM10Indexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">hmmer2-text</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">HmmerIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Hmmer2TextIndexer</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_WRITER_MAP"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_WRITER_MAP</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">blast-tab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastTabWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">blast-xml</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlastIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlastXmlWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">blat-psl</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">BlatIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">BlatPslWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">hmmer3-tab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">HmmerIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Hmmer3TabWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">hmmscan3-domtab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">HmmerIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Hmmer3DomtabHmmhitWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">hmmsearch3-domtab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">HmmerIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Hmmer3DomtabHmmqueryWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">phmmer3-domtab</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">HmmerIO</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Hmmer3DomtabHmmqueryWriter</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__warningregistry__"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">__warningregistry__</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Bio.SearchIO is an experimental submodule which may undergo signifi</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-string">cant changes prior to its future official release.</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+  &lt;class 'Bio.BiopythonExperimentalWarning'&gt;<code class="variable-op">,</code>
+  211<code class="variable-group">)</code><code class="variable-op">: </code>True<code class="variable-group">}</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:24 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

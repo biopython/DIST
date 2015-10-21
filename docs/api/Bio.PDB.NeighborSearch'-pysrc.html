@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.PDB.NeighborSearch'</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.PDB-module.html">Package&nbsp;PDB</a> ::
+        Module&nbsp;NeighborSearch'
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.PDB.NeighborSearch%27-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.PDB.NeighborSearch%27-module.html">Module Bio.PDB.NeighborSearch'</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""Fast atom neighbor lookup using a KD tree (implemented in C++)."""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">print_function</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">numpy</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package Bio.KDTree=Bio.KDTree-module.html,Class Bio.KDTree.KDTree'.KDTree=Bio.KDTree.KDTree%27.KDTree-class.html"><a title="Bio.KDTree
+Bio.KDTree.KDTree'.KDTree" class="py-name" href="#" onclick="return doclink('link-1', 'KDTree', 'link-1');">KDTree</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name"><a title="Bio.KDTree
+Bio.KDTree.KDTree'.KDTree" class="py-name" href="#" onclick="return doclink('link-2', 'KDTree', 'link-1');">KDTree</a></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-3', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Package Bio.PDB=Bio.PDB-module.html"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-4', 'PDB', 'link-4');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Module Bio.PDB.PDBExceptions=Bio.PDB.PDBExceptions-module.html"><a title="Bio.PDB.PDBExceptions" class="py-name" href="#" onclick="return doclink('link-5', 'PDBExceptions', 'link-5');">PDBExceptions</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Class Bio.PDB.PDBExceptions.PDBException=Bio.PDB.PDBExceptions.PDBException-class.html"><a title="Bio.PDB.PDBExceptions.PDBException" class="py-name" href="#" onclick="return doclink('link-6', 'PDBException', 'link-6');">PDBException</a></tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-7" class="py-name"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-7', 'Bio', 'link-0');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="Bio.PDB" class="py-name" href="#" onclick="return doclink('link-8', 'PDB', 'link-4');">PDB</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Package Bio.GA.Selection=Bio.GA.Selection-module.html,Module Bio.PDB.Selection=Bio.PDB.Selection-module.html"><a title="Bio.GA.Selection
+Bio.PDB.Selection" class="py-name" href="#" onclick="return doclink('link-9', 'Selection', 'link-9');">Selection</a></tt> <tt class="py-keyword">import</tt> <tt id="link-10" class="py-name" targets="Function Bio.PDB.Selection.unfold_entities()=Bio.PDB.Selection-module.html#unfold_entities"><a title="Bio.PDB.Selection.unfold_entities" class="py-name" href="#" onclick="return doclink('link-10', 'unfold_entities', 'link-10');">unfold_entities</a></tt><tt class="py-op">,</tt> <tt id="link-11" class="py-name" targets="Variable Bio.PDB.NeighborSearch'.entity_levels=Bio.PDB.NeighborSearch%27-module.html#entity_levels,Variable Bio.PDB.Selection.entity_levels=Bio.PDB.Selection-module.html#entity_levels"><a title="Bio.PDB.NeighborSearch'.entity_levels
+Bio.PDB.Selection.entity_levels" class="py-name" href="#" onclick="return doclink('link-11', 'entity_levels', 'link-11');">entity_levels</a></tt><tt class="py-op">,</tt> <tt id="link-12" class="py-name" targets="Function Bio.PDB.Selection.uniqueify()=Bio.PDB.Selection-module.html#uniqueify"><a title="Bio.PDB.Selection.uniqueify" class="py-name" href="#" onclick="return doclink('link-12', 'uniqueify', 'link-12');">uniqueify</a></tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="NeighborSearch"></a><div id="NeighborSearch-def"><a name="L18"></a><tt class="py-lineno"> 18</tt> <a class="py-toggle" href="#" id="NeighborSearch-toggle" onclick="return toggle('NeighborSearch');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.NeighborSearch-class.html">NeighborSearch</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="NeighborSearch-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="NeighborSearch-expanded"><a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt class="py-docstring">"""Class for neighbor searching,</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    This class can be used for two related purposes:</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">     1. To find all atoms/residues/chains/models/structures within radius</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">        of a given query position.</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">     2. To find all atoms/residues/chains/models/structures that are within</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">        a fixed radius of each other.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">    NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="NeighborSearch.__init__"></a><div id="NeighborSearch.__init__-def"><a name="L30"></a><tt class="py-lineno"> 30</tt> <a class="py-toggle" href="#" id="NeighborSearch.__init__-toggle" onclick="return toggle('NeighborSearch.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.NeighborSearch-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">atom_list</tt><tt class="py-op">,</tt> <tt class="py-param">bucket_size</tt><tt class="py-op">=</tt><tt class="py-number">10</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="NeighborSearch.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="NeighborSearch.__init__-expanded"><a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create the object.</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">         - atom_list - list of atoms. This list is used in the queries.</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">           It can contain atoms from different structures.</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">         - bucket_size - bucket size of KD tree. You can play around</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">           with this to optimize speed if you feel like it.</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">atom_list</tt> <tt class="py-op">=</tt> <tt class="py-name">atom_list</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-comment"># get the coordinates</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">        <tt class="py-name">coord_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt id="link-13" class="py-name" targets="Variable Bio.Graphics.ColorSpiral.ColorSpiral.a=Bio.Graphics.ColorSpiral.ColorSpiral-class.html#a"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-13', 'a', 'link-13');">a</a></tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_coord()=Bio.PDB.Atom.Atom-class.html#get_coord"><a title="Bio.PDB.Atom.Atom.get_coord" class="py-name" href="#" onclick="return doclink('link-14', 'get_coord', 'link-14');">get_coord</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt id="link-15" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-15', 'a', 'link-13');">a</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">atom_list</tt><tt class="py-op">]</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">        <tt class="py-comment"># to Nx3 array of type float</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Graphics.coords=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#coords"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.coords" class="py-name" href="#" onclick="return doclink('link-16', 'coords', 'link-16');">coords</a></tt> <tt class="py-op">=</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">array</tt><tt class="py-op">(</tt><tt class="py-name">coord_list</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">astype</tt><tt class="py-op">(</tt><tt class="py-string">"f"</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt><tt class="py-op">(</tt><tt class="py-name">bucket_size</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">        <tt class="py-keyword">assert</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.coords" class="py-name" href="#" onclick="return doclink('link-17', 'coords', 'link-16');">coords</a></tt><tt class="py-op">.</tt><tt class="py-name">shape</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">==</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">kdt</tt> <tt class="py-op">=</tt> <tt id="link-18" class="py-name"><a title="Bio.KDTree
+Bio.KDTree.KDTree'.KDTree" class="py-name" href="#" onclick="return doclink('link-18', 'KDTree', 'link-1');">KDTree</a></tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">,</tt> <tt class="py-name">bucket_size</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">kdt</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.set_coords()=Bio.KDTree.KDTree%27.KDTree-class.html#set_coords"><a title="Bio.KDTree.KDTree'.KDTree.set_coords" class="py-name" href="#" onclick="return doclink('link-19', 'set_coords', 'link-19');">set_coords</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-20" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Graphics.coords" class="py-name" href="#" onclick="return doclink('link-20', 'coords', 'link-16');">coords</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">    <tt class="py-comment"># Private</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"> </tt>
+<a name="NeighborSearch._get_unique_parent_pairs"></a><div id="NeighborSearch._get_unique_parent_pairs-def"><a name="L52"></a><tt class="py-lineno"> 52</tt> <a class="py-toggle" href="#" id="NeighborSearch._get_unique_parent_pairs-toggle" onclick="return toggle('NeighborSearch._get_unique_parent_pairs');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.NeighborSearch-class.html#_get_unique_parent_pairs">_get_unique_parent_pairs</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">pair_list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="NeighborSearch._get_unique_parent_pairs-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="NeighborSearch._get_unique_parent_pairs-expanded"><a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-comment"># translate a list of (entity, entity) tuples to</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-comment"># a list of (parent entity, parent entity) tuples,</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-comment"># thereby removing duplicate (parent entity, parent entity)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-comment"># pairs.</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-comment"># o pair_list - a list of (entity, entity) tuples</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-name">parent_pair_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-op">(</tt><tt class="py-name">e1</tt><tt class="py-op">,</tt> <tt class="py-name">e2</tt><tt class="py-op">)</tt> <tt class="py-keyword">in</tt> <tt class="py-name">pair_list</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-name">p1</tt> <tt class="py-op">=</tt> <tt class="py-name">e1</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Method Bio.PDB.Atom.Atom.get_parent()=Bio.PDB.Atom.Atom-class.html#get_parent,Method Bio.PDB.Entity.DisorderedEntityWrapper.get_parent()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#get_parent,Method Bio.PDB.Entity.Entity.get_parent()=Bio.PDB.Entity.Entity-class.html#get_parent"><a title="Bio.PDB.Atom.Atom.get_parent
+Bio.PDB.Entity.DisorderedEntityWrapper.get_parent
+Bio.PDB.Entity.Entity.get_parent" class="py-name" href="#" onclick="return doclink('link-21', 'get_parent', 'link-21');">get_parent</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">            <tt class="py-name">p2</tt> <tt class="py-op">=</tt> <tt class="py-name">e2</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="Bio.PDB.Atom.Atom.get_parent
+Bio.PDB.Entity.DisorderedEntityWrapper.get_parent
+Bio.PDB.Entity.Entity.get_parent" class="py-name" href="#" onclick="return doclink('link-22', 'get_parent', 'link-21');">get_parent</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">p1</tt> <tt class="py-op">==</tt> <tt class="py-name">p2</tt><tt class="py-op">:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">                <tt class="py-keyword">continue</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">p1</tt> <tt class="py-op">&lt;</tt> <tt class="py-name">p2</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">                <tt class="py-name">parent_pair_list</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-23', 'append', 'link-23');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">p1</tt><tt class="py-op">,</tt> <tt class="py-name">p2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">                <tt class="py-name">parent_pair_list</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-24', 'append', 'link-23');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">p2</tt><tt class="py-op">,</tt> <tt class="py-name">p1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-25" class="py-name"><a title="Bio.PDB.Selection.uniqueify" class="py-name" href="#" onclick="return doclink('link-25', 'uniqueify', 'link-12');">uniqueify</a></tt><tt class="py-op">(</tt><tt class="py-name">parent_pair_list</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">    <tt class="py-comment"># Public</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"> </tt>
+<a name="NeighborSearch.search"></a><div id="NeighborSearch.search-def"><a name="L72"></a><tt class="py-lineno"> 72</tt> <a class="py-toggle" href="#" id="NeighborSearch.search-toggle" onclick="return toggle('NeighborSearch.search');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.NeighborSearch-class.html#search">search</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">center</tt><tt class="py-op">,</tt> <tt class="py-param">radius</tt><tt class="py-op">,</tt> <tt class="py-param">level</tt><tt class="py-op">=</tt><tt class="py-string">"A"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="NeighborSearch.search-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="NeighborSearch.search-expanded"><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-docstring">"""Neighbor search.</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line"><tt class="py-docstring">        Return all atoms/residues/chains/models/structures</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">        that have at least one atom within radius of center.</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"><tt class="py-docstring">        What entitity level is returned (e.g. atoms or residues)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-docstring">        is determined by level (A=atoms, R=residues, C=chains,</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring">        M=models, S=structures).</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"><tt class="py-docstring">         - center - Numeric array</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring">         - radius - float</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring">         - level - char (A, R, C, M, S)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">level</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-26" class="py-name"><a title="Bio.PDB.NeighborSearch'.entity_levels
+Bio.PDB.Selection.entity_levels" class="py-name" href="#" onclick="return doclink('link-26', 'entity_levels', 'link-11');">entity_levels</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-27" class="py-name"><a title="Bio.PDB.PDBExceptions.PDBException" class="py-name" href="#" onclick="return doclink('link-27', 'PDBException', 'link-6');">PDBException</a></tt><tt class="py-op">(</tt><tt class="py-string">"%s: Unknown level"</tt> <tt class="py-op">%</tt> <tt class="py-name">level</tt><tt class="py-op">)</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">kdt</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.search()=Bio.KDTree.KDTree%27.KDTree-class.html#search,Method Bio.PDB.NeighborSearch'.NeighborSearch.search()=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html#search,Method Bio.Phylo.TreeConstruction.NNITreeSearcher.search()=Bio.Phylo.TreeConstruction.NNITreeSearcher-class.html#search,Method Bio.Phylo.TreeConstruction.TreeSearcher.search()=Bio.Phylo.TreeConstruction.TreeSearcher-class.html#search,Class Method Bio.Restriction.Restriction.AbstractCut.search()=Bio.Restriction.Restriction.AbstractCut-class.html#search,Method Bio.Restriction.Restriction.RestrictionBatch.search()=Bio.Restriction.Restriction.RestrictionBatch-class.html#search,Function Bio.SCOP.search()=Bio.SCOP-module.html#search,Function Bio.TogoWS.search()=Bio.TogoWS-module.html#search,Method Bio.motifs.Instances.search()=Bio.motifs.Instances-class.html#search,Method Bio.motifs.matrix.PositionSpecificScoringMatrix.search()=Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html#search"><a title="Bio.KDTree.KDTree'.KDTree.search
+Bio.PDB.NeighborSearch'.NeighborSearch.search
+Bio.Phylo.TreeConstruction.NNITreeSearcher.search
+Bio.Phylo.TreeConstruction.TreeSearcher.search
+Bio.Restriction.Restriction.AbstractCut.search
+Bio.Restriction.Restriction.RestrictionBatch.search
+Bio.SCOP.search
+Bio.TogoWS.search
+Bio.motifs.Instances.search
+Bio.motifs.matrix.PositionSpecificScoringMatrix.search" class="py-name" href="#" onclick="return doclink('link-28', 'search', 'link-28');">search</a></tt><tt class="py-op">(</tt><tt class="py-name">center</tt><tt class="py-op">,</tt> <tt class="py-name">radius</tt><tt class="py-op">)</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-name">indices</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">kdt</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.get_indices()=Bio.KDTree.KDTree%27.KDTree-class.html#get_indices"><a title="Bio.KDTree.KDTree'.KDTree.get_indices" class="py-name" href="#" onclick="return doclink('link-29', 'get_indices', 'link-29');">get_indices</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-name">n_atom_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-name">atom_list</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">atom_list</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-30" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-30', 'i', 'link-30');">i</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">indices</tt><tt class="py-op">:</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">            <tt id="link-31" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-31', 'a', 'link-13');">a</a></tt> <tt class="py-op">=</tt> <tt class="py-name">atom_list</tt><tt class="py-op">[</tt><tt id="link-32" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-32', 'i', 'link-30');">i</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-name">n_atom_list</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-33', 'append', 'link-23');">append</a></tt><tt class="py-op">(</tt><tt id="link-34" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-34', 'a', 'link-13');">a</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">level</tt> <tt class="py-op">==</tt> <tt class="py-string">"A"</tt><tt class="py-op">:</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">n_atom_list</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt id="link-35" class="py-name"><a title="Bio.PDB.Selection.unfold_entities" class="py-name" href="#" onclick="return doclink('link-35', 'unfold_entities', 'link-10');">unfold_entities</a></tt><tt class="py-op">(</tt><tt class="py-name">n_atom_list</tt><tt class="py-op">,</tt> <tt class="py-name">level</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="NeighborSearch.search_all"></a><div id="NeighborSearch.search_all-def"><a name="L101"></a><tt class="py-lineno">101</tt> <a class="py-toggle" href="#" id="NeighborSearch.search_all-toggle" onclick="return toggle('NeighborSearch.search_all');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.NeighborSearch-class.html#search_all">search_all</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">radius</tt><tt class="py-op">,</tt> <tt class="py-param">level</tt><tt class="py-op">=</tt><tt class="py-string">"A"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="NeighborSearch.search_all-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="NeighborSearch.search_all-expanded"><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-docstring">"""All neighbor search.</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line"><tt class="py-docstring">        Search all entities that have atoms pairs within</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line"><tt class="py-docstring">        radius.</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"><tt class="py-docstring">        Arguments:</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"><tt class="py-docstring">         - radius - float</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"><tt class="py-docstring">         - level - char (A, R, C, M, S)</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">level</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt id="link-36" class="py-name"><a title="Bio.PDB.NeighborSearch'.entity_levels
+Bio.PDB.Selection.entity_levels" class="py-name" href="#" onclick="return doclink('link-36', 'entity_levels', 'link-11');">entity_levels</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-37" class="py-name"><a title="Bio.PDB.PDBExceptions.PDBException" class="py-name" href="#" onclick="return doclink('link-37', 'PDBException', 'link-6');">PDBException</a></tt><tt class="py-op">(</tt><tt class="py-string">"%s: Unknown level"</tt> <tt class="py-op">%</tt> <tt class="py-name">level</tt><tt class="py-op">)</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">kdt</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.all_search()=Bio.KDTree.KDTree%27.KDTree-class.html#all_search"><a title="Bio.KDTree.KDTree'.KDTree.all_search" class="py-name" href="#" onclick="return doclink('link-38', 'all_search', 'link-38');">all_search</a></tt><tt class="py-op">(</tt><tt class="py-name">radius</tt><tt class="py-op">)</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-name">indices</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">kdt</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name" targets="Method Bio.KDTree.KDTree'.KDTree.all_get_indices()=Bio.KDTree.KDTree%27.KDTree-class.html#all_get_indices"><a title="Bio.KDTree.KDTree'.KDTree.all_get_indices" class="py-name" href="#" onclick="return doclink('link-39', 'all_get_indices', 'link-39');">all_get_indices</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-name">atom_list</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">atom_list</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">        <tt class="py-name">atom_pair_list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i1</tt><tt class="py-op">,</tt> <tt class="py-name">i2</tt> <tt class="py-keyword">in</tt> <tt class="py-name">indices</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">            <tt class="py-name">a1</tt> <tt class="py-op">=</tt> <tt class="py-name">atom_list</tt><tt class="py-op">[</tt><tt class="py-name">i1</tt><tt class="py-op">]</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">            <tt class="py-name">a2</tt> <tt class="py-op">=</tt> <tt class="py-name">atom_list</tt><tt class="py-op">[</tt><tt class="py-name">i2</tt><tt class="py-op">]</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-name">atom_pair_list</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-40', 'append', 'link-23');">append</a></tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">a1</tt><tt class="py-op">,</tt> <tt class="py-name">a2</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">level</tt> <tt class="py-op">==</tt> <tt class="py-string">"A"</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">            <tt class="py-comment"># return atoms</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">atom_pair_list</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt class="py-name">next_level_pair_list</tt> <tt class="py-op">=</tt> <tt class="py-name">atom_pair_list</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">l</tt> <tt class="py-keyword">in</tt> <tt class="py-op">[</tt><tt class="py-string">"R"</tt><tt class="py-op">,</tt> <tt class="py-string">"C"</tt><tt class="py-op">,</tt> <tt class="py-string">"M"</tt><tt class="py-op">,</tt> <tt class="py-string">"S"</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">            <tt class="py-name">next_level_pair_list</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-41" class="py-name" targets="Method Bio.PDB.NeighborSearch'.NeighborSearch._get_unique_parent_pairs()=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html#_get_unique_parent_pairs"><a title="Bio.PDB.NeighborSearch'.NeighborSearch._get_unique_parent_pairs" class="py-name" href="#" onclick="return doclink('link-41', '_get_unique_parent_pairs', 'link-41');">_get_unique_parent_pairs</a></tt><tt class="py-op">(</tt><tt class="py-name">next_level_pair_list</tt><tt class="py-op">)</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">level</tt> <tt class="py-op">==</tt> <tt class="py-name">l</tt><tt class="py-op">:</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">next_level_pair_list</tt> </tt>
+</div></div><a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line"> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line"> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt><tt class="py-op">.</tt><tt class="py-name">random</tt> <tt class="py-keyword">import</tt> <tt class="py-name">random</tt> </tt>
+<a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="Atom"></a><div id="Atom-def"><a name="L135"></a><tt class="py-lineno">135</tt> <a class="py-toggle" href="#" id="Atom-toggle" onclick="return toggle('Atom');">-</a><tt class="py-line">    <tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.Atom-class.html">Atom</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Atom-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Atom-expanded"><a name="Atom.__init__"></a><div id="Atom.__init__-def"><a name="L136"></a><tt class="py-lineno">136</tt> <a class="py-toggle" href="#" id="Atom.__init__-toggle" onclick="return toggle('Atom.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.Atom-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Atom.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="Atom.__init__-expanded"><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">coord</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-number">100</tt> <tt class="py-op">*</tt> <tt class="py-name">random</tt><tt class="py-op">(</tt><tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"> </tt>
+<a name="Atom.get_coord"></a><div id="Atom.get_coord-def"><a name="L139"></a><tt class="py-lineno">139</tt> <a class="py-toggle" href="#" id="Atom.get_coord-toggle" onclick="return toggle('Atom.get_coord');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.PDB.NeighborSearch'.Atom-class.html#get_coord">get_coord</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Atom.get_coord-collapsed" style="display:none;" pad="+++" indent="++++++++++++++++"></div><div id="Atom.get_coord-expanded"><a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">coord</tt> </tt>
+</div></div><a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-42" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-42', 'i', 'link-30');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-43" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-43', 'range', 'link-43');">range</a></tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">20</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line">        <tt class="py-comment"># Make a list of 100 atoms</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-name">al</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt id="link-44" class="py-name" targets="Module Bio.PDB.Atom=Bio.PDB.Atom-module.html,Class Bio.PDB.Atom.Atom=Bio.PDB.Atom.Atom-class.html"><a title="Bio.PDB.Atom
+Bio.PDB.Atom.Atom" class="py-name" href="#" onclick="return doclink('link-44', 'Atom', 'link-44');">Atom</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">j</tt> <tt class="py-keyword">in</tt> <tt id="link-45" class="py-name"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-45', 'range', 'link-43');">range</a></tt><tt class="py-op">(</tt><tt class="py-number">100</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-name">ns</tt> <tt class="py-op">=</tt> <tt id="link-46" class="py-name" targets="Class Bio.PDB.NeighborSearch'.NeighborSearch=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html"><a title="Bio.PDB.NeighborSearch'.NeighborSearch" class="py-name" href="#" onclick="return doclink('link-46', 'NeighborSearch', 'link-46');">NeighborSearch</a></tt><tt class="py-op">(</tt><tt class="py-name">al</tt><tt class="py-op">)</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt><tt class="py-op">(</tt><tt class="py-string">"Found %i"</tt> <tt class="py-op">%</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">ns</tt><tt class="py-op">.</tt><tt id="link-47" class="py-name" targets="Method Bio.PDB.NeighborSearch'.NeighborSearch.search_all()=Bio.PDB.NeighborSearch%27.NeighborSearch-class.html#search_all"><a title="Bio.PDB.NeighborSearch'.NeighborSearch.search_all" class="py-name" href="#" onclick="return doclink('link-47', 'search_all', 'link-47');">search_all</a></tt><tt class="py-op">(</tt><tt class="py-number">5.0</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:30 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

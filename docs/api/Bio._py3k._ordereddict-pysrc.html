@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio._py3k._ordereddict</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio._py3k-module.html">Package&nbsp;_py3k</a> ::
+        Module&nbsp;_ordereddict
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio._py3k._ordereddict-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio._py3k._ordereddict-module.html">Module Bio._py3k._ordereddict</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright (c) 2009 Raymond Hettinger</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># Permission is hereby granted, free of charge, to any person</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># obtaining a copy of this software and associated documentation files</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># (the "Software"), to deal in the Software without restriction,</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-comment"># including without limitation the rights to use, copy, modify, merge,</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment"># publish, distribute, sublicense, and/or sell copies of the Software,</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment"># and to permit persons to whom the Software is furnished to do so,</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment"># subject to the following conditions:</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">#     The above copyright notice and this permission notice shall be</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-comment">#     included in all copies or substantial portions of the Software.</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt class="py-comment">#     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-comment">#     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-comment">#     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-comment">#     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-comment">#     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-comment">#     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-comment">#     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-comment">#     OTHER DEALINGS IN THE SOFTWARE.</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">UserDict</tt> <tt class="py-keyword">import</tt> <tt class="py-name">DictMixin</tt> </tt>
+<a name="OrderedDict"></a><div id="OrderedDict-def"><a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt> <a class="py-toggle" href="#" id="OrderedDict-toggle" onclick="return toggle('OrderedDict');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html">OrderedDict</a><tt class="py-op">(</tt><tt class="py-base-class">dict</tt><tt class="py-op">,</tt> <tt class="py-base-class">DictMixin</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="OrderedDict-expanded"><a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__init__"></a><div id="OrderedDict.__init__-def"><a name="L28"></a><tt class="py-lineno"> 28</tt> <a class="py-toggle" href="#" id="OrderedDict.__init__-toggle" onclick="return toggle('OrderedDict.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwds</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__init__-expanded"><a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">)</tt> <tt class="py-op">&gt;</tt> <tt class="py-number">1</tt><tt class="py-op">:</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">TypeError</tt><tt class="py-op">(</tt><tt class="py-string">'expected at most 1 arguments, got %d'</tt> <tt class="py-op">%</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">args</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Method Bio.Crystal.Crystal.clear()=Bio.Crystal.Crystal-class.html#clear,Method Bio.File._IndexedSeqFileDict.clear()=Bio.File._IndexedSeqFileDict-class.html#clear,Method Bio.Index._InMemoryIndex.clear()=Bio.Index._InMemoryIndex-class.html#clear,Method Bio._py3k._ordereddict.OrderedDict.clear()=Bio._py3k._ordereddict.OrderedDict-class.html#clear"><a title="Bio.Crystal.Crystal.clear
+Bio.File._IndexedSeqFileDict.clear
+Bio.Index._InMemoryIndex.clear
+Bio._py3k._ordereddict.OrderedDict.clear" class="py-name" href="#" onclick="return doclink('link-0', 'clear', 'link-0');">clear</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.update()=Bio.File._IndexedSeqFileDict-class.html#update,Method Bio.Index._InMemoryIndex.update()=Bio.Index._InMemoryIndex-class.html#update,Method Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.update()=Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer-class.html#update,Method Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.update()=Bio.NeuralNetwork.BackPropagation.Layer.InputLayer-class.html#update,Method Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.update()=Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer-class.html#update,Method Bio.SeqRecord._RestrictedDict.update()=Bio.SeqRecord._RestrictedDict-class.html#update,Method Bio._py3k._ordereddict.OrderedDict.update()=Bio._py3k._ordereddict.OrderedDict-class.html#update"><a title="Bio.File._IndexedSeqFileDict.update
+Bio.Index._InMemoryIndex.update
+Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.update
+Bio.SeqRecord._RestrictedDict.update
+Bio._py3k._ordereddict.OrderedDict.update" class="py-name" href="#" onclick="return doclink('link-1', 'update', 'link-1');">update</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwds</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.clear"></a><div id="OrderedDict.clear-def"><a name="L37"></a><tt class="py-lineno"> 37</tt> <a class="py-toggle" href="#" id="OrderedDict.clear-toggle" onclick="return toggle('OrderedDict.clear');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#clear">clear</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.clear-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.clear-expanded"><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> <tt class="py-op">=</tt> <tt id="link-2" class="py-name" targets="Variable Bio.SeqFeature.CompoundLocation.end=Bio.SeqFeature.CompoundLocation-class.html#end,Variable Bio.SeqFeature.FeatureLocation.end=Bio.SeqFeature.FeatureLocation-class.html#end"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-2', 'end', 'link-2');">end</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt id="link-3" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-3', 'end', 'link-2');">end</a></tt> <tt class="py-op">+=</tt> <tt class="py-op">[</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt id="link-4" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-4', 'end', 'link-2');">end</a></tt><tt class="py-op">,</tt> <tt id="link-5" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-5', 'end', 'link-2');">end</a></tt><tt class="py-op">]</tt>         <tt class="py-comment"># sentinel node for doubly linked list</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__map</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt>                 <tt class="py-comment"># key --&gt; [key, prev, next]</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-name">dict</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="Bio.Crystal.Crystal.clear
+Bio.File._IndexedSeqFileDict.clear
+Bio.Index._InMemoryIndex.clear
+Bio._py3k._ordereddict.OrderedDict.clear" class="py-name" href="#" onclick="return doclink('link-6', 'clear', 'link-0');">clear</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__setitem__"></a><div id="OrderedDict.__setitem__-def"><a name="L43"></a><tt class="py-lineno"> 43</tt> <a class="py-toggle" href="#" id="OrderedDict.__setitem__-toggle" onclick="return toggle('OrderedDict.__setitem__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__setitem__">__setitem__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">,</tt> <tt class="py-param">value</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__setitem__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__setitem__-expanded"><a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">key</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt id="link-7" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-7', 'end', 'link-2');">end</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-name">curr</tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-8', 'end', 'link-2');">end</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">            <tt class="py-name">curr</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-9', 'end', 'link-2');">end</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__map</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">,</tt> <tt class="py-name">curr</tt><tt class="py-op">,</tt> <tt id="link-10" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-10', 'end', 'link-2');">end</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">        <tt class="py-name">dict</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method Bio.Crystal.Chain.__setitem__()=Bio.Crystal.Chain-class.html#__setitem__,Method Bio.Crystal.Crystal.__setitem__()=Bio.Crystal.Crystal-class.html#__setitem__,Method Bio.Entrez.Parser.StructureElement.__setitem__()=Bio.Entrez.Parser.StructureElement-class.html#__setitem__,Method Bio.File._IndexedSeqFileDict.__setitem__()=Bio.File._IndexedSeqFileDict-class.html#__setitem__,Method Bio.Index._InMemoryIndex.__setitem__()=Bio.Index._InMemoryIndex-class.html#__setitem__,Method Bio.PDB.Entity.DisorderedEntityWrapper.__setitem__()=Bio.PDB.Entity.DisorderedEntityWrapper-class.html#__setitem__,Method Bio.PDB.Vector'.Vector.__setitem__()=Bio.PDB.Vector%27.Vector-class.html#__setitem__,Method Bio.Phylo.PhyloXML.Events.__setitem__()=Bio.Phylo.PhyloXML.Events-class.html#__setitem__,Method Bio.Phylo.TreeConstruction._DistanceMatrix.__setitem__()=Bio.Phylo.TreeConstruction._DistanceMatrix-class.html#__setitem__,Method Bio.Phylo.TreeConstruction._Matrix.__setitem__()=Bio.Phylo.TreeConstruction._Matrix-class.html#__setitem__,Method Bio.SearchIO._model.hit.Hit.__setitem__()=Bio.SearchIO._model.hit.Hit-class.html#__setitem__,Method Bio.SearchIO._model.hsp.HSP.__setitem__()=Bio.SearchIO._model.hsp.HSP-class.html#__setitem__,Method Bio.SearchIO._model.query.QueryResult.__setitem__()=Bio.SearchIO._model.query.QueryResult-class.html#__setitem__,Method Bio.Seq.MutableSeq.__setitem__()=Bio.Seq.MutableSeq-class.html#__setitem__,Method Bio.SeqRecord._RestrictedDict.__setitem__()=Bio.SeqRecord._RestrictedDict-class.html#__setitem__,Method Bio._py3k._ordereddict.OrderedDict.__setitem__()=Bio._py3k._ordereddict.OrderedDict-class.html#__setitem__"><a title="Bio.Crystal.Chain.__setitem__
+Bio.Crystal.Crystal.__setitem__
+Bio.Entrez.Parser.StructureElement.__setitem__
+Bio.File._IndexedSeqFileDict.__setitem__
+Bio.Index._InMemoryIndex.__setitem__
+Bio.PDB.Entity.DisorderedEntityWrapper.__setitem__
+Bio.PDB.Vector'.Vector.__setitem__
+Bio.Phylo.PhyloXML.Events.__setitem__
+Bio.Phylo.TreeConstruction._DistanceMatrix.__setitem__
+Bio.Phylo.TreeConstruction._Matrix.__setitem__
+Bio.SearchIO._model.hit.Hit.__setitem__
+Bio.SearchIO._model.hsp.HSP.__setitem__
+Bio.SearchIO._model.query.QueryResult.__setitem__
+Bio.Seq.MutableSeq.__setitem__
+Bio.SeqRecord._RestrictedDict.__setitem__
+Bio._py3k._ordereddict.OrderedDict.__setitem__" class="py-name" href="#" onclick="return doclink('link-11', '__setitem__', 'link-11');">__setitem__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-12" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Writer.value()=Bio.Phylo.PhyloXMLIO.Writer-class.html#value"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-12', 'value', 'link-12');">value</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__delitem__"></a><div id="OrderedDict.__delitem__-def"><a name="L50"></a><tt class="py-lineno"> 50</tt> <a class="py-toggle" href="#" id="OrderedDict.__delitem__-toggle" onclick="return toggle('OrderedDict.__delitem__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__delitem__">__delitem__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">key</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__delitem__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__delitem__-expanded"><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-name">dict</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method Bio.Crystal.Chain.__delitem__()=Bio.Crystal.Chain-class.html#__delitem__,Method Bio.Crystal.Crystal.__delitem__()=Bio.Crystal.Crystal-class.html#__delitem__,Method Bio.Index._InMemoryIndex.__delitem__()=Bio.Index._InMemoryIndex-class.html#__delitem__,Method Bio.PDB.Chain.Chain.__delitem__()=Bio.PDB.Chain.Chain-class.html#__delitem__,Method Bio.PDB.Entity.Entity.__delitem__()=Bio.PDB.Entity.Entity-class.html#__delitem__,Method Bio.Phylo.PhyloXML.Events.__delitem__()=Bio.Phylo.PhyloXML.Events-class.html#__delitem__,Method Bio.Phylo.TreeConstruction._Matrix.__delitem__()=Bio.Phylo.TreeConstruction._Matrix-class.html#__delitem__,Method Bio.SearchIO._model.hit.Hit.__delitem__()=Bio.SearchIO._model.hit.Hit-class.html#__delitem__,Method Bio.SearchIO._model.hsp.HSP.__delitem__()=Bio.SearchIO._model.hsp.HSP-class.html#__delitem__,Method Bio.SearchIO._model.query.QueryResult.__delitem__()=Bio.SearchIO._model.query.QueryResult-class.html#__delitem__,Method Bio.Seq.MutableSeq.__delitem__()=Bio.Seq.MutableSeq-class.html#__delitem__,Method Bio._py3k._ordereddict.OrderedDict.__delitem__()=Bio._py3k._ordereddict.OrderedDict-class.html#__delitem__,Method BioSQL.BioSeqDatabase.BioSeqDatabase.__delitem__()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#__delitem__,Method BioSQL.BioSeqDatabase.DBServer.__delitem__()=BioSQL.BioSeqDatabase.DBServer-class.html#__delitem__"><a title="Bio.Crystal.Chain.__delitem__
+Bio.Crystal.Crystal.__delitem__
+Bio.Index._InMemoryIndex.__delitem__
+Bio.PDB.Chain.Chain.__delitem__
+Bio.PDB.Entity.Entity.__delitem__
+Bio.Phylo.PhyloXML.Events.__delitem__
+Bio.Phylo.TreeConstruction._Matrix.__delitem__
+Bio.SearchIO._model.hit.Hit.__delitem__
+Bio.SearchIO._model.hsp.HSP.__delitem__
+Bio.SearchIO._model.query.QueryResult.__delitem__
+Bio.Seq.MutableSeq.__delitem__
+Bio._py3k._ordereddict.OrderedDict.__delitem__
+BioSQL.BioSeqDatabase.BioSeqDatabase.__delitem__
+BioSQL.BioSeqDatabase.DBServer.__delitem__" class="py-name" href="#" onclick="return doclink('link-13', '__delitem__', 'link-13');">__delitem__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">key</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">        <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt class="py-name">prev</tt><tt class="py-op">,</tt> <tt id="link-14" class="py-name" targets="Method Bio.AlignIO.Interfaces.AlignmentIterator.next()=Bio.AlignIO.Interfaces.AlignmentIterator-class.html#next,Method Bio.Blast.NCBIStandalone.Iterator.next()=Bio.Blast.NCBIStandalone.Iterator-class.html#next,Method Bio.Blast.ParseBlastTable.BlastTableReader.next()=Bio.Blast.ParseBlastTable.BlastTableReader-class.html#next,Method Bio.DocSQL.IterationCursor.next()=Bio.DocSQL.IterationCursor-class.html#next,Method Bio.File.UndoHandle.next()=Bio.File.UndoHandle-class.html#next,Method Bio.GenBank.Iterator.next()=Bio.GenBank.Iterator-class.html#next,Method Bio.Nexus.Nexus.CharBuffer.next()=Bio.Nexus.Nexus.CharBuffer-class.html#next,Method Bio.PopGen.GenePop.Controller._FileIterator.next()=Bio.PopGen.GenePop.Controller._FileIterator-class.html#next,Method Bio.SeqIO.Interfaces.SequenceIterator.next()=Bio.SeqIO.Interfaces.SequenceIterator-class.html#next,Method Bio.bgzf.BgzfReader.next()=Bio.bgzf.BgzfReader-class.html#next"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-14', 'next', 'link-14');">next</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__map</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.pop()=Bio.File._IndexedSeqFileDict-class.html#pop,Method Bio.SearchIO._model.hit.Hit.pop()=Bio.SearchIO._model.hit.Hit-class.html#pop,Method Bio.SearchIO._model.query.QueryResult.pop()=Bio.SearchIO._model.query.QueryResult-class.html#pop,Method Bio.Seq.MutableSeq.pop()=Bio.Seq.MutableSeq-class.html#pop,Method Bio._py3k._ordereddict.OrderedDict.pop()=Bio._py3k._ordereddict.OrderedDict-class.html#pop"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-15', 'pop', 'link-15');">pop</a></tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-name">prev</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-16" class="py-name"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-16', 'next', 'link-14');">next</a></tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt id="link-17" class="py-name"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-17', 'next', 'link-14');">next</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">prev</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__iter__"></a><div id="OrderedDict.__iter__-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="OrderedDict.__iter__-toggle" onclick="return toggle('OrderedDict.__iter__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__iter__">__iter__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__iter__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__iter__-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt id="link-18" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-18', 'end', 'link-2');">end</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-name">curr</tt> <tt class="py-op">=</tt> <tt id="link-19" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-19', 'end', 'link-2');">end</a></tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">curr</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt id="link-20" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-20', 'end', 'link-2');">end</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">curr</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">            <tt class="py-name">curr</tt> <tt class="py-op">=</tt> <tt class="py-name">curr</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__reversed__"></a><div id="OrderedDict.__reversed__-def"><a name="L63"></a><tt class="py-lineno"> 63</tt> <a class="py-toggle" href="#" id="OrderedDict.__reversed__-toggle" onclick="return toggle('OrderedDict.__reversed__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__reversed__">__reversed__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__reversed__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__reversed__-expanded"><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt id="link-21" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-21', 'end', 'link-2');">end</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">        <tt class="py-name">curr</tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-22', 'end', 'link-2');">end</a></tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-keyword">while</tt> <tt class="py-name">curr</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt id="link-23" class="py-name"><a title="Bio.SeqFeature.CompoundLocation.end
+Bio.SeqFeature.FeatureLocation.end" class="py-name" href="#" onclick="return doclink('link-23', 'end', 'link-2');">end</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">            <tt class="py-keyword">yield</tt> <tt class="py-name">curr</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">            <tt class="py-name">curr</tt> <tt class="py-op">=</tt> <tt class="py-name">curr</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.popitem"></a><div id="OrderedDict.popitem-def"><a name="L70"></a><tt class="py-lineno"> 70</tt> <a class="py-toggle" href="#" id="OrderedDict.popitem-toggle" onclick="return toggle('OrderedDict.popitem');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#popitem">popitem</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">last</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.popitem-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.popitem-expanded"><a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">KeyError</tt><tt class="py-op">(</tt><tt class="py-string">'dictionary is empty'</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">last</tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt class="py-name">key</tt> <tt class="py-op">=</tt> <tt class="py-name">reversed</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-24', 'next', 'link-14');">next</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt class="py-name">key</tt> <tt class="py-op">=</tt> <tt class="py-name">iter</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="Bio.AlignIO.Interfaces.AlignmentIterator.next
+Bio.Blast.NCBIStandalone.Iterator.next
+Bio.Blast.ParseBlastTable.BlastTableReader.next
+Bio.DocSQL.IterationCursor.next
+Bio.File.UndoHandle.next
+Bio.GenBank.Iterator.next
+Bio.Nexus.Nexus.CharBuffer.next
+Bio.PopGen.GenePop.Controller._FileIterator.next
+Bio.SeqIO.Interfaces.SequenceIterator.next
+Bio.bgzf.BgzfReader.next" class="py-name" href="#" onclick="return doclink('link-25', 'next', 'link-14');">next</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt id="link-26" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-26', 'value', 'link-12');">value</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-27', 'pop', 'link-15');">pop</a></tt><tt class="py-op">(</tt><tt class="py-name">key</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">key</tt><tt class="py-op">,</tt> <tt id="link-28" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-28', 'value', 'link-12');">value</a></tt> </tt>
+</div><a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__reduce__"></a><div id="OrderedDict.__reduce__-def"><a name="L80"></a><tt class="py-lineno"> 80</tt> <a class="py-toggle" href="#" id="OrderedDict.__reduce__-toggle" onclick="return toggle('OrderedDict.__reduce__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__reduce__">__reduce__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__reduce__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__reduce__-expanded"><a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">        <tt id="link-29" class="py-name" targets="Method Bio.Crystal.Crystal.items()=Bio.Crystal.Crystal-class.html#items,Method Bio.File._IndexedSeqFileDict.items()=Bio.File._IndexedSeqFileDict-class.html#items,Method Bio.Phylo.PhyloXML.Events.items()=Bio.Phylo.PhyloXML.Events-class.html#items,Variable Bio.SearchIO._model.query.QueryResult.items=Bio.SearchIO._model.query.QueryResult-class.html#items,Method Bio._py3k._ordereddict.OrderedDict.items()=Bio._py3k._ordereddict.OrderedDict-class.html#items,Method BioSQL.BioSeqDatabase.BioSeqDatabase.items()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#items,Method BioSQL.BioSeqDatabase.DBServer.items()=BioSQL.BioSeqDatabase.DBServer-class.html#items"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-29', 'items', 'link-29');">items</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">[</tt><tt class="py-name">k</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-keyword">for</tt> <tt class="py-name">k</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">]</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-name">tmp</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__map</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">        <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__map</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-name">inst_dict</tt> <tt class="py-op">=</tt> <tt class="py-name">vars</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name" targets="Method Bio.Crystal.Crystal.copy()=Bio.Crystal.Crystal-class.html#copy,Method Bio.File._IndexedSeqFileDict.copy()=Bio.File._IndexedSeqFileDict-class.html#copy,Method Bio.GA.Organism.Organism.copy()=Bio.GA.Organism.Organism-class.html#copy,Method Bio.PDB.Atom.Atom.copy()=Bio.PDB.Atom.Atom-class.html#copy,Method Bio.PDB.Entity.Entity.copy()=Bio.PDB.Entity.Entity-class.html#copy,Method Bio.PDB.Vector'.Vector.copy()=Bio.PDB.Vector%27.Vector-class.html#copy,Method Bio._py3k._ordereddict.OrderedDict.copy()=Bio._py3k._ordereddict.OrderedDict-class.html#copy"><a title="Bio.Crystal.Crystal.copy
+Bio.File._IndexedSeqFileDict.copy
+Bio.GA.Organism.Organism.copy
+Bio.PDB.Atom.Atom.copy
+Bio.PDB.Entity.Entity.copy
+Bio.PDB.Vector'.Vector.copy
+Bio._py3k._ordereddict.OrderedDict.copy" class="py-name" href="#" onclick="return doclink('link-30', 'copy', 'link-30');">copy</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__map</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__end</tt> <tt class="py-op">=</tt> <tt class="py-name">tmp</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">inst_dict</tt><tt class="py-op">:</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt id="link-31" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-31', 'items', 'link-29');">items</a></tt><tt class="py-op">,</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">inst_dict</tt><tt class="py-op">)</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt id="link-32" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-32', 'items', 'link-29');">items</a></tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.keys"></a><div id="OrderedDict.keys-def"><a name="L90"></a><tt class="py-lineno"> 90</tt> <a class="py-toggle" href="#" id="OrderedDict.keys-toggle" onclick="return toggle('OrderedDict.keys');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#keys">keys</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.keys-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.keys-expanded"><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">list</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">    <tt id="link-33" class="py-name" targets="Method Bio.Crystal.Crystal.setdefault()=Bio.Crystal.Crystal-class.html#setdefault,Method Bio._py3k._ordereddict.OrderedDict.setdefault()=Bio._py3k._ordereddict.OrderedDict-class.html#setdefault"><a title="Bio.Crystal.Crystal.setdefault
+Bio._py3k._ordereddict.OrderedDict.setdefault" class="py-name" href="#" onclick="return doclink('link-33', 'setdefault', 'link-33');">setdefault</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.Crystal.Crystal.setdefault
+Bio._py3k._ordereddict.OrderedDict.setdefault" class="py-name" href="#" onclick="return doclink('link-34', 'setdefault', 'link-33');">setdefault</a></tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">    <tt id="link-35" class="py-name"><a title="Bio.File._IndexedSeqFileDict.update
+Bio.Index._InMemoryIndex.update
+Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.update
+Bio.SeqRecord._RestrictedDict.update
+Bio._py3k._ordereddict.OrderedDict.update" class="py-name" href="#" onclick="return doclink('link-35', 'update', 'link-1');">update</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="Bio.File._IndexedSeqFileDict.update
+Bio.Index._InMemoryIndex.update
+Bio.NeuralNetwork.BackPropagation.Layer.HiddenLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.InputLayer.update
+Bio.NeuralNetwork.BackPropagation.Layer.OutputLayer.update
+Bio.SeqRecord._RestrictedDict.update
+Bio._py3k._ordereddict.OrderedDict.update" class="py-name" href="#" onclick="return doclink('link-36', 'update', 'link-1');">update</a></tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">    <tt id="link-37" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-37', 'pop', 'link-15');">pop</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="Bio.File._IndexedSeqFileDict.pop
+Bio.SearchIO._model.hit.Hit.pop
+Bio.SearchIO._model.query.QueryResult.pop
+Bio.Seq.MutableSeq.pop
+Bio._py3k._ordereddict.OrderedDict.pop" class="py-name" href="#" onclick="return doclink('link-38', 'pop', 'link-15');">pop</a></tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">    <tt id="link-39" class="py-name" targets="Method Bio.Crystal.Crystal.values()=Bio.Crystal.Crystal-class.html#values,Method Bio.File._IndexedSeqFileDict.values()=Bio.File._IndexedSeqFileDict-class.html#values,Method Bio.Phylo.PhyloXML.Events.values()=Bio.Phylo.PhyloXML.Events-class.html#values,Method Bio._py3k._ordereddict.OrderedDict.values()=Bio._py3k._ordereddict.OrderedDict-class.html#values,Method BioSQL.BioSeqDatabase.BioSeqDatabase.values()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#values,Method BioSQL.BioSeqDatabase.DBServer.values()=BioSQL.BioSeqDatabase.DBServer-class.html#values"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-39', 'values', 'link-39');">values</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="Bio.Crystal.Crystal.values
+Bio.File._IndexedSeqFileDict.values
+Bio.Phylo.PhyloXML.Events.values
+Bio._py3k._ordereddict.OrderedDict.values
+BioSQL.BioSeqDatabase.BioSeqDatabase.values
+BioSQL.BioSeqDatabase.DBServer.values" class="py-name" href="#" onclick="return doclink('link-40', 'values', 'link-39');">values</a></tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">    <tt id="link-41" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-41', 'items', 'link-29');">items</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-42', 'items', 'link-29');">items</a></tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">    <tt id="link-43" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.iterkeys()=Bio.File._IndexedSeqFileDict-class.html#iterkeys,Method Bio._py3k._ordereddict.OrderedDict.iterkeys()=Bio._py3k._ordereddict.OrderedDict-class.html#iterkeys,Method BioSQL.BioSeqDatabase.BioSeqDatabase.iterkeys()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#iterkeys,Method BioSQL.BioSeqDatabase.DBServer.iterkeys()=BioSQL.BioSeqDatabase.DBServer-class.html#iterkeys"><a title="Bio.File._IndexedSeqFileDict.iterkeys
+Bio._py3k._ordereddict.OrderedDict.iterkeys
+BioSQL.BioSeqDatabase.BioSeqDatabase.iterkeys
+BioSQL.BioSeqDatabase.DBServer.iterkeys" class="py-name" href="#" onclick="return doclink('link-43', 'iterkeys', 'link-43');">iterkeys</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-44" class="py-name"><a title="Bio.File._IndexedSeqFileDict.iterkeys
+Bio._py3k._ordereddict.OrderedDict.iterkeys
+BioSQL.BioSeqDatabase.BioSeqDatabase.iterkeys
+BioSQL.BioSeqDatabase.DBServer.iterkeys" class="py-name" href="#" onclick="return doclink('link-44', 'iterkeys', 'link-43');">iterkeys</a></tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">    <tt id="link-45" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.itervalues()=Bio.File._IndexedSeqFileDict-class.html#itervalues,Method Bio._py3k._ordereddict.OrderedDict.itervalues()=Bio._py3k._ordereddict.OrderedDict-class.html#itervalues,Method BioSQL.BioSeqDatabase.BioSeqDatabase.itervalues()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#itervalues,Method BioSQL.BioSeqDatabase.DBServer.itervalues()=BioSQL.BioSeqDatabase.DBServer-class.html#itervalues"><a title="Bio.File._IndexedSeqFileDict.itervalues
+Bio._py3k._ordereddict.OrderedDict.itervalues
+BioSQL.BioSeqDatabase.BioSeqDatabase.itervalues
+BioSQL.BioSeqDatabase.DBServer.itervalues" class="py-name" href="#" onclick="return doclink('link-45', 'itervalues', 'link-45');">itervalues</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-46" class="py-name"><a title="Bio.File._IndexedSeqFileDict.itervalues
+Bio._py3k._ordereddict.OrderedDict.itervalues
+BioSQL.BioSeqDatabase.BioSeqDatabase.itervalues
+BioSQL.BioSeqDatabase.DBServer.itervalues" class="py-name" href="#" onclick="return doclink('link-46', 'itervalues', 'link-45');">itervalues</a></tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">    <tt id="link-47" class="py-name" targets="Method Bio.File._IndexedSeqFileDict.iteritems()=Bio.File._IndexedSeqFileDict-class.html#iteritems,Method Bio.SearchIO._model.query.QueryResult.iteritems()=Bio.SearchIO._model.query.QueryResult-class.html#iteritems,Method Bio._py3k._ordereddict.OrderedDict.iteritems()=Bio._py3k._ordereddict.OrderedDict-class.html#iteritems,Method BioSQL.BioSeqDatabase.BioSeqDatabase.iteritems()=BioSQL.BioSeqDatabase.BioSeqDatabase-class.html#iteritems,Method BioSQL.BioSeqDatabase.DBServer.iteritems()=BioSQL.BioSeqDatabase.DBServer-class.html#iteritems"><a title="Bio.File._IndexedSeqFileDict.iteritems
+Bio.SearchIO._model.query.QueryResult.iteritems
+Bio._py3k._ordereddict.OrderedDict.iteritems
+BioSQL.BioSeqDatabase.BioSeqDatabase.iteritems
+BioSQL.BioSeqDatabase.DBServer.iteritems" class="py-name" href="#" onclick="return doclink('link-47', 'iteritems', 'link-47');">iteritems</a></tt> <tt class="py-op">=</tt> <tt class="py-name">DictMixin</tt><tt class="py-op">.</tt><tt id="link-48" class="py-name"><a title="Bio.File._IndexedSeqFileDict.iteritems
+Bio.SearchIO._model.query.QueryResult.iteritems
+Bio._py3k._ordereddict.OrderedDict.iteritems
+BioSQL.BioSeqDatabase.BioSeqDatabase.iteritems
+BioSQL.BioSeqDatabase.DBServer.iteritems" class="py-name" href="#" onclick="return doclink('link-48', 'iteritems', 'link-47');">iteritems</a></tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__repr__"></a><div id="OrderedDict.__repr__-def"><a name="L102"></a><tt class="py-lineno">102</tt> <a class="py-toggle" href="#" id="OrderedDict.__repr__-toggle" onclick="return toggle('OrderedDict.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__repr__-expanded"><a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-string">'%s()'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">.</tt><tt class="py-name">__name__</tt><tt class="py-op">,</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">'%s(%r)'</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">.</tt><tt class="py-name">__name__</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-49" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-49', 'items', 'link-29');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.copy"></a><div id="OrderedDict.copy-def"><a name="L107"></a><tt class="py-lineno">107</tt> <a class="py-toggle" href="#" id="OrderedDict.copy-toggle" onclick="return toggle('OrderedDict.copy');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#copy">copy</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.copy-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.copy-expanded"><a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__class__</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line"> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">classmethod</tt> </tt>
+<a name="OrderedDict.fromkeys"></a><div id="OrderedDict.fromkeys-def"><a name="L111"></a><tt class="py-lineno">111</tt> <a class="py-toggle" href="#" id="OrderedDict.fromkeys-toggle" onclick="return toggle('OrderedDict.fromkeys');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#fromkeys">fromkeys</a><tt class="py-op">(</tt><tt class="py-param">cls</tt><tt class="py-op">,</tt> <tt class="py-param">iterable</tt><tt class="py-op">,</tt> <tt class="py-param">value</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.fromkeys-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.fromkeys-expanded"><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-name">d</tt> <tt class="py-op">=</tt> <tt class="py-name">cls</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">key</tt> <tt class="py-keyword">in</tt> <tt class="py-name">iterable</tt><tt class="py-op">:</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">            <tt class="py-name">d</tt><tt class="py-op">[</tt><tt class="py-name">key</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-50" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Writer.value" class="py-name" href="#" onclick="return doclink('link-50', 'value', 'link-12');">value</a></tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">d</tt> </tt>
+</div><a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__eq__"></a><div id="OrderedDict.__eq__-def"><a name="L117"></a><tt class="py-lineno">117</tt> <a class="py-toggle" href="#" id="OrderedDict.__eq__-toggle" onclick="return toggle('OrderedDict.__eq__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__eq__">__eq__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__eq__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__eq__-expanded"><a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt id="link-51" class="py-name" targets="Method Bio.Phylo.PhyloXMLIO.Parser.other()=Bio.Phylo.PhyloXMLIO.Parser-class.html#other,Method Bio.Phylo.PhyloXMLIO.Writer.other()=Bio.Phylo.PhyloXMLIO.Writer-class.html#other"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-51', 'other', 'link-51');">other</a></tt><tt class="py-op">,</tt> <tt id="link-52" class="py-name" targets="Class Bio._py3k._ordereddict.OrderedDict=Bio._py3k._ordereddict.OrderedDict-class.html"><a title="Bio._py3k._ordereddict.OrderedDict" class="py-name" href="#" onclick="return doclink('link-52', 'OrderedDict', 'link-52');">OrderedDict</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">)</tt> <tt class="py-op">!=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt id="link-53" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-53', 'other', 'link-51');">other</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">p</tt><tt class="py-op">,</tt> <tt class="py-name">q</tt> <tt class="py-keyword">in</tt> <tt class="py-name">zip</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-54" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-54', 'items', 'link-29');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt id="link-55" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-55', 'other', 'link-51');">other</a></tt><tt class="py-op">.</tt><tt id="link-56" class="py-name"><a title="Bio.Crystal.Crystal.items
+Bio.File._IndexedSeqFileDict.items
+Bio.Phylo.PhyloXML.Events.items
+Bio.SearchIO._model.query.QueryResult.items
+Bio._py3k._ordereddict.OrderedDict.items
+BioSQL.BioSeqDatabase.BioSeqDatabase.items
+BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return doclink('link-56', 'items', 'link-29');">items</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">p</tt> <tt class="py-op">!=</tt> <tt class="py-name">q</tt><tt class="py-op">:</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">                    <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">dict</tt><tt class="py-op">.</tt><tt id="link-57" class="py-name" targets="Method Bio.Crystal.Chain.__eq__()=Bio.Crystal.Chain-class.html#__eq__,Method Bio.Crystal.Hetero.__eq__()=Bio.Crystal.Hetero-class.html#__eq__,Method Bio.GA.Organism.Organism.__eq__()=Bio.GA.Organism.Organism-class.html#__eq__,Method Bio.Pathway.Reaction.__eq__()=Bio.Pathway.Reaction-class.html#__eq__,Method Bio.Pathway.Rep.Graph.Graph.__eq__()=Bio.Pathway.Rep.Graph.Graph-class.html#__eq__,Method Bio.Pathway.Rep.MultiGraph.MultiGraph.__eq__()=Bio.Pathway.Rep.MultiGraph.MultiGraph-class.html#__eq__,Method Bio.Phylo.PhyloXML.Confidence.__eq__()=Bio.Phylo.PhyloXML.Confidence-class.html#__eq__,Method Bio.Restriction.Restriction.FormattedSeq.__eq__()=Bio.Restriction.Restriction.FormattedSeq-class.html#__eq__,Method Bio.Restriction.Restriction.RestrictionType.__eq__()=Bio.Restriction.Restriction.RestrictionType-class.html#__eq__,Method Bio.Seq.MutableSeq.__eq__()=Bio.Seq.MutableSeq-class.html#__eq__,Method Bio.Seq.Seq.__eq__()=Bio.Seq.Seq-class.html#__eq__,Method Bio._py3k._ordereddict.OrderedDict.__eq__()=Bio._py3k._ordereddict.OrderedDict-class.html#__eq__,Method Bio.motifs.jaspar.Motif.__eq__()=Bio.motifs.jaspar.Motif-class.html#__eq__"><a title="Bio.Crystal.Chain.__eq__
+Bio.Crystal.Hetero.__eq__
+Bio.GA.Organism.Organism.__eq__
+Bio.Pathway.Reaction.__eq__
+Bio.Pathway.Rep.Graph.Graph.__eq__
+Bio.Pathway.Rep.MultiGraph.MultiGraph.__eq__
+Bio.Phylo.PhyloXML.Confidence.__eq__
+Bio.Restriction.Restriction.FormattedSeq.__eq__
+Bio.Restriction.Restriction.RestrictionType.__eq__
+Bio.Seq.MutableSeq.__eq__
+Bio.Seq.Seq.__eq__
+Bio._py3k._ordereddict.OrderedDict.__eq__
+Bio.motifs.jaspar.Motif.__eq__" class="py-name" href="#" onclick="return doclink('link-57', '__eq__', 'link-57');">__eq__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt id="link-58" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-58', 'other', 'link-51');">other</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"> </tt>
+<a name="OrderedDict.__ne__"></a><div id="OrderedDict.__ne__-def"><a name="L127"></a><tt class="py-lineno">127</tt> <a class="py-toggle" href="#" id="OrderedDict.__ne__-toggle" onclick="return toggle('OrderedDict.__ne__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio._py3k._ordereddict.OrderedDict-class.html#__ne__">__ne__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">other</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="OrderedDict.__ne__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="OrderedDict.__ne__-expanded"><a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt> <tt class="py-op">==</tt> <tt id="link-59" class="py-name"><a title="Bio.Phylo.PhyloXMLIO.Parser.other
+Bio.Phylo.PhyloXMLIO.Writer.other" class="py-name" href="#" onclick="return doclink('link-59', 'other', 'link-51');">other</a></tt> </tt>
+</div></div><a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:58 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

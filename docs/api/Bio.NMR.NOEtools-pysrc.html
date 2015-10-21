@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.NMR.NOEtools</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.NMR-module.html">Package&nbsp;NMR</a> ::
+        Module&nbsp;NOEtools
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.NMR.NOEtools-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.NMR.NOEtools-module.html">Module Bio.NMR.NOEtools</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2004 by Bob Bussell.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This code is part of the Biopython distribution and governed by its</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># license.  Please see the LICENSE file that should have been included</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># as part of this package.</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring">"""NOEtools: For predicting NOE coordinates from assignment data.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">The input and output are modelled on nmrview peaklists.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-docstring">This modules is suitable for directly generating an nmrview</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-docstring">peaklist with predicted crosspeaks directly from the</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-docstring">input assignment peaklist.</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module Bio.NMR.xpktools=Bio.NMR.xpktools-module.html"><a title="Bio.NMR.xpktools" class="py-name" href="#" onclick="return doclink('link-0', 'xpktools', 'link-0');">xpktools</a></tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-name">__docformat__</tt> <tt class="py-op">=</tt> <tt class="py-string">"restructuredtext en"</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"> </tt>
+<a name="predictNOE"></a><div id="predictNOE-def"><a name="L18"></a><tt class="py-lineno"> 18</tt> <a class="py-toggle" href="#" id="predictNOE-toggle" onclick="return toggle('predictNOE');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.NMR.NOEtools-module.html#predictNOE">predictNOE</a><tt class="py-op">(</tt><tt class="py-param">peaklist</tt><tt class="py-op">,</tt> <tt class="py-param">originNuc</tt><tt class="py-op">,</tt> <tt class="py-param">detectedNuc</tt><tt class="py-op">,</tt> <tt class="py-param">originResNum</tt><tt class="py-op">,</tt> <tt class="py-param">toResNum</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="predictNOE-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="predictNOE-expanded"><a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt class="py-docstring">"""Predict the i-&gt;j NOE position based on self peak (diagonal) assignments</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    Parameters</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">    ----------</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">    peaklist : xprtools.Peaklist</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">        List of peaks from which to derive predictions</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">    originNuc : str</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">        Name of originating nucleus.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">    originResNum : int</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">        Index of originating residue.</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    detectedNuc : str</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">        Name of detected nucleus.</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">    toResNum : int</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">        Index of detected residue.</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">    Returns</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">    -------</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">    returnLine : str</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">        The .xpk file entry for the predicted crosspeak.</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">    Examples</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">    --------</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">    Using predictNOE(peaklist,"N15","H1",10,12)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">    where peaklist is of the type xpktools.peaklist</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    would generate a .xpk file entry for a crosspeak</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">    that originated on N15 of residue 10 and ended up</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">    as magnetization detected on the H1 nucleus of</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    residue 12</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">    Notes</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">    =====</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">    The initial peaklist is assumed to be diagonal (self peaks only)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">    and currently there is no checking done to insure that this</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    assumption holds true.  Check your peaklist for errors and</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    off diagonal peaks before attempting to use predictNOE.</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">    <tt class="py-name">returnLine</tt> <tt class="py-op">=</tt> <tt class="py-string">""</tt>  <tt class="py-comment"># The modified line to be returned to the caller</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">    <tt class="py-name">datamap</tt> <tt class="py-op">=</tt> <tt id="link-1" class="py-name" targets="Function Bio.NMR.NOEtools._data_map()=Bio.NMR.NOEtools-module.html#_data_map"><a title="Bio.NMR.NOEtools._data_map" class="py-name" href="#" onclick="return doclink('link-1', '_data_map', 'link-1');">_data_map</a></tt><tt class="py-op">(</tt><tt class="py-name">peaklist</tt><tt class="py-op">.</tt><tt class="py-name">datalabels</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">    <tt class="py-comment"># Construct labels for keying into dictionary</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">    <tt class="py-name">originAssCol</tt> <tt class="py-op">=</tt> <tt class="py-name">datamap</tt><tt class="py-op">[</tt><tt class="py-name">originNuc</tt> <tt class="py-op">+</tt> <tt class="py-string">".L"</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">    <tt class="py-name">originPPMCol</tt> <tt class="py-op">=</tt> <tt class="py-name">datamap</tt><tt class="py-op">[</tt><tt class="py-name">originNuc</tt> <tt class="py-op">+</tt> <tt class="py-string">".P"</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">    <tt class="py-name">detectedPPMCol</tt> <tt class="py-op">=</tt> <tt class="py-name">datamap</tt><tt class="py-op">[</tt><tt class="py-name">detectedNuc</tt> <tt class="py-op">+</tt> <tt class="py-string">".P"</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line"> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">    <tt class="py-comment"># Make a list of the data lines involving the detected</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">toResNum</tt><tt class="py-op">)</tt> <tt class="py-keyword">in</tt> <tt class="py-name">peaklist</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Method Bio.NMR.xpktools.Peaklist.residue_dict()=Bio.NMR.xpktools.Peaklist-class.html#residue_dict"><a title="Bio.NMR.xpktools.Peaklist.residue_dict" class="py-name" href="#" onclick="return doclink('link-2', 'residue_dict', 'link-2');">residue_dict</a></tt><tt class="py-op">(</tt><tt class="py-name">detectedNuc</tt><tt class="py-op">)</tt> \ </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">    <tt class="py-keyword">and</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">originResNum</tt><tt class="py-op">)</tt> <tt class="py-keyword">in</tt> <tt class="py-name">peaklist</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name"><a title="Bio.NMR.xpktools.Peaklist.residue_dict" class="py-name" href="#" onclick="return doclink('link-3', 'residue_dict', 'link-2');">residue_dict</a></tt><tt class="py-op">(</tt><tt class="py-name">detectedNuc</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">        <tt class="py-name">detectedList</tt> <tt class="py-op">=</tt> <tt class="py-name">peaklist</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name"><a title="Bio.NMR.xpktools.Peaklist.residue_dict" class="py-name" href="#" onclick="return doclink('link-4', 'residue_dict', 'link-2');">residue_dict</a></tt><tt class="py-op">(</tt><tt class="py-name">detectedNuc</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">toResNum</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-name">originList</tt> <tt class="py-op">=</tt> <tt class="py-name">peaklist</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="Bio.NMR.xpktools.Peaklist.residue_dict" class="py-name" href="#" onclick="return doclink('link-5', 'residue_dict', 'link-2');">residue_dict</a></tt><tt class="py-op">(</tt><tt class="py-name">detectedNuc</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">originResNum</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">returnLine</tt> <tt class="py-op">=</tt> <tt class="py-name">detectedList</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">line</tt> <tt class="py-keyword">in</tt> <tt class="py-name">detectedList</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">            <tt class="py-name">aveDetectedPPM</tt> <tt class="py-op">=</tt> <tt id="link-6" class="py-name" targets="Function Bio.NMR.NOEtools._col_ave()=Bio.NMR.NOEtools-module.html#_col_ave"><a title="Bio.NMR.NOEtools._col_ave" class="py-name" href="#" onclick="return doclink('link-6', '_col_ave', 'link-6');">_col_ave</a></tt><tt class="py-op">(</tt><tt class="py-name">detectedList</tt><tt class="py-op">,</tt> <tt class="py-name">detectedPPMCol</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt class="py-name">aveOriginPPM</tt> <tt class="py-op">=</tt> <tt id="link-7" class="py-name"><a title="Bio.NMR.NOEtools._col_ave" class="py-name" href="#" onclick="return doclink('link-7', '_col_ave', 'link-6');">_col_ave</a></tt><tt class="py-op">(</tt><tt class="py-name">originList</tt><tt class="py-op">,</tt> <tt class="py-name">originPPMCol</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">            <tt class="py-name">originAss</tt> <tt class="py-op">=</tt> <tt class="py-name">originList</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method Bio.Nexus.Trees.Tree.split()=Bio.Nexus.Trees.Tree-class.html#split,Method Bio.Phylo.BaseTree.TreeMixin.split()=Bio.Phylo.BaseTree.TreeMixin-class.html#split,Method Bio.Restriction.Restriction.RestrictionBatch.split()=Bio.Restriction.Restriction.RestrictionBatch-class.html#split,Method Bio.Seq.Seq.split()=Bio.Seq.Seq-class.html#split"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-8', 'split', 'link-8');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">originAssCol</tt><tt class="py-op">]</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-name">returnLine</tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name"><a title="Bio.NMR.xpktools" class="py-name" href="#" onclick="return doclink('link-9', 'xpktools', 'link-0');">xpktools</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Function Bio.NMR.xpktools.replace_entry()=Bio.NMR.xpktools-module.html#replace_entry"><a title="Bio.NMR.xpktools.replace_entry" class="py-name" href="#" onclick="return doclink('link-10', 'replace_entry', 'link-10');">replace_entry</a></tt><tt class="py-op">(</tt><tt class="py-name">returnLine</tt><tt class="py-op">,</tt> <tt class="py-name">originAssCol</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">originAss</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-name">returnLine</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="Bio.NMR.xpktools" class="py-name" href="#" onclick="return doclink('link-11', 'xpktools', 'link-0');">xpktools</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="Bio.NMR.xpktools.replace_entry" class="py-name" href="#" onclick="return doclink('link-12', 'replace_entry', 'link-10');">replace_entry</a></tt><tt class="py-op">(</tt><tt class="py-name">returnLine</tt><tt class="py-op">,</tt> <tt class="py-name">originPPMCol</tt> <tt class="py-op">+</tt> <tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-name">aveOriginPPM</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">returnLine</tt> </tt>
+</div><a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"> </tt>
+<a name="_data_map"></a><div id="_data_map-def"><a name="L85"></a><tt class="py-lineno"> 85</tt> <a class="py-toggle" href="#" id="_data_map-toggle" onclick="return toggle('_data_map');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.NMR.NOEtools-module.html#_data_map">_data_map</a><tt class="py-op">(</tt><tt class="py-param">labelline</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_data_map-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_data_map-expanded"><a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">    <tt class="py-comment"># Generate a map between datalabels and column number</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">    <tt class="py-comment">#   based on a labelline</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line">    <tt id="link-13" class="py-name" targets="Variable Bio.PDB.Polypeptide.i=Bio.PDB.Polypeptide-module.html#i,Variable Bio.SeqIO.SffIO.i=Bio.SeqIO.SffIO-module.html#i"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-13', 'i', 'link-13');">i</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt>  <tt class="py-comment"># A counter</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">    <tt class="py-name">datamap</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt>  <tt class="py-comment"># The data map dictionary</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">    <tt class="py-name">labelList</tt> <tt class="py-op">=</tt> <tt class="py-name">labelline</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-14', 'split', 'link-8');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt>  <tt class="py-comment"># Get the label line</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">    <tt class="py-comment"># Get the column number for each label</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-15" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-15', 'i', 'link-13');">i</a></tt> <tt class="py-keyword">in</tt> <tt id="link-16" class="py-name" targets="Method Bio.Graphics.GenomeDiagram._Diagram.Diagram.range()=Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range,Method Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range()=Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Graph.GraphData.range()=Bio.Graphics.GenomeDiagram._Graph.GraphData-class.html#range,Method Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range()=Bio.Graphics.GenomeDiagram._GraphSet.GraphSet-class.html#range,Method Bio.Graphics.GenomeDiagram._Track.Track.range()=Bio.Graphics.GenomeDiagram._Track.Track-class.html#range"><a title="Bio.Graphics.GenomeDiagram._Diagram.Diagram.range
+Bio.Graphics.GenomeDiagram._FeatureSet.FeatureSet.range
+Bio.Graphics.GenomeDiagram._Graph.GraphData.range
+Bio.Graphics.GenomeDiagram._GraphSet.GraphSet.range
+Bio.Graphics.GenomeDiagram._Track.Track.range" class="py-name" href="#" onclick="return doclink('link-16', 'range', 'link-16');">range</a></tt><tt class="py-op">(</tt><tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">labelList</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-name">datamap</tt><tt class="py-op">[</tt><tt class="py-name">labelList</tt><tt class="py-op">[</tt><tt id="link-17" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-17', 'i', 'link-13');">i</a></tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-18" class="py-name"><a title="Bio.PDB.Polypeptide.i
+Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-18', 'i', 'link-13');">i</a></tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">datamap</tt> </tt>
+</div><a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line"> </tt>
+<a name="_col_ave"></a><div id="_col_ave-def"><a name="L99"></a><tt class="py-lineno"> 99</tt> <a class="py-toggle" href="#" id="_col_ave-toggle" onclick="return toggle('_col_ave');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.NMR.NOEtools-module.html#_col_ave">_col_ave</a><tt class="py-op">(</tt><tt class="py-param">list</tt><tt class="py-op">,</tt> <tt class="py-param">col</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_col_ave-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_col_ave-expanded"><a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">    <tt class="py-comment"># Compute average values from a particular column in a string list</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-name">total</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">    <tt class="py-name">n</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">    <tt class="py-keyword">for</tt> <tt id="link-19" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Component.element=Bio.KEGG.KGML.KGML_pathway.Component-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Entry.element=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Graphics.element=Bio.KEGG.KGML.KGML_pathway.Graphics-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.element=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.element=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#element,Variable Bio.KEGG.KGML.KGML_pathway.Relation.element=Bio.KEGG.KGML.KGML_pathway.Relation-class.html#element,Variable Bio.Phylo._cdao_owl.element=Bio.Phylo._cdao_owl-module.html#element"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-19', 'element', 'link-19');">element</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">list</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">        <tt class="py-name">total</tt> <tt class="py-op">+=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt id="link-20" class="py-name"><a title="Bio.KEGG.KGML.KGML_pathway.Component.element
+Bio.KEGG.KGML.KGML_pathway.Entry.element
+Bio.KEGG.KGML.KGML_pathway.Graphics.element
+Bio.KEGG.KGML.KGML_pathway.Pathway.element
+Bio.KEGG.KGML.KGML_pathway.Reaction.element
+Bio.KEGG.KGML.KGML_pathway.Relation.element
+Bio.Phylo._cdao_owl.element" class="py-name" href="#" onclick="return doclink('link-20', 'element', 'link-19');">element</a></tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="Bio.Nexus.Trees.Tree.split
+Bio.Phylo.BaseTree.TreeMixin.split
+Bio.Restriction.Restriction.RestrictionBatch.split
+Bio.Seq.Seq.split" class="py-name" href="#" onclick="return doclink('link-21', 'split', 'link-8');">split</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-name">col</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">        <tt class="py-name">n</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">total</tt> <tt class="py-op">/</tt> <tt class="py-name">n</tt> </tt>
+</div><a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:35 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

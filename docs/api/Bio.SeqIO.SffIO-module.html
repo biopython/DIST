@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SeqIO.SffIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SeqIO-module.html">Package&nbsp;SeqIO</a> ::
+        Module&nbsp;SffIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SeqIO.SffIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module SffIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Bio.SeqIO support for the binary Standard Flowgram Format (SFF) file format.</p>
+<p>SFF was designed by 454 Life Sciences (Roche), the Whitehead Institute for
+Biomedical Research and the Wellcome Trust Sanger Institute. SFF was also used
+as the native output format from early versions of Ion Torrent's PGM platform
+as well. You are expected to use this module via the Bio.SeqIO functions under
+the format name &quot;sff&quot; (or &quot;sff-trim&quot; as described below).</p>
+<p>For example, to iterate over the records in an SFF file,</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i %s...&quot;</span> % (record.id, len(record), record.seq[:20]))
+<span class="py-more">...</span>
+<span class="py-output">E3MFGYR02JWQ7T 265 tcagGGTCTACATGTTGGTT...</span>
+<span class="py-output">E3MFGYR02JA6IL 271 tcagTTTTTTTTGGAAAGGA...</span>
+<span class="py-output">E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...</span>
+<span class="py-output">E3MFGYR02GFKUC 299 tcagCGGCCGGGCCTCTCAT...</span>
+<span class="py-output">E3MFGYR02FTGED 281 tcagTGGTAATGGGGGGAAA...</span>
+<span class="py-output">E3MFGYR02FR9G7 261 tcagCTCCGTAAGAAGGTGC...</span>
+<span class="py-output">E3MFGYR02GAZMS 278 tcagAAAGAAGTAAGGTAAA...</span>
+<span class="py-output">E3MFGYR02HHZ8O 221 tcagACTTTCTTCTTTACCG...</span>
+<span class="py-output">E3MFGYR02GPGB1 269 tcagAAGCAGTGGTATCAAC...</span>
+<span class="py-output">E3MFGYR02F7Z7G 219 tcagAATCATCCACTTTTTA...</span></pre>
+</blockquote>
+<p>Each SeqRecord object will contain all the annotation from the SFF file,
+including the PHRED quality scores.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">E3MFGYR02F7Z7G 219</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s...&quot;</span> % record.seq[:10])
+<span class="py-output">tcagAATCAT...</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%r...&quot;</span> % (record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>][:10]))
+<span class="py-output">[22, 21, 23, 28, 26, 15, 12, 21, 28, 21]...</span></pre>
+</blockquote>
+<p>Notice that the sequence is given in mixed case, the central upper case region
+corresponds to the trimmed sequence. This matches the output of the Roche
+tools (and the 3rd party tool sff_extract) for SFF to FASTA.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;clip_qual_left&quot;</span>])
+<span class="py-output">4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;clip_qual_right&quot;</span>])
+<span class="py-output">134</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.seq[:4])
+<span class="py-output">tcag</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s...%s&quot;</span> % (record.seq[4:20], record.seq[120:134]))
+<span class="py-output">AATCATCCACTTTTTA...CAAAACACAAACAG</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.seq[134:])
+<span class="py-output">atcttatcaacaaaactcaaagttcctaactgagacacgcaacaggggataagacaaggcacacaggggataggnnnnnnnnnnn</span></pre>
+</blockquote>
+<p>The annotations dictionary also contains any adapter clip positions
+(usually zero), and information about the flows. e.g.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>len(record.annotations)
+<span class="py-output">11</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;flow_key&quot;</span>])
+<span class="py-output">TCAG</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;flow_values&quot;</span>][:10])
+<span class="py-output">(83, 1, 128, 7, 4, 84, 6, 106, 3, 172)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(len(record.annotations[<span class="py-string">&quot;flow_values&quot;</span>]))
+<span class="py-output">400</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;flow_index&quot;</span>][:10])
+<span class="py-output">(1, 2, 3, 2, 2, 0, 3, 2, 3, 3)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(len(record.annotations[<span class="py-string">&quot;flow_index&quot;</span>]))
+<span class="py-output">219</span></pre>
+</blockquote>
+<p>Note that to convert from a raw reading in flow_values to the corresponding
+homopolymer stretch estimate, the value should be rounded to the nearest 100:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%r...&quot;</span> % [int(round(value, -2)) // 100
+<span class="py-more">... </span>                 <span class="py-keyword">for</span> value <span class="py-keyword">in</span> record.annotations[<span class="py-string">&quot;flow_values&quot;</span>][:10]])
+<span class="py-more">...</span>
+<span class="py-output">[1, 0, 1, 0, 0, 1, 0, 1, 0, 2]...</span></pre>
+</blockquote>
+<p>If a read name is exactly 14 alphanumeric characters, the annotations
+dictionary will also contain meta-data about the read extracted by
+interpretting the name as a 454 Sequencing System &quot;Universal&quot; Accession
+Number. Note that if a read name happens to be exactly 14 alphanumeric
+characters but was not generated automatically, these annotation records
+will contain nonsense information.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;region&quot;</span>])
+<span class="py-output">2</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;time&quot;</span>])
+<span class="py-output">[2008, 1, 9, 16, 16, 0]</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;coords&quot;</span>])
+<span class="py-output">(2434, 1658)</span></pre>
+</blockquote>
+<p>As a convenience method, you can read the file with SeqIO format name &quot;sff-trim&quot;
+instead of &quot;sff&quot; to get just the trimmed sequences (without any annotation
+except for the PHRED quality scores and anything encoded in the read names):</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff-trim&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i %s...&quot;</span> % (record.id, len(record), record.seq[:20]))
+<span class="py-more">...</span>
+<span class="py-output">E3MFGYR02JWQ7T 260 GGTCTACATGTTGGTTAACC...</span>
+<span class="py-output">E3MFGYR02JA6IL 265 TTTTTTTTGGAAAGGAAAAC...</span>
+<span class="py-output">E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...</span>
+<span class="py-output">E3MFGYR02GFKUC 295 CGGCCGGGCCTCTCATCGGT...</span>
+<span class="py-output">E3MFGYR02FTGED 277 TGGTAATGGGGGGAAATTTA...</span>
+<span class="py-output">E3MFGYR02FR9G7 256 CTCCGTAAGAAGGTGCTGCC...</span>
+<span class="py-output">E3MFGYR02GAZMS 271 AAAGAAGTAAGGTAAATAAC...</span>
+<span class="py-output">E3MFGYR02HHZ8O 150 ACTTTCTTCTTTACCGTAAC...</span>
+<span class="py-output">E3MFGYR02GPGB1 221 AAGCAGTGGTATCAACGCAG...</span>
+<span class="py-output">E3MFGYR02F7Z7G 130 AATCATCCACTTTTTAACGT...</span></pre>
+</blockquote>
+<p>Looking at the final record in more detail, note how this differs to the
+example above:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-output">E3MFGYR02F7Z7G 130</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s...&quot;</span> % record.seq[:10])
+<span class="py-output">AATCATCCAC...</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%r...&quot;</span> % record.letter_annotations[<span class="py-string">&quot;phred_quality&quot;</span>][:10])
+<span class="py-output">[26, 15, 12, 21, 28, 21, 36, 28, 27, 27]...</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(record.annotations)
+<span class="py-output">3</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;region&quot;</span>])
+<span class="py-output">2</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;coords&quot;</span>])
+<span class="py-output">(2434, 1658)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.annotations[<span class="py-string">&quot;time&quot;</span>])
+<span class="py-output">[2008, 1, 9, 16, 16, 0]</span></pre>
+</blockquote>
+<p>You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
+reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>try:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO <span class="py-comment"># Python 2</span>
+<span class="py-more">... </span><span class="py-keyword">except</span> ImportError:
+<span class="py-more">... </span>    <span class="py-keyword">from</span> io <span class="py-keyword">import</span> StringIO <span class="py-comment"># Python 3</span>
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>out_handle = StringIO()
+<span class="py-prompt">&gt;&gt;&gt; </span>count = SeqIO.convert(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>,
+<span class="py-more">... </span>                      out_handle, <span class="py-string">&quot;fastq&quot;</span>)
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Converted %i records&quot;</span> % count)
+<span class="py-output">Converted 10 records</span></pre>
+</blockquote>
+<p>The output FASTQ file would start like this:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s...&quot;</span> % out_handle.getvalue()[:50])
+<span class="py-output">@E3MFGYR02JWQ7T</span>
+<span class="py-output">tcagGGTCTACATGTTGGTTAACCCGTACTGATT...</span></pre>
+</blockquote>
+<p>Bio.SeqIO.index() provides memory efficient random access to the reads in an
+SFF file by name. SFF files can include an index within the file, which can
+be read in making this very fast. If the index is missing (or in a format not
+yet supported in Biopython) the file is indexed by scanning all the reads -
+which is a little slower. For example,</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>reads = SeqIO.index(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = reads[<span class="py-string">&quot;E3MFGYR02JHD4H&quot;</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i %s...&quot;</span> % (record.id, len(record), record.seq[:20]))
+<span class="py-output">E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>reads.close()</pre>
+</blockquote>
+<p>Or, using the trimmed reads:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>reads = SeqIO.index(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff-trim&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = reads[<span class="py-string">&quot;E3MFGYR02JHD4H&quot;</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i %s...&quot;</span> % (record.id, len(record), record.seq[:20]))
+<span class="py-output">E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>reads.close()</pre>
+</blockquote>
+<p>You can also use the Bio.SeqIO.write() function with the &quot;sff&quot; format. Note
+that this requires all the flow information etc, and thus is probably only
+useful for SeqRecord objects originally from reading another SFF file (and
+not the trimmed SeqRecord objects from parsing an SFF file as &quot;sff-trim&quot;).</p>
+<p>As an example, let's pretend this example SFF file represents some DNA which
+was pre-amplified with a PCR primers AAAGANNNNN. The following script would
+produce a sub-file containing all those reads whose post-quality clipping
+region (i.e. the sequence after trimming) starts with AAAGA exactly (the non-
+degenerate bit of this pretend primer):</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span>records = (record <span class="py-keyword">for</span> record <span class="py-keyword">in</span>
+<span class="py-more">... </span>           SeqIO.parse(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>)
+<span class="py-more">... </span>           <span class="py-keyword">if</span> record.seq[record.annotations[<span class="py-string">&quot;clip_qual_left&quot;</span>]:].startswith(<span class="py-string">&quot;AAAGA&quot;</span>))
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>count = SeqIO.write(records, <span class="py-string">&quot;temp_filtered.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Selected %i records&quot;</span> % count)
+<span class="py-output">Selected 2 records</span></pre>
+</blockquote>
+<p>Of course, for an assembly you would probably want to remove these primers.
+If you want FASTA or FASTQ output, you could just slice the SeqRecord. However,
+if you want SFF output we have to preserve all the flow information - the trick
+is just to adjust the left clip position!</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">filter_and_trim</span>(records, primer):
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> records:
+<span class="py-more">... </span>        <span class="py-keyword">if</span> record.seq[record.annotations[<span class="py-string">&quot;clip_qual_left&quot;</span>]:].startswith(primer):
+<span class="py-more">... </span>            record.annotations[<span class="py-string">&quot;clip_qual_left&quot;</span>] += len(primer)
+<span class="py-more">... </span>            yield record
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.parse(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>count = SeqIO.write(filter_and_trim(records, <span class="py-string">&quot;AAAGA&quot;</span>),
+<span class="py-more">... </span>                    <span class="py-string">&quot;temp_filtered.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>)
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Selected %i records&quot;</span> % count)
+<span class="py-output">Selected 2 records</span></pre>
+</blockquote>
+<p>We can check the results, note the lower case clipped region now includes the &quot;AAAGA&quot;
+sequence:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;temp_filtered.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i %s...&quot;</span> % (record.id, len(record), record.seq[:20]))
+<span class="py-more">...</span>
+<span class="py-output">E3MFGYR02JHD4H 310 tcagaaagaCAAGTGGTATC...</span>
+<span class="py-output">E3MFGYR02GAZMS 278 tcagaaagaAGTAAGGTAAA...</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;temp_filtered.sff&quot;</span>, <span class="py-string">&quot;sff-trim&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i %s...&quot;</span> % (record.id, len(record), record.seq[:20]))
+<span class="py-more">...</span>
+<span class="py-output">E3MFGYR02JHD4H 287 CAAGTGGTATCAACGCAGAG...</span>
+<span class="py-output">E3MFGYR02GAZMS 266 AGTAAGGTAAATAACAAACG...</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> os
+<span class="py-prompt">&gt;&gt;&gt; </span>os.remove(<span class="py-string">&quot;temp_filtered.sff&quot;</span>)</pre>
+</blockquote>
+<p>For a description of the file format, please see the Roche manuals and:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&amp;f=formats&amp;m=doc&amp;s=formats" target="_top">http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&amp;f=formats&amp;m=doc&amp;s=formats</a></p>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.SffIO._AddTellHandle-class.html" class="summary-name" onclick="show_private();">_AddTellHandle</a><br />
+      Wrapper for handles which do not support the tell method (PRIVATE).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SeqIO.SffIO.SffWriter-class.html" class="summary-name">SffWriter</a><br />
+      SFF file writer.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#_check_mode" class="summary-sig-name" onclick="show_private();">_check_mode</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Ensure handle not opened in text mode.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_check_mode">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#_sff_file_header" class="summary-sig-name" onclick="show_private();">_sff_file_header</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Read in an SFF file header (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_file_header">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#_sff_do_slow_index" class="summary-sig-name" onclick="show_private();">_sff_do_slow_index</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Generates an index by scanning though all the reads in an SFF file (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_do_slow_index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#_sff_find_roche_index" class="summary-sig-name" onclick="show_private();">_sff_find_roche_index</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Locate any existing Roche style XML meta data and read index (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_find_roche_index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#ReadRocheXmlManifest" class="summary-sig-name">ReadRocheXmlManifest</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Reads any Roche style XML manifest data in the SFF &quot;index&quot;.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#ReadRocheXmlManifest">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#_sff_read_roche_index" class="summary-sig-name" onclick="show_private();">_sff_read_roche_index</a>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Reads any existing Roche style read index provided in the SFF file (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_read_roche_index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_sff_read_seq_record"></a><span class="summary-sig-name">_sff_read_seq_record</span>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">number_of_flows_per_read</span>,
+        <span class="summary-sig-arg">flow_chars</span>,
+        <span class="summary-sig-arg">key_sequence</span>,
+        <span class="summary-sig-arg">alphabet</span>,
+        <span class="summary-sig-arg">trim</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Parse the next read in the file, return data as a SeqRecord (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_read_seq_record">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_string_as_base_36"></a><span class="summary-sig-name">_string_as_base_36</span>(<span class="summary-sig-arg">string</span>)</span><br />
+      Interpret a string as a base-36 number as per 454 manual.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_string_as_base_36">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_read_xy"></a><span class="summary-sig-name">_get_read_xy</span>(<span class="summary-sig-arg">read_name</span>)</span><br />
+      Extract coordinates from last 5 characters of read name.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_get_read_xy">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_read_time"></a><span class="summary-sig-name">_get_read_time</span>(<span class="summary-sig-arg">read_name</span>)</span><br />
+      Extract time from first 6 characters of read name.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_get_read_time">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_read_region"></a><span class="summary-sig-name">_get_read_region</span>(<span class="summary-sig-arg">read_name</span>)</span><br />
+      Extract region from read name.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_get_read_region">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_sff_read_raw_record"></a><span class="summary-sig-name">_sff_read_raw_record</span>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">number_of_flows_per_read</span>)</span><br />
+      Extract the next read in the file as a raw (bytes) string (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_read_raw_record">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#SffIterator" class="summary-sig-name">SffIterator</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">DNAAlphabet()</span>,
+        <span class="summary-sig-arg">trim</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#SffIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqIO.SffIO-module.html#_check_eof" class="summary-sig-name" onclick="show_private();">_check_eof</a>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">index_offset</span>,
+        <span class="summary-sig-arg">index_length</span>)</span><br />
+      Check final padding is OK (8 byte alignment) and file ends (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_check_eof">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_SffTrimIterator"></a><span class="summary-sig-name">_SffTrimIterator</span>(<span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">DNAAlphabet()</span>)</span><br />
+      Iterate over SFF reads (as SeqRecord objects) with trimming (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_SffTrimIterator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_null"></a><span class="summary-name">_null</span> = <code title="'\x00'"><code class="variable-quote">'</code><code class="variable-string">\x00</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_sff"></a><span class="summary-name">_sff</span> = <code title="'.sff'"><code class="variable-quote">'</code><code class="variable-string">.sff</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_hsh"></a><span class="summary-name">_hsh</span> = <code title="'.hsh'"><code class="variable-quote">'</code><code class="variable-string">.hsh</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_srt"></a><span class="summary-name">_srt</span> = <code title="'.srt'"><code class="variable-quote">'</code><code class="variable-string">.srt</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_mft"></a><span class="summary-name">_mft</span> = <code title="'.mft'"><code class="variable-quote">'</code><code class="variable-string">.mft</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_flag"></a><span class="summary-name">_flag</span> = <code title="'\xff'"><code class="variable-quote">'</code><code class="variable-string">\xff</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_valid_UAN_read_name"></a><span class="summary-name">_valid_UAN_read_name</span> = <code title="re.compile(r'^[a-zA-Z0-9]{14}$')">re.compile(r'^<code class="re-group">[</code>a<code class="re-op">-</code>zA<code class="re-op">-</code>Z0<code class="re-op">-</code>9<code class="re-group">]</code><code class="re-op">{14}</code>$')</code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_powers_of_36"></a><span class="summary-name">_powers_of_36</span> = <code title="[1, 36, 1296, 46656, 1679616, 60466176]"><code class="variable-group">[</code>1<code class="variable-op">, </code>36<code class="variable-op">, </code>1296<code class="variable-op">, </code>46656<code class="variable-op">, </code>1679616<code class="variable-op">, </code>60466176<code class="variable-group">]</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_time_denominators"></a><span class="summary-name">_time_denominators</span> = <code title="[35942400, 2764800, 86400, 3600, 60]"><code class="variable-group">[</code>35942400<code class="variable-op">, </code>2764800<code class="variable-op">, </code>86400<code class="variable-op">, </code>3600<code class="variable-op">, </code>60<code class="variable-group">]</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.SeqIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.SeqIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="i"></a><span class="summary-name">i</span> = <code title="5">5</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_check_mode"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_check_mode</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_check_mode">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Ensure handle not opened in text mode.</p>
+<p>Ensures mode is not set for Universal new line
+and ensures mode is binary for Windows</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_sff_file_header"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_sff_file_header</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_file_header">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Read in an SFF file header (PRIVATE).</p>
+<p>Assumes the handle is at the start of the file, will read forwards
+though the header and leave the handle pointing at the first record.
+Returns a tuple of values from the header (header_length, index_offset,
+index_length, number_of_reads, flows_per_read, flow_chars, key_sequence)</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Roche/greek.sff&quot;</span>, <span class="py-string">&quot;rb&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-builtin">values</span> = _sff_file_header(handle)
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-builtin">values</span>[0])
+<span class="py-output">840</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-builtin">values</span>[1])
+<span class="py-output">65040</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-builtin">values</span>[2])
+<span class="py-output">256</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-builtin">values</span>[3])
+<span class="py-output">24</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-builtin">values</span>[4])
+<span class="py-output">800</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-builtin">values</span>[-1]
+<span class="py-output">'TCAG'</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_sff_do_slow_index"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_sff_do_slow_index</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_do_slow_index">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generates an index by scanning though all the reads in an SFF file (PRIVATE).</p>
+<p>This is a slow but generic approach if we can't parse the provided index
+(if present).</p>
+<p>Will use the handle seek/tell functions.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_sff_find_roche_index"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_sff_find_roche_index</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_find_roche_index">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Locate any existing Roche style XML meta data and read index (PRIVATE).</p>
+<p>Makes a number of hard coded assumptions based on reverse engineered SFF
+files from Roche 454 machines.</p>
+<p>Returns a tuple of read count, SFF &quot;index&quot; offset and size, XML offset
+and size, and the actual read index offset and size.</p>
+<p>Raises a ValueError for unsupported or non-Roche index blocks.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="ReadRocheXmlManifest"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ReadRocheXmlManifest</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#ReadRocheXmlManifest">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Reads any Roche style XML manifest data in the SFF &quot;index&quot;.</p>
+<p>The SFF file format allows for multiple different index blocks, and Roche
+took advantage of this to define their own index block which also embeds
+an XML manifest string. This is not a publically documented extension to
+the SFF file format, this was reverse engineered.</p>
+<p>The handle should be to an SFF file opened in binary mode. This function
+will use the handle seek/tell functions and leave the handle in an
+arbitrary location.</p>
+<p>Any XML manifest found is returned as a Python string, which you can then
+parse as appropriate, or reuse when writing out SFF files with the
+SffWriter class.</p>
+<p>Returns a string, or raises a ValueError if an Roche manifest could not be
+found.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_sff_read_roche_index"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_sff_read_roche_index</span>(<span class="sig-arg">handle</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_sff_read_roche_index">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Reads any existing Roche style read index provided in the SFF file (PRIVATE).</p>
+<p>Will use the handle seek/tell functions.</p>
+<p>This works on &quot;.srt1.00&quot; and &quot;.mft1.00&quot; style Roche SFF index blocks.</p>
+<p>Roche SFF indices use base 255 not 256, meaning we see bytes in range the
+range 0 to 254 only. This appears to be so that byte 0xFF (character 255)
+can be used as a marker character to separate entries (required if the
+read name lengths vary).</p>
+<p>Note that since only four bytes are used for the read offset, this is
+limited to 255^4 bytes (nearly 4GB). If you try to use the Roche sfffile
+tool to combine SFF files beyound this limit, they issue a warning and
+omit the index (and manifest).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SffIterator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SffIterator</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">DNAAlphabet()</span>,
+        <span class="sig-arg">trim</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#SffIterator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over Standard Flowgram Format (SFF) reads (as SeqRecord objects).</p>
+<blockquote>
+<ul class="rst-simple">
+<li>handle - input file, an SFF file, e.g. from Roche 454 sequencing.
+This must NOT be opened in universal read lines mode!</li>
+<li>alphabet - optional alphabet, defaults to generic DNA.</li>
+<li>trim - should the sequences be trimmed?</li>
+</ul>
+</blockquote>
+<p>The resulting SeqRecord objects should match those from a paired FASTA
+and QUAL file converted from the SFF file using the Roche 454 tool
+ssfinfo. i.e. The sequence will be mixed case, with the trim regions
+shown in lower case.</p>
+<p>This function is used internally via the Bio.SeqIO functions:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> SeqIO.parse(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;sff&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-more">...</span>
+<span class="py-output">E3MFGYR02JWQ7T 265</span>
+<span class="py-output">E3MFGYR02JA6IL 271</span>
+<span class="py-output">E3MFGYR02JHD4H 310</span>
+<span class="py-output">E3MFGYR02GFKUC 299</span>
+<span class="py-output">E3MFGYR02FTGED 281</span>
+<span class="py-output">E3MFGYR02FR9G7 261</span>
+<span class="py-output">E3MFGYR02GAZMS 278</span>
+<span class="py-output">E3MFGYR02HHZ8O 221</span>
+<span class="py-output">E3MFGYR02GPGB1 269</span>
+<span class="py-output">E3MFGYR02F7Z7G 219</span></pre>
+<p>You can also call it directly:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;rb&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> SffIterator(handle):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-more">...</span>
+<span class="py-output">E3MFGYR02JWQ7T 265</span>
+<span class="py-output">E3MFGYR02JA6IL 271</span>
+<span class="py-output">E3MFGYR02JHD4H 310</span>
+<span class="py-output">E3MFGYR02GFKUC 299</span>
+<span class="py-output">E3MFGYR02FTGED 281</span>
+<span class="py-output">E3MFGYR02FR9G7 261</span>
+<span class="py-output">E3MFGYR02GAZMS 278</span>
+<span class="py-output">E3MFGYR02HHZ8O 221</span>
+<span class="py-output">E3MFGYR02GPGB1 269</span>
+<span class="py-output">E3MFGYR02F7Z7G 219</span></pre>
+<p>Or, with the trim option:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;Roche/E3MFGYR02_random_10_reads.sff&quot;</span>, <span class="py-string">&quot;rb&quot;</span>) <span class="py-keyword">as</span> handle:
+<span class="py-more">... </span>    <span class="py-keyword">for</span> record <span class="py-keyword">in</span> SffIterator(handle, trim=True):
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
+<span class="py-more">...</span>
+<span class="py-output">E3MFGYR02JWQ7T 260</span>
+<span class="py-output">E3MFGYR02JA6IL 265</span>
+<span class="py-output">E3MFGYR02JHD4H 292</span>
+<span class="py-output">E3MFGYR02GFKUC 295</span>
+<span class="py-output">E3MFGYR02FTGED 277</span>
+<span class="py-output">E3MFGYR02FR9G7 256</span>
+<span class="py-output">E3MFGYR02GAZMS 271</span>
+<span class="py-output">E3MFGYR02HHZ8O 150</span>
+<span class="py-output">E3MFGYR02GPGB1 221</span>
+<span class="py-output">E3MFGYR02F7Z7G 130</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_check_eof"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_check_eof</span>(<span class="sig-arg">handle</span>,
+        <span class="sig-arg">index_offset</span>,
+        <span class="sig-arg">index_length</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqIO.SffIO-pysrc.html#_check_eof">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Check final padding is OK (8 byte alignment) and file ends (PRIVATE).</p>
+<p>Will attempt to spot apparent SFF file concatenation and give an error.</p>
+<p>Will not attempt to seek, only moves the handle forward.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:27 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

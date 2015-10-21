@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.Seq.UnknownSeq</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.Seq-module.html">Module&nbsp;Seq</a> ::
+        Class&nbsp;UnknownSeq
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.Seq.UnknownSeq-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class UnknownSeq</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+object --+    
+         |    
+       <a href="Bio.Seq.Seq-class.html">Seq</a> --+
+             |
+            <strong class="uidshort">UnknownSeq</strong>
+</pre>
+
+<hr />
+<p>A read-only sequence object of known length but unknown contents.</p>
+<p>If you have an unknown sequence, you can represent this with a normal
+Seq object, for example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq = Seq(<span class="py-string">&quot;N&quot;</span>*5)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq
+<span class="py-output">Seq('NNNNN', Alphabet())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(my_seq)
+<span class="py-output">5</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_seq)
+<span class="py-output">NNNNN</span></pre>
+<p>However, this is rather wasteful of memory (especially for large
+sequences), which is where this class is most usefull:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>unk_five = UnknownSeq(5)
+<span class="py-prompt">&gt;&gt;&gt; </span>unk_five
+<span class="py-output">UnknownSeq(5, alphabet = Alphabet(), character = '?')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(unk_five)
+<span class="py-output">5</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(unk_five)
+<span class="py-output">?????</span></pre>
+<p>You can add unknown sequence together, provided their alphabets and
+characters are compatible, and get another memory saving UnknownSeq:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>unk_four = UnknownSeq(4)
+<span class="py-prompt">&gt;&gt;&gt; </span>unk_four
+<span class="py-output">UnknownSeq(4, alphabet = Alphabet(), character = '?')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>unk_four + unk_five
+<span class="py-output">UnknownSeq(9, alphabet = Alphabet(), character = '?')</span></pre>
+<p>If the alphabet or characters don't match up, the addition gives an
+ordinary Seq object:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>unk_nnnn = UnknownSeq(4, character = <span class="py-string">&quot;N&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>unk_nnnn
+<span class="py-output">UnknownSeq(4, alphabet = Alphabet(), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>unk_nnnn + unk_four
+<span class="py-output">Seq('NNNN????', Alphabet())</span></pre>
+<p>Combining with a real Seq gives a new Seq object:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>known_seq = Seq(<span class="py-string">&quot;ACGT&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>unk_four + known_seq
+<span class="py-output">Seq('????ACGT', Alphabet())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>known_seq + unk_four
+<span class="py-output">Seq('ACGT????', Alphabet())</span></pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">length</span>,
+        <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">Alphabet()</span>,
+        <span class="summary-sig-arg">character</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Create a new UnknownSeq object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#__len__" class="summary-sig-name">__len__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the stated length of the unknown sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__len__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the unknown sequence as full string of the given length.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns a (truncated) representation of the sequence for debugging.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#__add__" class="summary-sig-name">__add__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      Add another sequence or string to this sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__add__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#__radd__" class="summary-sig-name">__radd__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">other</span>)</span><br />
+      Adding a sequence on the left.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__radd__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      Get a subsequence from the UnknownSeq object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#count" class="summary-sig-name">count</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">sub</span>,
+        <span class="summary-sig-arg">start</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">end</span>=<span class="summary-sig-default">9223372036854775807</span>)</span><br />
+      Non-overlapping count method, like that of a python string.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.count">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#complement" class="summary-sig-name">complement</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      The complement of an unknown nucleotide equals itself.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.complement">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#reverse_complement" class="summary-sig-name">reverse_complement</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      The reverse complement of an unknown nucleotide equals itself.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.reverse_complement">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#transcribe" class="summary-sig-name">transcribe</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns unknown RNA sequence from an unknown DNA sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.transcribe">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#back_transcribe" class="summary-sig-name">back_transcribe</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns unknown DNA sequence from an unknown RNA sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.back_transcribe">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#upper" class="summary-sig-name">upper</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns an upper case copy of the sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.upper">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#lower" class="summary-sig-name">lower</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns a lower case copy of the sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.lower">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#translate" class="summary-sig-name">translate</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Translate an unknown nucleotide sequence into an unknown protein.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.translate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.Seq.UnknownSeq-class.html#ungap" class="summary-sig-name">ungap</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">gap</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return a copy of the sequence without the gap character(s).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.ungap">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.Seq.Seq-class.html">Seq</a></code></b>:
+      <code><a href="Bio.Seq.Seq-class.html#__contains__">__contains__</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#__eq__">__eq__</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#__hash__">__hash__</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#__le__">__le__</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#__lt__">__lt__</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#__ne__">__ne__</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#endswith">endswith</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#find">find</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#lstrip">lstrip</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#rfind">rfind</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#rsplit">rsplit</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#rstrip">rstrip</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#split">split</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#startswith">startswith</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#strip">strip</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#tomutable">tomutable</a></code>,
+      <code><a href="Bio.Seq.Seq-class.html#tostring">tostring</a></code>
+      </p>
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.Seq.Seq-class.html">Seq</a></code></b> (private):
+      <code><a href="Bio.Seq.Seq-class.html#_get_seq_str_and_check_alphabet" onclick="show_private();">_get_seq_str_and_check_alphabet</a></code>
+      </p></div>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">length</span>,
+        <span class="sig-arg">alphabet</span>=<span class="sig-default">Alphabet()</span>,
+        <span class="sig-arg">character</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a new UnknownSeq object.</p>
+<p>If character is omitted, it is determined from the alphabet, &quot;N&quot; for
+nucleotides, &quot;X&quot; for proteins, and &quot;?&quot; otherwise.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__len__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__len__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Length operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__len__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Returns the stated length of the unknown sequence.
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#__len__">Seq.__len__</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Returns the unknown sequence as full string of the given length.
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__repr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Returns a (truncated) representation of the sequence for debugging.
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__add__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__add__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+    <br /><em class="fname">(Addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__add__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add another sequence or string to this sequence.</p>
+<p>Adding two UnknownSeq objects returns another UnknownSeq object
+provided the character is the same and the alphabets are compatible.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> UnknownSeq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_protein
+<span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(10, generic_protein) + UnknownSeq(5, generic_protein)
+<span class="py-output">UnknownSeq(15, alphabet = ProteinAlphabet(), character = 'X')</span></pre>
+<p>If the characters differ, an UnknownSeq object cannot be used, so a
+Seq object is returned:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> UnknownSeq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_protein
+<span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(10, generic_protein) + UnknownSeq(5, generic_protein,
+<span class="py-more">... </span>                                             character=<span class="py-string">&quot;x&quot;</span>)
+<span class="py-output">Seq('XXXXXXXXXXxxxxx', ProteinAlphabet())</span></pre>
+<p>If adding a string to an UnknownSeq, a new Seq is returned with the
+same alphabet:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> UnknownSeq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_protein
+<span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(5, generic_protein) + <span class="py-string">&quot;LV&quot;</span>
+<span class="py-output">Seq('XXXXXLV', ProteinAlphabet())</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#__add__">Seq.__add__</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__radd__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__radd__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">other</span>)</span>
+    <br /><em class="fname">(Right-side addition operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__radd__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Adding a sequence on the left.</p>
+<p>If adding a string to a Seq, the alphabet is preserved:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_protein
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;LV&quot;</span> + Seq(<span class="py-string">&quot;MELKI&quot;</span>, generic_protein)
+<span class="py-output">Seq('LVMELKI', ProteinAlphabet())</span></pre>
+<p>Adding two Seq (like) objects is handled via the __add__ method.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#__radd__">Seq.__radd__</a>
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.__getitem__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get a subsequence from the UnknownSeq object.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>unk = UnknownSeq(8, character=<span class="py-string">&quot;N&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(unk[:])
+<span class="py-output">NNNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(unk[5:3])
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(unk[1:-1])
+<span class="py-output">NNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(unk[1:-1:2])
+<span class="py-output">NNN</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#__getitem__">Seq.__getitem__</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="count"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">count</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">sub</span>,
+        <span class="sig-arg">start</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">end</span>=<span class="sig-default">9223372036854775807</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.count">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Non-overlapping count method, like that of a python string.</p>
+<p>This behaves like the python string (and Seq object) method of the
+same name, which does a non-overlapping count!</p>
+<p>Returns an integer, the number of occurrences of substring
+argument sub in the (sub)sequence given by [start:end].
+Optional arguments start and end are interpreted as in slice
+notation.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>sub - a string or another Seq object to look for</li>
+<li>start - optional integer, slice start</li>
+<li>end - optional integer, slice end</li>
+</ul>
+</dd>
+</dl>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;NNNN&quot;</span>.count(<span class="py-string">&quot;N&quot;</span>)
+<span class="py-output">4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>Seq(<span class="py-string">&quot;NNNN&quot;</span>).count(<span class="py-string">&quot;N&quot;</span>)
+<span class="py-output">4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(4, character=<span class="py-string">&quot;N&quot;</span>).count(<span class="py-string">&quot;N&quot;</span>)
+<span class="py-output">4</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(4, character=<span class="py-string">&quot;N&quot;</span>).count(<span class="py-string">&quot;A&quot;</span>)
+<span class="py-output">0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(4, character=<span class="py-string">&quot;N&quot;</span>).count(<span class="py-string">&quot;AA&quot;</span>)
+<span class="py-output">0</span></pre>
+<p>HOWEVER, please note because that python strings and Seq objects (and
+MutableSeq objects) do a non-overlapping search, this may not give
+the answer you expect:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(4, character=<span class="py-string">&quot;N&quot;</span>).count(<span class="py-string">&quot;NN&quot;</span>)
+<span class="py-output">2</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>UnknownSeq(4, character=<span class="py-string">&quot;N&quot;</span>).count(<span class="py-string">&quot;NNN&quot;</span>)
+<span class="py-output">1</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#count">Seq.count</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="complement"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">complement</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.complement">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>The complement of an unknown nucleotide equals itself.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_nuc = UnknownSeq(8)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_nuc
+<span class="py-output">UnknownSeq(8, alphabet = Alphabet(), character = '?')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_nuc)
+<span class="py-output">????????</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_nuc.complement()
+<span class="py-output">UnknownSeq(8, alphabet = Alphabet(), character = '?')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_nuc.complement())
+<span class="py-output">????????</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#complement">Seq.complement</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="reverse_complement"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">reverse_complement</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.reverse_complement">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>The reverse complement of an unknown nucleotide equals itself.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_nuc = UnknownSeq(10)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_nuc
+<span class="py-output">UnknownSeq(10, alphabet = Alphabet(), character = '?')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_nuc)
+<span class="py-output">??????????</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_nuc.reverse_complement()
+<span class="py-output">UnknownSeq(10, alphabet = Alphabet(), character = '?')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_nuc.reverse_complement())
+<span class="py-output">??????????</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#reverse_complement">Seq.reverse_complement</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="transcribe"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">transcribe</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.transcribe">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns unknown RNA sequence from an unknown DNA sequence.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_dna = UnknownSeq(10, character=<span class="py-string">&quot;N&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_dna
+<span class="py-output">UnknownSeq(10, alphabet = Alphabet(), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_dna)
+<span class="py-output">NNNNNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_rna = my_dna.transcribe()
+<span class="py-prompt">&gt;&gt;&gt; </span>my_rna
+<span class="py-output">UnknownSeq(10, alphabet = RNAAlphabet(), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_rna)
+<span class="py-output">NNNNNNNNNN</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#transcribe">Seq.transcribe</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="back_transcribe"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">back_transcribe</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.back_transcribe">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns unknown DNA sequence from an unknown RNA sequence.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_rna = UnknownSeq(20, character=<span class="py-string">&quot;N&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_rna
+<span class="py-output">UnknownSeq(20, alphabet = Alphabet(), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_rna)
+<span class="py-output">NNNNNNNNNNNNNNNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_dna = my_rna.back_transcribe()
+<span class="py-prompt">&gt;&gt;&gt; </span>my_dna
+<span class="py-output">UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_dna)
+<span class="py-output">NNNNNNNNNNNNNNNNNNNN</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#back_transcribe">Seq.back_transcribe</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="upper"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">upper</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.upper">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns an upper case copy of the sequence.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> UnknownSeq
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq = UnknownSeq(20, generic_dna, character=<span class="py-string">&quot;n&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq
+<span class="py-output">UnknownSeq(20, alphabet = DNAAlphabet(), character = 'n')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_seq)
+<span class="py-output">nnnnnnnnnnnnnnnnnnnn</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_seq.upper()
+<span class="py-output">UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_seq.upper())
+<span class="py-output">NNNNNNNNNNNNNNNNNNNN</span></pre>
+<p>This will adjust the alphabet if required. See also the lower method.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#upper">Seq.upper</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="lower"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">lower</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.lower">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a lower case copy of the sequence.</p>
+<p>This will adjust the alphabet if required:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> IUPAC
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> UnknownSeq
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq = UnknownSeq(20, IUPAC.extended_protein)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq
+<span class="py-output">UnknownSeq(20, alphabet = ExtendedIUPACProtein(), character = 'X')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_seq)
+<span class="py-output">XXXXXXXXXXXXXXXXXXXX</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_seq.lower()
+<span class="py-output">UnknownSeq(20, alphabet = ProteinAlphabet(), character = 'x')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_seq.lower())
+<span class="py-output">xxxxxxxxxxxxxxxxxxxx</span></pre>
+<p>See also the upper method.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#lower">Seq.lower</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="translate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">translate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.translate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Translate an unknown nucleotide sequence into an unknown protein.</p>
+<p>e.g.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq = UnknownSeq(9, character=<span class="py-string">&quot;N&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_seq)
+<span class="py-output">NNNNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_protein = my_seq.translate()
+<span class="py-prompt">&gt;&gt;&gt; </span>my_protein
+<span class="py-output">UnknownSeq(3, alphabet = ProteinAlphabet(), character = 'X')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_protein)
+<span class="py-output">XXX</span></pre>
+<p>In comparison, using a normal Seq object:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_seq = Seq(<span class="py-string">&quot;NNNNNNNNN&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_seq)
+<span class="py-output">NNNNNNNNN</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_protein = my_seq.translate()
+<span class="py-prompt">&gt;&gt;&gt; </span>my_protein
+<span class="py-output">Seq('XXX', ExtendedIUPACProtein())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(my_protein)
+<span class="py-output">XXX</span></pre>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#translate">Seq.translate</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ungap"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ungap</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">gap</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Seq-pysrc.html#UnknownSeq.ungap">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a copy of the sequence without the gap character(s).</p>
+<p>The gap character can be specified in two ways - either as an explicit
+argument, or via the sequence's alphabet. For example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> UnknownSeq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> Gapped, generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span>my_dna = UnknownSeq(20, Gapped(generic_dna, <span class="py-string">&quot;-&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>my_dna
+<span class="py-output">UnknownSeq(20, alphabet = Gapped(DNAAlphabet(), '-'), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_dna.ungap()
+<span class="py-output">UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_dna.ungap(<span class="py-string">&quot;-&quot;</span>)
+<span class="py-output">UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')</span></pre>
+<p>If the UnknownSeq is using the gap character, then an empty Seq is
+returned:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>my_gap = UnknownSeq(20, Gapped(generic_dna, <span class="py-string">&quot;-&quot;</span>), character=<span class="py-string">&quot;-&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_gap
+<span class="py-output">UnknownSeq(20, alphabet = Gapped(DNAAlphabet(), '-'), character = '-')</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_gap.ungap()
+<span class="py-output">Seq('', DNAAlphabet())</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_gap.ungap(<span class="py-string">&quot;-&quot;</span>)
+<span class="py-output">Seq('', DNAAlphabet())</span></pre>
+<p>Notice that the returned sequence's alphabet is adjusted to remove any
+explicit gap character declaration.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="Bio.Seq.Seq-class.html#ungap">Seq.ungap</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:18 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,1416 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.SearchIO._model.query.QueryResult</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.SearchIO-module.html">Package&nbsp;SearchIO</a> ::
+        <a href="Bio.SearchIO._model-module.html" onclick="show_private();">Package&nbsp;_model</a> ::
+        <a href="Bio.SearchIO._model.query-module.html" onclick="show_private();">Module&nbsp;query</a> ::
+        Class&nbsp;QueryResult
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.SearchIO._model.query.QueryResult-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class QueryResult</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+             object --+    
+                      |    
+<a href="Bio.SearchIO._model._base._BaseSearchObject-class.html" onclick="show_private();">_base._BaseSearchObject</a> --+
+                          |
+                         <strong class="uidshort">QueryResult</strong>
+</pre>
+
+<hr />
+<p>Class representing search results from a single query.</p>
+<p>QueryResult is the container object that stores all search hits from a
+single search query. It is the top-level object returned by SearchIO's two
+main functions, <tt class="rst-docutils literal">read</tt> and <tt class="rst-docutils literal">parse</tt>. Depending on the search results and
+search output format, a QueryResult object will contain zero or more Hit
+objects (see Hit).</p>
+<p>You can take a quick look at a QueryResult's contents and attributes by
+invoking <tt class="rst-docutils literal">print</tt> on it:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; from Bio import SearchIO
+&gt;&gt;&gt; qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+&gt;&gt;&gt; print(qresult)
+Program: blastn (2.2.27+)
+  Query: 33211 (61)
+         mir_1
+ Target: refseq_rna
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+            1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+            2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+            3      2  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+            4      1  gi|301171267|ref|NR_035851.1|  Pan troglodytes microRNA...
+            5      2  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+            6      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+            7      1  gi|301171259|ref|NR_035850.1|  Pan troglodytes microRNA...
+            8      1  gi|262205451|ref|NR_030222.1|  Homo sapiens microRNA 51...
+            9      2  gi|301171447|ref|NR_035871.1|  Pan troglodytes microRNA...
+           10      1  gi|301171276|ref|NR_035852.1|  Pan troglodytes microRNA...
+           11      1  gi|262205290|ref|NR_030188.1|  Homo sapiens microRNA 51...
+...
+</pre>
+<p>If you just want to know how many hits a QueryResult has, you can invoke
+<tt class="rst-docutils literal">len</tt> on it. Alternatively, you can simply type its name in the interpreter:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; len(qresult)
+100
+&gt;&gt;&gt; qresult
+QueryResult(id='33211', 100 hits)
+</pre>
+<p>QueryResult behaves like a hybrid of Python's built-in list and dictionary.
+You can retrieve its items (Hit objects) using the integer index of the
+item, just like regular Python lists:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; first_hit = qresult[0]
+&gt;&gt;&gt; first_hit
+Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
+</pre>
+<p>You can slice QueryResult objects as well. Slicing will return a new
+QueryResult object containing only the sliced hits:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; sliced_qresult = qresult[:3]    # slice the first three hits
+&gt;&gt;&gt; len(qresult)
+100
+&gt;&gt;&gt; len(sliced_qresult)
+3
+&gt;&gt;&gt; print(sliced_qresult)
+Program: blastn (2.2.27+)
+  Query: 33211 (61)
+         mir_1
+ Target: refseq_rna
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+            1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+            2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+</pre>
+<p>Like Python dictionaries, you can also retrieve hits using the hit's ID.
+This is useful for retrieving hits that you know should exist in a given
+search:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; hit = qresult['gi|262205317|ref|NR_030195.1|']
+&gt;&gt;&gt; hit
+Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
+</pre>
+<p>You can also replace a Hit in QueryResult with another Hit using either the
+integer index or hit key string. Note that the replacing object must be a
+Hit that has the same <tt class="rst-docutils literal">query_id</tt> property as the QueryResult object.</p>
+<p>If you're not sure whether a QueryResult contains a particular hit, you can
+use the hit ID to check for membership first:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; 'gi|262205317|ref|NR_030195.1|' in qresult
+True
+&gt;&gt;&gt; 'gi|262380031|ref|NR_023426.1|' in qresult
+False
+</pre>
+<p>Or, if you just want to know the rank / position of a given hit, you can
+use the hit ID as an argument for the <tt class="rst-docutils literal">index</tt> method. Note that the values
+returned will be zero-based. So zero (0) means the hit is the first in the
+QueryResult, three (3) means the hit is the fourth item, and so on. If the
+hit does not exist in the QueryResult, a <tt class="rst-docutils literal">ValueError</tt> will be raised.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult.index(<span class="py-string">'gi|262205317|ref|NR_030195.1|'</span>)
+<span class="py-output">0</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>qresult.index(<span class="py-string">'gi|262205330|ref|NR_030198.1|'</span>)
+<span class="py-output">5</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>qresult.index(<span class="py-string">'gi|262380031|ref|NR_023426.1|'</span>)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">...</span>
+<span class="py-except">ValueError: ...</span></pre>
+</blockquote>
+<p>To ease working with a large number of hits, QueryResult has several
+<tt class="rst-docutils literal">filter</tt> and <tt class="rst-docutils literal">map</tt> methods, analogous to Python's built-in functions with
+the same names. There are <tt class="rst-docutils literal">filter</tt> and <tt class="rst-docutils literal">map</tt> methods available for
+operations over both Hit objects or HSP objects. As an example, here we are
+using the <tt class="rst-docutils literal">hit_map</tt> method to rename all hit IDs within a QueryResult:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; def renamer(hit):
+...     hit.id = hit.id.split('|')[3]
+...     return hit
+&gt;&gt;&gt; mapped_qresult = qresult.hit_map(renamer)
+&gt;&gt;&gt; print(mapped_qresult)
+Program: blastn (2.2.27+)
+  Query: 33211 (61)
+         mir_1
+ Target: refseq_rna
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  NR_030195.1  Homo sapiens microRNA 520b (MIR520B), micr...
+            1      1  NR_035856.1  Pan troglodytes microRNA mir-520b (MIR520B...
+            2      1  NR_032573.1  Macaca mulatta microRNA mir-519a (MIR519A)...
+...
+</pre>
+<p>The principle for other <tt class="rst-docutils literal">map</tt> and <tt class="rst-docutils literal">filter</tt> methods are similar: they accept
+a function, applies it, and returns a new QueryResult object.</p>
+<p>There are also other methods useful for working with list-like objects:
+<tt class="rst-docutils literal">append</tt>, <tt class="rst-docutils literal">pop</tt>, and <tt class="rst-docutils literal">sort</tt>. More details and examples are available in
+their respective documentations.</p>
+<p>Finally, just like Python lists and dictionaries, QueryResult objects are
+iterable. Iteration over QueryResults will yield Hit objects:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; for hit in qresult[:4]:     # iterate over the first four items
+...     hit
+...
+Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
+Hit(id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 hsps)
+Hit(id='gi|270133242|ref|NR_032573.1|', query_id='33211', 1 hsps)
+Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
+</pre>
+<p>If you need access to all the hits in a QueryResult object, you can get
+them in a list using the <tt class="rst-docutils literal">hits</tt> property. Similarly, access to all hit IDs is
+available through the <tt class="rst-docutils literal">hit_keys</tt> property.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult.hits
+<span class="py-output">[Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps), ...]</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>qresult.hit_keys
+<span class="py-output">['gi|262205317|ref|NR_030195.1|', 'gi|301171311|ref|NR_035856.1|', ...]</span></pre>
+</blockquote>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hits</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
+        <span class="summary-sig-arg">id</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">hit_key_function</span>=<span class="summary-sig-default">&lt;function &lt;lambda&gt; at 0x4e99a28&gt;</span>)</span><br />
+      Initializes a QueryResult object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__iter__"></a><span class="summary-sig-name">__iter__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__iter__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="iterhits"></a><span class="summary-sig-name">iterhits</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns an iterator over the Hit objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.iterhits">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="iterhit_keys"></a><span class="summary-sig-name">iterhit_keys</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns an iterator over the ID of the Hit objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.iterhit_keys">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="iteritems"></a><span class="summary-sig-name">iteritems</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns an iterator yielding tuples of Hit ID and Hit objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.iteritems">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__contains__"></a><span class="summary-sig-name">__contains__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit_key</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__contains__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__len__"></a><span class="summary-sig-name">__len__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__len__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__bool__"></a><span class="summary-sig-name">__bool__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__bool__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__nonzero__"></a><span class="summary-sig-name">__nonzero__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__bool__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      repr(x)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__repr__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit_key</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__setitem__"></a><span class="summary-sig-name">__setitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit_key</span>,
+        <span class="summary-sig-arg">hit</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__setitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__delitem__"></a><span class="summary-sig-name">__delitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit_key</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__delitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#absorb" class="summary-sig-name">absorb</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit</span>)</span><br />
+      Adds a Hit object to the end of QueryResult.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.absorb">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#append" class="summary-sig-name">append</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit</span>)</span><br />
+      Adds a Hit object to the end of QueryResult.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.append">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#hit_filter" class="summary-sig-name">hit_filter</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">func</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Creates a new QueryResult object whose Hit objects pass the filter
+function.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hit_filter">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#hit_map" class="summary-sig-name">hit_map</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">func</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Creates a new QueryResult object, mapping the given function to its
+Hits.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hit_map">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#hsp_filter" class="summary-sig-name">hsp_filter</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">func</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Creates a new QueryResult object whose HSP objects pass the filter
+function.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hsp_filter">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#hsp_map" class="summary-sig-name">hsp_map</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">func</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Creates a new QueryResult object, mapping the given function to its
+HSPs.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hsp_map">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#pop" class="summary-sig-name">pop</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit_key</span>=<span class="summary-sig-default">-1</span>,
+        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">object()</span>)</span><br />
+      Removes the specified hit key and return the Hit object.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.pop">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#index" class="summary-sig-name">index</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hit_key</span>)</span><br />
+      Returns the index of a given hit key, zero-based.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.SearchIO._model.query.QueryResult-class.html#sort" class="summary-sig-name">sort</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">in_place</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Sorts the Hit objects.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.sort">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.SearchIO._model._base._BaseSearchObject-class.html" onclick="show_private();">_base._BaseSearchObject</a></code></b> (private):
+      <code><a href="Bio.SearchIO._model._base._BaseSearchObject-class.html#_transfer_attrs" onclick="show_private();">_transfer_attrs</a></code>
+      </p></div>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Class Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-ClassVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_NON_STICKY_ATTRS"></a><span class="summary-name">_NON_STICKY_ATTRS</span> = <code title="('_items', '__alt_hit_ids')"><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">_items</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">__alt_hit_ids</code><code class="variable-quote">'</code><code class="variable-group">)</code></code>
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__marker"></a><span class="summary-name">__marker</span> = <code title="object()">object()</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.query.QueryResult-class.html#hits" class="summary-name">hits</a><br />
+      Hit objects contained in the QueryResult.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.query.QueryResult-class.html#hit_keys" class="summary-name">hit_keys</a><br />
+      Hit IDs of the Hit objects contained in the QueryResult.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.query.QueryResult-class.html#items" class="summary-name">items</a><br />
+      List of tuples of Hit IDs and Hit objects.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.query.QueryResult-class.html#id" class="summary-name">id</a><br />
+      QueryResult ID string
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.query.QueryResult-class.html#description" class="summary-name">description</a><br />
+      QueryResult description
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.query.QueryResult-class.html#hsps" class="summary-name">hsps</a><br />
+      HSP objects contained in the QueryResult.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.SearchIO._model.query.QueryResult-class.html#fragments" class="summary-name">fragments</a><br />
+      HSPFragment objects contained in the QueryResult.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hits</span>=<span class="sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>,
+        <span class="sig-arg">id</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">hit_key_function</span>=<span class="sig-default">&lt;function &lt;lambda&gt; at 0x4e99a28&gt;</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  Initializes a QueryResult object.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>id</code></strong> (string) - query sequence ID</li>
+        <li><strong class="pname"><code>hits</code></strong> (iterable) - iterator yielding Hit objects</li>
+        <li><strong class="pname"><code>hit_key_function</code></strong> (callable, accepts Hit objects, returns string) - function to define hit keys</li>
+    </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__repr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__repr__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+repr(x)
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__repr__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+str(x)
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="absorb"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">absorb</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hit</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.absorb">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Adds a Hit object to the end of QueryResult. If the QueryResult
+already has a Hit with the same ID, append the new Hit's HSPs into
+the existing Hit.</p>
+<p>This method is used for file formats that may output the same Hit in
+separate places, such as BLAT or Exonerate. In both formats, Hit
+with different strands are put in different places. However, SearchIO
+considers them to be the same as a Hit object should be all database
+entries with the same ID, regardless of strand orientation.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hit</code></strong> (Hit) - object to absorb</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="append"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">append</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hit</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.append">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Adds a Hit object to the end of QueryResult.</p>
+<p>Any Hit object appended must have the same <tt class="rst-docutils literal">query_id</tt> property as the
+QueryResult's <tt class="rst-docutils literal">id</tt> property. If the hit key already exists, a
+<tt class="rst-docutils literal">ValueError</tt> will be raised.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hit</code></strong> (Hit) - object to append</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_filter"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hit_filter</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">func</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hit_filter">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Creates a new QueryResult object whose Hit objects pass the filter
+function.</p>
+<p>Here is an example of using <tt class="rst-docutils literal">hit_filter</tt> to select Hits whose
+description begins with the string 'Homo sapiens', case sensitive:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; from Bio import SearchIO
+&gt;&gt;&gt; qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+&gt;&gt;&gt; def desc_filter(hit):
+...     return hit.description.startswith('Homo sapiens')
+...
+&gt;&gt;&gt; len(qresult)
+100
+&gt;&gt;&gt; filtered = qresult.hit_filter(desc_filter)
+&gt;&gt;&gt; len(filtered)
+39
+&gt;&gt;&gt; print(filtered[:4])
+Program: blastn (2.2.27+)
+  Query: 33211 (61)
+         mir_1
+ Target: refseq_rna
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+            1      2  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+            2      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+            3      1  gi|262205451|ref|NR_030222.1|  Homo sapiens microRNA 51...
+</pre>
+<p>Note that instance attributes (other than the hits) from the unfiltered
+QueryResult are retained in the filtered object.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult.program == filtered.program
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>qresult.target == filtered.target
+<span class="py-output">True</span></pre>
+</blockquote>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>func</code></strong> (callable, accepts Hit, returns bool) - filter function</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_map"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hit_map</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">func</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hit_map">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Creates a new QueryResult object, mapping the given function to its
+Hits.</p>
+<p>Here is an example of using <tt class="rst-docutils literal">hit_map</tt> with a function that discards all
+HSPs in a Hit except for the first one:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; from Bio import SearchIO
+&gt;&gt;&gt; qresult = next(SearchIO.parse('Blast/mirna.xml', 'blast-xml'))
+&gt;&gt;&gt; print(qresult[:8])
+Program: blastn (2.2.27+)
+  Query: 33211 (61)
+         mir_1
+ Target: refseq_rna
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+            1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+            2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+            3      2  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+            4      1  gi|301171267|ref|NR_035851.1|  Pan troglodytes microRNA...
+            5      2  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+            6      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+            7      1  gi|301171259|ref|NR_035850.1|  Pan troglodytes microRNA...
+
+&gt;&gt;&gt; top_hsp = lambda hit: hit[:1]
+&gt;&gt;&gt; mapped_qresult = qresult.hit_map(top_hsp)
+&gt;&gt;&gt; print(mapped_qresult[:8])
+Program: blastn (2.2.27+)
+  Query: 33211 (61)
+         mir_1
+ Target: refseq_rna
+   Hits: ----  -----  ----------------------------------------------------------
+            #  # HSP  ID + description
+         ----  -----  ----------------------------------------------------------
+            0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+            1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+            2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+            3      1  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+            4      1  gi|301171267|ref|NR_035851.1|  Pan troglodytes microRNA...
+            5      1  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+            6      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+            7      1  gi|301171259|ref|NR_035850.1|  Pan troglodytes microRNA...
+</pre>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>func</code></strong> (callable, accepts Hit, returns Hit) - map function</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hsp_filter"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hsp_filter</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">func</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hsp_filter">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Creates a new QueryResult object whose HSP objects pass the filter
+function.</p>
+<p><tt class="rst-docutils literal">hsp_filter</tt> is the same as <tt class="rst-docutils literal">hit_filter</tt>, except that it filters
+directly on each HSP object in every Hit. If the filtering removes
+all HSP objects in a given Hit, the entire Hit will be discarded. This
+will result in the QueryResult having less Hit after filtering.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="hsp_map"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hsp_map</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">func</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.hsp_map">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Creates a new QueryResult object, mapping the given function to its
+HSPs.</p>
+<p><tt class="rst-docutils literal">hsp_map</tt> is the same as <tt class="rst-docutils literal">hit_map</tt>, except that it applies the given
+function to all HSP objects in every Hit, instead of the Hit objects.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="pop"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">pop</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hit_key</span>=<span class="sig-default">-1</span>,
+        <span class="sig-arg">default</span>=<span class="sig-default">object()</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.pop">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Removes the specified hit key and return the Hit object.</p>
+<p>By default, <tt class="rst-docutils literal">pop</tt> will remove and return the last Hit object in the
+QueryResult object. To remove specific Hit objects, you can use its
+integer index or hit key.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = next(SearchIO.parse(<span class="py-string">'Blast/mirna.xml'</span>, <span class="py-string">'blast-xml'</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>len(qresult)
+<span class="py-output">100</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> hit <span class="py-keyword">in</span> qresult[:5]:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(hit.id)
+<span class="py-more">...</span>
+<span class="py-output">gi|262205317|ref|NR_030195.1|</span>
+<span class="py-output">gi|301171311|ref|NR_035856.1|</span>
+<span class="py-output">gi|270133242|ref|NR_032573.1|</span>
+<span class="py-output">gi|301171322|ref|NR_035857.1|</span>
+<span class="py-output">gi|301171267|ref|NR_035851.1|</span></pre>
+<p># remove the last hit
+&gt;&gt;&gt; qresult.pop()
+Hit(id='gi|397513516|ref|XM_003827011.1|', query_id='33211', 1 hsps)</p>
+<p># remove the first hit
+&gt;&gt;&gt; qresult.pop(0)
+Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)</p>
+<p># remove hit with the given ID
+&gt;&gt;&gt; qresult.pop('gi|301171322|ref|NR_035857.1|')
+Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)</p>
+</blockquote>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hit_key</code></strong> (int or string) - key of the Hit object to return</li>
+        <li><strong class="pname"><code>default</code></strong> (object) - return value if no Hit exists with the given key</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="index"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">index</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hit_key</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.index">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns the index of a given hit key, zero-based.</p>
+<p>This method is useful for finding out the integer index (usually
+correlated with search rank) of a given hit key.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = next(SearchIO.parse(<span class="py-string">'Blast/mirna.xml'</span>, <span class="py-string">'blast-xml'</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult.index(<span class="py-string">'gi|301171259|ref|NR_035850.1|'</span>)
+<span class="py-output">7</span></pre>
+</blockquote>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hit_key</code></strong> (string) - hit ID</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="sort"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sort</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">in_place</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SearchIO._model.query-pysrc.html#QueryResult.sort">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sorts the Hit objects.</p>
+<p><tt class="rst-docutils literal">sort</tt> defaults to sorting in-place, to mimick Python's <tt class="rst-docutils literal">list.sort</tt>
+method. If you set the <tt class="rst-docutils literal">in_place</tt> argument to False, it will treat
+return a new, sorted QueryResult object and keep the initial one
+unsorted.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>key</code></strong> (callable, accepts Hit, returns key for sorting) - sorting function</li>
+        <li><strong class="pname"><code>reverse</code></strong> (bool) - whether to reverse sorting results or no</li>
+        <li><strong class="pname"><code>in_place</code></strong> (bool) - whether to do in-place sorting or no</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="hits"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hits</h3>
+  Hit objects contained in the QueryResult.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.hits(<span class="summary-sig-arg">self</span>)</span>
+        - Hit objects contained in the QueryResult.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hit_keys"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hit_keys</h3>
+  Hit IDs of the Hit objects contained in the QueryResult.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.hit_keys(<span class="summary-sig-arg">self</span>)</span>
+        - Hit IDs of the Hit objects contained in the QueryResult.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="items"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">items</h3>
+  List of tuples of Hit IDs and Hit objects.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.items(<span class="summary-sig-arg">self</span>)</span>
+        - List of tuples of Hit IDs and Hit objects.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="id"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">id</h3>
+  QueryResult ID string
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.setter(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="description"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">description</h3>
+  QueryResult description
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.getter(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.setter(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hsps"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hsps</h3>
+  HSP objects contained in the QueryResult.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.hsps(<span class="summary-sig-arg">self</span>)</span>
+        - HSP objects contained in the QueryResult.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fragments"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">fragments</h3>
+  HSPFragment objects contained in the QueryResult.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.fragments(<span class="summary-sig-arg">self</span>)</span>
+        - HSPFragment objects contained in the QueryResult.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:17 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
