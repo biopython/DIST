@@ -68,101 +68,46 @@ object --+
 </pre>
 
 <hr />
-<pre class="literalblock">
-Diagram
-
-Provides:
-
-Attributes:
-
-o name         String, identifier for the diagram
-
-o tracks       List of Track objects comprising the diagram
-
-o format       String, format of the diagram (circular/linear)
-
-o pagesize     String, the pagesize of output
-
-o orientation  String, the page orientation (landscape/portrait)
-
-o x            Float, the proportion of the page to take up with even
-                      X margins
-
-o y            Float, the proportion of the page to take up with even
-                      Y margins
-
-o xl           Float, the proportion of the page to take up with the
-                      left X margin
-
-o xr           Float, the proportion of the page to take up with the
-                      right X margin
-
-o yt           Float, the proportion of the page to take up with the
-                      top Y margin
-
-o yb           Float, the proportion of the page to take up with the
-                      bottom Y margin
-
-o circle_core  Float, the proportion of the available radius to leave
-               empty at the center of a circular diagram (0 to 1).
-
-o start        Int, the base/aa position to start the diagram at
-
-o end          Int, the base/aa position to end the diagram at
-
-o tracklines   Boolean, True if track guidelines are to be drawn
-
-o fragments    Int, for a linear diagram, the number of equal divisions
-                        into which the sequence is divided
-
-o fragment_size Float, the proportion of the space available to each
-                           fragment that should be used in drawing
-
-o track_size   Float, the proportion of the space available to each
-                          track that should be used in drawing
-
-o circular     Boolean, True if the genome/sequence to be drawn is, in
-                        reality, circular.
-
-Methods:
-
-o __init__(self, name=None) Called on instantiation
-
-o draw(self, format='circular', ...) Instructs the package to draw
-    the diagram
-
-o write(self, filename='test1.ps', output='PS') Writes the drawn
-    diagram to a specified file, in a specified format.
-
-o add_track(self, track, track_level) Adds a Track object to the
-    diagram, with instructions to place it at a particular level on
-    the diagram
-
-o del_track(self, track_level) Removes the track that is to be drawn
-    at a particular level on the diagram
-
-o get_tracks(self) Returns the list of Track objects to be drawn
-    contained in the diagram
-
-o renumber_tracks(self, low=1) Renumbers all tracks consecutively,
-    optionally from a passed lowest number
-
-o get_levels(self) Returns a list of levels currently occupied by
-    Track objects
-
-o get_drawn_levels(self) Returns a list of levels currently occupied
-    by Track objects that will be shown in the drawn diagram (i.e.
-    are not hidden)
-
-o range(self) Returns the lowest- and highest-numbered positions
-    contained within features in all tracks on the diagram as a tuple.
-
-o __getitem__(self, key) Returns the track contained at the level of
-    the passed key
-
-o __str__(self) Returns a formatted string describing the diagram
-
-</pre>
+<p>Diagram container.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>name           - a string, identifier for the diagram.</li>
+<li>tracks         - a list of Track objects comprising the diagram.</li>
+<li>format         - a string, format of the diagram 'circular' or
+'linear', depending on the sort of diagram required.</li>
+<li>pagesize       - a string, the pagesize of output describing the ISO
+size of the image, or a tuple of pixels.</li>
+<li>orientation    - a string describing the required orientation of the
+final drawing ('landscape' or 'portrait').</li>
+<li>x              - a float (0-&gt;1), the proportion of the page to take
+up with even X margins t the page.</li>
+<li>y              - a float (0-&gt;1), the proportion of the page to take
+up with even Y margins to the page.</li>
+<li>xl             - a float (0-&gt;1), the proportion of the page to take
+up with the left X margin to the page (overrides x).</li>
+<li>xr             - a float (0-&gt;1), the proportion of the page to take
+up with the right X margin to the page (overrides x).</li>
+<li>yt             - a float (0-&gt;1), the proportion of the page to take
+up with the top Y margin to the page (overrides y).</li>
+<li>yb             - a float (0-&gt;1), the proportion of the page to take
+up with the bottom Y margin to the page (overrides y).</li>
+<li>circle_core    - a float, the proportion of the available radius to
+leave empty at the center of a circular diagram (0 to 1).</li>
+<li>start          - an integer, the base/aa position to start the diagram at.</li>
+<li>end            - an integer, the base/aa position to end the diagram at.</li>
+<li>tracklines     - a boolean, True if track guidelines are to be drawn.</li>
+<li>fragments      - and integer, for a linear diagram, the number of equal
+divisions into which the sequence is divided.</li>
+<li>fragment_size  - a float (0-&gt;1), the proportion of the space
+available to each fragment that should be used in drawing.</li>
+<li>track_size     - a float (0-&gt;1), the proportion of the space
+available to each track that should be used in drawing with sigils.</li>
+<li>circular       - a boolean, True if the genome/sequence to be drawn
+is, in reality, circular.</li>
+</ul>
+</dd>
+</dl>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -188,8 +133,25 @@ o __str__(self) Returns a formatted string describing the diagram
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">None</span>)</span><br />
-      o name  String describing the diagram</td>
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">circular</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">pagesize</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">A3</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">orientation</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">landscape</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">x</span>=<span class="summary-sig-default">0.05</span>,
+        <span class="summary-sig-arg">y</span>=<span class="summary-sig-default">0.05</span>,
+        <span class="summary-sig-arg">xl</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">xr</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">yt</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">yb</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">start</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">end</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">tracklines</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">fragments</span>=<span class="summary-sig-default">10</span>,
+        <span class="summary-sig-arg">fragment_size</span>=<span class="summary-sig-default">0.9</span>,
+        <span class="summary-sig-arg">track_size</span>=<span class="summary-sig-default">0.75</span>,
+        <span class="summary-sig-arg">circular</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">circle_core</span>=<span class="summary-sig-default">0.0</span>)</span><br />
+      Called on instantiation.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.__init__">source&nbsp;code</a></span>
             
@@ -208,7 +170,7 @@ o __str__(self) Returns a formatted string describing the diagram
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#set_all_tracks" class="summary-sig-name">set_all_tracks</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">attr</span>,
         <span class="summary-sig-arg">value</span>)</span><br />
-      o attr      An attribute of the Track class</td>
+      Set the passed attribute of all tracks in the set to the passed value.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.set_all_tracks">source&nbsp;code</a></span>
             
@@ -224,7 +186,7 @@ o __str__(self) Returns a formatted string describing the diagram
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="draw"></a><span class="summary-sig-name">draw</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#draw" class="summary-sig-name">draw</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">pagesize</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">orientation</span>=<span class="summary-sig-default">None</span>,
@@ -260,11 +222,10 @@ o __str__(self) Returns a formatted string describing the diagram
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#write" class="summary-sig-name">write</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">filename</span>=<span class="summary-sig-default">'test1.ps'</span>,
-        <span class="summary-sig-arg">output</span>=<span class="summary-sig-default">'PS'</span>,
+        <span class="summary-sig-arg">filename</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">test1.ps</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">output</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">PS</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">dpi</span>=<span class="summary-sig-default">72</span>)</span><br />
-      o filename      String indicating the name of the output file,
-                or a handle to write to.</td>
+      Writes the drawn diagram to a specified file, in a specified format.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.write">source&nbsp;code</a></span>
             
@@ -302,7 +263,7 @@ o __str__(self) Returns a formatted string describing the diagram
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#add_track" class="summary-sig-name">add_track</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">track</span>,
         <span class="summary-sig-arg">track_level</span>)</span><br />
-      o track         Track object to draw</td>
+      Adds a Track object to the diagram.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.add_track">source&nbsp;code</a></span>
             
@@ -314,17 +275,14 @@ o __str__(self) Returns a formatted string describing the diagram
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><pre class="literalblock">
-Track
-
-</pre></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#new_track" class="summary-sig-name">new_track</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">track_level</span>)</span><br />
-      o track_level   Int, the level at which the track will be drawn
-                (above an arbitrary baseline)</td>
+        <span class="summary-sig-arg">track_level</span>,
+        <span class="summary-sig-arg">**args</span>)</span><br />
+      Add a new Track to the diagram at a given level.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.new_track">source&nbsp;code</a></span>
             
@@ -342,7 +300,7 @@ Track
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#del_track" class="summary-sig-name">del_track</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">track_level</span>)</span><br />
-      o track_level   Int, the level of the track on the diagram to delete</td>
+      Removes the track to be drawn at a particular level on the diagram.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.del_track">source&nbsp;code</a></span>
             
@@ -354,15 +312,12 @@ Track
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><pre class="literalblock">
-list
-
-</pre></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_tracks"></a><span class="summary-sig-name">get_tracks</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns a list of the tracks contained in the diagram</td>
+          <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#get_tracks" class="summary-sig-name">get_tracks</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns a list of the tracks contained in the diagram.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.get_tracks">source&nbsp;code</a></span>
             
@@ -381,8 +336,7 @@ list
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#move_track" class="summary-sig-name">move_track</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">from_level</span>,
         <span class="summary-sig-arg">to_level</span>)</span><br />
-      o from_level    Int, the level at which the track to be moved is
-                found</td>
+      Moves a track from one level on the diagram to another.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.move_track">source&nbsp;code</a></span>
             
@@ -401,7 +355,7 @@ list
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#renumber_tracks" class="summary-sig-name">renumber_tracks</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">low</span>=<span class="summary-sig-default">1</span>,
         <span class="summary-sig-arg">step</span>=<span class="summary-sig-default">1</span>)</span><br />
-      o low       Int, the track number to start from</td>
+      Renumbers all tracks consecutively.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.renumber_tracks">source&nbsp;code</a></span>
             
@@ -413,15 +367,12 @@ list
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><pre class="literalblock">
-[int, int, ...]
-
-</pre></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_levels"></a><span class="summary-sig-name">get_levels</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return a sorted list of levels occupied by tracks in the diagram</td>
+          <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#get_levels" class="summary-sig-name">get_levels</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return a sorted list of levels occupied by tracks in the diagram.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.get_levels">source&nbsp;code</a></span>
             
@@ -433,15 +384,12 @@ list
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><pre class="literalblock">
-[int, int, ...]
-
-</pre></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#get_drawn_levels" class="summary-sig-name">get_drawn_levels</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return a sorted list of levels occupied by tracks that are not...</td>
+      Return a sorted list of levels occupied by tracks.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.get_drawn_levels">source&nbsp;code</a></span>
             
@@ -453,15 +401,12 @@ list
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><pre class="literalblock">
-(int, int)
-
-</pre></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#range" class="summary-sig-name">range</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns the lowest and highest base (or mark) numbers containd in...</td>
+      Returns lowest and highest base numbers from track features.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.range">source&nbsp;code</a></span>
             
@@ -473,16 +418,13 @@ list
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><pre class="literalblock">
-Track
-
-</pre></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>)</span><br />
-      o key       The id of a track in the diagram</td>
+      Returns the track contained at the level of the passed key.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.__getitem__">source&nbsp;code</a></span>
             
@@ -494,15 +436,12 @@ Track
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><pre class="literalblock">
-&quot;&quot;
-
-</pre></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Graphics.GenomeDiagram._Diagram.Diagram-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns a formatted string with information about the diagram</td>
+      Returns a formatted string describing the diagram.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.__str__">source&nbsp;code</a></span>
             
@@ -581,7 +520,24 @@ Track
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">name</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">circular</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">pagesize</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">A3</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">orientation</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">landscape</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">x</span>=<span class="sig-default">0.05</span>,
+        <span class="sig-arg">y</span>=<span class="sig-default">0.05</span>,
+        <span class="sig-arg">xl</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">xr</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">yt</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">yb</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">start</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">end</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">tracklines</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">fragments</span>=<span class="sig-default">10</span>,
+        <span class="sig-arg">fragment_size</span>=<span class="sig-default">0.9</span>,
+        <span class="sig-arg">track_size</span>=<span class="sig-default">0.75</span>,
+        <span class="sig-arg">circular</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">circle_core</span>=<span class="sig-default">0.0</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -589,61 +545,8 @@ Track
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o name  String describing the diagram
-
-o format    String: 'circular' or 'linear', depending on the sort of
-            diagram required
-
-o pagesize  String describing the ISO size of the image, or a tuple
-            of pixels
-
-o orientation   String describing the required orientation of the
-                final drawing ('landscape' or 'portrait')
-
-o x         Float (0-&gt;1) describing the relative size of the X
-            margins to the page
-
-o y         Float (0-&gt;1) describing the relative size of the Y
-            margins to the page
-
-o xl        Float (0-&gt;1) describing the relative size of the left X
-            margin to the page (overrides x)
-
-o xl        Float (0-&gt;1) describing the relative size of the left X
-            margin to the page (overrides x)
-
-o xr        Float (0-&gt;1) describing the relative size of the right X
-            margin to the page (overrides x)
-
-o yt        Float (0-&gt;1) describing the relative size of the top Y
-            margin to the page (overrides y)
-
-o yb        Float (0-&gt;1) describing the relative size of the lower Y
-            margin to the page (overrides y)
-
-o start     Int, the position to begin drawing the diagram at
-
-
-o end       Int, the position to stop drawing the diagram at
-
-o tracklines    Boolean flag to show (or not) lines delineating
-            tracks on the diagram
-
-o fragments Int, for linear diagrams, the number of sections into
-            which to break the sequence being drawn
-
-o fragment_size     Float (0-&gt;1), for linear diagrams, describing
-                    the proportion of space in a fragment to take
-                    up with tracks
-
-o track_size        Float (0-&gt;1) describing the proportion of space
-                    in a track to take up with sigils
-
-o circular  Boolean flag to indicate whether the sequence being
-            drawn is circular
-
-</pre>
+  <p>Called on instantiation.</p>
+<p>gdd = Diagram(name=None)</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -667,15 +570,54 @@ o circular  Boolean flag to indicate whether the sequence being
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o attr      An attribute of the Track class
-
-o value     The value to set that attribute
-
-Set the passed attribute of all tracks in the set to the
-passed value
-
-</pre>
+  <p>Set the passed attribute of all tracks in the set to the passed value.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>attr    - An attribute of the Track class.</li>
+<li>value   - The value to set that attribute.</li>
+</ul>
+</dd>
+</dl>
+<p>set_all_tracks(self, attr, value)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="draw"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">draw</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">pagesize</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">orientation</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">x</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">y</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">xl</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">xr</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">yt</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">yb</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">start</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">end</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">tracklines</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">fragments</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">fragment_size</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">track_size</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">circular</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">circle_core</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">cross_track_links</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.draw">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Draw the diagram, with passed parameters overriding existing attributes.</p>
+<p>gdd.draw(format='circular')</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -688,8 +630,8 @@ passed value
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">write</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">filename</span>=<span class="sig-default">'test1.ps'</span>,
-        <span class="sig-arg">output</span>=<span class="sig-default">'PS'</span>,
+        <span class="sig-arg">filename</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">test1.ps</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">output</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">PS</code><code class="variable-quote">'</code></span>,
         <span class="sig-arg">dpi</span>=<span class="sig-default">72</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -697,23 +639,23 @@ passed value
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o filename      String indicating the name of the output file,
-                or a handle to write to.
-
-o output        String indicating output format, one of PS, PDF,
-                SVG, or provided the ReportLab renderPM module is
-                installed, one of the bitmap formats JPG, BMP,
-                GIF, PNG, TIFF or TIFF.  The format can be given
-                in upper or lower case.
-
-o dpi           Resolution (dots per inch) for bitmap formats.
-
-Write the completed drawing out to a file in a prescribed format
-
-No return value.
-
-</pre>
+  <p>Writes the drawn diagram to a specified file, in a specified format.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>filename   - a string indicating the name of the output file,
+or a handle to write to.</li>
+<li>output     - a string indicating output format, one of PS, PDF,
+SVG, or provided the ReportLab renderPM module is installed, one
+of the bitmap formats JPG, BMP, GIF, PNG, TIFF or TIFF.  The
+format can be given in upper or lower case.</li>
+<li>dpi        - an integer. Resolution (dots per inch) for bitmap formats.</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>No return value.</dd>
+</dl>
+<p>write(self, filename='test1.ps', output='PS', dpi=72)</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -734,18 +676,20 @@ No return value.
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-Returns a byte string containing the diagram in the requested format.
-
-o output        String indicating output format, one of PS, PDF,
-                SVG, JPG, BMP, GIF, PNG, TIFF or TIFF (as
-                specified for the write method).
-
-o dpi           Resolution (dots per inch) for bitmap formats.
-
-Return the completed drawing as a bytes string in a prescribed format
-
-</pre>
+  <p>Returns a byte string containing the diagram in the requested format.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>output    - a string indicating output format, one of PS, PDF,
+SVG, JPG, BMP, GIF, PNG, TIFF or TIFF (as specified for the write
+method).</li>
+<li>dpi       - Resolution (dots per inch) for bitmap formats.</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>Return the completed drawing as a bytes string in a prescribed
+format.</dd>
+</dl>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -766,15 +710,19 @@ Return the completed drawing as a bytes string in a prescribed format
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o track         Track object to draw
-
-o track_level   Int, the level at which the track will be drawn
-                (above an arbitrary baseline)
-
-Add a pre-existing Track to the diagram at a given level
-
-</pre>
+  <p>Adds a Track object to the diagram.</p>
+<p>It also accepts instructions to place it at a particular level on the
+diagram.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>track          - Track object to draw.</li>
+<li>track_level    - an integer. The level at which the track will be
+drawn (above an arbitrary baseline).</li>
+</ul>
+</dd>
+</dl>
+<p>add_track(self, track, track_level)</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -787,26 +735,26 @@ Add a pre-existing Track to the diagram at a given level
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">new_track</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">track_level</span>)</span>
+        <span class="sig-arg">track_level</span>,
+        <span class="sig-arg">**args</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.new_track">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o track_level   Int, the level at which the track will be drawn
-                (above an arbitrary baseline)
-
-Add a new Track to the diagram at a given level and returns it for
-further user manipulation.
-
-</pre>
+  <p>Add a new Track to the diagram at a given level.</p>
+<p>The track is returned for further user manipulation.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>track_level   - an integer. The level at which the track will be
+drawn (above an arbitrary baseline).</li>
+</ul>
+</dd>
+</dl>
+<p>new_track(self, track_level)</p>
   <dl class="fields">
-    <dt>Returns: <pre class="literalblock">
-Track
-
-</pre></dt>
   </dl>
 </td></tr></table>
 </div>
@@ -825,12 +773,36 @@ Track
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o track_level   Int, the level of the track on the diagram to delete
-
-Remove the track at the passed level from the diagram
-
-</pre>
+  <p>Removes the track to be drawn at a particular level on the diagram.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>track_level   - an integer. The level of the track on the diagram
+to delete.</li>
+</ul>
+</dd>
+</dl>
+<p>del_track(self, track_level)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_tracks"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_tracks</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.get_tracks">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a list of the tracks contained in the diagram.</p>
+<p>get_tracks(self)</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -851,15 +823,17 @@ Remove the track at the passed level from the diagram
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o from_level    Int, the level at which the track to be moved is
-                found
-
-o to_level      Int, the level to move the track to
-
-Moves a track from one level on the diagram to another
-
-</pre>
+  <p>Moves a track from one level on the diagram to another.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>from_level   - an integer. The level at which the track to be
+moved is found.</li>
+<li>to_level     - an integer. The level to move the track to.</li>
+</ul>
+</dd>
+</dl>
+<p>move_track(self, from_level, to_level)</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -880,15 +854,38 @@ Moves a track from one level on the diagram to another
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o low       Int, the track number to start from
-
-o step      Int, the track interval for separation of tracks
-
-Reassigns all the tracks to run consecutively from the lowest
-value (low)
-
-</pre>
+  <p>Renumbers all tracks consecutively.</p>
+<p>Optionally from a passed lowest number.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>low     - an integer. The track number to start from.</li>
+<li>step    - an integer. The track interval for separation of
+tracks.</li>
+</ul>
+</dd>
+</dl>
+<p>renumber_tracks(self, low=1, step=1)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_levels"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_levels</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Graphics.GenomeDiagram._Diagram-pysrc.html#Diagram.get_levels">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a sorted list of levels occupied by tracks in the diagram.</p>
+<p>get_levels(self)</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -907,16 +904,10 @@ value (low)
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-Return a sorted list of levels occupied by tracks that are not
-explicitly hidden
-
-</pre>
+  <p>Return a sorted list of levels occupied by tracks.</p>
+<p>These tracks are not explicitly hidden.</p>
+<p>get_drawn_levels(self)</p>
   <dl class="fields">
-    <dt>Returns: <pre class="literalblock">
-[int, int, ...]
-
-</pre></dt>
   </dl>
 </td></tr></table>
 </div>
@@ -934,16 +925,10 @@ explicitly hidden
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-Returns the lowest and highest base (or mark) numbers containd in
-track features as a tuple
-
-</pre>
+  <p>Returns lowest and highest base numbers from track features.</p>
+<p>Returned type is a tuple.</p>
+<p>range(self)</p>
   <dl class="fields">
-    <dt>Returns: <pre class="literalblock">
-(int, int)
-
-</pre></dt>
   </dl>
 </td></tr></table>
 </div>
@@ -963,17 +948,16 @@ track features as a tuple
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-o key       The id of a track in the diagram
-
-Return the Track object with the passed id
-
-</pre>
+  <p>Returns the track contained at the level of the passed key.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>key    - The id of a track in the diagram.</li>
+</ul>
+</dd>
+</dl>
+<p>__getitem__(self, key)</p>
   <dl class="fields">
-    <dt>Returns: <pre class="literalblock">
-Track
-
-</pre></dt>
   </dl>
 </td></tr></table>
 </div>
@@ -992,15 +976,9 @@ Track
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-Returns a formatted string with information about the diagram
-
-</pre>
+  <p>Returns a formatted string describing the diagram.</p>
+<p>__str__(self)</p>
   <dl class="fields">
-    <dt>Returns: <pre class="literalblock">
-&quot;&quot;
-
-</pre></dt>
     <dt>Overrides:
         object.__str__
     </dt>
@@ -1036,7 +1014,7 @@ Returns a formatted string with information about the diagram
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:46 2015
+    Generated by Epydoc 3.0.1 on Wed Jun  8 15:02:52 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

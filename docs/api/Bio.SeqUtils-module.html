@@ -207,7 +207,7 @@ Miscellaneous functions for dealing with sequences.
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.SeqUtils-module.html#seq3" class="summary-sig-name">seq3</a>(<span class="summary-sig-arg">seq</span>,
-        <span class="summary-sig-arg">custom_map</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Ter</code><code class="variable-quote">'</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">custom_map</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">undef_code</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Xaa</code><code class="variable-quote">'</code></span>)</span><br />
       Turn a one letter code protein sequence into one with three letter codes.</td>
           <td align="right" valign="top">
@@ -226,7 +226,7 @@ Miscellaneous functions for dealing with sequences.
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.SeqUtils-module.html#seq1" class="summary-sig-name">seq1</a>(<span class="summary-sig-arg">seq</span>,
-        <span class="summary-sig-arg">custom_map</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">Ter</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code><code class="variable-group">}</code></span>,
+        <span class="summary-sig-arg">custom_map</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">undef_code</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">X</code><code class="variable-quote">'</code></span>)</span><br />
       Turns a three-letter code protein sequence into one with single letter codes.</td>
           <td align="right" valign="top">
@@ -270,23 +270,6 @@ Miscellaneous functions for dealing with sequences.
       Formatted string showing the 6 frame translations and GC content.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.SeqUtils-pysrc.html#six_frame_translations">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="Bio.SeqUtils-module.html#quick_FASTA_reader" class="summary-sig-name">quick_FASTA_reader</a>(<span class="summary-sig-arg">file</span>)</span><br />
-      Simple FASTA reader, returning a list of string tuples (DEPRECATED).</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.SeqUtils-pysrc.html#quick_FASTA_reader">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -462,7 +445,7 @@ searches only on forward strand</p>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">seq3</span>(<span class="sig-arg">seq</span>,
-        <span class="sig-arg">custom_map</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Ter</code><code class="variable-quote">'</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">custom_map</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">undef_code</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Xaa</code><code class="variable-quote">'</code></span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -471,21 +454,22 @@ searches only on forward strand</p>
   </tr></table>
   
   <p>Turn a one letter code protein sequence into one with three letter codes.</p>
-<p>The single input argument 'seq' should be a protein sequence using single
-letter codes, either as a python string or as a Seq or MutableSeq object.</p>
+<p>The single required input argument 'seq' should be a protein sequence using
+single letter codes, either as a python string or as a Seq or MutableSeq
+object.</p>
 <p>This function returns the amino acid sequence as a string using the three
 letter amino acid codes. Output follows the IUPAC standard (including
 ambiguous characters B for &quot;Asx&quot;, J for &quot;Xle&quot; and X for &quot;Xaa&quot;, and also U
 for &quot;Sel&quot; and O for &quot;Pyl&quot;) plus &quot;Ter&quot; for a terminator given as an asterisk.
 Any unknown character (including possible gap characters), is changed into
-'Xaa'.</p>
+'Xaa' by default.</p>
 <p>e.g.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> seq3
 <span class="py-prompt">&gt;&gt;&gt; </span>seq3(<span class="py-string">&quot;MAIVMGRWKGAR*&quot;</span>)
 <span class="py-output">'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'</span></pre>
 <p>You can set a custom translation of the codon termination code using the
-&quot;custom_map&quot; argument, e.g.</p>
+dictionary &quot;custom_map&quot; argument (which defaults to {'*': 'Ter'}), e.g.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>seq3(<span class="py-string">&quot;MAIVMGRWKGAR*&quot;</span>, custom_map={<span class="py-string">&quot;*&quot;</span>: <span class="py-string">&quot;***&quot;</span>})
 <span class="py-output">'MetAlaIleValMetGlyArgTrpLysGlyAlaArg***'</span></pre>
@@ -511,7 +495,7 @@ as '-', using the &quot;undef_code&quot; argument, e.g.</p>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">seq1</span>(<span class="sig-arg">seq</span>,
-        <span class="sig-arg">custom_map</span>=<span class="sig-default"><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">Ter</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code><code class="variable-group">}</code></span>,
+        <span class="sig-arg">custom_map</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">undef_code</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">X</code><code class="variable-quote">'</code></span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -520,14 +504,15 @@ as '-', using the &quot;undef_code&quot; argument, e.g.</p>
   </tr></table>
   
   <p>Turns a three-letter code protein sequence into one with single letter codes.</p>
-<p>The single input argument 'seq' should be a protein sequence using three-
-letter codes, either as a python string or as a Seq or MutableSeq object.</p>
+<p>The single required input argument 'seq' should be a protein sequence
+using three-letter codes, either as a python string or as a Seq or
+MutableSeq object.</p>
 <p>This function returns the amino acid sequence as a string using the one
 letter amino acid codes. Output follows the IUPAC standard (including
 ambiguous characters &quot;B&quot; for &quot;Asx&quot;, &quot;J&quot; for &quot;Xle&quot;, &quot;X&quot; for &quot;Xaa&quot;, &quot;U&quot; for
 &quot;Sel&quot;, and &quot;O&quot; for &quot;Pyl&quot;) plus &quot;*&quot; for a terminator given the &quot;Ter&quot; code.
-Any unknown character (including possible gap characters), is changed into
-'-'.</p>
+Any unknown character (including possible gap characters), is changed
+into '-' by default.</p>
 <p>e.g.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils <span class="py-keyword">import</span> seq3
@@ -539,7 +524,7 @@ Any unknown character (including possible gap characters), is changed into
 <span class="py-prompt">&gt;&gt;&gt; </span>seq1(<span class="py-string">&quot;METalaIlEValMetGLYArgtRplysGlyAlaARGTer&quot;</span>)
 <span class="py-output">'MAIVMGRWKGAR*'</span></pre>
 <p>You can set a custom translation of the codon termination code using the
-&quot;custom_map&quot; argument, e.g.</p>
+dictionary &quot;custom_map&quot; argument (defaulting to {'Ter': '*'}), e.g.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>seq1(<span class="py-string">&quot;MetAlaIleValMetGlyArgTrpLysGlyAlaArg***&quot;</span>, custom_map={<span class="py-string">&quot;***&quot;</span>: <span class="py-string">&quot;*&quot;</span>})
 <span class="py-output">'MAIVMGRWKGAR*'</span></pre>
@@ -667,48 +652,6 @@ similar to DNA Striders six-frame translation</p>
   </dl>
 </td></tr></table>
 </div>
-<a name="quick_FASTA_reader"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">quick_FASTA_reader</span>(<span class="sig-arg">file</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.SeqUtils-pysrc.html#quick_FASTA_reader">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Simple FASTA reader, returning a list of string tuples (DEPRECATED).</p>
-<p>The single argument 'file' should be the filename of a FASTA format file.
-This function will open and read in the entire file, constructing a list
-of all the records, each held as a tuple of strings (the sequence name or
-title, and its sequence).</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>seqs = quick_FASTA_reader(<span class="py-string">&quot;Fasta/dups.fasta&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> title, sequence <span class="py-keyword">in</span> seqs:
-<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (title, sequence))
-<span class="py-output">alpha ACGTA</span>
-<span class="py-output">beta CGTC</span>
-<span class="py-output">gamma CCGCC</span>
-<span class="py-output">alpha (again - this is a duplicate entry to test the indexing code) ACGTA</span>
-<span class="py-output">delta CGCGC</span></pre>
-<p>This function was is fast, but because it returns the data as a single in
-memory list, is unsuitable for large files where an iterator approach is
-preferable.</p>
-<p>You are generally encouraged to use Bio.SeqIO.parse(handle, &quot;fasta&quot;) which
-allows you to iterate over the records one by one (avoiding having all the
-records in memory at once).  Using Bio.SeqIO also makes it easy to switch
-between different input file formats.  However, please note that rather
-than simple strings, Bio.SeqIO uses SeqRecord objects for each record.</p>
-<p>If you want to use simple strings, use the function SimpleFastaParser
-added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
 <br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
@@ -738,7 +681,7 @@ added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:27 2015
+    Generated by Epydoc 3.0.1 on Wed Jun  8 15:02:45 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

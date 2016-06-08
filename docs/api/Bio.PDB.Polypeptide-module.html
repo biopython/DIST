@@ -59,52 +59,51 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module Polypeptide</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html">source&nbsp;code</a></span></p>
-<pre class="literalblock">
-Polypeptide-related classes (construction and representation).
-
-Simple example with multiple chains,
-
-    &gt;&gt;&gt; from Bio.PDB.PDBParser import PDBParser
-    &gt;&gt;&gt; from Bio.PDB.Polypeptide import PPBuilder
-    &gt;&gt;&gt; structure = PDBParser().get_structure('2BEG', 'PDB/2BEG.pdb')
-    &gt;&gt;&gt; ppb=PPBuilder()
-    &gt;&gt;&gt; for pp in ppb.build_peptides(structure):
-    ...     print(pp.get_sequence())
-    LVFFAEDVGSNKGAIIGLMVGGVVIA
-    LVFFAEDVGSNKGAIIGLMVGGVVIA
-    LVFFAEDVGSNKGAIIGLMVGGVVIA
-    LVFFAEDVGSNKGAIIGLMVGGVVIA
-    LVFFAEDVGSNKGAIIGLMVGGVVIA
-
-Example with non-standard amino acids using HETATM lines in the PDB file,
-in this case selenomethionine (MSE):
-
-    &gt;&gt;&gt; from Bio.PDB.PDBParser import PDBParser
-    &gt;&gt;&gt; from Bio.PDB.Polypeptide import PPBuilder
-    &gt;&gt;&gt; structure = PDBParser().get_structure('1A8O', 'PDB/1A8O.pdb')
-    &gt;&gt;&gt; ppb=PPBuilder()
-    &gt;&gt;&gt; for pp in ppb.build_peptides(structure):
-    ...     print(pp.get_sequence())
-    DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW
-    TETLLVQNANPDCKTILKALGPGATLEE
-    TACQG
-
-If you want to, you can include non-standard amino acids in the peptides:
-
-    &gt;&gt;&gt; for pp in ppb.build_peptides(structure, aa_only=False):
-    ...     print(pp.get_sequence())
-    ...     print(&quot;%s %s&quot; % (pp.get_sequence()[0], pp[0].get_resname()))
-    ...     print(&quot;%s %s&quot; % (pp.get_sequence()[-7], pp[-7].get_resname()))
-    ...     print(&quot;%s %s&quot; % (pp.get_sequence()[-6], pp[-6].get_resname()))
-    MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG
-    M MSE
-    M MSE
-    M MSE
-
-In this case the selenomethionines (the first and also seventh and sixth from
-last residues) have been shown as M (methionine) by the get_sequence method.
-
-</pre>
+<p>Polypeptide-related classes (construction and representation).</p>
+<p>Simple example with multiple chains,</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.PDBParser <span class="py-keyword">import</span> PDBParser
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.Polypeptide <span class="py-keyword">import</span> PPBuilder
+<span class="py-prompt">&gt;&gt;&gt; </span>structure = PDBParser().get_structure(<span class="py-string">'2BEG'</span>, <span class="py-string">'PDB/2BEG.pdb'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>ppb=PPBuilder()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> pp <span class="py-keyword">in</span> ppb.build_peptides(structure):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(pp.get_sequence())
+<span class="py-output">LVFFAEDVGSNKGAIIGLMVGGVVIA</span>
+<span class="py-output">LVFFAEDVGSNKGAIIGLMVGGVVIA</span>
+<span class="py-output">LVFFAEDVGSNKGAIIGLMVGGVVIA</span>
+<span class="py-output">LVFFAEDVGSNKGAIIGLMVGGVVIA</span>
+<span class="py-output">LVFFAEDVGSNKGAIIGLMVGGVVIA</span></pre>
+</blockquote>
+<p>Example with non-standard amino acids using HETATM lines in the PDB file,
+in this case selenomethionine (MSE):</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.PDBParser <span class="py-keyword">import</span> PDBParser
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.Polypeptide <span class="py-keyword">import</span> PPBuilder
+<span class="py-prompt">&gt;&gt;&gt; </span>structure = PDBParser().get_structure(<span class="py-string">'1A8O'</span>, <span class="py-string">'PDB/1A8O.pdb'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>ppb=PPBuilder()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> pp <span class="py-keyword">in</span> ppb.build_peptides(structure):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(pp.get_sequence())
+<span class="py-output">DIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNW</span>
+<span class="py-output">TETLLVQNANPDCKTILKALGPGATLEE</span>
+<span class="py-output">TACQG</span></pre>
+</blockquote>
+<p>If you want to, you can include non-standard amino acids in the peptides:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> pp <span class="py-keyword">in</span> ppb.build_peptides(structure, aa_only=False):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(pp.get_sequence())
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (pp.get_sequence()[0], pp[0].get_resname()))
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (pp.get_sequence()[-7], pp[-7].get_resname()))
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %s&quot;</span> % (pp.get_sequence()[-6], pp[-6].get_resname()))
+<span class="py-output">MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG</span>
+<span class="py-output">M MSE</span>
+<span class="py-output">M MSE</span>
+<span class="py-output">M MSE</span></pre>
+</blockquote>
+<p>In this case the selenomethionines (the first and also seventh and sixth from
+last residues) have been shown as M (methionine) by the get_sequence method.</p>
 
 <!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -179,7 +178,7 @@ last residues) have been shown as M (methionine) by the get_sequence method.
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.Polypeptide-module.html#index_to_one" class="summary-sig-name">index_to_one</a>(<span class="summary-sig-arg">index</span>)</span><br />
+          <td><span class="summary-sig"><a name="index_to_one"></a><span class="summary-sig-name">index_to_one</span>(<span class="summary-sig-arg">index</span>)</span><br />
       Index to corresponding one letter amino acid name.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#index_to_one">source&nbsp;code</a></span>
@@ -196,7 +195,7 @@ last residues) have been shown as M (methionine) by the get_sequence method.
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.Polypeptide-module.html#one_to_index" class="summary-sig-name">one_to_index</a>(<span class="summary-sig-arg">s</span>)</span><br />
+          <td><span class="summary-sig"><a name="one_to_index"></a><span class="summary-sig-name">one_to_index</span>(<span class="summary-sig-arg">s</span>)</span><br />
       One letter code to index.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#one_to_index">source&nbsp;code</a></span>
@@ -213,7 +212,7 @@ last residues) have been shown as M (methionine) by the get_sequence method.
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.Polypeptide-module.html#index_to_three" class="summary-sig-name">index_to_three</a>(<span class="summary-sig-arg">i</span>)</span><br />
+          <td><span class="summary-sig"><a name="index_to_three"></a><span class="summary-sig-name">index_to_three</span>(<span class="summary-sig-arg">i</span>)</span><br />
       Index to corresponding three letter amino acid name.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#index_to_three">source&nbsp;code</a></span>
@@ -230,7 +229,7 @@ last residues) have been shown as M (methionine) by the get_sequence method.
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.Polypeptide-module.html#three_to_index" class="summary-sig-name">three_to_index</a>(<span class="summary-sig-arg">s</span>)</span><br />
+          <td><span class="summary-sig"><a name="three_to_index"></a><span class="summary-sig-name">three_to_index</span>(<span class="summary-sig-arg">s</span>)</span><br />
       Three letter code to index.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#three_to_index">source&nbsp;code</a></span>
@@ -264,7 +263,7 @@ last residues) have been shown as M (methionine) by the get_sequence method.
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.Polypeptide-module.html#one_to_three" class="summary-sig-name">one_to_three</a>(<span class="summary-sig-arg">s</span>)</span><br />
+          <td><span class="summary-sig"><a name="one_to_three"></a><span class="summary-sig-name">one_to_three</span>(<span class="summary-sig-arg">s</span>)</span><br />
       One letter code to three letter code.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#one_to_three">source&nbsp;code</a></span>
@@ -455,114 +454,6 @@ last residues) have been shown as M (methionine) by the get_sequence method.
   </td>
 </tr>
 </table>
-<a name="index_to_one"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">index_to_one</span>(<span class="sig-arg">index</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#index_to_one">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <pre class="literalblock">
-Index to corresponding one letter amino acid name.
-
-&gt;&gt;&gt; index_to_one(0)
-'A'
-&gt;&gt;&gt; index_to_one(19)
-'Y'
-
-</pre>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="one_to_index"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">one_to_index</span>(<span class="sig-arg">s</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#one_to_index">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <pre class="literalblock">
-One letter code to index.
-
-&gt;&gt;&gt; one_to_index('A')
-0
-&gt;&gt;&gt; one_to_index('Y')
-19
-
-</pre>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="index_to_three"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">index_to_three</span>(<span class="sig-arg">i</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#index_to_three">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <pre class="literalblock">
-Index to corresponding three letter amino acid name.
-
-&gt;&gt;&gt; index_to_three(0)
-'ALA'
-&gt;&gt;&gt; index_to_three(19)
-'TYR'
-
-</pre>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="three_to_index"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">three_to_index</span>(<span class="sig-arg">s</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#three_to_index">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <pre class="literalblock">
-Three letter code to index.
-
-&gt;&gt;&gt; three_to_index('ALA')
-0
-&gt;&gt;&gt; three_to_index('TYR')
-19
-
-</pre>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
 <a name="three_to_one"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -577,49 +468,18 @@ Three letter code to index.
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-Three letter code to one letter code.
-
-&gt;&gt;&gt; three_to_one('ALA')
-'A'
-&gt;&gt;&gt; three_to_one('TYR')
-'Y'
-
-For non-standard amino acids, you get a KeyError:
-
-&gt;&gt;&gt; three_to_one('MSE')
-Traceback (most recent call last):
-   ...
-KeyError: 'MSE'
-
-</pre>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="one_to_three"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">one_to_three</span>(<span class="sig-arg">s</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.PDB.Polypeptide-pysrc.html#one_to_three">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <pre class="literalblock">
-One letter code to three letter code.
-
-&gt;&gt;&gt; one_to_three('A')
-'ALA'
-&gt;&gt;&gt; one_to_three('Y')
-'TYR'
-
-</pre>
+  <p>Three letter code to one letter code.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>three_to_one(<span class="py-string">'ALA'</span>)
+<span class="py-output">'A'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>three_to_one(<span class="py-string">'TYR'</span>)
+<span class="py-output">'Y'</span></pre>
+<p>For non-standard amino acids, you get a KeyError:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>three_to_one(<span class="py-string">'MSE'</span>)
+<span class="py-except">Traceback (most recent call last):</span>
+<span class="py-except">   ...</span>
+<span class="py-except">KeyError: 'MSE'</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -639,26 +499,20 @@ One letter code to three letter code.
     </td>
   </tr></table>
   
-  <pre class="literalblock">
-Return True if residue object/string is an amino acid.
-
-@param residue: a L{Residue} object OR a three letter amino acid code
-@type residue: L{Residue} or string
-
-@param standard: flag to check for the 20 AA (default false)
-@type standard: boolean
-
-&gt;&gt;&gt; is_aa('ALA')
-True
-
-Known three letter codes for modified amino acids are supported,
-
-&gt;&gt;&gt; is_aa('FME')
-True
-&gt;&gt;&gt; is_aa('FME', standard=True)
-False
-
-</pre>
+  <p>Return True if residue object/string is an amino acid.</p>
+<p>&#64;param residue: a L{Residue} object OR a three letter amino acid code
+&#64;type residue: L{Residue} or string</p>
+<p>&#64;param standard: flag to check for the 20 AA (default false)
+&#64;type standard: boolean</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>is_aa(<span class="py-string">'ALA'</span>)
+<span class="py-output">True</span></pre>
+<p>Known three letter codes for modified amino acids are supported,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>is_aa(<span class="py-string">'FME'</span>)
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>is_aa(<span class="py-string">'FME'</span>, standard=True)
+<span class="py-output">False</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -867,7 +721,7 @@ False
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:20 2015
+    Generated by Epydoc 3.0.1 on Wed Jun  8 15:02:40 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

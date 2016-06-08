@@ -68,7 +68,7 @@ object --+
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="Bio.Seq.UnknownSeq-class.html">UnknownSeq</a></li><li>, <a href="Bio.codonalign.codonseq.CodonSeq-class.html">codonalign.codonseq.CodonSeq</a></li><li>, <a href="Bio.Motif.Parsers.MEME.MEMEInstance-class.html">Motif.Parsers.MEME.MEMEInstance</a></li><li>, <a href="Bio.motifs.meme.Instance-class.html">motifs.meme.Instance</a></li><li>, <a href="BioSQL.BioSeq.DBSeq-class.html">BioSQL.BioSeq.DBSeq</a></li>  </ul>
+<li><a href="Bio.Seq.UnknownSeq-class.html">UnknownSeq</a></li><li>, <a href="Bio.codonalign.codonseq.CodonSeq-class.html">codonalign.codonseq.CodonSeq</a></li><li>, <a href="Bio.motifs.meme.Instance-class.html">motifs.meme.Instance</a></li><li>, <a href="BioSQL.BioSeq.DBSeq-class.html">BioSQL.BioSeq.DBSeq</a></li>  </ul>
 </dd></dl>
 
 <hr />
@@ -691,7 +691,8 @@ not applicable to sequences with a protein alphabet).</p>
         <span class="summary-sig-arg">table</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Standard</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">stop_symbol</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">to_stop</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">cds</span>=<span class="summary-sig-default">False</span>)</span><br />
+        <span class="summary-sig-arg">cds</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">gap</span>=<span class="summary-sig-default">None</span>)</span><br />
       Turns a nucleotide sequence into a protein sequence.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Seq-pysrc.html#Seq.translate">source&nbsp;code</a></span>
@@ -797,13 +798,11 @@ not applicable to sequences with a protein alphabet).</p>
   </tr></table>
   
   <p>Create a Seq object.</p>
-<dl class="rst-rst-docutils rst-docutils">
+<dl class="rst-docutils">
 <dt>Arguments:</dt>
-<dd><ul class="rst-rst-first rst-rst-last rst-rst-simple rst-first rst-last rst-simple">
-<li><p class="rst-first rst-first">seq - Sequence, required (string)</p>
-</li>
-<li><p class="rst-first rst-first">alphabet - Optional argument, an Alphabet object from Bio.Alphabet</p>
-</li>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>seq - Sequence, required (string)</li>
+<li>alphabet - Optional argument, an Alphabet object from Bio.Alphabet</li>
 </ul>
 </dd>
 </dl>
@@ -1769,7 +1768,8 @@ exception:</p>
         <span class="sig-arg">table</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Standard</code><code class="variable-quote">'</code></span>,
         <span class="sig-arg">stop_symbol</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
         <span class="sig-arg">to_stop</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">cds</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">cds</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">gap</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.Seq-pysrc.html#Seq.translate">source&nbsp;code</a></span>&nbsp;
@@ -1802,6 +1802,8 @@ sequence length is a multiple of three, and that there is a
 single in frame stop codon at the end (this will be excluded
 from the protein sequence, regardless of the to_stop option).
 If these tests fail, an exception is raised.</li>
+<li>gap - Single character string to denote symbol used for gaps.
+It will try to guess the gap character from the alphabet.</li>
 </ul>
 </dd>
 </dl>
@@ -1840,10 +1842,21 @@ has no effect:</p>
 <span class="py-output">Seq('LAIVMGR', ExtendedIUPACProtein())</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>coding_dna2.translate(to_stop=True)
 <span class="py-output">Seq('LAIVMGR', ExtendedIUPACProtein())</span></pre>
+<p>When translating gapped sequences, the gap character is inferred from
+the alphabet:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> Gapped
+<span class="py-prompt">&gt;&gt;&gt; </span>coding_dna3 = Seq(<span class="py-string">&quot;GTG---GCCATT&quot;</span>, Gapped(IUPAC.unambiguous_dna))
+<span class="py-prompt">&gt;&gt;&gt; </span>coding_dna3.translate()
+<span class="py-output">Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))</span></pre>
+<p>It is possible to pass the gap character when the alphabet is missing:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>coding_dna4 = Seq(<span class="py-string">&quot;GTG---GCCATT&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>coding_dna4.translate(gap=<span class="py-string">'-'</span>)
+<span class="py-output">Seq('V-AI', Gapped(ExtendedIUPACProtein(), '-'))</span></pre>
 <p>NOTE - Ambiguous codons like &quot;TAN&quot; or &quot;NNN&quot; could be an amino acid
 or a stop codon.  These are translated as &quot;X&quot;.  Any invalid codon
 (e.g. &quot;TA?&quot; or &quot;T-A&quot;) will throw a TranslationError.</p>
-<p>NOTE - Does NOT support gapped sequences.</p>
 <p>NOTE - This does NOT behave like the python string's translate
 method.  For that use str(my_seq).translate(...) instead.</p>
   <dl class="fields">
@@ -1957,7 +1970,7 @@ define one, an exception is raised:</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Oct 21 18:04:18 2015
+    Generated by Epydoc 3.0.1 on Wed Jun  8 15:05:26 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

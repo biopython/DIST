@@ -189,7 +189,8 @@
         <span class="summary-sig-arg">stop_symbol</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">to_stop</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">cds</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">pos_stop</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">X</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">pos_stop</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">X</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">gap</span>=<span class="summary-sig-default">None</span>)</span><br />
       Helper function to translate a nucleotide string (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Seq-pysrc.html#_translate_str">source&nbsp;code</a></span>
@@ -210,7 +211,8 @@
         <span class="summary-sig-arg">table</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Standard</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">stop_symbol</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">to_stop</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">cds</span>=<span class="summary-sig-default">False</span>)</span><br />
+        <span class="summary-sig-arg">cds</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">gap</span>=<span class="summary-sig-default">None</span>)</span><br />
       Translate a nucleotide sequence into amino acids.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Seq-pysrc.html#translate">source&nbsp;code</a></span>
@@ -424,7 +426,8 @@ python string's translate method to use in a (reverse) complement.</p>
         <span class="sig-arg">stop_symbol</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
         <span class="sig-arg">to_stop</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">cds</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">pos_stop</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">X</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">pos_stop</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">X</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">gap</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.Seq-pysrc.html#_translate_str">source&nbsp;code</a></span>&nbsp;
@@ -450,6 +453,8 @@ sequence length is a multiple of three, and that there is a
 single in frame stop codon at the end (this will be excluded
 from the protein sequence, regardless of the to_stop option).
 If these tests fail, an exception is raised.</li>
+<li>gap - Single character string to denote symbol used for gaps.
+Defaults to None.</li>
 </ul>
 </dd>
 </dl>
@@ -470,7 +475,7 @@ If these tests fail, an exception is raised.</li>
 <span class="py-except">Traceback (most recent call last):</span>
 <span class="py-except">   ...</span>
 <span class="py-except">TranslationError: Codon 'TA?' is invalid</span></pre>
-<p>In a change to older verions of Biopython, partial codons are now
+<p>In a change to older versions of Biopython, partial codons are now
 always regarded as an error (previously only checked if cds=True)
 and will trigger a warning (likely to become an exception in a
 future release).</p>
@@ -503,7 +508,8 @@ while number of codons.</p>
         <span class="sig-arg">table</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Standard</code><code class="variable-quote">'</code></span>,
         <span class="sig-arg">stop_symbol</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
         <span class="sig-arg">to_stop</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">cds</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">cds</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">gap</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.Seq-pysrc.html#translate">source&nbsp;code</a></span>&nbsp;
@@ -535,6 +541,8 @@ sequence length is a multiple of three, and that there is a
 single in frame stop codon at the end (this will be excluded
 from the protein sequence, regardless of the to_stop option).
 If these tests fail, an exception is raised.</li>
+<li>gap - Single character string to denote symbol used for gaps.
+Defaults to None.</li>
 </ul>
 </dd>
 </dl>
@@ -570,7 +578,6 @@ argument has no effect:</p>
 <p>NOTE - Ambiguous codons like &quot;TAN&quot; or &quot;NNN&quot; could be an amino acid
 or a stop codon.  These are translated as &quot;X&quot;.  Any invalid codon
 (e.g. &quot;TA?&quot; or &quot;T-A&quot;) will throw a TranslationError.</p>
-<p>NOTE - Does NOT support gapped sequences.</p>
 <p>It will however translate either DNA or RNA.</p>
   <dl class="fields">
   </dl>
@@ -702,7 +709,7 @@ Given a Seq or a MutableSeq, returns a new Seq object with the same alphabet.</p
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:26 2015
+    Generated by Epydoc 3.0.1 on Wed Jun  8 15:02:44 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

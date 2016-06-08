@@ -61,13 +61,27 @@
 <p>Provides code to access NCBI over the WWW.</p>
 <p>The main Entrez web page is available at:
 <a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/Entrez/" target="_top">http://www.ncbi.nlm.nih.gov/Entrez/</a></p>
-<p>A list of the Entrez utilities is available at:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html</a></p>
+<p>Entrez Programming Utilities web page is available at:
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25501/" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25501/</a></p>
+<p>This module provides a number of functions like <tt class="rst-docutils literal">efetch</tt> (short for
+Entrez Fetch) which will return the data as a handle object. This is
+a standard interface used in Python for reading data from a file, or
+in this case a remote network connection, and provides methods like
+<tt class="rst-docutils literal">.read()</tt> or offers iteration over the contents line by line. See
+also &quot;What the heck is a handle?&quot; in the Biopython Tutorial and
+Cookbook: <a class="rst-reference external" href="http://biopython.org/DIST/docs/tutorial/Tutorial.html" target="_top">http://biopython.org/DIST/docs/tutorial/Tutorial.html</a>
+<a class="rst-reference external" href="http://biopython.org/DIST/docs/tutorial/Tutorial.pdf" target="_top">http://biopython.org/DIST/docs/tutorial/Tutorial.pdf</a></p>
+<p>Unlike a handle to a file on disk from the <tt class="rst-docutils literal">open(filename)</tt> function,
+which has a <tt class="rst-docutils literal">.name</tt> attribute giving the filename, the handles from
+<tt class="rst-docutils literal">Bio.Entrez</tt> all have a <tt class="rst-docutils literal">.url</tt> attribute instead giving the URL
+used to connect to the NCBI Entrez API.</p>
+<p>The Entrez module also provides an XML parser which takes a handle
+as input.</p>
 <p>Variables:</p>
 <blockquote>
 <ul class="rst-simple">
 <li>email        Set the Entrez email parameter (default is not set).</li>
-<li>tool         Set the Entrez tool parameter (default is  biopython).</li>
+<li>tool         Set the Entrez tool parameter (default is <tt class="rst-docutils literal">biopython</tt>).</li>
 </ul>
 </blockquote>
 <p>Functions:</p>
@@ -382,7 +396,7 @@ multiple records, and is particular useful for large files.</p>
         <tr>
           <td><span class="summary-sig"><a href="Bio.Entrez-module.html#_open" class="summary-sig-name" onclick="show_private();">_open</a>(<span class="summary-sig-arg">cgi</span>,
         <span class="summary-sig-arg">params</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">post</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">post</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">ecitmatch</span>=<span class="summary-sig-default">False</span>)</span><br />
       Helper function to build the URL and open a handle to it (PRIVATE).</td>
           <td align="right" valign="top">
@@ -489,7 +503,7 @@ multiple records, and is particular useful for large files.</p>
 <p>Posts a file containing a list of UIs for future use in the user's
 environment to use with subsequent search strategies.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/epost_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost</a></p>
 <p>Return a handle to the results.</p>
 <p>Raises an IOError exception if there's a network error.</p>
   <dl class="fields">
@@ -515,7 +529,7 @@ environment to use with subsequent search strategies.</p>
 <p>EFetch retrieves records in the requested format from a list of one or
 more UIs or from user's environment.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch</a></p>
 <p>Return a handle to the results.</p>
 <p>Raises an IOError exception if there's a network error.</p>
 <p>Short example:</p>
@@ -526,6 +540,8 @@ more UIs or from user's environment.</p>
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().strip())
 <span class="py-output">LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
+<p>This will automatically use an HTTP POST rather than HTTP GET if there
+are over 200 identifiers as recommended by the NCBI.</p>
 <p><strong>Warning:</strong> The NCBI changed the default retmode in Feb 2012, so many
 databases which previously returned text output now give XML.</p>
   <dl class="fields">
@@ -553,7 +569,7 @@ databases which previously returned text output now give XML.</p>
 and ESummary) and term translations, and optionally retains results
 for future use in the user's environment.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch</a></p>
 <p>Return a handle to the results which are always in XML format.</p>
 <p>Raises an IOError exception if there's a network error.</p>
 <p>Short example:</p>
@@ -594,7 +610,7 @@ scores for links to Entrez databases or Related Articles; creates a
 hyperlink to the primary LinkOut provider for a specific ID and
 database, or lists LinkOut URLs and attributes for multiple IDs.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/elink_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink</a></p>
 <p>Return a handle to the results, by default in XML format.</p>
 <p>Raises an IOError exception if there's a network error.</p>
 <p>This example finds articles related to the Biopython application
@@ -634,7 +650,7 @@ note's entry in the PubMed database:</p>
 <p>EInfo provides field names, index term counts, last update, and
 available links for each Entrez database.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/einfo_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/einfo_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EInfo" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EInfo</a></p>
 <p>Return a handle to the results, by default in XML format.</p>
 <p>Raises an IOError exception if there's a network error.</p>
 <p>Short example:</p>
@@ -666,7 +682,7 @@ available links for each Entrez database.</p>
 <p>ESummary retrieves document summaries from a list of primary IDs or
 from the user's environment.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary</a></p>
 <p>Return a handle to the results, by default in XML format.</p>
 <p>Raises an IOError exception if there's a network error.</p>
 <p>This example discovers more about entry 30367 in the journals database:</p>
@@ -702,7 +718,7 @@ from the user's environment.</p>
 <p>EGQuery provides Entrez database counts in XML for a single search
 using Global Query.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/egquery_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery</a></p>
 <p>Return a handle to the results in XML format.</p>
 <p>Raises an IOError exception if there's a network error.</p>
 <p>This quick example based on a longer version from the Biopython
@@ -739,7 +755,7 @@ in PubMedCentral:</p>
   <p>ESpell retrieves spelling suggestions, returned in a results handle.</p>
 <p>ESpell retrieves spelling suggestions, if available.</p>
 <p>See the online documentation for an explanation of the parameters:
-<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/entrez/query/static/espell_help.html" target="_top">http://www.ncbi.nlm.nih.gov/entrez/query/static/espell_help.html</a></p>
+<a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell</a></p>
 <p>Return a handle to the results, by default in XML format.</p>
 <p>Raises an IOError exception if there's a network error.</p>
 <p>Short example:</p>
@@ -871,7 +887,7 @@ the tag name in my_element.tag.</p>
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">_open</span>(<span class="sig-arg">cgi</span>,
         <span class="sig-arg">params</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">post</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">post</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">ecitmatch</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -883,6 +899,12 @@ the tag name in my_element.tag.</p>
 <p>Open a handle to Entrez.  cgi is the URL for the cgi script to access.
 params is a dictionary with the options to pass to it.  Does some
 simple error checking, and will raise an IOError if it encounters one.</p>
+<p>The arugment post should be a boolean to explicitly control if an HTTP
+POST should be used rather an HTTP GET based on the query length.
+By default (post=None), POST is used if the query URL would be over
+1000 characters long.</p>
+<p>The arugment post should be a boolean to explicitly control if an HTTP
+POST should be used rather an HTTP GET based on the query length.</p>
 <p>This function also enforces the &quot;up to three queries per second rule&quot;
 to avoid abusing the NCBI servers.</p>
   <dl class="fields">
@@ -918,7 +940,7 @@ to avoid abusing the NCBI servers.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Oct 21 18:01:14 2015
+    Generated by Epydoc 3.0.1 on Wed Jun  8 15:02:37 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
