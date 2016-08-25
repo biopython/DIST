@@ -61,12 +61,12 @@
 <p>This package implements pairwise sequence alignment using a dynamic
 programming algorithm.</p>
 <p>This provides functions to get global and local alignments between two
-sequences.  A global alignment finds the best concordance between all
-characters in two sequences.  A local alignment finds just the
+sequences. A global alignment finds the best concordance between all
+characters in two sequences. A local alignment finds just the
 subsequences that align the best.</p>
 <p>When doing alignments, you can specify the match score and gap
 penalties.  The match score indicates the compatibility between an
-alignment of two characters in the sequences.  Highly compatible
+alignment of two characters in the sequences. Highly compatible
 characters should be given positive scores, and incompatible ones
 should be given negative scores or 0.  The gap penalties should be
 negative.</p>
@@ -80,8 +80,9 @@ the second indicates the parameters for gap penalties.</p>
 <p>The match parameters are:</p>
 <pre class="rst-literal-block">
 CODE  DESCRIPTION
-x     No parameters.  Identical characters have score of 1, otherwise 0.
-m     A match score is the score of identical chars, otherwise mismatch score.
+x     No parameters. Identical characters have score of 1, otherwise 0.
+m     A match score is the score of identical chars, otherwise mismatch
+      score.
 d     A dictionary returns the score of any pair of characters.
 c     A callback function returns scores.
 </pre>
@@ -94,93 +95,184 @@ d     The sequences have different open and extend gap penalties.
 c     A callback function returns the gap penalties.
 </pre>
 <p>All the different alignment functions are contained in an object
-&quot;align&quot;.  For example:</p>
+<tt class="rst-docutils literal">align</tt>. For example:</p>
 <blockquote>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> pairwise2
 <span class="py-prompt">&gt;&gt;&gt; </span>alignments = pairwise2.align.globalxx(<span class="py-string">&quot;ACCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>)</pre>
 </blockquote>
-<p>will return a list of the alignments between the two strings.  The
-parameters of the alignment function depends on the function called.
+<p>will return a list of the alignments between the two strings. For a nice
+printout, use the <tt class="rst-docutils literal">format_alignment</tt> method of the module:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.pairwise2 <span class="py-keyword">import</span> format_alignment
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(format_alignment(*alignments[0]))
+<span class="py-output">ACCGT</span>
+<span class="py-output">|||||</span>
+<span class="py-output">A-CG-</span>
+<span class="py-output">  Score=3</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+<p>All alignment functions have the following arguments:</p>
+<ul class="rst-simple">
+<li>Two sequences: strings, Biopython sequence objects or lists.
+Lists are useful for suppling sequences which contain residues that are
+encoded by more than one letter.</li>
+<li><tt class="rst-docutils literal">penalize_extend_when_opening</tt>: boolean (default: False).
+Whether to count an extension penalty when opening a gap. If false, a gap of
+1 is only penalized an &quot;open&quot; penalty, otherwise it is penalized
+&quot;open+extend&quot;.</li>
+<li><tt class="rst-docutils literal">penalize_end_gaps</tt>: boolean.
+Whether to count the gaps at the ends of an alignment. By default, they are
+counted for global alignments but not for local ones. Setting
+<tt class="rst-docutils literal">penalize_end_gaps</tt> to (boolean, boolean) allows you to specify for the
+two sequences separately whether gaps at the end of the alignment should be
+counted.</li>
+<li><tt class="rst-docutils literal">gap_char</tt>: string (default: <tt class="rst-docutils literal"><span class="pre">'-'</span></tt>).
+Which character to use as a gap character in the alignment returned. If your
+input sequences are lists, you must change this to <tt class="rst-docutils literal"><span class="pre">['-']</span></tt>.</li>
+<li><tt class="rst-docutils literal">force_generic</tt>: boolean (default: False).
+Always use the generic, non-cached, dynamic programming function (slow!).
+For debugging.</li>
+<li><tt class="rst-docutils literal">score_only</tt>: boolean (default: False).
+Only get the best score, don't recover any alignments. The return value of
+the function is the score. Faster and uses less memory.</li>
+<li><tt class="rst-docutils literal">one_alignment_only</tt>: boolean (default: False).
+Only recover one alignment.</li>
+</ul>
+<p>The other parameters of the alignment function depend on the function called.
 Some examples:</p>
-<pre class="rst-literal-block">
-# Find the best global alignment between the two sequences.
-# Identical characters are given 1 point.  No points are deducted
-# for mismatches or gaps.
-&gt;&gt;&gt; from Bio.pairwise2 import format_alignment
-&gt;&gt;&gt; for a in pairwise2.align.globalxx(&quot;ACCGT&quot;, &quot;ACG&quot;):
-...     print(format_alignment(*a))
-ACCGT
-|||||
-AC-G-
-  Score=3
-&lt;BLANKLINE&gt;
-ACCGT
-|||||
-A-CG-
-  Score=3
-&lt;BLANKLINE&gt;
-
-# Same thing as before, but with a local alignment.
-&gt;&gt;&gt; for a in pairwise2.align.localxx(&quot;ACCGT&quot;, &quot;ACG&quot;):
-...     print(format_alignment(*a))
-ACCGT
-||||
-AC-G-
-  Score=3
-&lt;BLANKLINE&gt;
-ACCGT
-||||
-A-CG-
-  Score=3
-&lt;BLANKLINE&gt;
-
-# Do a global alignment.  Identical characters are given 2 points,
-# 1 point is deducted for each non-identical character.
-&gt;&gt;&gt; for a in pairwise2.align.globalmx(&quot;ACCGT&quot;, &quot;ACG&quot;, 2, -1):
-...     print(format_alignment(*a))
-ACCGT
-|||||
-AC-G-
-  Score=6
-&lt;BLANKLINE&gt;
-ACCGT
-|||||
-A-CG-
-  Score=6
-&lt;BLANKLINE&gt;
-
-# Same as above, except now 0.5 points are deducted when opening a
-# gap, and 0.1 points are deducted when extending it.
-&gt;&gt;&gt; for a in pairwise2.align.globalms(&quot;ACCGT&quot;, &quot;ACG&quot;, 2, -1, -.5, -.1):
-...     print(format_alignment(*a))
-ACCGT
-|||||
-AC-G-
-  Score=5
-&lt;BLANKLINE&gt;
-ACCGT
-|||||
-A-CG-
-  Score=5
-&lt;BLANKLINE&gt;
-</pre>
-<p>The alignment function can also use known matrices already included in
-Biopython ( Bio.SubsMat -&gt; MatrixInfo ):</p>
-<pre class="rst-literal-block">
-&gt;&gt;&gt; from Bio.SubsMat import MatrixInfo as matlist
-&gt;&gt;&gt; matrix = matlist.blosum62
-&gt;&gt;&gt; for a in pairwise2.align.globaldx(&quot;KEVLA&quot;, &quot;EVL&quot;, matrix):
-...     print(format_alignment(*a))
-KEVLA
-|||||
--EVL-
-  Score=13
-&lt;BLANKLINE&gt;
-</pre>
+<ul>
+<li><p class="rst-first">Find the best global alignment between the two sequences. Identical
+characters are given 1 point. No points are deducted for mismatches or gaps.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.globalxx(<span class="py-string">&quot;ACCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
+<span class="py-output">ACCGT</span>
+<span class="py-output">|||||</span>
+<span class="py-output">A-CG-</span>
+<span class="py-output">  Score=3</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">ACCGT</span>
+<span class="py-output">|||||</span>
+<span class="py-output">AC-G-</span>
+<span class="py-output">  Score=3</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+</li>
+<li><p class="rst-first">Same thing as before, but with a local alignment.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.localxx(<span class="py-string">&quot;ACCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
+<span class="py-output">ACCGT</span>
+<span class="py-output">||||</span>
+<span class="py-output">A-CG-</span>
+<span class="py-output">  Score=3</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">ACCGT</span>
+<span class="py-output">||||</span>
+<span class="py-output">AC-G-</span>
+<span class="py-output">  Score=3</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+</li>
+<li><p class="rst-first">Do a global alignment. Identical characters are given 2 points, 1 point is
+deducted for each non-identical character. Don't penalize gaps.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.globalmx(<span class="py-string">&quot;ACCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>, 2, -1):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
+<span class="py-output">ACCGT</span>
+<span class="py-output">|||||</span>
+<span class="py-output">A-CG-</span>
+<span class="py-output">  Score=6</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">ACCGT</span>
+<span class="py-output">|||||</span>
+<span class="py-output">AC-G-</span>
+<span class="py-output">  Score=6</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+</li>
+<li><p class="rst-first">Same as above, except now 0.5 points are deducted when opening a gap, and
+0.1 points are deducted when extending it.</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.globalms(<span class="py-string">&quot;ACCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>, 2, -1, -.5, -.1):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
+<span class="py-output">ACCGT</span>
+<span class="py-output">|||||</span>
+<span class="py-output">A-CG-</span>
+<span class="py-output">  Score=5</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">ACCGT</span>
+<span class="py-output">|||||</span>
+<span class="py-output">AC-G-</span>
+<span class="py-output">  Score=5</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+</li>
+<li><p class="rst-first">Depending on the penalties, a gap in one sequence may be followed by a gap in
+the other sequence.If you don't like this behaviour, increase the gap-open
+penalty:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.globalms(<span class="py-string">&quot;A&quot;</span>, <span class="py-string">&quot;T&quot;</span>, 5, -4, -1, -.1):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
+<span class="py-output">A-</span>
+<span class="py-output">||</span>
+<span class="py-output">-T</span>
+<span class="py-output">  Score=-2</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.globalms(<span class="py-string">&quot;A&quot;</span>, <span class="py-string">&quot;T&quot;</span>, 5, -4, -3, -.1):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
+<span class="py-output">A</span>
+<span class="py-output">|</span>
+<span class="py-output">T</span>
+<span class="py-output">  Score=-4</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+</li>
+<li><p class="rst-first">The alignment function can also use known matrices already included in
+Biopython (<tt class="rst-docutils literal">MatrixInfo</tt> from <tt class="rst-docutils literal">Bio.SubsMat</tt>):</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SubsMat <span class="py-keyword">import</span> MatrixInfo <span class="py-keyword">as</span> matlist
+<span class="py-prompt">&gt;&gt;&gt; </span>matrix = matlist.blosum62
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.globaldx(<span class="py-string">&quot;KEVLA&quot;</span>, <span class="py-string">&quot;EVL&quot;</span>, matrix):
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
+<span class="py-output">KEVLA</span>
+<span class="py-output">|||||</span>
+<span class="py-output">-EVL-</span>
+<span class="py-output">  Score=13</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+</blockquote>
+</li>
+<li><p class="rst-first">With the parameter <tt class="rst-docutils literal">c</tt> you can define your own match- and gap functions.
+E.g. to define an affine logarithmic gap function and using it:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> math <span class="py-keyword">import</span> log
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">gap_function</span>(x, y):  <span class="py-comment"># x is gap position in seq, y is gap length</span>
+<span class="py-more">... </span>    <span class="py-keyword">if</span> y == 0:  <span class="py-comment"># No gap</span>
+<span class="py-more">... </span>        return 0
+<span class="py-more">... </span>    <span class="py-keyword">elif</span> y == 1:  <span class="py-comment"># Gap open penalty</span>
+<span class="py-more">... </span>        return -2
+<span class="py-more">... </span>    return - (2 + y/4.0 + log(y)/2.0)
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>alignment = pairwise2.align.globalmc(<span class="py-string">&quot;ACCCCCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>, 5, -4,
+<span class="py-more">... </span>                                     gap_function, gap_function)</pre>
+</blockquote>
+<p>You can define different gap functions for each sequence.
+Self-defined match functions must take the two residues to be compared and
+return a score.</p>
+</li>
+</ul>
 <p>To see a description of the parameters for a function, please look at
 the docstring for the function via the help function, e.g.
-type help(pairwise2.align.localds) at the Python prompt.</p>
+type <tt class="rst-docutils literal">help(pairwise2.align.localds</tt>) at the Python prompt.</p>
 
 <!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -258,7 +350,8 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
         <span class="summary-sig-arg">gap_char</span>,
         <span class="summary-sig-arg">force_generic</span>,
         <span class="summary-sig-arg">score_only</span>,
-        <span class="summary-sig-arg">one_alignment_only</span>)</span></td>
+        <span class="summary-sig-arg">one_alignment_only</span>)</span><br />
+      Return a list of alignments between two sequences or its score</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_align">source&nbsp;code</a></span>
             
@@ -274,15 +367,15 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_make_score_matrix_generic"></a><span class="summary-sig-name">_make_score_matrix_generic</span>(<span class="summary-sig-arg">sequenceA</span>,
+          <td><span class="summary-sig"><a href="Bio.pairwise2-module.html#_make_score_matrix_generic" class="summary-sig-name" onclick="show_private();">_make_score_matrix_generic</a>(<span class="summary-sig-arg">sequenceA</span>,
         <span class="summary-sig-arg">sequenceB</span>,
         <span class="summary-sig-arg">match_fn</span>,
         <span class="summary-sig-arg">gap_A_fn</span>,
         <span class="summary-sig-arg">gap_B_fn</span>,
-        <span class="summary-sig-arg">penalize_extend_when_opening</span>,
         <span class="summary-sig-arg">penalize_end_gaps</span>,
         <span class="summary-sig-arg">align_globally</span>,
-        <span class="summary-sig-arg">score_only</span>)</span></td>
+        <span class="summary-sig-arg">score_only</span>)</span><br />
+      Generate a score and traceback matrix according to Needleman-Wunsch</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_make_score_matrix_generic">source&nbsp;code</a></span>
             
@@ -305,7 +398,10 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
         <span class="summary-sig-arg">trace_matrix</span>,
         <span class="summary-sig-arg">align_globally</span>,
         <span class="summary-sig-arg">gap_char</span>,
-        <span class="summary-sig-arg">one_alignment_only</span>)</span></td>
+        <span class="summary-sig-arg">one_alignment_only</span>,
+        <span class="summary-sig-arg">gap_A_fn</span>,
+        <span class="summary-sig-arg">gap_B_fn</span>)</span><br />
+      Do the backtracing and return a list of alignments</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_recover_alignments">source&nbsp;code</a></span>
             
@@ -321,13 +417,9 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_find_start"></a><span class="summary-sig-name">_find_start</span>(<span class="summary-sig-arg">score_matrix</span>,
-        <span class="summary-sig-arg">sequenceA</span>,
-        <span class="summary-sig-arg">sequenceB</span>,
-        <span class="summary-sig-arg">gap_A_fn</span>,
-        <span class="summary-sig-arg">gap_B_fn</span>,
-        <span class="summary-sig-arg">penalize_end_gaps</span>,
-        <span class="summary-sig-arg">align_globally</span>)</span></td>
+          <td><span class="summary-sig"><a href="Bio.pairwise2-module.html#_find_start" class="summary-sig-name" onclick="show_private();">_find_start</a>(<span class="summary-sig-arg">score_matrix</span>,
+        <span class="summary-sig-arg">align_globally</span>)</span><br />
+      Return a list of starting points (score, (row, col)).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_start">source&nbsp;code</a></span>
             
@@ -343,44 +435,8 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_find_global_start"></a><span class="summary-sig-name">_find_global_start</span>(<span class="summary-sig-arg">sequenceA</span>,
-        <span class="summary-sig-arg">sequenceB</span>,
-        <span class="summary-sig-arg">score_matrix</span>,
-        <span class="summary-sig-arg">gap_A_fn</span>,
-        <span class="summary-sig-arg">gap_B_fn</span>,
-        <span class="summary-sig-arg">penalize_end_gaps</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_global_start">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_find_local_start"></a><span class="summary-sig-name">_find_local_start</span>(<span class="summary-sig-arg">score_matrix</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_local_start">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_clean_alignments"></a><span class="summary-sig-name">_clean_alignments</span>(<span class="summary-sig-arg">alignments</span>)</span></td>
+          <td><span class="summary-sig"><a name="_clean_alignments"></a><span class="summary-sig-name">_clean_alignments</span>(<span class="summary-sig-arg">alignments</span>)</span><br />
+      Take a list of alignments and return a cleaned version.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_clean_alignments">source&nbsp;code</a></span>
             
@@ -396,11 +452,16 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_pad_until_equal"></a><span class="summary-sig-name">_pad_until_equal</span>(<span class="summary-sig-arg">s1</span>,
-        <span class="summary-sig-arg">s2</span>,
-        <span class="summary-sig-arg">char</span>)</span></td>
+          <td><span class="summary-sig"><a name="_finish_backtrace"></a><span class="summary-sig-name">_finish_backtrace</span>(<span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">ali_seqA</span>,
+        <span class="summary-sig-arg">ali_seqB</span>,
+        <span class="summary-sig-arg">row</span>,
+        <span class="summary-sig-arg">col</span>,
+        <span class="summary-sig-arg">gap_char</span>)</span><br />
+      Add remaining sequences and fill with gaps if neccessary</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_pad_until_equal">source&nbsp;code</a></span>
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_finish_backtrace">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -414,47 +475,25 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_lpad_until_equal"></a><span class="summary-sig-name">_lpad_until_equal</span>(<span class="summary-sig-arg">s1</span>,
-        <span class="summary-sig-arg">s2</span>,
-        <span class="summary-sig-arg">char</span>)</span></td>
+          <td><span class="summary-sig"><a name="_find_gap_open"></a><span class="summary-sig-name">_find_gap_open</span>(<span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">ali_seqA</span>,
+        <span class="summary-sig-arg">ali_seqB</span>,
+        <span class="summary-sig-arg">end</span>,
+        <span class="summary-sig-arg">row</span>,
+        <span class="summary-sig-arg">col</span>,
+        <span class="summary-sig-arg">col_gap</span>,
+        <span class="summary-sig-arg">gap_char</span>,
+        <span class="summary-sig-arg">score_matrix</span>,
+        <span class="summary-sig-arg">trace_matrix</span>,
+        <span class="summary-sig-arg">in_process</span>,
+        <span class="summary-sig-arg">gap_fn</span>,
+        <span class="summary-sig-arg">target</span>,
+        <span class="summary-sig-arg">index</span>,
+        <span class="summary-sig-arg">direction</span>)</span><br />
+      Find the starting point(s) of the extended gap</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_lpad_until_equal">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_pad"></a><span class="summary-sig-name">_pad</span>(<span class="summary-sig-arg">s</span>,
-        <span class="summary-sig-arg">char</span>,
-        <span class="summary-sig-arg">n</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_pad">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_lpad"></a><span class="summary-sig-name">_lpad</span>(<span class="summary-sig-arg">s</span>,
-        <span class="summary-sig-arg">char</span>,
-        <span class="summary-sig-arg">n</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_lpad">source&nbsp;code</a></span>
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_gap_open">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -512,23 +551,6 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
       Format the alignment prettily into a string.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#format_alignment">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_test"></a><span class="summary-sig-name">_test</span>()</span><br />
-      Run the module's doctests (PRIVATE).</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_test">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -601,6 +623,56 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
   </td>
 </tr>
 </table>
+<a name="_make_score_matrix_generic"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_make_score_matrix_generic</span>(<span class="sig-arg">sequenceA</span>,
+        <span class="sig-arg">sequenceB</span>,
+        <span class="sig-arg">match_fn</span>,
+        <span class="sig-arg">gap_A_fn</span>,
+        <span class="sig-arg">gap_B_fn</span>,
+        <span class="sig-arg">penalize_end_gaps</span>,
+        <span class="sig-arg">align_globally</span>,
+        <span class="sig-arg">score_only</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.pairwise2-pysrc.html#_make_score_matrix_generic">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generate a score and traceback matrix according to Needleman-Wunsch</p>
+<p>This implementation allows the usage of general gap functions and is rather
+slow. It is automatically called if you define your own gap functions. You
+can force the usage of this method with <tt class="rst-docutils literal">force_generic=True</tt>.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_find_start"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_find_start</span>(<span class="sig-arg">score_matrix</span>,
+        <span class="sig-arg">align_globally</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_start">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a list of starting points (score, (row, col)).</p>
+<p>Indicating every possible place to start the tracebacks.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
 <a name="print_matrix"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -649,7 +721,7 @@ type help(pairwise2.align.localds) at the Python prompt.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Jun  8 15:02:46 2016
+    Generated by Epydoc 3.0.1 on Thu Aug 25 13:15:03 2016
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
