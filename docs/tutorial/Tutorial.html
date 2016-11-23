@@ -55,7 +55,7 @@ TD P{margin:0px;}
 <IMG ALIGN="center" SRC="images/biopython.jpg" TITLE="Biopython Logo" ALT="[Biopython Logo]" width="1024" height="288" />
 </p>
 </P><TABLE CLASS="title"><TR><TD><H1 CLASS="titlemain">Biopython Tutorial and Cookbook</H1><H3 CLASS="titlerest">Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck,<BR>
-Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy&#X144;ski</H3><H3 CLASS="titlerest">Last Update &#X2013; 25 August 2016 (Biopython 1.68)</H3></TD></TR>
+Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy&#X144;ski</H3><H3 CLASS="titlerest">Last Update &#X2013; 23 November 2016 (Biopython 1.68 with minor updates)</H3></TD></TR>
 </TABLE><!--TOC chapter Contents-->
 <H1 CLASS="chapter"><!--SEC ANCHOR -->Contents</H1><!--SEC END --><UL CLASS="toc"><LI CLASS="li-toc">
 <A HREF="#htoc1">Chapter&#XA0;1&#XA0;&#XA0;Introduction</A>
@@ -1608,8 +1608,8 @@ completely within the new sequence are preserved (with their locations adjusted)
 </PRE><PRE CLASS="verbatim">&gt;&gt;&gt; record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
-description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
-dbxrefs=['Project:10638'])
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence',
+dbxrefs=['Project:58037'])
 </PRE><PRE CLASS="verbatim">&gt;&gt;&gt; len(record)
 9609
 &gt;&gt;&gt; len(record.features)
@@ -1686,7 +1686,7 @@ and <TT>description</TT>, but for practicality these are preserved:</P><PRE CLAS
 &gt;&gt;&gt; sub_record.name
 'NC_005816'
 &gt;&gt;&gt; sub_record.description
-'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.'
+'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence'
 </PRE><P>This illustrates the problem nicely though, our new sub-record is
 <EM>not</EM> the complete sequence of the plasmid, so the description is wrong!
 Let&#X2019;s fix this and then view the sub-record as a reduced GenBank file using
@@ -2101,7 +2101,7 @@ are iterators rather than lists.</P><P>If you really want to, you can even look 
 ...
 </PRE><P>We can access a single <CODE>SeqRecord</CODE> object via the keys and manipulate the object as normal:</P><PRE CLASS="verbatim">&gt;&gt;&gt; seq_record = orchid_dict["Z78475.1"]
 &gt;&gt;&gt; print(seq_record.description)
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 &gt;&gt;&gt; print(repr(seq_record.seq))
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 </PRE><P>So, it is very easy to create an in memory &#X201C;database&#X201D; of our GenBank records. Next we&#X2019;ll try this for the FASTA file instead.</P><P>Note that those of you with prior Python experience should all be able to construct a dictionary like this &#X201C;by hand&#X201D;. However, typical dictionary construction methods will not deal with the case of repeated keys very nicely. Using the <CODE>Bio.SeqIO.to_dict()</CODE> will explicitly check for duplicate keys, and raise an exception if any are found.</P><!--TOC subsubsection Specifying the dictionary keys-->
@@ -2141,7 +2141,7 @@ Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
 &gt;&gt;&gt; print(record.id)
 Z78532.1
 &gt;&gt;&gt; print(record.description)
-C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA.
+C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA
 </PRE><P>That should have retrieved the record <TT>Z78532.1</TT>, the second entry in the file.</P><!--TOC subsection Sequence files as Dictionaries &#X2013; Indexed files-->
 <H3 CLASS="subsection"><!--SEC ANCHOR --><A NAME="htoc59">5.4.2</A>&#XA0;&#XA0;Sequence files as Dictionaries &#X2013; Indexed files</H3><!--SEC END --><P>
 <A NAME="sec:SeqIO-index"></A></P><P>As the previous couple of examples tried to illustrate, using
@@ -2160,7 +2160,7 @@ it on demand.</P><P>As an example, let&#X2019;s use the same GenBank file as bef
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 </PRE><PRE CLASS="verbatim">&gt;&gt;&gt; seq_record = orchid_dict["Z78475.1"]
 &gt;&gt;&gt; print(seq_record.description)
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 &gt;&gt;&gt; seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 &gt;&gt;&gt; orchid_dict.close()
@@ -4606,7 +4606,7 @@ For any series of more than 100 requests, do this at weekends or outside USA pea
 </LI><LI CLASS="li-itemize">Use the optional email parameter so the NCBI can contact you if there is a problem. You can either explicitly set this as a parameter with each call to Entrez (e.g. include <TT>email="A.N.Other@example.com"</TT> in the argument list), or you can set a global email address:
 <PRE CLASS="verbatim">&gt;&gt;&gt; from Bio import Entrez
 &gt;&gt;&gt; Entrez.email = "A.N.Other@example.com"
-</PRE><TT>Bio.Entrez</TT> will then use this email address with each call to Entrez. The <TT>example.com</TT> address is a reserved domain name specifically for documentation (RFC 2606). Please DO NOT use a random email &#X2013; it&#X2019;s better not to give an email at all. The email parameter will be mandatory from June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
+</PRE><TT>Bio.Entrez</TT> will then use this email address with each call to Entrez. The <TT>example.com</TT> address is a reserved domain name specifically for documentation (RFC 2606). Please DO NOT use a random email &#X2013; it&#X2019;s better not to give an email at all. The email parameter has been mandatory since June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
 </LI><LI CLASS="li-itemize">If you are using Biopython within some larger software suite, use the tool parameter to specify this. You can either explicitly set the tool name as a parameter with each call to Entrez (e.g. include <TT>tool="MyLocalScript"</TT> in the argument list), or you can set a global tool name:
 <PRE CLASS="verbatim">&gt;&gt;&gt; from Bio import Entrez
 &gt;&gt;&gt; Entrez.tool = "MyLocalScript"
@@ -5468,28 +5468,31 @@ additional argument of <CODE>usehistory="y"</CODE>,</P><PRE CLASS="verbatim">&gt
 </PRE><P>However, you also get given two additional pieces of information, the <TT>WebEnv</TT> session cookie, and the <TT>QueryKey</TT>:</P><PRE CLASS="verbatim">&gt;&gt;&gt; webenv = search_results["WebEnv"]
 &gt;&gt;&gt; query_key = search_results["QueryKey"]
 </PRE><P>Having stored these values in variables <TT>session_cookie</TT> and <TT>query_key</TT> we can use them as parameters to <CODE>Bio.Entrez.efetch()</CODE> instead of giving the GI numbers as identifiers.</P><P>While for small searches you might be OK downloading everything at once, it is better to download in batches. You use the <TT>retstart</TT> and <TT>retmax</TT> parameters to specify which range of search results you want returned (starting entry using zero-based counting, and maximum number of results to return). Sometimes you will get intermittent errors from Entrez, HTTPError 5XX, we use a try except pause retry block to address this.
-For example,</P><PRE CLASS="verbatim">from Bio import Entrez
-import time
+For example,</P><PRE CLASS="verbatim"># This assumes you have already run a search as shown above,
+# and set the variables count, webenv, query_key
+
 try:
     from urllib.error import HTTPError  # for Python 3
 except ImportError:
     from urllib2 import HTTPError  # for Python 2
+
 batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
 for start in range(0, count, batch_size):
     end = min(count, start+batch_size)
     print("Going to download record %i to %i" % (start+1, end))
-    attempt = 1
-    while attempt &lt;= 3:
+    attempt = 0
+    while attempt &lt; 3:
+        attempt += 1
         try:
-            fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text",
+            fetch_handle = Entrez.efetch(db="nucleotide",
+                                         rettype="fasta", retmode="text",
                                          retstart=start, retmax=batch_size,
                                          webenv=webenv, query_key=query_key)
         except HTTPError as err:
             if 500 &lt;= err.code &lt;= 599:
                 print("Received error from server %s" % err)
                 print("Attempt %i of 3" % attempt)
-                attempt += 1
                 time.sleep(15)
             else:
                 raise
@@ -5910,7 +5913,7 @@ The dictionary is created from the mmCIF file as follows:</P><PRE CLASS="verbati
 <H3 CLASS="subsection"><!--SEC ANCHOR --><A NAME="htoc152">11.1.3</A>&#XA0;&#XA0;Reading files in the MMTF format</H3><!--SEC END --><P>You can use the direct MMTFParser to read a structure from a file:
 </P><PRE CLASS="verbatim">&gt;&gt;&gt; from Bio.PDB.mmtf import MMTFParser
 &gt;&gt;&gt; structure = MMTFParser.get_structure("PDB/4CUP.mmtf")
-</PRE><P>Or you can use the same class to get a structure by it&#X2019;s PDB ID:
+</PRE><P>Or you can use the same class to get a structure by its PDB ID:
 </P><PRE CLASS="verbatim">&gt;&gt;&gt; structure = MMTFParser.get_structure_from_url("4CUP")
 </PRE><P>This gives you a Structure object as if read from a PDB or mmCIF file.</P><P>You can also have access to the underlying data using the external
 MMTF library which Biopython is using internally:
@@ -11086,7 +11089,18 @@ e_freq_table = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
                                                  chars_to_ignore = ['N'])
 </PRE><P>Now, <CODE>info_content</CODE> will contain the relative information content over the region in relation to the expected frequencies.</P><P>The value return is calculated using base 2 as the logarithm base in the formula above. You can modify this by passing the parameter <CODE>log_base</CODE> as the base you want:</P><PRE CLASS="verbatim">info_content = summary_align.information_content(5, 30, log_base = 10,
                                                  chars_to_ignore = ['N'])
-</PRE><P>Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won&#X2019;t reveal any mistakes made in coding this function!</P><!--TOC section Substitution Matrices-->
+</PRE><P>By default nucleotide or amino acid residues with a frequency of 0 in a column are not take into account when the relative information column for that column is computed. If this is not the desired result, you can use <CODE>pseudo_count</CODE> instead.</P><PRE CLASS="verbatim">info_content = summary_align.information_content(5, 30,
+                                                 chars_to_ignore = ['N'],
+                                                 pseudo_count = 1)
+</PRE><P>In this case, the observed frequency <I>P</I><SUB><I>ij</I></SUB> of a particular letter <I>i</I> in the <I>j</I>-th column is computed as follow :</P><TABLE CLASS="display dcenter"><TR VALIGN="middle"><TD CLASS="dcell"><I>P</I><SUB><I>ij</I></SUB>&#XA0;=&#XA0;</TD><TD CLASS="dcell"><TABLE CLASS="display"><TR><TD CLASS="dcell" ALIGN="center"><I>n</I><SUB><I>ij</I></SUB>&#XA0;+&#XA0;<I>k</I>&#XD7;&#XA0;<I>Q</I><SUB><I>i</I></SUB></TD></TR>
+<TR><TD CLASS="hbar"></TD></TR>
+<TR><TD CLASS="dcell" ALIGN="center"><I>N</I><SUB><I>j</I></SUB>&#XA0;+&#XA0;<I>k</I></TD></TR>
+</TABLE></TD></TR>
+</TABLE><P>where:</P><UL CLASS="itemize"><LI CLASS="li-itemize">
+<I>k</I> &#X2013; the pseudo count you pass as argument.
+</LI><LI CLASS="li-itemize"><I>k</I> &#X2013; the pseudo count you pass as argument.
+</LI><LI CLASS="li-itemize"><I>Q</I><SUB><I>i</I></SUB> &#X2013; The expected frequency of the letter <I>i</I> as described above.
+</LI></UL><P>Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won&#X2019;t reveal any mistakes made in coding this function!</P><!--TOC section Substitution Matrices-->
 <H2 CLASS="section"><!--SEC ANCHOR --><A NAME="htoc303">20.4</A>&#XA0;&#XA0;Substitution Matrices</H2><!--SEC END --><P>
 <A NAME="sec:sub_matrix"></A></P><P>Substitution matrices are an extremely important part of everyday bioinformatics work. They provide the scoring terms for classifying how likely two different residues are to substitute for each other. This is essential in doing sequence comparisons. The book &#X201C;Biological Sequence Analysis&#X201D; by Durbin et al. provides a really nice introduction to Substitution Matrices and their uses. Some famous substitution matrices are the PAM and BLOSUM series of matrices.</P><P>Biopython provides a ton of common substitution matrices, and also provides functionality for creating your own substitution matrices.</P><!--TOC subsection Using common substitution matrices-->
 <H3 CLASS="subsection"><!--SEC ANCHOR --><A NAME="htoc304">20.4.1</A>&#XA0;&#XA0;Using common substitution matrices</H3><!--SEC END --><!--TOC subsection Creating your own substitution matrix from an alignment-->
