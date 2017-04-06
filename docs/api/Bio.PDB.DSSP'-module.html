@@ -61,28 +61,7 @@
 <h1 class="epydoc">Module DSSP'</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.PDB.DSSP%27-pysrc.html">source&nbsp;code</a></span></p>
 <p>Use the DSSP program to calculate secondary structure and accessibility.</p>
 <p>You need to have a working version of DSSP (and a license, free for academic
-use) in order to use this. For DSSP, see U{<a class="rst-reference external" href="http://swift.cmbi.ru.nl/gv/dssp/" target="_top">http://swift.cmbi.ru.nl/gv/dssp/</a>}.</p>
-<p>The DSSP codes for secondary structure used here are:</p>
-<blockquote>
-<dl class="rst-docutils">
-<dt>H</dt>
-<dd>Alpha helix (4-12)</dd>
-<dt>B</dt>
-<dd>Isolated beta-bridge residue</dd>
-<dt>E</dt>
-<dd>Strand</dd>
-<dt>G</dt>
-<dd>3-10 helix</dd>
-<dt>I</dt>
-<dd>pi helix</dd>
-<dt>T</dt>
-<dd>Turn</dd>
-<dt>S</dt>
-<dd>Bend</dd>
-<dt>-</dt>
-<dd>None</dd>
-</dl>
-</blockquote>
+use) in order to use this. For DSSP, see <a class="rst-reference external" href="http://swift.cmbi.ru.nl/gv/dssp/" target="_top">http://swift.cmbi.ru.nl/gv/dssp/</a>.</p>
 <p>The following Accessible surface area (ASA) values can be used, defaulting
 to the Sander and Rost values:</p>
 <blockquote>
@@ -95,6 +74,132 @@ to the Sander and Rost values:</p>
 <dd>Tien et al. 2013 <a class="rst-reference external" href="http://dx.doi.org/10.1371/journal.pone.0080635" target="_top">http://dx.doi.org/10.1371/journal.pone.0080635</a></dd>
 </dl>
 </blockquote>
+<p>The DSSP codes for secondary structure used here are:</p>
+<blockquote>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Code</th>
+<th class="rst-head">Structure</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>H</td>
+<td>Alpha helix (4-12)</td>
+</tr>
+<tr><td>B</td>
+<td>Isolated beta-bridge residue</td>
+</tr>
+<tr><td>E</td>
+<td>Strand</td>
+</tr>
+<tr><td>G</td>
+<td>3-10 helix</td>
+</tr>
+<tr><td>I</td>
+<td>Pi helix</td>
+</tr>
+<tr><td>T</td>
+<td>Turn</td>
+</tr>
+<tr><td>S</td>
+<td>Bend</td>
+</tr>
+<tr><td>-</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<div class="rst-section" id="rst-usage">
+<h1 class="heading">Usage</h1>
+<p>The DSSP class can be used to run DSSP on a pdb file, and provides a
+handle to the DSSP secondary structure and accessibility.</p>
+<p><strong>Note</strong> that DSSP can only handle one model, and will only run
+calculations on the first model in the provided PDB file.</p>
+</div>
+<div class="rst-section" id="rst-example">
+<h1 class="heading">Example:</h1>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>p = PDBParser()
+<span class="py-prompt">&gt;&gt;&gt; </span>structure = p.get_structure(<span class="py-string">&quot;1MOT&quot;</span>, <span class="py-string">&quot;1mot.pdb&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>model = structure[0]
+<span class="py-prompt">&gt;&gt;&gt; </span>dssp = DSSP(model, <span class="py-string">&quot;1mot.pdb&quot;</span>)</pre>
+<p>Note that the recent DSSP executable from the DSSP-2 package was
+renamed from <code class="link">dssp</code> to <code class="link">mkdssp</code>. If using a recent DSSP release,
+you may need to provide the name of your DSSP executable:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>dssp = DSSP(model, <span class="py-string">'1mot.pdb'</span>, dssp=<span class="py-string">'mkdssp'</span>)</pre>
+<p>DSSP data is accessed by a tuple - (chain id, residue id):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>a_key = list(dssp.keys())[2]
+<span class="py-prompt">&gt;&gt;&gt; </span>a_key
+<span class="py-output">('A', (' ', 251, ' '))</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>dssp[a_key]
+<span class="py-output">(3, 'A', 'H', 0.7075471698113207, -61.2, -42.4,</span>
+<span class="py-output"> -2, -0.7, 4, -3.0, 1, -0.2, 5, -0.2)</span></pre>
+<p>The dssp data returned for a single residue is a tuple in the form:</p>
+<blockquote>
+<table border="1" class="rst-docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="rst-head">Tuple Index</th>
+<th class="rst-head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>0</td>
+<td>DSSP index</td>
+</tr>
+<tr><td>1</td>
+<td>Amino acid</td>
+</tr>
+<tr><td>2</td>
+<td>Secondary structure</td>
+</tr>
+<tr><td>3</td>
+<td>Relative ASA</td>
+</tr>
+<tr><td>4</td>
+<td>Phi</td>
+</tr>
+<tr><td>5</td>
+<td>Psi</td>
+</tr>
+<tr><td>6</td>
+<td>NH--&gt;O_1_relidx</td>
+</tr>
+<tr><td>7</td>
+<td>NH--&gt;O_1_energy</td>
+</tr>
+<tr><td>8</td>
+<td>O--&gt;NH_1_relidx</td>
+</tr>
+<tr><td>9</td>
+<td>O--&gt;NH_1_energy</td>
+</tr>
+<tr><td>10</td>
+<td>NH--&gt;O_2_relidx</td>
+</tr>
+<tr><td>11</td>
+<td>NH--&gt;O_2_energy</td>
+</tr>
+<tr><td>12</td>
+<td>O--&gt;NH_2_relidx</td>
+</tr>
+<tr><td>13</td>
+<td>O--&gt;NH_2_energy</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</div>
 
 <!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -472,7 +577,7 @@ C=2</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:15:00 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:09 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

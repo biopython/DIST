@@ -137,11 +137,11 @@ which can return multiple records - such as efetch, esummary
 and elink. Typical usage is:</p>
 <blockquote>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.efetch(<span class="py-string">&quot;pubmed&quot;</span>, id=<span class="py-string">&quot;19304878,14630660&quot;</span>, retmode=<span class="py-string">&quot;xml&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.esummary(db=<span class="py-string">&quot;pubmed&quot;</span>, id=<span class="py-string">&quot;19304878,14630660&quot;</span>, retmode=<span class="py-string">&quot;xml&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>records = Entrez.parse(handle)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> records:
 <span class="py-more">... </span>    <span class="py-comment"># each record is a Python dictionary or list.</span>
-<span class="py-more">... </span>    <span class="py-keyword">print</span>(record[<span class="py-string">'MedlineCitation'</span>][<span class="py-string">'Article'</span>][<span class="py-string">'ArticleTitle'</span>])
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(record[<span class="py-string">'Title'</span>])
 <span class="py-output">Biopython: freely available Python tools for computational molecular biology and bioinformatics.</span>
 <span class="py-output">PDB file parser and structure class implemented in Python.</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
@@ -475,23 +475,6 @@ multiple records, and is particular useful for large files.</p>
       
     </td>
   </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="_test"></a><span class="summary-sig-name">_test</span>()</span><br />
-      Run the module's doctests (PRIVATE).</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.Entrez-pysrc.html#_test">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
 </table>
 <!-- ==================== VARIABLES ==================== -->
 <a name="section-Variables"></a>
@@ -603,7 +586,7 @@ more UIs or from user's environment.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
 <span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.efetch(db=<span class="py-string">&quot;nucleotide&quot;</span>, id=<span class="py-string">&quot;57240072&quot;</span>, rettype=<span class="py-string">&quot;gb&quot;</span>, retmode=<span class="py-string">&quot;text&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.efetch(db=<span class="py-string">&quot;nucleotide&quot;</span>, id=<span class="py-string">&quot;AY851612&quot;</span>, rettype=<span class="py-string">&quot;gb&quot;</span>, retmode=<span class="py-string">&quot;text&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.readline().strip())
 <span class="py-output">LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
@@ -643,14 +626,14 @@ for future use in the user's environment.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
 <span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.esearch(db=<span class="py-string">&quot;nucleotide&quot;</span>, retmax=10, term=<span class="py-string">&quot;opuntia[ORGN] accD&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.esearch(db=<span class="py-string">&quot;nucleotide&quot;</span>, retmax=10, term=<span class="py-string">&quot;opuntia[ORGN] accD&quot;</span>, idtype=<span class="py-string">&quot;acc&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(handle)
 <span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
-<span class="py-prompt">&gt;&gt;&gt; </span>record[<span class="py-string">&quot;Count&quot;</span>] &gt;= 2
+<span class="py-prompt">&gt;&gt;&gt; </span>int(record[<span class="py-string">&quot;Count&quot;</span>]) &gt;= 2
 <span class="py-output">True</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;156535671&quot;</span> <span class="py-keyword">in</span> record[<span class="py-string">&quot;IdList&quot;</span>]
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;EF590893.1&quot;</span> <span class="py-keyword">in</span> record[<span class="py-string">&quot;IdList&quot;</span>]
 <span class="py-output">True</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;156535673&quot;</span> <span class="py-keyword">in</span> record[<span class="py-string">&quot;IdList&quot;</span>]
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">&quot;EF590892.1&quot;</span> <span class="py-keyword">in</span> record[<span class="py-string">&quot;IdList&quot;</span>]
 <span class="py-output">True</span></pre>
   <dl class="fields">
   </dl>
@@ -752,17 +735,18 @@ from the user's environment.</p>
 <a class="rst-reference external" href="http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary" target="_top">http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary</a></p>
 <p>Return a handle to the results, by default in XML format.</p>
 <p>Raises an IOError exception if there's a network error.</p>
-<p>This example discovers more about entry 30367 in the journals database:</p>
+<p>This example discovers more about entry 19923 in the structure
+database:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
 <span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.esummary(db=<span class="py-string">&quot;journals&quot;</span>, id=<span class="py-string">&quot;30367&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.esummary(db=<span class="py-string">&quot;structure&quot;</span>, id=<span class="py-string">&quot;19923&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.read(handle)
 <span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[0][<span class="py-string">&quot;Id&quot;</span>])
-<span class="py-output">30367</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[0][<span class="py-string">&quot;Title&quot;</span>])
-<span class="py-output">Computational biology and chemistry</span></pre>
+<span class="py-output">19923</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[0][<span class="py-string">&quot;PdbDescr&quot;</span>])
+<span class="py-output">Crystal Structure Of E. Coli Aconitase B</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -799,7 +783,7 @@ in PubMedCentral:</p>
 <span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> row <span class="py-keyword">in</span> record[<span class="py-string">&quot;eGQueryResult&quot;</span>]:
 <span class="py-more">... </span>    <span class="py-keyword">if</span> <span class="py-string">&quot;pmc&quot;</span> <span class="py-keyword">in</span> row[<span class="py-string">&quot;DbName&quot;</span>]:
-<span class="py-more">... </span>        <span class="py-keyword">print</span>(row[<span class="py-string">&quot;Count&quot;</span>] &gt; 60)
+<span class="py-more">... </span>        <span class="py-keyword">print</span>(int(row[<span class="py-string">&quot;Count&quot;</span>]) &gt; 60)
 <span class="py-output">True</span></pre>
   <dl class="fields">
   </dl>
@@ -862,12 +846,13 @@ in PubMedCentral:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
 <span class="py-prompt">&gt;&gt;&gt; </span>Entrez.email = <span class="py-string">&quot;Your.Name.Here@example.org&quot;</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>citation_1 = {
-<span class="py-more">... </span>   <span class="py-string">&quot;journal_title&quot;</span>: <span class="py-string">&quot;proc natl acad sci u s a&quot;</span>,
-<span class="py-more">... </span>   <span class="py-string">&quot;year&quot;</span>: <span class="py-string">&quot;1991&quot;</span>, <span class="py-string">&quot;volume&quot;</span>: <span class="py-string">&quot;88&quot;</span>, <span class="py-string">&quot;first_page&quot;</span>: <span class="py-string">&quot;3248&quot;</span>,
-<span class="py-more">... </span>   <span class="py-string">&quot;author_name&quot;</span>: <span class="py-string">&quot;mann bj&quot;</span>, <span class="py-string">&quot;key&quot;</span>: <span class="py-string">&quot;citation_1&quot;</span>}
-<span class="py-prompt">&gt;&gt;&gt; </span>record = Entrez.ecitmatch(db=<span class="py-string">&quot;pubmed&quot;</span>, bdata=[citation_1])
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record[<span class="py-string">&quot;Query&quot;</span>])</pre>
+<span class="py-prompt">&gt;&gt;&gt; </span>citation_1 = {<span class="py-string">&quot;journal_title&quot;</span>: <span class="py-string">&quot;proc natl acad sci u s a&quot;</span>,
+<span class="py-more">... </span>              <span class="py-string">&quot;year&quot;</span>: <span class="py-string">&quot;1991&quot;</span>, <span class="py-string">&quot;volume&quot;</span>: <span class="py-string">&quot;88&quot;</span>, <span class="py-string">&quot;first_page&quot;</span>: <span class="py-string">&quot;3248&quot;</span>,
+<span class="py-more">... </span>              <span class="py-string">&quot;author_name&quot;</span>: <span class="py-string">&quot;mann bj&quot;</span>, <span class="py-string">&quot;key&quot;</span>: <span class="py-string">&quot;citation_1&quot;</span>}
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.ecitmatch(db=<span class="py-string">&quot;pubmed&quot;</span>, bdata=[citation_1])
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(handle.read().strip().split(<span class="py-string">&quot;|&quot;</span>))
+<span class="py-output">['proc natl acad sci u s a', '1991', '88', '3248', 'mann bj', 'citation_1', '2014248']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>handle.close()</pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1005,7 +990,7 @@ to avoid abusing the NCBI servers.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:14:59 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:07 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

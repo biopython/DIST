@@ -81,8 +81,6 @@
     </li>
     <li> <strong class="uidlink">UserDict.DictMixin</strong>
     <ul>
-    <li> <strong class="uidlink"><a href="Bio._py3k._ordereddict.OrderedDict-class.html">Bio._py3k._ordereddict.OrderedDict</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.File._IndexedSeqFileDict-class.html" onclick="show_private();">Bio.File._IndexedSeqFileDict</a></strong>:
       <em class="summary">Read only dictionary interface to a sequential record file.</em>
     <ul>
@@ -95,7 +93,9 @@
     </li>
     <li> <strong class="uidlink">xml.sax.xmlreader.Locator</strong>:
       <em class="summary">Interface for associating a SAX event with a document
-location.</em>
+location. A locator object will return valid results only during
+calls to DocumentHandler methods; at any other time, the
+results are unpredictable.</em>
     <ul>
     <li> <strong class="uidlink">xml.sax.expatreader.ExpatParser</strong>:
       <em class="summary">SAX driver for the pyexpat C module.</em>
@@ -110,7 +110,9 @@ location.</em>
       <em class="summary">Base for property holders</em>
     <ul>
     <li> <strong class="uidlink">reportlab.graphics.widgetbase.Widget</strong>:
-      <em class="summary">Base for all user-defined widgets.</em>
+      <em class="summary">Base for all user-defined widgets.  Keep as simple as possible. Does
+not inherit from Shape so that we can rewrite shapes without breaking
+widgets and vice versa.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html" onclick="show_private();">Bio.Graphics.BasicChromosome._ChromosomeComponent</a></strong>:
       <em class="summary">Base class specifying the interface for a component of the system.</em>
@@ -146,7 +148,8 @@ location.</em>
     <li> <strong class="uidlink">xml.sax.xmlreader.IncrementalParser</strong>:
       <em class="summary">This interface adds three extra methods to the XMLReader
 interface that allow XML parsers to support incremental
-parsing.</em>
+parsing. Support for this interface is optional, since not all
+underlying XML parsers support this functionality.</em>
     <ul>
     <li> <strong class="uidlink">xml.sax.expatreader.ExpatParser</strong>:
       <em class="summary">SAX driver for the pyexpat C module.</em>
@@ -163,10 +166,17 @@ parsing.</em>
       <em class="summary">Addin class to provide the horribleness of _drawTimeResize</em>
     <ul>
     <li> <strong class="uidlink">reportlab.graphics.shapes.UserNode</strong>:
-      <em class="summary">A simple template for creating a new node.</em>
+      <em class="summary">A simple template for creating a new node.  The user (Python
+programmer) may subclasses this.  provideNode() must be defined to
+provide a Shape primitive when called by a renderer.  It does
+NOT inherit from Shape, as the renderer always replaces it, and
+your own classes can safely inherit from it without getting
+lots of unintended behaviour.</em>
     <ul>
     <li> <strong class="uidlink">reportlab.graphics.widgetbase.Widget</strong>:
-      <em class="summary">Base for all user-defined widgets.</em>
+      <em class="summary">Base for all user-defined widgets.  Keep as simple as possible. Does
+not inherit from Shape so that we can rewrite shapes without breaking
+widgets and vice versa.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Graphics.BasicChromosome._ChromosomeComponent-class.html" onclick="show_private();">Bio.Graphics.BasicChromosome._ChromosomeComponent</a></strong>:
       <em class="summary">Base class specifying the interface for a component of the system.</em>
@@ -291,11 +301,14 @@ parsing.</em>
     <li> <strong class="uidlink"><a href="Bio.Sequencing.Applications._samtools.SamtoolsRmdupCommandline-class.html">Bio.Sequencing.Applications._samtools.SamtoolsRmdupCommandline</a></strong>:
       <em class="summary">Command line wrapper for samtools rmdup.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Sequencing.Applications._samtools.SamtoolsSortCommandline-class.html">Bio.Sequencing.Applications._samtools.SamtoolsSortCommandline</a></strong>:
-      <em class="summary">Command line wrapper for samtools sort.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Sequencing.Applications._samtools.SamtoolsTargetcutCommandline-class.html">Bio.Sequencing.Applications._samtools.SamtoolsTargetcutCommandline</a></strong>:
       <em class="summary">Command line wrapper for samtools targetcut.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Sequencing.Applications._samtools.SamtoolsVersion0xSortCommandline-class.html">Bio.Sequencing.Applications._samtools.SamtoolsVersion0xSortCommandline</a></strong>:
+      <em class="summary">Command line wrapper for samtools version 0.1.x sort.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Sequencing.Applications._samtools.SamtoolsVersion1xSortCommandline-class.html">Bio.Sequencing.Applications._samtools.SamtoolsVersion1xSortCommandline</a></strong>:
+      <em class="summary">Command line wrapper for samtools version 1.3.x sort.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Sequencing.Applications._samtools.SamtoolsViewCommandline-class.html">Bio.Sequencing.Applications._samtools.SamtoolsViewCommandline</a></strong>:
       <em class="summary">Command line wrapper for samtools view.</em>
@@ -451,7 +464,7 @@ parsing.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.ParserSupport.TaggingConsumer-class.html">Bio.ParserSupport.TaggingConsumer</a></strong>:
       <em class="summary">A Consumer that tags the data stream with the event and
-prints it to a handle.</em>
+prints it to a handle.  Useful for debugging.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Blast.NCBIStandalone._BlastConsumer-class.html" onclick="show_private();">Bio.Blast.NCBIStandalone._BlastConsumer</a></strong>
     <ul>
@@ -613,21 +626,6 @@ using three consecutive CA positions.</em>
     <li> <strong class="uidlink"><a href="Bio.Blast.Record.Alignment-class.html">Bio.Blast.Record.Alignment</a></strong>:
       <em class="summary">Stores information about one hit in the alignments section.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Align.Generic.Alignment-class.html">Bio.Align.Generic.Alignment</a></strong>:
-      <em class="summary">Represent a set of alignments (DEPRECATED).</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.Align.MultipleSeqAlignment-class.html">Bio.Align.MultipleSeqAlignment</a></strong>:
-      <em class="summary">Represents a classical multiple sequence alignment (MSA).</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.codonalign.codonalignment.CodonAlignment-class.html">Bio.codonalign.codonalignment.CodonAlignment</a></strong>:
-      <em class="summary">Codon Alignment class that inherits from MultipleSeqAlignment.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.FSSP.FSSPTools.FSSPAlign-class.html">Bio.FSSP.FSSPTools.FSSPAlign</a></strong>
-    </li>
-    </ul>
-    </li>
-    </ul>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.AlignIO.Interfaces.AlignmentIterator-class.html">Bio.AlignIO.Interfaces.AlignmentIterator</a></strong>:
       <em class="summary">Base class for building MultipleSeqAlignment iterators.</em>
     <ul>
@@ -667,6 +665,9 @@ using three consecutive CA positions.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.AlignIO.EmbossIO.EmbossWriter-class.html">Bio.AlignIO.EmbossIO.EmbossWriter</a></strong>:
       <em class="summary">Emboss alignment writer (WORK IN PROGRESS).</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.MafIO.MafWriter-class.html">Bio.AlignIO.MafIO.MafWriter</a></strong>:
+      <em class="summary">Accepts a MultipleSeqAlignment object, writes a MAF file</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.AlignIO.PhylipIO.PhylipWriter-class.html">Bio.AlignIO.PhylipIO.PhylipWriter</a></strong>:
       <em class="summary">Phylip alignment writer.</em>
@@ -814,8 +815,10 @@ as well as clusterings by percent id or evalue.</em>
       <em class="summary">Exception raised when CDAO object construction cannot continue.</em>
     </li>
     <li> <strong class="uidlink">subprocess.CalledProcessError</strong>:
-      <em class="summary">This exception is raised when a process run by check_call() returns
-a non-zero exit status.</em>
+      <em class="summary">This exception is raised when a process run by check_call() or
+check_output() returns a non-zero exit status.
+The exit status will be stored in the returncode attribute;
+check_output() will also store the output in the output attribute.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Application.ApplicationError-class.html">Bio.Application.ApplicationError</a></strong>:
       <em class="summary">Raised when an application returns a non-zero exit status.</em>
@@ -875,16 +878,20 @@ interpreter exiting.</em>
       <em class="summary">Base class for I/O related errors.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PAML.baseml.BasemlError-class.html">Bio.Phylo.PAML.baseml.BasemlError</a></strong>:
-      <em class="summary">BASEML has failed.</em>
+      <em class="summary">BASEML has failed. Run with verbose = True to view BASEML's error
+message</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PAML.codeml.CodemlError-class.html">Bio.Phylo.PAML.codeml.CodemlError</a></strong>:
-      <em class="summary">CODEML has failed.</em>
+      <em class="summary">CODEML has failed. Run with verbose = True to view CODEML's error
+message</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PAML._paml.PamlError-class.html">Bio.Phylo.PAML._paml.PamlError</a></strong>:
-      <em class="summary">paml has failed.</em>
+      <em class="summary">paml has failed. Run with verbose = True to view the error
+message</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PAML.yn00.Yn00Error-class.html">Bio.Phylo.PAML.yn00.Yn00Error</a></strong>:
-      <em class="summary">yn00 has failed.</em>
+      <em class="summary">yn00 has failed. Run with verbose = True to view yn00's error
+message</em>
     </li>
     </ul>
     </li>
@@ -902,6 +909,8 @@ interpreter exiting.</em>
     <li> <strong class="uidlink"><a href="Bio.Entrez.Parser.CorruptedXMLError-class.html">Bio.Entrez.Parser.CorruptedXMLError</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Entrez.Parser.NotXMLError-class.html">Bio.Entrez.Parser.NotXMLError</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Affy.CelFile.ParserError-class.html">Bio.Affy.CelFile.ParserError</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Entrez.Parser.ValidationError-class.html">Bio.Entrez.Parser.ValidationError</a></strong>:
       <em class="summary">XML tag found which was not defined in the DTD.</em>
@@ -993,9 +1002,6 @@ interpreter exiting.</em>
     <li> <strong class="uidlink"><a href="Bio.CAPS.CAPSMap-class.html">Bio.CAPS.CAPSMap</a></strong>:
       <em class="summary">A map of an alignment showing all possible dcuts.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Crystal.Chain-class.html">Bio.Crystal.Chain</a></strong>:
-      <em class="summary">This class represents a sequence of Hetero elements.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Nexus.Nodes.Chain-class.html">Bio.Nexus.Nodes.Chain</a></strong>:
       <em class="summary">Stores a list of nodes that are linked together.</em>
     <ul>
@@ -1005,9 +1011,13 @@ and multiple successors (=subclades).</em>
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Crystal.Chain-class.html">Bio.Crystal.Chain</a></strong>:
+      <em class="summary">This class represents a sequence of Hetero elements.</em>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.Dice.ChainSelector-class.html">Bio.PDB.Dice.ChainSelector</a></strong>:
       <em class="summary">Only accepts residues with right chainid
-and between start and end.</em>
+and between start and end. Remove hydrogens, waters and ligands.
+Only use model 0 by default.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Nexus.Nexus.CharBuffer-class.html">Bio.Nexus.Nexus.CharBuffer</a></strong>:
       <em class="summary">Helps reading NEXUS-words and characters from a buffer (semi-PRIVATE).</em>
@@ -1102,7 +1112,7 @@ and between start and end.</em>
     <li> <strong class="uidlink"><a href="Bio.PDB.Entity.DisorderedEntityWrapper-class.html">Bio.PDB.Entity.DisorderedEntityWrapper</a></strong>:
       <em class="summary">This class is a simple wrapper class that groups a number of equivalent
 Entities and forwards all method calls to one of them (the currently selected
-object).</em>
+object). DisorderedResidue and DisorderedAtom are subclasses of this class.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.PDB.Atom.DisorderedAtom-class.html">Bio.PDB.Atom.DisorderedAtom</a></strong>:
       <em class="summary">Contains all Atom objects that represent the same disordered atom.</em>
@@ -1121,15 +1131,18 @@ object).</em>
     <li> <strong class="uidlink"><a href="Bio.PopGen.GenePop.EasyController.EasyController-class.html">Bio.PopGen.GenePop.EasyController.EasyController</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.Entity.Entity-class.html">Bio.PDB.Entity.Entity</a></strong>:
-      <em class="summary">Basic container object.</em>
+      <em class="summary">Basic container object for PDB heirachy.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.PDB.Chain.Chain-class.html">Bio.PDB.Chain.Chain</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.Model.Model-class.html">Bio.PDB.Model.Model</a></strong>:
-      <em class="summary">The object representing a model in a structure.</em>
+      <em class="summary">The object representing a model in a structure. In a structure
+derived from an X-ray crystallography experiment, only a single
+model will be present (with some exceptions). NMR structures
+normally contain many different models.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.Residue.Residue-class.html">Bio.PDB.Residue.Residue</a></strong>:
-      <em class="summary">Represents a residue.</em>
+      <em class="summary">Represents a residue. A Residue object stores atoms.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.Structure.Structure-class.html">Bio.PDB.Structure.Structure</a></strong>:
       <em class="summary">The Structure class contains a collection of Model instances.</em>
@@ -1164,11 +1177,11 @@ object).</em>
     <li> <strong class="uidlink"><a href="Bio.SearchIO.FastaIO.FastaM10Parser-class.html">Bio.SearchIO.FastaIO.FastaM10Parser</a></strong>:
       <em class="summary">Parser for Bill Pearson's FASTA suite's -m 10 output.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Graphics.GenomeDiagram._Feature.Feature-class.html">Bio.Graphics.GenomeDiagram._Feature.Feature</a></strong>:
-      <em class="summary">Class to wrap Bio.SeqFeature objects for GenomeDiagram</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.GenBank.Record.Feature-class.html">Bio.GenBank.Record.Feature</a></strong>:
       <em class="summary">Hold information about a Feature in the Feature Table of GenBank record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Graphics.GenomeDiagram._Feature.Feature-class.html">Bio.Graphics.GenomeDiagram._Feature.Feature</a></strong>:
+      <em class="summary">Class to wrap Bio.SeqFeature objects for GenomeDiagram</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SeqFeature.FeatureLocation-class.html">Bio.SeqFeature.FeatureLocation</a></strong>:
       <em class="summary">Specify the location of a feature along a sequence.</em>
@@ -1346,19 +1359,20 @@ coordinates are query coordinates.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.DocSQL.IterationCursor-class.html">Bio.DocSQL.IterationCursor</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Blast.NCBIStandalone.Iterator-class.html">Bio.Blast.NCBIStandalone.Iterator</a></strong>:
-      <em class="summary">Iterates over a file of multiple BLAST results.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.GenBank.Iterator-class.html">Bio.GenBank.Iterator</a></strong>:
       <em class="summary">Iterator interface to move over a file of GenBank entries one at a time (OBSOLETE).</em>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Blast.NCBIStandalone.Iterator-class.html">Bio.Blast.NCBIStandalone.Iterator</a></strong>:
+      <em class="summary">Iterates over a file of multiple BLAST results.</em>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.motifs.jaspar.db.JASPAR5-class.html">Bio.motifs.jaspar.db.JASPAR5</a></strong>:
-      <em class="summary">Class representing a JASPAR5 DB.</em>
+      <em class="summary">Class representing a JASPAR5 DB. The methods within are loosely based
+on the perl TFBS::DB::JASPAR5 module.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.phenotype.phen_micro.JsonWriter-class.html">Bio.phenotype.phen_micro.JsonWriter</a></strong>:
       <em class="summary">Class to write PM Json format files.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.KDTree.KDTree.KDTree-class.html">Bio.KDTree.KDTree.KDTree</a></strong>:
+    <li> <strong class="uidlink"><a href="Bio.KDTree.KDTree%27.KDTree-class.html">Bio.KDTree.KDTree'.KDTree</a></strong>:
       <em class="summary">KD tree implementation (C++, SWIG python wrapper)</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Graphics.KGML_vis.KGMLCanvas-class.html">Bio.Graphics.KGML_vis.KGMLCanvas</a></strong>:
@@ -1380,6 +1394,9 @@ classification.</em>
     <li> <strong class="uidlink"><a href="Bio.PDB.mmtf.MMTFParser-class.html">Bio.PDB.mmtf.MMTFParser</a></strong>:
       <em class="summary">Class to get a BioPython structure from a URL or a filename.</em>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.AlignIO.MafIO.MafIndex-class.html">Bio.AlignIO.MafIO.MafIndex</a></strong>:
+      <em class="summary">This is used as an index for a MAF file.</em>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.MarkovModel.MarkovModel-class.html">Bio.MarkovModel.MarkovModel</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.HMM.MarkovModel.MarkovModelBuilder-class.html">Bio.HMM.MarkovModel.MarkovModelBuilder</a></strong>:
@@ -1396,7 +1413,14 @@ classification.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.motifs.transfac.Motif-class.html">Bio.motifs.transfac.Motif</a></strong>:
       <em class="summary">A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
-motif.</em>
+motif. This class inherits from the Bio.motifs.Motif base class, as well
+as from a Python dictionary. All motif information found by the parser
+is stored as attributes of the base class when possible; see the
+Bio.motifs.Motif base class for a description of these attributes. All
+other information associated with the motif is stored as (key, value)
+pairs in the dictionary, where the key is the two-letter fields as found
+in the TRANSFAC file. References are an exception: These are stored in
+the .references attribute.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.motifs.meme.Motif-class.html">Bio.motifs.meme.Motif</a></strong>:
       <em class="summary">A subclass of Motif used in parsing MEME (and MAST) output.</em>
@@ -1418,13 +1442,23 @@ motif.</em>
     <li> <strong class="uidlink"><a href="Bio.Blast.Record.MultipleAlignment-class.html">Bio.Blast.Record.MultipleAlignment</a></strong>:
       <em class="summary">Holds information about a multiple alignment.</em>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Align.MultipleSeqAlignment-class.html">Bio.Align.MultipleSeqAlignment</a></strong>:
+      <em class="summary">Represents a classical multiple sequence alignment (MSA).</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="Bio.codonalign.codonalignment.CodonAlignment-class.html">Bio.codonalign.codonalignment.CodonAlignment</a></strong>:
+      <em class="summary">Codon Alignment class that inherits from MultipleSeqAlignment.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.FSSP.FSSPTools.FSSPAlign-class.html">Bio.FSSP.FSSPTools.FSSPAlign</a></strong>
+    </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Seq.MutableSeq-class.html">Bio.Seq.MutableSeq</a></strong>:
       <em class="summary">An editable sequence object (with an alphabet).</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.NaiveBayes.NaiveBayes-class.html">Bio.NaiveBayes.NaiveBayes</a></strong>:
       <em class="summary">Holds information for a NaiveBayes classifier.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.PDB.NeighborSearch.NeighborSearch-class.html">Bio.PDB.NeighborSearch.NeighborSearch</a></strong>:
+    <li> <strong class="uidlink"><a href="Bio.PDB.NeighborSearch%27.NeighborSearch-class.html">Bio.PDB.NeighborSearch'.NeighborSearch</a></strong>:
       <em class="summary">Class for neighbor searching,</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Pathway.Network-class.html">Bio.Pathway.Network</a></strong>:
@@ -1436,7 +1470,7 @@ motif.</em>
       <em class="summary">A node in the Scop hierarchy</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.SCOP.Domain-class.html">Bio.SCOP.Domain</a></strong>:
-      <em class="summary">A SCOP domain.</em>
+      <em class="summary">A SCOP domain. A leaf node in the Scop hierarchy.</em>
     </li>
     </ul>
     </li>
@@ -1444,7 +1478,7 @@ motif.</em>
       <em class="summary">A single node.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Nexus.Trees.NodeData-class.html">Bio.Nexus.Trees.NodeData</a></strong>:
-      <em class="summary">Stores tree-relevant data associated with nodes (e.g.</em>
+      <em class="summary">Stores tree-relevant data associated with nodes (e.g. branches or otus).</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.GA.Organism.Organism-class.html">Bio.GA.Organism.Organism</a></strong>:
       <em class="summary">Represent a single individual in a population.</em>
@@ -1457,7 +1491,10 @@ motif.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.PDBList%27.PDBList-class.html">Bio.PDB.PDBList'.PDBList</a></strong>:
       <em class="summary">This class provides quick access to the structure lists on the
-PDB server or its mirrors.</em>
+PDB server or its mirrors. The structure lists contain
+four-letter PDB codes, indicating that structures are
+new, have been modified or are obsolete. The lists are released
+on a weekly basis.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.PDBParser%27.PDBParser-class.html">Bio.PDB.PDBParser'.PDBParser</a></strong>:
       <em class="summary">Parse a PDB file and return a Structure object.</em>
@@ -1492,8 +1529,11 @@ PDB server or its mirrors.</em>
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.SeqIO.UniprotIO.Parser-class.html">Bio.SeqIO.UniprotIO.Parser</a></strong>:
-      <em class="summary">Parse a UniProt XML entry to a SeqRecord.</em>
+    <li> <strong class="uidlink"><a href="Bio.Phylo.NewickIO.Parser-class.html">Bio.Phylo.NewickIO.Parser</a></strong>:
+      <em class="summary">Parse a Newick tree given a file handle.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Phylo.NeXMLIO.Parser-class.html">Bio.Phylo.NeXMLIO.Parser</a></strong>:
+      <em class="summary">Parse a NeXML tree given a file handle.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PhyloXMLIO.Parser-class.html">Bio.Phylo.PhyloXMLIO.Parser</a></strong>:
       <em class="summary">Methods for parsing all phyloXML nodes from an XML stream.</em>
@@ -1501,11 +1541,8 @@ PDB server or its mirrors.</em>
     <li> <strong class="uidlink"><a href="Bio.Phylo.CDAOIO.Parser-class.html">Bio.Phylo.CDAOIO.Parser</a></strong>:
       <em class="summary">Parse a CDAO tree given a file handle.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Phylo.NeXMLIO.Parser-class.html">Bio.Phylo.NeXMLIO.Parser</a></strong>:
-      <em class="summary">Parse a NeXML tree given a file handle.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Phylo.NewickIO.Parser-class.html">Bio.Phylo.NewickIO.Parser</a></strong>:
-      <em class="summary">Parse a Newick tree given a file handle.</em>
+    <li> <strong class="uidlink"><a href="Bio.SeqIO.UniprotIO.Parser-class.html">Bio.SeqIO.UniprotIO.Parser</a></strong>:
+      <em class="summary">Parse a UniProt XML entry to a SeqRecord.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.KEGG.KGML.KGML_pathway.Pathway-class.html">Bio.KEGG.KGML.KGML_pathway.Pathway</a></strong>:
       <em class="summary">Represents a KGML pathway from KEGG.</em>
@@ -1544,36 +1581,13 @@ PDB server or its mirrors.</em>
       <em class="summary">Store the information for one PROTSIM line from a Unigene file</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.QCPSuperimposer.QCPSuperimposer-class.html">Bio.PDB.QCPSuperimposer.QCPSuperimposer</a></strong>:
-      <em class="summary">QCPSuperimposer finds the best rotation and translation to put
-two point sets on top of each other (minimizing the RMSD).</em>
+      <em class="summary">Quaternion Characteristic Polynomial (QCP) Superimposer.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.GenBank.Record.Qualifier-class.html">Bio.GenBank.Record.Qualifier</a></strong>:
       <em class="summary">Hold information about a qualifier in a GenBank feature.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.DocSQL.Query-class.html">Bio.DocSQL.Query</a></strong>:
       <em class="summary">SHOW TABLES</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QueryAll-class.html">Bio.DocSQL.QueryAll</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QueryAllFirstItem-class.html">Bio.DocSQL.QueryAllFirstItem</a></strong>
-    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QueryGeneric-class.html">Bio.DocSQL.QueryGeneric</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QuerySingle-class.html">Bio.DocSQL.QuerySingle</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.Create-class.html">Bio.DocSQL.Create</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.Insert-class.html">Bio.DocSQL.Insert</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.Update-class.html">Bio.DocSQL.Update</a></strong>
-    </li>
-    </ul>
-    </li>
-    </ul>
-    </li>
-    </ul>
     </li>
     <li> <strong class="uidlink"><a href="Bio.NeuralNetwork.Gene.Schema.RandomMotifGenerator-class.html">Bio.NeuralNetwork.Gene.Schema.RandomMotifGenerator</a></strong>:
       <em class="summary">Generate a random motif within given parameters.</em>
@@ -1587,74 +1601,77 @@ two point sets on top of each other (minimizing the RMSD).</em>
     <li> <strong class="uidlink"><a href="Bio.Sequencing.Ace.Reads-class.html">Bio.Sequencing.Ace.Reads</a></strong>:
       <em class="summary">Holds information about a read supporting an ACE contig.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.PopGen.FDist.Record-class.html">Bio.PopGen.FDist.Record</a></strong>:
-      <em class="summary">Holds information from a FDist record.</em>
+    <li> <strong class="uidlink"><a href="Bio.PopGen.GenePop.LargeFileParser.Record-class.html">Bio.PopGen.GenePop.LargeFileParser.Record</a></strong>:
+      <em class="summary">Holds information from a GenePop record.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.SCOP.Des.Record-class.html">Bio.SCOP.Des.Record</a></strong>:
+    <li> <strong class="uidlink"><a href="Bio.PopGen.GenePop.Record-class.html">Bio.PopGen.GenePop.Record</a></strong>:
+      <em class="summary">Holds information from a GenePop record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Sequencing.Phd.Record-class.html">Bio.Sequencing.Phd.Record</a></strong>:
+      <em class="summary">Hold information from a PHD file.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.SCOP.Hie.Record-class.html">Bio.SCOP.Hie.Record</a></strong>:
       <em class="summary">Holds information for one node in the SCOP hierarchy.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Affy.CelFile.Record-class.html">Bio.Affy.CelFile.Record</a></strong>:
       <em class="summary">Stores the information in a cel file</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Geo.Record.Record-class.html">Bio.Geo.Record.Record</a></strong>:
-      <em class="summary">Hold GEO information in a format similar to the original record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Sequencing.Phd.Record-class.html">Bio.Sequencing.Phd.Record</a></strong>:
-      <em class="summary">Hold information from a PHD file.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.ExPASy.Prosite.Record-class.html">Bio.ExPASy.Prosite.Record</a></strong>:
-      <em class="summary">Holds information from a Prosite record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.GenBank.Record.Record-class.html">Bio.GenBank.Record.Record</a></strong>:
-      <em class="summary">Hold GenBank information in a format similar to the original record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.SwissProt.Record-class.html">Bio.SwissProt.Record</a></strong>:
-      <em class="summary">Holds information from a SwissProt record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Emboss.Primer3.Record-class.html">Bio.Emboss.Primer3.Record</a></strong>:
-      <em class="summary">Represent information from a primer3 run finding primers.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.UniGene.Record-class.html">Bio.UniGene.Record</a></strong>:
-      <em class="summary">Store a Unigene record</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.KEGG.Compound.Record-class.html">Bio.KEGG.Compound.Record</a></strong>:
-      <em class="summary">Holds info from a KEGG Ligand/Compound record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.PopGen.GenePop.LargeFileParser.Record-class.html">Bio.PopGen.GenePop.LargeFileParser.Record</a></strong>:
-      <em class="summary">Holds information from a GenePop record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.SCOP.Hie.Record-class.html">Bio.SCOP.Hie.Record</a></strong>:
-      <em class="summary">Holds information for one node in the SCOP hierarchy.</em>
+    <li> <strong class="uidlink"><a href="Bio.Compass.Record-class.html">Bio.Compass.Record</a></strong>:
+      <em class="summary">Hold information from one compass hit.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SCOP.Cla.Record-class.html">Bio.SCOP.Cla.Record</a></strong>:
       <em class="summary">Holds information for one SCOP domain.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.ExPASy.Prodoc.Record-class.html">Bio.ExPASy.Prodoc.Record</a></strong>:
-      <em class="summary">Holds information from a Prodoc record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.SCOP.Dom.Record-class.html">Bio.SCOP.Dom.Record</a></strong>:
-      <em class="summary">Holds information for one SCOP domain.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.PopGen.GenePop.Record-class.html">Bio.PopGen.GenePop.Record</a></strong>:
-      <em class="summary">Holds information from a GenePop record.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Compass.Record-class.html">Bio.Compass.Record</a></strong>:
-      <em class="summary">Hold information from one compass hit.</em>
+    <li> <strong class="uidlink"><a href="Bio.Cluster.Record-class.html">Bio.Cluster.Record</a></strong>:
+      <em class="summary">Store gene expression data.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.KEGG.Enzyme.Record-class.html">Bio.KEGG.Enzyme.Record</a></strong>:
       <em class="summary">Holds info from a KEGG Enzyme record.</em>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.GenBank.Record.Record-class.html">Bio.GenBank.Record.Record</a></strong>:
+      <em class="summary">Hold GenBank information in a format similar to the original record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.UniGene.Record-class.html">Bio.UniGene.Record</a></strong>:
+      <em class="summary">Store a Unigene record</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Emboss.Primer3.Record-class.html">Bio.Emboss.Primer3.Record</a></strong>:
+      <em class="summary">Represent information from a primer3 run finding primers.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Geo.Record.Record-class.html">Bio.Geo.Record.Record</a></strong>:
+      <em class="summary">Hold GEO information in a format similar to the original record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.SCOP.Des.Record-class.html">Bio.SCOP.Des.Record</a></strong>:
+      <em class="summary">Holds information for one node in the SCOP hierarchy.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.SwissProt.Record-class.html">Bio.SwissProt.Record</a></strong>:
+      <em class="summary">Holds information from a SwissProt record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.PopGen.FDist.Record-class.html">Bio.PopGen.FDist.Record</a></strong>:
+      <em class="summary">Holds information from a FDist record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.ExPASy.Prosite.Record-class.html">Bio.ExPASy.Prosite.Record</a></strong>:
+      <em class="summary">Holds information from a Prosite record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.SCOP.Dom.Record-class.html">Bio.SCOP.Dom.Record</a></strong>:
+      <em class="summary">Holds information for one SCOP domain.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.KEGG.Compound.Record-class.html">Bio.KEGG.Compound.Record</a></strong>:
+      <em class="summary">Holds info from a KEGG Ligand/Compound record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.ExPASy.Prodoc.Record-class.html">Bio.ExPASy.Prodoc.Record</a></strong>:
+      <em class="summary">Holds information from a Prodoc record.</em>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.GenBank.RecordParser-class.html">Bio.GenBank.RecordParser</a></strong>:
       <em class="summary">Parse GenBank files into Record objects (OBSOLETE).</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.SwissProt.Reference-class.html">Bio.SwissProt.Reference</a></strong>:
-      <em class="summary">Holds information from one reference in a SwissProt entry.</em>
+    <li> <strong class="uidlink"><a href="Bio.ExPASy.Prodoc.Reference-class.html">Bio.ExPASy.Prodoc.Reference</a></strong>:
+      <em class="summary">Holds information from a Prodoc citation.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.GenBank.Record.Reference-class.html">Bio.GenBank.Record.Reference</a></strong>:
       <em class="summary">Hold information from a GenBank reference.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.ExPASy.Prodoc.Reference-class.html">Bio.ExPASy.Prodoc.Reference</a></strong>:
-      <em class="summary">Holds information from a Prodoc citation.</em>
+    <li> <strong class="uidlink"><a href="Bio.SwissProt.Reference-class.html">Bio.SwissProt.Reference</a></strong>:
+      <em class="summary">Holds information from one reference in a SwissProt entry.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SeqFeature.Reference-class.html">Bio.SeqFeature.Reference</a></strong>:
       <em class="summary">Represent a Generic Reference object.</em>
@@ -1750,7 +1767,7 @@ two point sets on top of each other (minimizing the RMSD).</em>
       <em class="summary">Store the information for one SEQUENCE line from a Unigene file</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SeqIO.Interfaces.SequenceWriter-class.html">Bio.SeqIO.Interfaces.SequenceWriter</a></strong>:
-      <em class="summary">This class should be subclassed.</em>
+      <em class="summary">Base class for building SeqRecord writers.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.SeqIO.Interfaces.SequentialSequenceWriter-class.html">Bio.SeqIO.Interfaces.SequentialSequenceWriter</a></strong>:
       <em class="summary">This class should be subclassed.</em>
@@ -1889,11 +1906,11 @@ thereby minimizing the RMSD.</em>
     <li> <strong class="uidlink"><a href="Bio.Phylo.CDAO.Clade-class.html">Bio.Phylo.CDAO.Clade</a></strong>:
       <em class="summary">CDAO Clade (sub-tree) object.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Phylo.NeXML.Clade-class.html">Bio.Phylo.NeXML.Clade</a></strong>:
-      <em class="summary">NeXML Clade (sub-tree) object.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.Newick.Clade-class.html">Bio.Phylo.Newick.Clade</a></strong>:
       <em class="summary">Newick Clade (sub-tree) object.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Phylo.NeXML.Clade-class.html">Bio.Phylo.NeXML.Clade</a></strong>:
+      <em class="summary">NeXML Clade (sub-tree) object.</em>
     </li>
     </ul>
     </li>
@@ -1930,7 +1947,7 @@ thereby minimizing the RMSD.</em>
       <em class="summary">Domain architecture of a protein.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PhyloXML.Events-class.html">Bio.Phylo.PhyloXML.Events</a></strong>:
-      <em class="summary">Events at the root node of a clade (e.g.</em>
+      <em class="summary">Events at the root node of a clade (e.g. one gene duplication).</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PhyloXML.Id-class.html">Bio.Phylo.PhyloXML.Id</a></strong>:
       <em class="summary">A general-purpose identifier element.</em>
@@ -1985,11 +2002,11 @@ thereby minimizing the RMSD.</em>
     <li> <strong class="uidlink"><a href="Bio.Phylo.CDAO.Tree-class.html">Bio.Phylo.CDAO.Tree</a></strong>:
       <em class="summary">CDAO Tree object.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Phylo.Newick.Tree-class.html">Bio.Phylo.Newick.Tree</a></strong>:
-      <em class="summary">Newick Tree object.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.NeXML.Tree-class.html">Bio.Phylo.NeXML.Tree</a></strong>:
       <em class="summary">NeXML Tree object.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Phylo.Newick.Tree-class.html">Bio.Phylo.Newick.Tree</a></strong>:
+      <em class="summary">Newick Tree object.</em>
     </li>
     </ul>
     </li>
@@ -2007,11 +2024,11 @@ thereby minimizing the RMSD.</em>
     <li> <strong class="uidlink"><a href="Bio.Phylo.CDAO.Clade-class.html">Bio.Phylo.CDAO.Clade</a></strong>:
       <em class="summary">CDAO Clade (sub-tree) object.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Phylo.NeXML.Clade-class.html">Bio.Phylo.NeXML.Clade</a></strong>:
-      <em class="summary">NeXML Clade (sub-tree) object.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.Newick.Clade-class.html">Bio.Phylo.Newick.Clade</a></strong>:
       <em class="summary">Newick Clade (sub-tree) object.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Phylo.NeXML.Clade-class.html">Bio.Phylo.NeXML.Clade</a></strong>:
+      <em class="summary">NeXML Clade (sub-tree) object.</em>
     </li>
     </ul>
     </li>
@@ -2024,11 +2041,11 @@ thereby minimizing the RMSD.</em>
     <li> <strong class="uidlink"><a href="Bio.Phylo.CDAO.Tree-class.html">Bio.Phylo.CDAO.Tree</a></strong>:
       <em class="summary">CDAO Tree object.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Phylo.Newick.Tree-class.html">Bio.Phylo.Newick.Tree</a></strong>:
-      <em class="summary">Newick Tree object.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.NeXML.Tree-class.html">Bio.Phylo.NeXML.Tree</a></strong>:
       <em class="summary">NeXML Tree object.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Phylo.Newick.Tree-class.html">Bio.Phylo.Newick.Tree</a></strong>:
+      <em class="summary">Newick Tree object.</em>
     </li>
     </ul>
     </li>
@@ -2052,11 +2069,14 @@ thereby minimizing the RMSD.</em>
       <em class="summary">Class to stop training on a network when the validation error increases.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.PDB.Vector%27.Vector-class.html">Bio.PDB.Vector'.Vector</a></strong>:
-      <em class="summary">3D vector</em>
+      <em class="summary">3D vector.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.phenotype.phen_micro.WellRecord-class.html">Bio.phenotype.phen_micro.WellRecord</a></strong>:
       <em class="summary">WellRecord object stores all the time course signals of a phenotype
 Microarray well.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Phylo.CDAOIO.Writer-class.html">Bio.Phylo.CDAOIO.Writer</a></strong>:
+      <em class="summary">Based on the writer in Bio.Nexus.Trees (str, to_string).</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.NewickIO.Writer-class.html">Bio.Phylo.NewickIO.Writer</a></strong>:
       <em class="summary">Based on the writer in Bio.Nexus.Trees (str, to_string).</em>
@@ -2066,9 +2086,6 @@ Microarray well.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Phylo.PhyloXMLIO.Writer-class.html">Bio.Phylo.PhyloXMLIO.Writer</a></strong>:
       <em class="summary">Methods for serializing a PhyloXML object to XML.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Phylo.CDAOIO.Writer-class.html">Bio.Phylo.CDAOIO.Writer</a></strong>:
-      <em class="summary">Based on the writer in Bio.Nexus.Trees (str, to_string).</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SeqIO.SeqXmlIO.XMLRecordIterator-class.html">Bio.SeqIO.SeqXmlIO.XMLRecordIterator</a></strong>:
       <em class="summary">Base class for building iterators for record style XML formats.</em>
@@ -2088,7 +2105,7 @@ Microarray well.</em>
       <em class="summary">Represent an argument on a commandline.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Application._ArgumentList-class.html" onclick="show_private();">Bio.Application._ArgumentList</a></strong>:
-      <em class="summary">Represent a variable list of arguments on a command line, e.g.</em>
+      <em class="summary">Represent a variable list of arguments on a command line, e.g. multiple filenames.</em>
     </li>
     </ul>
     </li>
@@ -2366,7 +2383,7 @@ coordinates are query coordinates.</em>
       <em class="summary">Type basestring cannot be instantiated; it is the base for str and unicode.</em>
     <ul>
     <li> <strong class="uidlink">str</strong>:
-      <em class="summary">str(object) -&gt; string</em>
+      <em class="summary">str(object='') -&gt; string</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Entrez.Parser.StringElement-class.html">Bio.Entrez.Parser.StringElement</a></strong>
     </li>
@@ -2376,7 +2393,8 @@ coordinates are query coordinates.</em>
     </ul>
     </li>
     <li> <strong class="uidlink">unicode</strong>:
-      <em class="summary">unicode(string [, encoding[, errors]]) -&gt; object</em>
+      <em class="summary">unicode(object='') -&gt; unicode object
+unicode(string[, encoding[, errors]]) -&gt; unicode object</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Entrez.Parser.UnicodeElement-class.html">Bio.Entrez.Parser.UnicodeElement</a></strong>
     </li>
@@ -2412,6 +2430,14 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     <li> <strong class="uidlink"><a href="Bio.SubsMat.FreqTable.FreqTable-class.html">Bio.SubsMat.FreqTable.FreqTable</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.motifs.matrix.GenericPositionMatrix-class.html">Bio.motifs.matrix.GenericPositionMatrix</a></strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="Bio.motifs.matrix.FrequencyPositionMatrix-class.html">Bio.motifs.matrix.FrequencyPositionMatrix</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.motifs.matrix.PositionSpecificScoringMatrix-class.html">Bio.motifs.matrix.PositionSpecificScoringMatrix</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.motifs.matrix.PositionWeightMatrix-class.html">Bio.motifs.matrix.PositionWeightMatrix</a></strong>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SCOP.Cla.Index-class.html">Bio.SCOP.Cla.Index</a></strong>:
       <em class="summary">A CLA file indexed by SCOP identifiers for rapid random access.</em>
@@ -2421,26 +2447,37 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     </li>
     <li> <strong class="uidlink"><a href="Bio.motifs.transfac.Motif-class.html">Bio.motifs.transfac.Motif</a></strong>:
       <em class="summary">A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
-motif.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio._py3k._ordereddict.OrderedDict-class.html">Bio._py3k._ordereddict.OrderedDict</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.SwissProt.KeyWList.Record-class.html">Bio.SwissProt.KeyWList.Record</a></strong>:
-      <em class="summary">This record stores the information of one keyword or category in the
-keywlist.txt as a Python dictionary.</em>
+motif. This class inherits from the Bio.motifs.Motif base class, as well
+as from a Python dictionary. All motif information found by the parser
+is stored as attributes of the base class when possible; see the
+Bio.motifs.Motif base class for a description of these attributes. All
+other information associated with the motif is stored as (key, value)
+pairs in the dictionary, where the key is the two-letter fields as found
+in the TRANSFAC file. References are an exception: These are stored in
+the .references attribute.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.ExPASy.Enzyme.Record-class.html">Bio.ExPASy.Enzyme.Record</a></strong>:
       <em class="summary">Holds information from an ExPASy ENZYME record as a Python dictionary.</em>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.SwissProt.KeyWList.Record-class.html">Bio.SwissProt.KeyWList.Record</a></strong>:
+      <em class="summary">This record stores the information of one keyword or category in the
+keywlist.txt as a Python dictionary. The keys in this dictionary are
+the line codes that can appear in the keywlist.txt file:</em>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Medline.Record-class.html">Bio.Medline.Record</a></strong>:
       <em class="summary">A dictionary holding information from a Medline record.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.ExPASy.cellosaurus.Record-class.html">Bio.ExPASy.cellosaurus.Record</a></strong>:
+      <em class="summary">Holds information from an ExPASy Cellosaurus record as a Python dictionary.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SCOP.Raf.SeqMapIndex-class.html">Bio.SCOP.Raf.SeqMapIndex</a></strong>:
       <em class="summary">An RAF file index.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.SubsMat.SeqMat-class.html">Bio.SubsMat.SeqMat</a></strong>:
       <em class="summary">A Generic sequence matrix class
-The key is a 2-tuple containing the letter indices of the matrix.</em>
+The key is a 2-tuple containing the letter indices of the matrix. Those
+should be sorted in the tuple (low, high). Because each matrix is dealt
+with as a half-matrix.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.SubsMat.AcceptedReplacementsMatrix-class.html">Bio.SubsMat.AcceptedReplacementsMatrix</a></strong>:
       <em class="summary">Accepted replacements matrix</em>
@@ -2484,7 +2521,8 @@ The key is a 2-tuple containing the letter indices of the matrix.</em>
       <em class="summary">identity_match([match][, mismatch]) -&gt; match_fn</em>
     </li>
     <li> <strong class="uidlink">int</strong>:
-      <em class="summary">int(x[, base]) -&gt; integer</em>
+      <em class="summary">int(x=0) -&gt; int or long
+int(x, base=10) -&gt; int or long</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.SeqFeature.AfterPosition-class.html">Bio.SeqFeature.AfterPosition</a></strong>:
       <em class="summary">Specify a position where the actual location is found after it.</em>
@@ -2532,45 +2570,24 @@ list(iterable) -&gt; new list initialized from iterable's items</em>
     <li> <strong class="uidlink"><a href="Bio.PDB.Polypeptide.Polypeptide-class.html">Bio.PDB.Polypeptide.Polypeptide</a></strong>:
       <em class="summary">A polypeptide is simply a list of L{Residue} objects.</em>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QueryAll-class.html">Bio.DocSQL.QueryAll</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QueryAllFirstItem-class.html">Bio.DocSQL.QueryAllFirstItem</a></strong>
-    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QueryRow-class.html">Bio.DocSQL.QueryRow</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.QuerySingle-class.html">Bio.DocSQL.QuerySingle</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.Create-class.html">Bio.DocSQL.Create</a></strong>
-    <ul>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.Insert-class.html">Bio.DocSQL.Insert</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.DocSQL.Update-class.html">Bio.DocSQL.Update</a></strong>
-    </li>
-    </ul>
-    </li>
-    </ul>
-    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.motifs.mast.Record-class.html">Bio.motifs.mast.Record</a></strong>:
-      <em class="summary">The class for holding the results from a MAST run.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.motifs.transfac.Record-class.html">Bio.motifs.transfac.Record</a></strong>:
-      <em class="summary">A Bio.motifs.transfac.Record stores the information in a TRANSFAC
-matrix table.</em>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.motifs.meme.Record-class.html">Bio.motifs.meme.Record</a></strong>:
-      <em class="summary">A class for holding the results of a MEME run.</em>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.motifs.alignace.Record-class.html">Bio.motifs.alignace.Record</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.motifs.jaspar.Record-class.html">Bio.motifs.jaspar.Record</a></strong>:
       <em class="summary">Represent a list of jaspar motifs.</em>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.motifs.mast.Record-class.html">Bio.motifs.mast.Record</a></strong>:
+      <em class="summary">The class for holding the results from a MAST run.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.motifs.meme.Record-class.html">Bio.motifs.meme.Record</a></strong>:
+      <em class="summary">A class for holding the results of a MEME run.</em>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.ExPASy.ScanProsite.Record-class.html">Bio.ExPASy.ScanProsite.Record</a></strong>:
       <em class="summary">Represents search results returned by ScanProsite.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.motifs.transfac.Record-class.html">Bio.motifs.transfac.Record</a></strong>:
+      <em class="summary">A Bio.motifs.transfac.Record stores the information in a TRANSFAC
+matrix table. The record inherits from a list containing the individual
+motifs.</em>
     </li>
     </ul>
     </li>
@@ -2600,7 +2617,7 @@ set(iterable) -&gt; new set object</em>
 type(name, bases, dict) -&gt; a new type</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RestrictionType-class.html" onclick="show_private();">Bio.Restriction.Restriction.RestrictionType</a></strong>:
-      <em class="summary">RestrictionType.</em>
+      <em class="summary">RestrictionType. Type from which derives all enzyme classes.</em>
     <ul>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AanI-class.html">Bio.Restriction.Restriction.AanI</a></strong>
     </li>
@@ -2646,6 +2663,8 @@ type(name, bases, dict) -&gt; a new type</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc36I-class.html">Bio.Restriction.Restriction.Acc36I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65I-class.html">Bio.Restriction.Restriction.Acc65I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AccB1I-class.html">Bio.Restriction.Restriction.AccB1I</a></strong>
     </li>
@@ -2702,6 +2721,8 @@ type(name, bases, dict) -&gt; a new type</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhdI-class.html">Bio.Restriction.Restriction.AhdI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhlI-class.html">Bio.Restriction.Restriction.AhlI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
@@ -3331,6 +3352,8 @@ is variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RdeGBIII-class.html">Bio.Restriction.Restriction.RdeGBIII</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RleAI-class.html">Bio.Restriction.Restriction.RleAI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaB5I-class.html">Bio.Restriction.Restriction.RpaB5I</a></strong>
@@ -3517,6 +3540,8 @@ is variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AsuNHI-class.html">Bio.Restriction.Restriction.AsuNHI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaI-class.html">Bio.Restriction.Restriction.AvaI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaII-class.html">Bio.Restriction.Restriction.AvaII</a></strong>
@@ -3618,6 +3643,8 @@ is variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BinI-class.html">Bio.Restriction.Restriction.BinI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BisI-class.html">Bio.Restriction.Restriction.BisI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BlnI-class.html">Bio.Restriction.Restriction.BlnI</a></strong>
     </li>
@@ -3836,6 +3863,8 @@ is blunt.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PdiI-class.html">Bio.Restriction.Restriction.PdiI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PdmI-class.html">Bio.Restriction.Restriction.PdmI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmaCI-class.html">Bio.Restriction.Restriction.PmaCI</a></strong>
     </li>
@@ -4079,6 +4108,8 @@ is blunt.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp68I-class.html">Bio.Restriction.Restriction.Bsp68I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspACI-class.html">Bio.Restriction.Restriction.BspACI</a></strong>
@@ -4237,8 +4268,6 @@ is blunt.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu36I-class.html">Bio.Restriction.Restriction.Bsu36I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BsuI-class.html">Bio.Restriction.Restriction.BsuI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BsuRI-class.html">Bio.Restriction.Restriction.BsuRI</a></strong>
@@ -4309,6 +4338,8 @@ is blunt.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CfrI-class.html">Bio.Restriction.Restriction.CfrI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -4324,6 +4355,8 @@ is blunt.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNIII-class.html">Bio.Restriction.Restriction.CjeNIII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeP659IV-class.html">Bio.Restriction.Restriction.CjeP659IV</a></strong>
     </li>
@@ -6195,6 +6228,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl23II-class.html">Bio.Restriction.Restriction.Pfl23II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PinAI-class.html">Bio.Restriction.Restriction.PinAI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ple19I-class.html">Bio.Restriction.Restriction.Ple19I</a></strong>
@@ -6451,6 +6486,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco32I-class.html">Bio.Restriction.Restriction.Eco32I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco47I-class.html">Bio.Restriction.Restriction.Eco47I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco47III-class.html">Bio.Restriction.Restriction.Eco47III</a></strong>
@@ -6477,7 +6514,7 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoICRI-class.html">Bio.Restriction.Restriction.EcoICRI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoNI-class.html">Bio.Restriction.Restriction.EcoNI</a></strong>
     </li>
@@ -6501,6 +6538,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EheI-class.html">Bio.Restriction.Restriction.EheI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.ErhI-class.html">Bio.Restriction.Restriction.ErhI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaBC3I-class.html">Bio.Restriction.Restriction.EsaBC3I</a></strong>
@@ -6512,6 +6551,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3I-class.html">Bio.Restriction.Restriction.Esp3I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EspI-class.html">Bio.Restriction.Restriction.EspI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FaeI-class.html">Bio.Restriction.Restriction.FaeI</a></strong>
     </li>
@@ -6760,6 +6801,10 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AbaCIII-class.html">Bio.Restriction.Restriction.AbaCIII</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65I-class.html">Bio.Restriction.Restriction.Acc65I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AccI-class.html">Bio.Restriction.Restriction.AccI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AchA6III-class.html">Bio.Restriction.Restriction.AchA6III</a></strong>
@@ -6772,6 +6817,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AcuI-class.html">Bio.Restriction.Restriction.AcuI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AflII-class.html">Bio.Restriction.Restriction.AflII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AflIII-class.html">Bio.Restriction.Restriction.AflIII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AgeI-class.html">Bio.Restriction.Restriction.AgeI</a></strong>
@@ -6780,9 +6827,13 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhdI-class.html">Bio.Restriction.Restriction.AhdI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AjnI-class.html">Bio.Restriction.Restriction.AjnI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AleI-class.html">Bio.Restriction.Restriction.AleI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AloI-class.html">Bio.Restriction.Restriction.AloI</a></strong>
     </li>
@@ -6823,6 +6874,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AspS9I-class.html">Bio.Restriction.Restriction.AspS9I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Asu14238IV-class.html">Bio.Restriction.Restriction.Asu14238IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaI-class.html">Bio.Restriction.Restriction.AvaI</a></strong>
     </li>
@@ -6872,11 +6925,15 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BfuCI-class.html">Bio.Restriction.Restriction.BfuCI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BglI-class.html">Bio.Restriction.Restriction.BglI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BglII-class.html">Bio.Restriction.Restriction.BglII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BloAII-class.html">Bio.Restriction.Restriction.BloAII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BlpI-class.html">Bio.Restriction.Restriction.BlpI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmgBI-class.html">Bio.Restriction.Restriction.BmgBI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmrI-class.html">Bio.Restriction.Restriction.BmrI</a></strong>
     </li>
@@ -6924,6 +6981,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspACI-class.html">Bio.Restriction.Restriction.BspACI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspCNI-class.html">Bio.Restriction.Restriction.BspCNI</a></strong>
@@ -6944,6 +7003,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BssSI-class.html">Bio.Restriction.Restriction.BssSI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstAPI-class.html">Bio.Restriction.Restriction.BstAPI</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstC8I-class.html">Bio.Restriction.Restriction.BstC8I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstF5I-class.html">Bio.Restriction.Restriction.BstF5I</a></strong>
@@ -6957,8 +7018,6 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstYI-class.html">Bio.Restriction.Restriction.BstYI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu15I-class.html">Bio.Restriction.Restriction.Bsu15I</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BsuRI-class.html">Bio.Restriction.Restriction.BsuRI</a></strong>
     </li>
@@ -7000,6 +7059,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CfrI-class.html">Bio.Restriction.Restriction.CfrI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -7013,6 +7074,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNIII-class.html">Bio.Restriction.Restriction.CjeNIII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cla11845III-class.html">Bio.Restriction.Restriction.Cla11845III</a></strong>
     </li>
@@ -7056,13 +7119,15 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco31I-class.html">Bio.Restriction.Restriction.Eco31I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco57I-class.html">Bio.Restriction.Restriction.Eco57I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoE1140I-class.html">Bio.Restriction.Restriction.EcoE1140I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoHI-class.html">Bio.Restriction.Restriction.EcoHI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoNI-class.html">Bio.Restriction.Restriction.EcoNI</a></strong>
     </li>
@@ -7076,6 +7141,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoT38I-class.html">Bio.Restriction.Restriction.EcoT38I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaBC3I-class.html">Bio.Restriction.Restriction.EsaBC3I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaSSI-class.html">Bio.Restriction.Restriction.EsaSSI</a></strong>
@@ -7084,9 +7151,9 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3I-class.html">Bio.Restriction.Restriction.Esp3I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FatI-class.html">Bio.Restriction.Restriction.FatI</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FauI-class.html">Bio.Restriction.Restriction.FauI</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FatI-class.html">Bio.Restriction.Restriction.FatI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Fnu4HI-class.html">Bio.Restriction.Restriction.Fnu4HI</a></strong>
     </li>
@@ -7242,6 +7309,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nal45188II-class.html">Bio.Restriction.Restriction.Nal45188II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NciI-class.html">Bio.Restriction.Restriction.NciI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NcoI-class.html">Bio.Restriction.Restriction.NcoI</a></strong>
@@ -7270,6 +7339,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NotI-class.html">Bio.Restriction.Restriction.NotI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NspI-class.html">Bio.Restriction.Restriction.NspI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.OspHL35III-class.html">Bio.Restriction.Restriction.OspHL35III</a></strong>
@@ -7278,9 +7349,13 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pac19842II-class.html">Bio.Restriction.Restriction.Pac19842II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PaeR7I-class.html">Bio.Restriction.Restriction.PaeR7I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pal408I-class.html">Bio.Restriction.Restriction.Pal408I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pdi8503III-class.html">Bio.Restriction.Restriction.Pdi8503III</a></strong>
     </li>
@@ -7291,10 +7366,6 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PliMI-class.html">Bio.Restriction.Restriction.PliMI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PluTI-class.html">Bio.Restriction.Restriction.PluTI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmlI-class.html">Bio.Restriction.Restriction.PmlI</a></strong>
     </li>
@@ -7308,8 +7379,6 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp0357II-class.html">Bio.Restriction.Restriction.Psp0357II</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PspGI-class.html">Bio.Restriction.Restriction.PspGI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PspOMII-class.html">Bio.Restriction.Restriction.PspOMII</a></strong>
@@ -7319,6 +7388,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PspPRI-class.html">Bio.Restriction.Restriction.PspPRI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PstI-class.html">Bio.Restriction.Restriction.PstI</a></strong>
     </li>
@@ -7336,6 +7407,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RflFIII-class.html">Bio.Restriction.Restriction.RflFIII</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaB5I-class.html">Bio.Restriction.Restriction.RpaB5I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaBI-class.html">Bio.Restriction.Restriction.RpaBI</a></strong>
@@ -7345,6 +7418,12 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaTI-class.html">Bio.Restriction.Restriction.RpaTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RsaI-class.html">Bio.Restriction.Restriction.RsaI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RsrII-class.html">Bio.Restriction.Restriction.RsrII</a></strong>
     </li>
@@ -7372,7 +7451,29 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -7452,6 +7553,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XbaI-class.html">Bio.Restriction.Restriction.XbaI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XcmI-class.html">Bio.Restriction.Restriction.XcmI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XhoI-class.html">Bio.Restriction.Restriction.XhoI</a></strong>
@@ -7461,6 +7564,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XmaI-class.html">Bio.Restriction.Restriction.XmaI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XmaIII-class.html">Bio.Restriction.Restriction.XmaIII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XmnI-class.html">Bio.Restriction.Restriction.XmnI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Yps3606I-class.html">Bio.Restriction.Restriction.Yps3606I</a></strong>
     </li>
@@ -7484,8 +7589,6 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc16I-class.html">Bio.Restriction.Restriction.Acc16I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc36I-class.html">Bio.Restriction.Restriction.Acc36I</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65I-class.html">Bio.Restriction.Restriction.Acc65I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AccB1I-class.html">Bio.Restriction.Restriction.AccB1I</a></strong>
     </li>
@@ -7517,8 +7620,6 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AfiI-class.html">Bio.Restriction.Restriction.AfiI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AflII-class.html">Bio.Restriction.Restriction.AflII</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhaIII-class.html">Bio.Restriction.Restriction.AhaIII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhlI-class.html">Bio.Restriction.Restriction.AhlI</a></strong>
@@ -7526,8 +7627,6 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AjiI-class.html">Bio.Restriction.Restriction.AjiI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AjuI-class.html">Bio.Restriction.Restriction.AjuI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AleI-class.html">Bio.Restriction.Restriction.AleI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AlfI-class.html">Bio.Restriction.Restriction.AlfI</a></strong>
     </li>
@@ -7621,10 +7720,6 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BfuI-class.html">Bio.Restriction.Restriction.BfuI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BglI-class.html">Bio.Restriction.Restriction.BglI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BglII-class.html">Bio.Restriction.Restriction.BglII</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BinI-class.html">Bio.Restriction.Restriction.BinI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BisI-class.html">Bio.Restriction.Restriction.BisI</a></strong>
@@ -7644,6 +7739,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmeRI-class.html">Bio.Restriction.Restriction.BmeRI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmeT110I-class.html">Bio.Restriction.Restriction.BmeT110I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmgBI-class.html">Bio.Restriction.Restriction.BmgBI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmgI-class.html">Bio.Restriction.Restriction.BmgI</a></strong>
     </li>
@@ -7830,8 +7927,6 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstACI-class.html">Bio.Restriction.Restriction.BstACI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstAFI-class.html">Bio.Restriction.Restriction.BstAFI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstAPI-class.html">Bio.Restriction.Restriction.BstAPI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstAUI-class.html">Bio.Restriction.Restriction.BstAUI</a></strong>
     </li>
@@ -8020,6 +8115,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FalI-class.html">Bio.Restriction.Restriction.FalI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FaqI-class.html">Bio.Restriction.Restriction.FaqI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FauI-class.html">Bio.Restriction.Restriction.FauI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FauNDI-class.html">Bio.Restriction.Restriction.FauNDI</a></strong>
     </li>
@@ -8228,6 +8325,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl1108I-class.html">Bio.Restriction.Restriction.Pfl1108I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl23II-class.html">Bio.Restriction.Restriction.Pfl23II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflFI-class.html">Bio.Restriction.Restriction.PflFI</a></strong>
     </li>
@@ -8483,8 +8582,6 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XmiI-class.html">Bio.Restriction.Restriction.XmiI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XmnI-class.html">Bio.Restriction.Restriction.XmnI</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XspI-class.html">Bio.Restriction.Restriction.XspI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.YkrI-class.html">Bio.Restriction.Restriction.YkrI</a></strong>
@@ -8579,6 +8676,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NarI-class.html">Bio.Restriction.Restriction.NarI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NciI-class.html">Bio.Restriction.Restriction.NciI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NcoI-class.html">Bio.Restriction.Restriction.NcoI</a></strong>
@@ -8622,9 +8721,13 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AbaUMB2I-class.html">Bio.Restriction.Restriction.AbaUMB2I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AchA6III-class.html">Bio.Restriction.Restriction.AchA6III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Aco12261II-class.html">Bio.Restriction.Restriction.Aco12261II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
@@ -8635,6 +8738,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AspJHL3II-class.html">Bio.Restriction.Restriction.AspJHL3II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Asu14238IV-class.html">Bio.Restriction.Restriction.Asu14238IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaIII-class.html">Bio.Restriction.Restriction.AvaIII</a></strong>
     </li>
@@ -8648,6 +8753,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BfaSII-class.html">Bio.Restriction.Restriction.BfaSII</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BloAII-class.html">Bio.Restriction.Restriction.BloAII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmgI-class.html">Bio.Restriction.Restriction.BmgI</a></strong>
@@ -8656,11 +8763,11 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspGI-class.html">Bio.Restriction.Restriction.BspGI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspNCI-class.html">Bio.Restriction.Restriction.BspNCI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cal14237I-class.html">Bio.Restriction.Restriction.Cal14237I</a></strong>
     </li>
@@ -8678,6 +8785,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cdu23823II-class.html">Bio.Restriction.Restriction.Cdu23823II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -8687,6 +8796,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeFV-class.html">Bio.Restriction.Restriction.CjeFV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeP659IV-class.html">Bio.Restriction.Restriction.CjeP659IV</a></strong>
     </li>
@@ -8706,13 +8817,19 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ecl35734I-class.html">Bio.Restriction.Restriction.Ecl35734I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoE1140I-class.html">Bio.Restriction.Restriction.EcoE1140I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaSSI-class.html">Bio.Restriction.Restriction.EsaSSI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3007I-class.html">Bio.Restriction.Restriction.Esp3007I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FinI-class.html">Bio.Restriction.Restriction.FinI</a></strong>
     </li>
@@ -8778,15 +8895,23 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nal45188II-class.html">Bio.Restriction.Restriction.Nal45188II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NhaXI-class.html">Bio.Restriction.Restriction.NhaXI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NhoI-class.html">Bio.Restriction.Restriction.NhoI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.OspHL35III-class.html">Bio.Restriction.Restriction.OspHL35III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pac19842II-class.html">Bio.Restriction.Restriction.Pac19842II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pal408I-class.html">Bio.Restriction.Restriction.Pal408I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pdi8503III-class.html">Bio.Restriction.Restriction.Pdi8503III</a></strong>
     </li>
@@ -8798,17 +8923,13 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PliMI-class.html">Bio.Restriction.Restriction.PliMI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pse18267I-class.html">Bio.Restriction.Restriction.Pse18267I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp0357II-class.html">Bio.Restriction.Restriction.Psp0357II</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PsuGI-class.html">Bio.Restriction.Restriction.PsuGI</a></strong>
     </li>
@@ -8822,13 +8943,41 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaTI-class.html">Bio.Restriction.Restriction.RpaTI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Saf8902III-class.html">Bio.Restriction.Restriction.Saf8902III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sbo46I-class.html">Bio.Restriction.Restriction.Sbo46I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -8868,6 +9017,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Vtu19109I-class.html">Bio.Restriction.Restriction.Vtu19109I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Yps3606I-class.html">Bio.Restriction.Restriction.Yps3606I</a></strong>
     </li>
     </ul>
@@ -8887,6 +9038,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc36I-class.html">Bio.Restriction.Restriction.Acc36I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AccBSI-class.html">Bio.Restriction.Restriction.AccBSI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AceIII-class.html">Bio.Restriction.Restriction.AceIII</a></strong>
@@ -8900,6 +9053,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Aco12261II-class.html">Bio.Restriction.Restriction.Aco12261II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AcuI-class.html">Bio.Restriction.Restriction.AcuI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
@@ -8934,6 +9089,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Asu14238IV-class.html">Bio.Restriction.Restriction.Asu14238IV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AsuHPI-class.html">Bio.Restriction.Restriction.AsuHPI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Awo1030IV-class.html">Bio.Restriction.Restriction.Awo1030IV</a></strong>
     </li>
@@ -8984,6 +9141,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BfuI-class.html">Bio.Restriction.Restriction.BfuI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BinI-class.html">Bio.Restriction.Restriction.BinI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BloAII-class.html">Bio.Restriction.Restriction.BloAII</a></strong>
     </li>
@@ -9055,6 +9214,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspACI-class.html">Bio.Restriction.Restriction.BspACI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspCNI-class.html">Bio.Restriction.Restriction.BspCNI</a></strong>
@@ -9092,8 +9253,6 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstV1I-class.html">Bio.Restriction.Restriction.BstV1I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BstV2I-class.html">Bio.Restriction.Restriction.BstV2I</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BsuI-class.html">Bio.Restriction.Restriction.BsuI</a></strong>
     </li>
@@ -9133,6 +9292,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cdu23823II-class.html">Bio.Restriction.Restriction.Cdu23823II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -9146,6 +9307,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNIII-class.html">Bio.Restriction.Restriction.CjeNIII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeP659IV-class.html">Bio.Restriction.Restriction.CjeP659IV</a></strong>
     </li>
@@ -9181,19 +9344,25 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco31I-class.html">Bio.Restriction.Restriction.Eco31I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco57I-class.html">Bio.Restriction.Restriction.Eco57I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco57MI-class.html">Bio.Restriction.Restriction.Eco57MI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoE1140I-class.html">Bio.Restriction.Restriction.EcoE1140I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaSSI-class.html">Bio.Restriction.Restriction.EsaSSI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3007I-class.html">Bio.Restriction.Restriction.Esp3007I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3I-class.html">Bio.Restriction.Restriction.Esp3I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FaqI-class.html">Bio.Restriction.Restriction.FaqI</a></strong>
     </li>
@@ -9305,6 +9474,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nal45188II-class.html">Bio.Restriction.Restriction.Nal45188II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NgoAVII-class.html">Bio.Restriction.Restriction.NgoAVII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NgoAVIII-class.html">Bio.Restriction.Restriction.NgoAVIII</a></strong>
@@ -9315,11 +9486,17 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NmeAIII-class.html">Bio.Restriction.Restriction.NmeAIII</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.OspHL35III-class.html">Bio.Restriction.Restriction.OspHL35III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pac19842II-class.html">Bio.Restriction.Restriction.Pac19842II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pal408I-class.html">Bio.Restriction.Restriction.Pal408I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PciSI-class.html">Bio.Restriction.Restriction.PciSI</a></strong>
     </li>
@@ -9339,10 +9516,6 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PliMI-class.html">Bio.Restriction.Restriction.PliMI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PpiI-class.html">Bio.Restriction.Restriction.PpiI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PpsI-class.html">Bio.Restriction.Restriction.PpsI</a></strong>
@@ -9350,8 +9523,6 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pse18267I-class.html">Bio.Restriction.Restriction.Pse18267I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp0357II-class.html">Bio.Restriction.Restriction.Psp0357II</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PspFI-class.html">Bio.Restriction.Restriction.PspFI</a></strong>
     </li>
@@ -9362,6 +9533,8 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PsrI-class.html">Bio.Restriction.Restriction.PsrI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PsuGI-class.html">Bio.Restriction.Restriction.PsuGI</a></strong>
     </li>
@@ -9377,6 +9550,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaI-class.html">Bio.Restriction.Restriction.RlaI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RleAI-class.html">Bio.Restriction.Restriction.RleAI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaB5I-class.html">Bio.Restriction.Restriction.RpaB5I</a></strong>
@@ -9386,6 +9561,12 @@ and the cut are not variable.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaI-class.html">Bio.Restriction.Restriction.RpaI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaTI-class.html">Bio.Restriction.Restriction.RpaTI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Saf8902III-class.html">Bio.Restriction.Restriction.Saf8902III</a></strong>
     </li>
@@ -9401,7 +9582,29 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -9469,6 +9672,8 @@ and the cut are not variable.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.WviI-class.html">Bio.Restriction.Restriction.WviI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.YkrI-class.html">Bio.Restriction.Restriction.YkrI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Yps3606I-class.html">Bio.Restriction.Restriction.Yps3606I</a></strong>
@@ -9485,9 +9690,13 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AbaUMB2I-class.html">Bio.Restriction.Restriction.AbaUMB2I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AchA6III-class.html">Bio.Restriction.Restriction.AchA6III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Aco12261II-class.html">Bio.Restriction.Restriction.Aco12261II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
@@ -9498,6 +9707,8 @@ is not characterised.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AspJHL3II-class.html">Bio.Restriction.Restriction.AspJHL3II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Asu14238IV-class.html">Bio.Restriction.Restriction.Asu14238IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaIII-class.html">Bio.Restriction.Restriction.AvaIII</a></strong>
     </li>
@@ -9511,6 +9722,8 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BfaSII-class.html">Bio.Restriction.Restriction.BfaSII</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BloAII-class.html">Bio.Restriction.Restriction.BloAII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmgI-class.html">Bio.Restriction.Restriction.BmgI</a></strong>
@@ -9519,11 +9732,11 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspGI-class.html">Bio.Restriction.Restriction.BspGI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspNCI-class.html">Bio.Restriction.Restriction.BspNCI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cal14237I-class.html">Bio.Restriction.Restriction.Cal14237I</a></strong>
     </li>
@@ -9541,6 +9754,8 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cdu23823II-class.html">Bio.Restriction.Restriction.Cdu23823II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -9550,6 +9765,8 @@ is not characterised.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeFV-class.html">Bio.Restriction.Restriction.CjeFV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeP659IV-class.html">Bio.Restriction.Restriction.CjeP659IV</a></strong>
     </li>
@@ -9569,13 +9786,19 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ecl35734I-class.html">Bio.Restriction.Restriction.Ecl35734I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoE1140I-class.html">Bio.Restriction.Restriction.EcoE1140I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaSSI-class.html">Bio.Restriction.Restriction.EsaSSI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3007I-class.html">Bio.Restriction.Restriction.Esp3007I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FinI-class.html">Bio.Restriction.Restriction.FinI</a></strong>
     </li>
@@ -9641,15 +9864,23 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nal45188II-class.html">Bio.Restriction.Restriction.Nal45188II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NhaXI-class.html">Bio.Restriction.Restriction.NhaXI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NhoI-class.html">Bio.Restriction.Restriction.NhoI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.OspHL35III-class.html">Bio.Restriction.Restriction.OspHL35III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pac19842II-class.html">Bio.Restriction.Restriction.Pac19842II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pal408I-class.html">Bio.Restriction.Restriction.Pal408I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pdi8503III-class.html">Bio.Restriction.Restriction.Pdi8503III</a></strong>
     </li>
@@ -9661,17 +9892,13 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PliMI-class.html">Bio.Restriction.Restriction.PliMI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pse18267I-class.html">Bio.Restriction.Restriction.Pse18267I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp0357II-class.html">Bio.Restriction.Restriction.Psp0357II</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PsuGI-class.html">Bio.Restriction.Restriction.PsuGI</a></strong>
     </li>
@@ -9685,13 +9912,41 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaTI-class.html">Bio.Restriction.Restriction.RpaTI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Saf8902III-class.html">Bio.Restriction.Restriction.Saf8902III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sbo46I-class.html">Bio.Restriction.Restriction.Sbo46I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -9731,6 +9986,8 @@ is not characterised.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Vtu19109I-class.html">Bio.Restriction.Restriction.Vtu19109I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Yps3606I-class.html">Bio.Restriction.Restriction.Yps3606I</a></strong>
     </li>
     </ul>
@@ -9747,6 +10004,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AbaUMB2I-class.html">Bio.Restriction.Restriction.AbaUMB2I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AceIII-class.html">Bio.Restriction.Restriction.AceIII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AchA6III-class.html">Bio.Restriction.Restriction.AchA6III</a></strong>
@@ -9754,6 +10013,8 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Aco12261II-class.html">Bio.Restriction.Restriction.Aco12261II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhaIII-class.html">Bio.Restriction.Restriction.AhaIII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
@@ -9782,6 +10043,8 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Asu14238IV-class.html">Bio.Restriction.Restriction.Asu14238IV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AsuI-class.html">Bio.Restriction.Restriction.AsuI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaIII-class.html">Bio.Restriction.Restriction.AvaIII</a></strong>
     </li>
@@ -9813,6 +10076,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BinI-class.html">Bio.Restriction.Restriction.BinI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BloAII-class.html">Bio.Restriction.Restriction.BloAII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmeDI-class.html">Bio.Restriction.Restriction.BmeDI</a></strong>
@@ -9833,6 +10098,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspD6I-class.html">Bio.Restriction.Restriction.BspD6I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspGI-class.html">Bio.Restriction.Restriction.BspGI</a></strong>
@@ -9842,8 +10109,6 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspMII-class.html">Bio.Restriction.Restriction.BspMII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspNCI-class.html">Bio.Restriction.Restriction.BspNCI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BthCI-class.html">Bio.Restriction.Restriction.BthCI</a></strong>
     </li>
@@ -9875,6 +10140,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CfrI-class.html">Bio.Restriction.Restriction.CfrI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -9890,6 +10157,8 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNIII-class.html">Bio.Restriction.Restriction.CjeNIII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeP659IV-class.html">Bio.Restriction.Restriction.CjeP659IV</a></strong>
     </li>
@@ -9921,13 +10190,17 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ecl35734I-class.html">Bio.Restriction.Restriction.Ecl35734I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco57MI-class.html">Bio.Restriction.Restriction.Eco57MI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoE1140I-class.html">Bio.Restriction.Restriction.EcoE1140I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoHI-class.html">Bio.Restriction.Restriction.EcoHI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaBC3I-class.html">Bio.Restriction.Restriction.EsaBC3I</a></strong>
     </li>
@@ -9936,6 +10209,8 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3007I-class.html">Bio.Restriction.Restriction.Esp3007I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EspI-class.html">Bio.Restriction.Restriction.EspI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FinI-class.html">Bio.Restriction.Restriction.FinI</a></strong>
     </li>
@@ -10035,6 +10310,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nal45188II-class.html">Bio.Restriction.Restriction.Nal45188II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NgoAVII-class.html">Bio.Restriction.Restriction.NgoAVII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NgoAVIII-class.html">Bio.Restriction.Restriction.NgoAVIII</a></strong>
@@ -10049,6 +10326,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NmeDI-class.html">Bio.Restriction.Restriction.NmeDI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NspBII-class.html">Bio.Restriction.Restriction.NspBII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.OspHL35III-class.html">Bio.Restriction.Restriction.OspHL35III</a></strong>
@@ -10057,7 +10336,11 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pac19842II-class.html">Bio.Restriction.Restriction.Pac19842II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pal408I-class.html">Bio.Restriction.Restriction.Pal408I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pdi8503III-class.html">Bio.Restriction.Restriction.Pdi8503III</a></strong>
     </li>
@@ -10067,13 +10350,11 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl1108I-class.html">Bio.Restriction.Restriction.Pfl1108I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PlaDI-class.html">Bio.Restriction.Restriction.PlaDI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PliMI-class.html">Bio.Restriction.Restriction.PliMI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PpiI-class.html">Bio.Restriction.Restriction.PpiI</a></strong>
     </li>
@@ -10085,8 +10366,6 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp03I-class.html">Bio.Restriction.Restriction.Psp03I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PspOMII-class.html">Bio.Restriction.Restriction.PspOMII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PspPRI-class.html">Bio.Restriction.Restriction.PspPRI</a></strong>
@@ -10094,6 +10373,8 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PssI-class.html">Bio.Restriction.Restriction.PssI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PsuGI-class.html">Bio.Restriction.Restriction.PsuGI</a></strong>
     </li>
@@ -10111,6 +10392,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaI-class.html">Bio.Restriction.Restriction.RlaI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RleAI-class.html">Bio.Restriction.Restriction.RleAI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaB5I-class.html">Bio.Restriction.Restriction.RpaB5I</a></strong>
@@ -10120,6 +10403,12 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaI-class.html">Bio.Restriction.Restriction.RpaI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaTI-class.html">Bio.Restriction.Restriction.RpaTI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Saf8902III-class.html">Bio.Restriction.Restriction.Saf8902III</a></strong>
     </li>
@@ -10141,7 +10430,29 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -10225,6 +10536,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.WviI-class.html">Bio.Restriction.Restriction.WviI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XhoII-class.html">Bio.Restriction.Restriction.XhoII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XmaIII-class.html">Bio.Restriction.Restriction.XmaIII</a></strong>
@@ -10234,6 +10547,8 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Yps3606I-class.html">Bio.Restriction.Restriction.Yps3606I</a></strong>
     </li>
     </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NruI-class.html">Bio.Restriction.Restriction.NruI</a></strong>
     </li>
@@ -11326,6 +11641,8 @@ available.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl23II-class.html">Bio.Restriction.Restriction.Pfl23II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflFI-class.html">Bio.Restriction.Restriction.PflFI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflMI-class.html">Bio.Restriction.Restriction.PflMI</a></strong>
@@ -11423,6 +11740,8 @@ available.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RgaI-class.html">Bio.Restriction.Restriction.RgaI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RigI-class.html">Bio.Restriction.Restriction.RigI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RleAI-class.html">Bio.Restriction.Restriction.RleAI</a></strong>
     </li>
@@ -12049,6 +12368,8 @@ is recessed in 5'.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RgaI-class.html">Bio.Restriction.Restriction.RgaI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RigI-class.html">Bio.Restriction.Restriction.RigI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RleAI-class.html">Bio.Restriction.Restriction.RleAI</a></strong>
     </li>
@@ -12922,6 +13243,8 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacI-class.html">Bio.Restriction.Restriction.PacI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PaeI-class.html">Bio.Restriction.Restriction.PaeI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PaeR7I-class.html">Bio.Restriction.Restriction.PaeR7I</a></strong>
@@ -13769,6 +14092,8 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl23II-class.html">Bio.Restriction.Restriction.Pfl23II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflFI-class.html">Bio.Restriction.Restriction.PflFI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflMI-class.html">Bio.Restriction.Restriction.PflMI</a></strong>
@@ -14079,6 +14404,8 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PauI-class.html">Bio.Restriction.Restriction.PauI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PceI-class.html">Bio.Restriction.Restriction.PceI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PciI-class.html">Bio.Restriction.Restriction.PciI</a></strong>
@@ -14105,6 +14432,8 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl23II-class.html">Bio.Restriction.Restriction.Pfl23II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflFI-class.html">Bio.Restriction.Restriction.PflFI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflMI-class.html">Bio.Restriction.Restriction.PflMI</a></strong>
@@ -14127,11 +14456,7 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmaCI-class.html">Bio.Restriction.Restriction.PmaCI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeI-class.html">Bio.Restriction.Restriction.PmeI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmlI-class.html">Bio.Restriction.Restriction.PmlI</a></strong>
     </li>
@@ -14158,8 +14483,6 @@ is recessed in 3'.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp0357II-class.html">Bio.Restriction.Restriction.Psp0357II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp03I-class.html">Bio.Restriction.Restriction.Psp03I</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp124BI-class.html">Bio.Restriction.Restriction.Psp124BI</a></strong>
     </li>
@@ -14199,6 +14522,8 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PstI-class.html">Bio.Restriction.Restriction.PstI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PstNI-class.html">Bio.Restriction.Restriction.PstNI</a></strong>
@@ -14233,6 +14558,8 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaI-class.html">Bio.Restriction.Restriction.RlaI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RleAI-class.html">Bio.Restriction.Restriction.RleAI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaB5I-class.html">Bio.Restriction.Restriction.RpaB5I</a></strong>
@@ -14250,6 +14577,12 @@ is recessed in 3'.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RsaNI-class.html">Bio.Restriction.Restriction.RsaNI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RseI-class.html">Bio.Restriction.Restriction.RseI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsr2I-class.html">Bio.Restriction.Restriction.Rsr2I</a></strong>
     </li>
@@ -14303,7 +14636,29 @@ is recessed in 3'.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -14562,9 +14917,13 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AbaUMB2I-class.html">Bio.Restriction.Restriction.AbaUMB2I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AchA6III-class.html">Bio.Restriction.Restriction.AchA6III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Aco12261II-class.html">Bio.Restriction.Restriction.Aco12261II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
@@ -14575,6 +14934,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AspJHL3II-class.html">Bio.Restriction.Restriction.AspJHL3II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Asu14238IV-class.html">Bio.Restriction.Restriction.Asu14238IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaIII-class.html">Bio.Restriction.Restriction.AvaIII</a></strong>
     </li>
@@ -14588,6 +14949,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BfaSII-class.html">Bio.Restriction.Restriction.BfaSII</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BloAII-class.html">Bio.Restriction.Restriction.BloAII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BmgI-class.html">Bio.Restriction.Restriction.BmgI</a></strong>
@@ -14596,11 +14959,11 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspGI-class.html">Bio.Restriction.Restriction.BspGI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspNCI-class.html">Bio.Restriction.Restriction.BspNCI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cal14237I-class.html">Bio.Restriction.Restriction.Cal14237I</a></strong>
     </li>
@@ -14618,6 +14981,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cdu23823II-class.html">Bio.Restriction.Restriction.Cdu23823II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -14627,6 +14992,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeFV-class.html">Bio.Restriction.Restriction.CjeFV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeP659IV-class.html">Bio.Restriction.Restriction.CjeP659IV</a></strong>
     </li>
@@ -14646,13 +15013,19 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ecl35734I-class.html">Bio.Restriction.Restriction.Ecl35734I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoE1140I-class.html">Bio.Restriction.Restriction.EcoE1140I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaSSI-class.html">Bio.Restriction.Restriction.EsaSSI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3007I-class.html">Bio.Restriction.Restriction.Esp3007I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FinI-class.html">Bio.Restriction.Restriction.FinI</a></strong>
     </li>
@@ -14718,15 +15091,23 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nal45188II-class.html">Bio.Restriction.Restriction.Nal45188II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NhaXI-class.html">Bio.Restriction.Restriction.NhaXI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NhoI-class.html">Bio.Restriction.Restriction.NhoI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.OspHL35III-class.html">Bio.Restriction.Restriction.OspHL35III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pac19842II-class.html">Bio.Restriction.Restriction.Pac19842II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pal408I-class.html">Bio.Restriction.Restriction.Pal408I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pdi8503III-class.html">Bio.Restriction.Restriction.Pdi8503III</a></strong>
     </li>
@@ -14738,17 +15119,13 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PliMI-class.html">Bio.Restriction.Restriction.PliMI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pse18267I-class.html">Bio.Restriction.Restriction.Pse18267I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp0357II-class.html">Bio.Restriction.Restriction.Psp0357II</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PsuGI-class.html">Bio.Restriction.Restriction.PsuGI</a></strong>
     </li>
@@ -14762,13 +15139,41 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaTI-class.html">Bio.Restriction.Restriction.RpaTI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Saf8902III-class.html">Bio.Restriction.Restriction.Saf8902III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sbo46I-class.html">Bio.Restriction.Restriction.Sbo46I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -14808,6 +15213,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Vtu19109I-class.html">Bio.Restriction.Restriction.Vtu19109I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Yps3606I-class.html">Bio.Restriction.Restriction.Yps3606I</a></strong>
     </li>
     </ul>
@@ -14833,6 +15240,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XapI-class.html">Bio.Restriction.Restriction.XapI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XbaI-class.html">Bio.Restriction.Restriction.XbaI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XceI-class.html">Bio.Restriction.Restriction.XceI</a></strong>
     </li>
@@ -14871,6 +15280,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc36I-class.html">Bio.Restriction.Restriction.Acc36I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65I-class.html">Bio.Restriction.Restriction.Acc65I</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Acc65V-class.html">Bio.Restriction.Restriction.Acc65V</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AccB1I-class.html">Bio.Restriction.Restriction.AccB1I</a></strong>
     </li>
@@ -14927,6 +15338,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhdI-class.html">Bio.Restriction.Restriction.AhdI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhlI-class.html">Bio.Restriction.Restriction.AhlI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyRBAHI-class.html">Bio.Restriction.Restriction.AhyRBAHI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AhyYL17I-class.html">Bio.Restriction.Restriction.AhyYL17I</a></strong>
     </li>
@@ -15023,6 +15436,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AsuII-class.html">Bio.Restriction.Restriction.AsuII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AsuNHI-class.html">Bio.Restriction.Restriction.AsuNHI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AteTI-class.html">Bio.Restriction.Restriction.AteTI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.AvaI-class.html">Bio.Restriction.Restriction.AvaI</a></strong>
     </li>
@@ -15125,6 +15540,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BinI-class.html">Bio.Restriction.Restriction.BinI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BisI-class.html">Bio.Restriction.Restriction.BisI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Ble402II-class.html">Bio.Restriction.Restriction.Ble402II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BlnI-class.html">Bio.Restriction.Restriction.BlnI</a></strong>
     </li>
@@ -15314,6 +15731,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp3004IV-class.html">Bio.Restriction.Restriction.Bsp3004IV</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp460III-class.html">Bio.Restriction.Restriction.Bsp460III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsp68I-class.html">Bio.Restriction.Restriction.Bsp68I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BspACI-class.html">Bio.Restriction.Restriction.BspACI</a></strong>
@@ -15472,8 +15891,6 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu36I-class.html">Bio.Restriction.Restriction.Bsu36I</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Bsu7003I-class.html">Bio.Restriction.Restriction.Bsu7003I</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BsuI-class.html">Bio.Restriction.Restriction.BsuI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.BsuRI-class.html">Bio.Restriction.Restriction.BsuRI</a></strong>
@@ -15544,6 +15961,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CfrI-class.html">Bio.Restriction.Restriction.CfrI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cfupf3II-class.html">Bio.Restriction.Restriction.Cfupf3II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032I-class.html">Bio.Restriction.Restriction.Cgl13032I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Cgl13032II-class.html">Bio.Restriction.Restriction.Cgl13032II</a></strong>
@@ -15559,6 +15978,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNII-class.html">Bio.Restriction.Restriction.CjeNII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNIII-class.html">Bio.Restriction.Restriction.CjeNIII</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeNV-class.html">Bio.Restriction.Restriction.CjeNV</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.CjeP659IV-class.html">Bio.Restriction.Restriction.CjeP659IV</a></strong>
     </li>
@@ -15660,6 +16081,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco32I-class.html">Bio.Restriction.Restriction.Eco32I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco4465II-class.html">Bio.Restriction.Restriction.Eco4465II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco47I-class.html">Bio.Restriction.Restriction.Eco47I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eco47III-class.html">Bio.Restriction.Restriction.Eco47III</a></strong>
@@ -15686,7 +16109,7 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoICRI-class.html">Bio.Restriction.Restriction.EcoICRI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMII-class.html">Bio.Restriction.Restriction.EcoMII</a></strong>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoMVII-class.html">Bio.Restriction.Restriction.EcoMVII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EcoNI-class.html">Bio.Restriction.Restriction.EcoNI</a></strong>
     </li>
@@ -15710,6 +16133,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EheI-class.html">Bio.Restriction.Restriction.EheI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Eli8509II-class.html">Bio.Restriction.Restriction.Eli8509II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.ErhI-class.html">Bio.Restriction.Restriction.ErhI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EsaBC3I-class.html">Bio.Restriction.Restriction.EsaBC3I</a></strong>
@@ -15721,6 +16146,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Esp3I-class.html">Bio.Restriction.Restriction.Esp3I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.EspI-class.html">Bio.Restriction.Restriction.EspI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Exi27195I-class.html">Bio.Restriction.Restriction.Exi27195I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.FaeI-class.html">Bio.Restriction.Restriction.FaeI</a></strong>
     </li>
@@ -16042,6 +16469,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NarI-class.html">Bio.Restriction.Restriction.NarI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Nbr128II-class.html">Bio.Restriction.Restriction.Nbr128II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NciI-class.html">Bio.Restriction.Restriction.NciI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NcoI-class.html">Bio.Restriction.Restriction.NcoI</a></strong>
@@ -16078,6 +16507,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NotI-class.html">Bio.Restriction.Restriction.NotI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NpeUS61II-class.html">Bio.Restriction.Restriction.NpeUS61II</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NruI-class.html">Bio.Restriction.Restriction.NruI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.NsbI-class.html">Bio.Restriction.Restriction.NsbI</a></strong>
@@ -16100,6 +16531,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacI-class.html">Bio.Restriction.Restriction.PacI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PacIII-class.html">Bio.Restriction.Restriction.PacIII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PaeI-class.html">Bio.Restriction.Restriction.PaeI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PaeR7I-class.html">Bio.Restriction.Restriction.PaeR7I</a></strong>
@@ -16113,6 +16546,8 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PasI-class.html">Bio.Restriction.Restriction.PasI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PauI-class.html">Bio.Restriction.Restriction.PauI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PcaII-class.html">Bio.Restriction.Restriction.PcaII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PceI-class.html">Bio.Restriction.Restriction.PceI</a></strong>
     </li>
@@ -16140,6 +16575,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl23II-class.html">Bio.Restriction.Restriction.Pfl23II</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pfl8569I-class.html">Bio.Restriction.Restriction.Pfl8569I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflFI-class.html">Bio.Restriction.Restriction.PflFI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PflMI-class.html">Bio.Restriction.Restriction.PflMI</a></strong>
@@ -16162,11 +16599,7 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmaCI-class.html">Bio.Restriction.Restriction.PmaCI</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pme5II-class.html">Bio.Restriction.Restriction.Pme5II</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeI-class.html">Bio.Restriction.Restriction.PmeI</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmeS132I-class.html">Bio.Restriction.Restriction.PmeS132I</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PmlI-class.html">Bio.Restriction.Restriction.PmlI</a></strong>
     </li>
@@ -16193,8 +16626,6 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp0357II-class.html">Bio.Restriction.Restriction.Psp0357II</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp03I-class.html">Bio.Restriction.Restriction.Psp03I</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp10HII-class.html">Bio.Restriction.Restriction.Psp10HII</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Psp124BI-class.html">Bio.Restriction.Restriction.Psp124BI</a></strong>
     </li>
@@ -16234,6 +16665,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst14472I-class.html">Bio.Restriction.Restriction.Pst14472I</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Pst273I-class.html">Bio.Restriction.Restriction.Pst273I</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PstI-class.html">Bio.Restriction.Restriction.PstI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.PstNI-class.html">Bio.Restriction.Restriction.PstNI</a></strong>
@@ -16268,6 +16701,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaI-class.html">Bio.Restriction.Restriction.RlaI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RlaII-class.html">Bio.Restriction.Restriction.RlaII</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RleAI-class.html">Bio.Restriction.Restriction.RleAI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RpaB5I-class.html">Bio.Restriction.Restriction.RpaB5I</a></strong>
@@ -16285,6 +16720,12 @@ is unknown.</em>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RsaNI-class.html">Bio.Restriction.Restriction.RsaNI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RseI-class.html">Bio.Restriction.Restriction.RseI</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008IV-class.html">Bio.Restriction.Restriction.Rsp008IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsp008V-class.html">Bio.Restriction.Restriction.Rsp008V</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.RspPBTS2III-class.html">Bio.Restriction.Restriction.RspPBTS2III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Rsr2I-class.html">Bio.Restriction.Restriction.Rsr2I</a></strong>
     </li>
@@ -16338,7 +16779,29 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13311III-class.html">Bio.Restriction.Restriction.Sen13311III</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen13III-class.html">Bio.Restriction.Restriction.Sen13III</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1736II-class.html">Bio.Restriction.Restriction.Sen1736II</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1878IV-class.html">Bio.Restriction.Restriction.Sen1878IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1880IV-class.html">Bio.Restriction.Restriction.Sen1880IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1896IV-class.html">Bio.Restriction.Restriction.Sen1896IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1898IV-class.html">Bio.Restriction.Restriction.Sen1898IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1906IV-class.html">Bio.Restriction.Restriction.Sen1906IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1908IV-class.html">Bio.Restriction.Restriction.Sen1908IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Sen1910IV-class.html">Bio.Restriction.Restriction.Sen1910IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1808III-class.html">Bio.Restriction.Restriction.SenC1808III</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenC1810IV-class.html">Bio.Restriction.Restriction.SenC1810IV</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenSARA26III-class.html">Bio.Restriction.Restriction.SenSARA26III</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.SenTFIV-class.html">Bio.Restriction.Restriction.SenTFIV</a></strong>
     </li>
@@ -16554,6 +17017,8 @@ is unknown.</em>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XbaI-class.html">Bio.Restriction.Restriction.XbaI</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.Xca85IV-class.html">Bio.Restriction.Restriction.Xca85IV</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XceI-class.html">Bio.Restriction.Restriction.XceI</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction.XcmI-class.html">Bio.Restriction.Restriction.XcmI</a></strong>
@@ -16625,7 +17090,7 @@ is unknown.</em>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:14:57 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:02 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

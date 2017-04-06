@@ -92,7 +92,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a href="Bio.Entrez.Parser.DataHandler-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">validate</span>)</span><br />
-      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
+      x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Entrez.Parser-pysrc.html#DataHandler.__init__">source&nbsp;code</a></span>
             
@@ -249,12 +249,14 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.Entrez.Parser.DataHandler-class.html#elementDecl" class="summary-sig-name">elementDecl</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a name="elementDecl"></a><span class="summary-sig-name">elementDecl</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">model</span>)</span><br />
       This callback function is called for each element declaration:
 &lt;!ELEMENT       name          (...)&gt;
-encountered in a DTD.</td>
+encountered in a DTD. The purpose of this function is to determine
+whether this element should be regarded as a string, integer, list
+dictionary, structure, or error.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Entrez.Parser-pysrc.html#DataHandler.elementDecl">source&nbsp;code</a></span>
             
@@ -340,13 +342,16 @@ encountered in a DTD.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.Entrez.Parser.DataHandler-class.html#externalEntityRefHandler" class="summary-sig-name">externalEntityRefHandler</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a name="externalEntityRefHandler"></a><span class="summary-sig-name">externalEntityRefHandler</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">context</span>,
         <span class="summary-sig-arg">base</span>,
         <span class="summary-sig-arg">systemId</span>,
         <span class="summary-sig-arg">publicId</span>)</span><br />
       The purpose of this function is to load the DTD locally, instead
-of downloading it from the URL specified in the XML.</td>
+of downloading it from the URL specified in the XML. Using the local
+DTD results in much faster parsing. If the DTD is not found locally,
+we try to download it. If new DTDs become available from NCBI,
+putting them in Bio/Entrez/DTDs will allow the parser to see them.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Entrez.Parser-pysrc.html#DataHandler.externalEntityRefHandler">source&nbsp;code</a></span>
             
@@ -487,64 +492,12 @@ of downloading it from the URL specified in the XML.</td>
     </td>
   </tr></table>
   
-  x.__init__(...) initializes x; see x.__class__.__doc__ for signature
+  x.__init__(...) initializes x; see help(type(x)) for signature
   <dl class="fields">
     <dt>Overrides:
         object.__init__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="elementDecl"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">elementDecl</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">name</span>,
-        <span class="sig-arg">model</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.Entrez.Parser-pysrc.html#DataHandler.elementDecl">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  This callback function is called for each element declaration:
-&lt;!ELEMENT       name          (...)&gt;
-encountered in a DTD. The purpose of this function is to determine
-whether this element should be regarded as a string, integer, list
-dictionary, structure, or error.
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="externalEntityRefHandler"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">externalEntityRefHandler</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">context</span>,
-        <span class="sig-arg">base</span>,
-        <span class="sig-arg">systemId</span>,
-        <span class="sig-arg">publicId</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.Entrez.Parser-pysrc.html#DataHandler.externalEntityRefHandler">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  The purpose of this function is to load the DTD locally, instead
-of downloading it from the URL specified in the XML. Using the local
-DTD results in much faster parsing. If the DTD is not found locally,
-we try to download it. If new DTDs become available from NCBI,
-putting them in Bio/Entrez/DTDs will allow the parser to see them.
-  <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
@@ -632,7 +585,7 @@ putting them in Bio/Entrez/DTDs will allow the parser to see them.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:15:05 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:22 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

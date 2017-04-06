@@ -75,6 +75,13 @@ on a weekly basis.</p>
 <p>It also provides a function to retrieve PDB files from the server.
 To use it properly, prepare a directory /pdb or the like,
 where PDB files are stored.</p>
+<p>All available file formats (PDB, PDBx/mmCif, PDBML, mmtf) are supported.
+Please note that large structures (containing &gt;62 chains
+and/or 99999 ATOM lines) are no longer stored as a single PDB file
+and by default (when PDB format selected) are not downloaded.</p>
+<p>Large structures can be downloaded in other formats, including PDBx/mmCif
+or as a .tar file (a collection of PDB-like formatted files for a given
+structure).</p>
 <p>If you want to use this module from inside a proxy, add
 the proxy variable to your environment, e.g. in Unix:
 export HTTP_PROXY='<a class="rst-reference external" href="http://realproxy.charite.de:888" target="_top">http://realproxy.charite.de:888</a>'
@@ -124,7 +131,8 @@ export HTTP_PROXY='<a class="rst-reference external" href="http://realproxy.char
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#download_entire_pdb" class="summary-sig-name">download_entire_pdb</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">listfile</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">listfile</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">file_format</span>=<span class="summary-sig-default">None</span>)</span><br />
       Retrieve all PDB entries not present in the local PDB copy.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.download_entire_pdb">source&nbsp;code</a></span>
@@ -142,7 +150,8 @@ export HTTP_PROXY='<a class="rst-reference external" href="http://realproxy.char
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#download_obsolete_entries" class="summary-sig-name">download_obsolete_entries</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">listfile</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">listfile</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">file_format</span>=<span class="summary-sig-default">None</span>)</span><br />
       Retrieve all obsolete PDB entries not present in the local obsolete
 PDB copy.</td>
           <td align="right" valign="top">
@@ -160,9 +169,32 @@ PDB copy.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#get_all_entries" class="summary-sig-name">get_all_entries</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#download_pdb_files" class="summary-sig-name">download_pdb_files</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pdb_codes</span>,
+        <span class="summary-sig-arg">obsolete</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">pdir</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">file_format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">overwrite</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Fetch set of PDB structure files from the PDB server and stores them locally.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.download_pdb_files">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_all_entries"></a><span class="summary-sig-name">get_all_entries</span>(<span class="summary-sig-arg">self</span>)</span><br />
       Retrieves a big file containing all the
-PDB entries and some annotation to them.</td>
+PDB entries and some annotation to them.
+Returns a list of PDB codes in the index file.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.get_all_entries">source&nbsp;code</a></span>
             
@@ -231,31 +263,13 @@ and writes it to a file.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#get_status_list" class="summary-sig-name">get_status_list</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">url</span>)</span><br />
-      Retrieves a list of pdb codes in the weekly pdb status file
-from the given URL.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.get_status_list">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
           <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#retrieve_pdb_file" class="summary-sig-name">retrieve_pdb_file</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">pdb_code</span>,
         <span class="summary-sig-arg">obsolete</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">pdir</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Retrieves a PDB structure file from the PDB server and
-stores it in a local file tree.</td>
+        <span class="summary-sig-arg">pdir</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">file_format</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">overwrite</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Fetch PDB structure file from PDB server, and store it locally.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.retrieve_pdb_file">source&nbsp;code</a></span>
             
@@ -271,8 +285,12 @@ stores it in a local file tree.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#update_pdb" class="summary-sig-name">update_pdb</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      I guess this is the 'most wanted' function from this module.</td>
+          <td><span class="summary-sig"><a name="update_pdb"></a><span class="summary-sig-name">update_pdb</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">file_format</span>=<span class="summary-sig-default">None</span>)</span><br />
+      I guess this is the 'most wanted' function from this module.
+It gets the weekly lists of new and modified pdb entries and
+automatically downloads the according PDB files.
+You can call this module as a weekly cron job.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.update_pdb">source&nbsp;code</a></span>
             
@@ -298,6 +316,59 @@ stores it in a local file tree.</td>
       <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== STATIC METHODS ==================== -->
+<a name="section-StaticMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Static Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-StaticMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_print_default_format_warning"></a><span class="summary-sig-name">_print_default_format_warning</span>(<span class="summary-sig-arg">file_format</span>)</span><br />
+      Temporary warning (similar to a deprecation warning) that files are being downloaded in mmCIF</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList._print_default_format_warning">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.PDB.PDBList%27.PDBList-class.html#get_status_list" class="summary-sig-name">get_status_list</a>(<span class="summary-sig-arg">url</span>)</span><br />
+      Retrieves a list of pdb codes in the weekly pdb status file
+from the given URL. Used by get_recent_files.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.get_status_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
     </td>
   </tr>
 </table>
@@ -330,13 +401,6 @@ e, J.R.Rodgers, O.Kennard, T.Shimanouchi, M.Tasumi
     J. Mol. Biol. 112 pp. 535-542 (1977)
     http://www.pdb.org/.
     '''"><code class="variable-quote">'</code><code class="variable-string">\n    The Protein Data Bank: a computer-based archi</code><code class="variable-ellipsis">...</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="alternative_download_url"></a><span class="summary-name">alternative_download_url</span> = <code title="'http://www.rcsb.org/pdb/files/'"><code class="variable-quote">'</code><code class="variable-string">http://www.rcsb.org/pdb/files/</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 </table>
@@ -417,7 +481,8 @@ e, J.R.Rodgers, O.Kennard, T.Shimanouchi, M.Tasumi
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">download_entire_pdb</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">listfile</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">listfile</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">file_format</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.download_entire_pdb">source&nbsp;code</a></span>&nbsp;
@@ -425,8 +490,20 @@ e, J.R.Rodgers, O.Kennard, T.Shimanouchi, M.Tasumi
   </tr></table>
   
   <p>Retrieve all PDB entries not present in the local PDB copy.</p>
-<p>Writes a list file containing all PDB codes (optional, if listfile is
-given).</p>
+<p>&#64;param listfile: filename to which all PDB codes will be written (optional)</p>
+<dl class="rst-docutils">
+<dt>&#64;param file_format:</dt>
+<dd><p class="rst-first">File format. Available options:</p>
+<ul class="rst-last rst-simple">
+<li>&quot;mmCif&quot; (default, PDBx/mmCif file),</li>
+<li>&quot;pdb&quot; (format PDB),</li>
+<li>&quot;xml&quot; (PMDML/XML format),</li>
+<li>&quot;mmtf&quot; (highly compressed),</li>
+<li>&quot;bundle&quot; (PDB formatted archive for large structure}</li>
+</ul>
+</dd>
+</dl>
+<p>NOTE. The default download format has changed from PDB to PDBx/mmCif</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -439,7 +516,8 @@ given).</p>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">download_obsolete_entries</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">listfile</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">listfile</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">file_format</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.download_obsolete_entries">source&nbsp;code</a></span>&nbsp;
@@ -448,29 +526,69 @@ given).</p>
   
   <p>Retrieve all obsolete PDB entries not present in the local obsolete
 PDB copy.</p>
-<p>Writes a list file containing all PDB codes (optional, if listfile is
-given).</p>
+<p>&#64;param listfile: filename to which all PDB codes will be written (optional)</p>
+<dl class="rst-docutils">
+<dt>&#64;param file_format: file format. Available options:</dt>
+<dd>&quot;mmCif&quot; (default, PDBx/mmCif file),
+&quot;pdb&quot; (format PDB),
+&quot;xml&quot; (PMDML/XML format),</dd>
+</dl>
+<p>NOTE. The default download format has changed from PDB to PDBx/mmCif</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
-<a name="get_all_entries"></a>
+<a name="download_pdb_files"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_all_entries</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">download_pdb_files</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">pdb_codes</span>,
+        <span class="sig-arg">obsolete</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">pdir</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">file_format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">overwrite</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.get_all_entries">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.download_pdb_files">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  Retrieves a big file containing all the
-PDB entries and some annotation to them.
-Returns a list of PDB codes in the index file.
+  <p>Fetch set of PDB structure files from the PDB server and stores them locally.</p>
+<p>The PDB structure's file name is returned as a single string.
+If obsolete <tt class="rst-docutils literal">==</tt> True, the files will be saved in a special file tree.</p>
+<p>&#64;param pdb_codes: a list of 4-symbols structure Ids from PDB
+&#64;type pdb_codes: list of strings</p>
+<dl class="rst-docutils">
+<dt>&#64;param file_format:</dt>
+<dd><p class="rst-first">File format. Available options:</p>
+<ul class="rst-last rst-simple">
+<li>&quot;mmCif&quot; (default, PDBx/mmCif file),</li>
+<li>&quot;pdb&quot; (format PDB),</li>
+<li>&quot;xml&quot; (PMDML/XML format),</li>
+<li>&quot;mmtf&quot; (highly compressed),</li>
+<li>&quot;bundle&quot; (PDB formatted archive for large structure}</li>
+</ul>
+</dd>
+</dl>
+<p>&#64;param overwrite: if set to True, existing structure files will be overwritten. Default: False
+&#64;type overwrite: bool</p>
+<dl class="rst-docutils">
+<dt>&#64;param obsolete:</dt>
+<dd>Has a meaning only for obsolete structures.
+If True, download the obsolete structure
+to 'obsolete' folder, otherwise download won't be performed.
+This option doesn't work for mmtf format as obsoleted structures are not availbe as mmtf.
+(default: False)</dd>
+</dl>
+<p>&#64;type obsolete: bool</p>
+<p>&#64;param pdir: put the file in this directory (default: create a PDB-style directory tree)
+&#64;type pdir: string</p>
+<p>&#64;return: filenames
+&#64;rtype: string</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -547,8 +665,8 @@ drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_status_list</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">url</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_status_list</span>(<span class="sig-arg">url</span>)</span>
+    <br /><em class="fname">Static Method</em>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.get_status_list">source&nbsp;code</a></span>&nbsp;
@@ -573,43 +691,52 @@ very simply one PDB name per line.</p>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">retrieve_pdb_file</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">pdb_code</span>,
         <span class="sig-arg">obsolete</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">pdir</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">pdir</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">file_format</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">overwrite</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.retrieve_pdb_file">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Retrieves a PDB structure file from the PDB server and
-stores it in a local file tree.</p>
+  <p>Fetch PDB structure file from PDB server, and store it locally.</p>
 <p>The PDB structure's file name is returned as a single string.
 If obsolete <tt class="rst-docutils literal">==</tt> True, the file will be saved in a special file tree.</p>
+<p>NOTE. The default download format has changed from PDB to PDBx/mmCif</p>
+<p>&#64;param pdb_code: 4-symbols structure Id from PDB (e.g. 3J92).
+&#64;type pdb_code: string</p>
+<dl class="rst-docutils">
+<dt>&#64;param file_format:</dt>
+<dd><p class="rst-first">File format. Available options:</p>
+<ul class="rst-last rst-simple">
+<li>&quot;mmCif&quot; (default, PDBx/mmCif file),</li>
+<li>&quot;pdb&quot; (format PDB),</li>
+<li>&quot;xml&quot; (PDBML/XML format),</li>
+<li>&quot;mmtf&quot; (highly compressed),</li>
+<li>&quot;bundle&quot; (PDB formatted archive for large structure}</li>
+</ul>
+</dd>
+</dl>
+<p>&#64;type file_format: string</p>
+<p>&#64;param overwrite: if set to True, existing structure files will be overwritten. Default: False
+&#64;type overwrite: bool</p>
+<dl class="rst-docutils">
+<dt>&#64;param obsolete:</dt>
+<dd>Has a meaning only for obsolete structures. If True, download the obsolete structure
+to 'obsolete' folder, otherwise download won't be performed.
+This option doesn't work for mmtf format as obsoleted structures aren't stored in mmtf.
+Also doesn't have meaning when parameter pdir is specified.
+Note: make sure that you are about to download the really obsolete structure.
+Trying to download non-obsolete structure into obsolete folder will not work
+and you face the &quot;structure doesn't exists&quot; error.
+Default: False</dd>
+</dl>
+<p>&#64;type obsolete: bool</p>
 <p>&#64;param pdir: put the file in this directory (default: create a PDB-style directory tree)
 &#64;type pdir: string</p>
 <p>&#64;return: filename
 &#64;rtype: string</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="update_pdb"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">update_pdb</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.PDB.PDBList%27-pysrc.html#PDBList.update_pdb">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  I guess this is the 'most wanted' function from this module.
-It gets the weekly lists of new and modified pdb entries and
-automatically downloads the according PDB files.
-You can call this module as a weekly cronjob.
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -687,7 +814,7 @@ You can call this module as a weekly cronjob.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:15:08 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:30 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

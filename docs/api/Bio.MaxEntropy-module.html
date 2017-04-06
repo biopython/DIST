@@ -110,9 +110,12 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.MaxEntropy-module.html#calculate" class="summary-sig-name">calculate</a>(<span class="summary-sig-arg">me</span>,
+          <td><span class="summary-sig"><a name="calculate"></a><span class="summary-sig-name">calculate</span>(<span class="summary-sig-arg">me</span>,
         <span class="summary-sig-arg">observation</span>)</span><br />
-      Calculate the log of the probability for each class.</td>
+      Calculate the log of the probability for each class.  me is a
+MaxEntropy object that has been trained.  observation is a vector
+representing the observed data.  The return value is a list of
+unnormalized log probabilities for each class.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#calculate">source&nbsp;code</a></span>
             
@@ -146,11 +149,14 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.MaxEntropy-module.html#_eval_feature_fn" class="summary-sig-name" onclick="show_private();">_eval_feature_fn</a>(<span class="summary-sig-arg">fn</span>,
+          <td><span class="summary-sig"><a name="_eval_feature_fn"></a><span class="summary-sig-name">_eval_feature_fn</span>(<span class="summary-sig-arg">fn</span>,
         <span class="summary-sig-arg">xs</span>,
         <span class="summary-sig-arg">classes</span>)</span><br />
       Evaluate a feature function on every instance of the training set
-and class.</td>
+and class.  fn is a callback function that takes two parameters: a
+training instance and a class.  Return a dictionary of (training
+set index, class index) -&gt; non-zero value.  Values of 0 are not
+stored in the dictionary.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_eval_feature_fn">source&nbsp;code</a></span>
             
@@ -166,11 +172,13 @@ and class.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.MaxEntropy-module.html#_calc_empirical_expects" class="summary-sig-name" onclick="show_private();">_calc_empirical_expects</a>(<span class="summary-sig-arg">xs</span>,
+          <td><span class="summary-sig"><a name="_calc_empirical_expects"></a><span class="summary-sig-name">_calc_empirical_expects</span>(<span class="summary-sig-arg">xs</span>,
         <span class="summary-sig-arg">ys</span>,
         <span class="summary-sig-arg">classes</span>,
         <span class="summary-sig-arg">features</span>)</span><br />
-      Calculate the expectation of each function from the data.</td>
+      Calculate the expectation of each function from the data.  This is
+the constraint for the maximum entropy distribution.  Return a
+list of expectations, parallel to the list of features.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_calc_empirical_expects">source&nbsp;code</a></span>
             
@@ -186,11 +194,13 @@ and class.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.MaxEntropy-module.html#_calc_model_expects" class="summary-sig-name" onclick="show_private();">_calc_model_expects</a>(<span class="summary-sig-arg">xs</span>,
+          <td><span class="summary-sig"><a name="_calc_model_expects"></a><span class="summary-sig-name">_calc_model_expects</span>(<span class="summary-sig-arg">xs</span>,
         <span class="summary-sig-arg">classes</span>,
         <span class="summary-sig-arg">features</span>,
         <span class="summary-sig-arg">alphas</span>)</span><br />
-      Calculate the expectation of each feature from the model.</td>
+      Calculate the expectation of each feature from the model.  This is
+not used in maximum entropy training, but provides a good function
+for debugging.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_calc_model_expects">source&nbsp;code</a></span>
             
@@ -206,12 +216,12 @@ and class.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.MaxEntropy-module.html#_calc_p_class_given_x" class="summary-sig-name" onclick="show_private();">_calc_p_class_given_x</a>(<span class="summary-sig-arg">xs</span>,
+          <td><span class="summary-sig"><a name="_calc_p_class_given_x"></a><span class="summary-sig-name">_calc_p_class_given_x</span>(<span class="summary-sig-arg">xs</span>,
         <span class="summary-sig-arg">classes</span>,
         <span class="summary-sig-arg">features</span>,
         <span class="summary-sig-arg">alphas</span>)</span><br />
       Calculate P(y|x), where y is the class and x is an instance from
-the training set.</td>
+the training set.  Return a XSxCLASSES matrix of probabilities.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_calc_p_class_given_x">source&nbsp;code</a></span>
             
@@ -353,130 +363,6 @@ the training set.</td>
   </td>
 </tr>
 </table>
-<a name="calculate"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">calculate</span>(<span class="sig-arg">me</span>,
-        <span class="sig-arg">observation</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#calculate">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  Calculate the log of the probability for each class.  me is a
-MaxEntropy object that has been trained.  observation is a vector
-representing the observed data.  The return value is a list of
-unnormalized log probabilities for each class.
-  <dl class="fields">
-    <dt>Returns: list of log probs</dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="_eval_feature_fn"></a>
-<div class="private">
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_eval_feature_fn</span>(<span class="sig-arg">fn</span>,
-        <span class="sig-arg">xs</span>,
-        <span class="sig-arg">classes</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_eval_feature_fn">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  Evaluate a feature function on every instance of the training set
-and class.  fn is a callback function that takes two parameters: a
-training instance and a class.  Return a dictionary of (training
-set index, class index) -&gt; non-zero value.  Values of 0 are not
-stored in the dictionary.
-  <dl class="fields">
-    <dt>Returns: dict of values</dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="_calc_empirical_expects"></a>
-<div class="private">
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_calc_empirical_expects</span>(<span class="sig-arg">xs</span>,
-        <span class="sig-arg">ys</span>,
-        <span class="sig-arg">classes</span>,
-        <span class="sig-arg">features</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_calc_empirical_expects">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  Calculate the expectation of each function from the data.  This is
-the constraint for the maximum entropy distribution.  Return a
-list of expectations, parallel to the list of features.
-  <dl class="fields">
-    <dt>Returns: list of expectations</dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="_calc_model_expects"></a>
-<div class="private">
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_calc_model_expects</span>(<span class="sig-arg">xs</span>,
-        <span class="sig-arg">classes</span>,
-        <span class="sig-arg">features</span>,
-        <span class="sig-arg">alphas</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_calc_model_expects">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  Calculate the expectation of each feature from the model.  This is
-not used in maximum entropy training, but provides a good function
-for debugging.
-  <dl class="fields">
-    <dt>Returns: list of expectations</dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="_calc_p_class_given_x"></a>
-<div class="private">
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_calc_p_class_given_x</span>(<span class="sig-arg">xs</span>,
-        <span class="sig-arg">classes</span>,
-        <span class="sig-arg">features</span>,
-        <span class="sig-arg">alphas</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#_calc_p_class_given_x">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  Calculate P(y|x), where y is the class and x is an instance from
-the training set.  Return a XSxCLASSES matrix of probabilities.
-  <dl class="fields">
-    <dt>Returns: matrix</dt>
-  </dl>
-</td></tr></table>
-</div>
 <a name="train"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -544,7 +430,7 @@ of iterations and the convergence criterion for Newton's method.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:15:00 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:09 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -280,6 +280,23 @@ or more complicated things.</p>
       
     </td>
   </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_gap_char"></a><span class="summary-sig-name">_get_gap_char</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the gap character used in the alignment</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align.AlignInfo-pysrc.html#SummaryInfo._get_gap_char">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -291,7 +308,8 @@ or more complicated things.</p>
         <span class="summary-sig-arg">end</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">e_freq_table</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">log_base</span>=<span class="summary-sig-default">2</span>,
-        <span class="summary-sig-arg">chars_to_ignore</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">chars_to_ignore</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">pseudo_count</span>=<span class="summary-sig-default">0</span>)</span><br />
       Calculate the information content for each residue along an alignment.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Align.AlignInfo-pysrc.html#SummaryInfo.information_content">source&nbsp;code</a></span>
@@ -312,7 +330,10 @@ or more complicated things.</p>
         <span class="summary-sig-arg">residue_num</span>,
         <span class="summary-sig-arg">all_records</span>,
         <span class="summary-sig-arg">letters</span>,
-        <span class="summary-sig-arg">to_ignore</span>)</span><br />
+        <span class="summary-sig-arg">to_ignore</span>,
+        <span class="summary-sig-arg">pseudo_count</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">e_freq_table</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">random_expected</span>=<span class="summary-sig-default">None</span>)</span><br />
       Determine the frequency of specific letters in the alignment.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Align.AlignInfo-pysrc.html#SummaryInfo._get_letter_freqs">source&nbsp;code</a></span>
@@ -440,7 +461,7 @@ or more complicated things.</p>
   </tr></table>
   
   <p>Initialize with the alignment to calculate information on.</p>
-<p>ic_vector attribute. A dictionary. Keys: column numbers. Values:</p>
+<p>ic_vector attribute. A list of ic content for each column number.</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -735,7 +756,8 @@ parameters, will be used.</li>
         <span class="sig-arg">end</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">e_freq_table</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">log_base</span>=<span class="sig-default">2</span>,
-        <span class="sig-arg">chars_to_ignore</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">chars_to_ignore</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">pseudo_count</span>=<span class="sig-default">0</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.Align.AlignInfo-pysrc.html#SummaryInfo.information_content">source&nbsp;code</a></span>&nbsp;
@@ -785,7 +807,10 @@ content is calculated.</p>
         <span class="sig-arg">residue_num</span>,
         <span class="sig-arg">all_records</span>,
         <span class="sig-arg">letters</span>,
-        <span class="sig-arg">to_ignore</span>)</span>
+        <span class="sig-arg">to_ignore</span>,
+        <span class="sig-arg">pseudo_count</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">e_freq_table</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">random_expected</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="Bio.Align.AlignInfo-pysrc.html#SummaryInfo._get_letter_freqs">source&nbsp;code</a></span>&nbsp;
@@ -802,13 +827,19 @@ from.</li>
 <li>letters - The letters we are interested in getting the frequency
 for.</li>
 <li>to_ignore - Letters we are specifically supposed to ignore.</li>
+<li>pseudo_count - Optional argument specifying the Pseudo count (k)
+to add in order to prevent a frequency of 0 for a letter.</li>
+<li>e_freq_table - An optional argument specifying the expected
+frequencies for each letter. This is a SubsMat.FreqTable instance.</li>
+<li>random_expected - Optional argument that specify the frequency to use
+when e_freq_table is not defined.</li>
 </ul>
 </dd>
 </dl>
 <p>This will calculate the frequencies of each of the specified letters
 in the alignment at the given frequency, and return this as a
 dictionary where the keys are the letters and the values are the
-frequencies.</p>
+frequencies. Pseudo count can be added to prevent a null frequency</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -876,7 +907,7 @@ info content.</li>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:15:03 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:18 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

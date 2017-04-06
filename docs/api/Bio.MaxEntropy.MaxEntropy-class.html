@@ -71,6 +71,49 @@ object --+
 classes      List of the possible classes of data.
 alphas       List of the weights for each feature.
 feature_fns  List of the feature functions.</p>
+<p>Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
+<a class="rst-reference external" href="http://www.inf.u-szeged.hu/~ormandi/teaching" target="_top">http://www.inf.u-szeged.hu/~ormandi/teaching</a></p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.MaxEntropy <span class="py-keyword">import</span> train, classify
+<span class="py-prompt">&gt;&gt;&gt; </span>xcar = [
+<span class="py-more">... </span>    [<span class="py-string">'Red'</span>, <span class="py-string">'Sports'</span>, <span class="py-string">'Domestic'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Red'</span>, <span class="py-string">'Sports'</span>, <span class="py-string">'Domestic'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Red'</span>, <span class="py-string">'Sports'</span>, <span class="py-string">'Domestic'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Yellow'</span>, <span class="py-string">'Sports'</span>, <span class="py-string">'Domestic'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Yellow'</span>, <span class="py-string">'Sports'</span>, <span class="py-string">'Imported'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Yellow'</span>, <span class="py-string">'SUV'</span>, <span class="py-string">'Imported'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Yellow'</span>, <span class="py-string">'SUV'</span>, <span class="py-string">'Imported'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Yellow'</span>, <span class="py-string">'SUV'</span>, <span class="py-string">'Domestic'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Red'</span>, <span class="py-string">'SUV'</span>, <span class="py-string">'Imported'</span>],
+<span class="py-more">... </span>    [<span class="py-string">'Red'</span>, <span class="py-string">'Sports'</span>, <span class="py-string">'Imported'</span>]]
+<span class="py-prompt">&gt;&gt;&gt; </span>ycar = [<span class="py-string">'Yes'</span>,<span class="py-string">'No'</span>,<span class="py-string">'Yes'</span>,<span class="py-string">'No'</span>,<span class="py-string">'Yes'</span>,<span class="py-string">'No'</span>,<span class="py-string">'Yes'</span>,<span class="py-string">'No'</span>,<span class="py-string">'No'</span>,<span class="py-string">'Yes'</span>]</pre>
+<p>Requires some rules or features</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">udf1</span>(ts, cl):
+<span class="py-more">... </span>    return ts[0] != <span class="py-string">'Red'</span>
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">udf2</span>(ts, cl):
+<span class="py-more">... </span>    return ts[1] != <span class="py-string">'Sports'</span>
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">udf3</span>(ts, cl):
+<span class="py-more">... </span>    return ts[2] != <span class="py-string">'Domestic'</span>
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>user_functions = [udf1, udf2, udf3]  <span class="py-comment"># must be an iterable type</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>xe = train(xcar, ycar, user_functions)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> xv, yv <span class="py-keyword">in</span> zip(xcar, ycar):
+<span class="py-more">... </span>    xc = classify(xe, xv)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">'Pred: %s gives %s y is %s'</span> % (xv, xc, yv))
+<span class="py-more">...</span>
+<span class="py-output">Pred: ['Red', 'Sports', 'Domestic'] gives No y is Yes</span>
+<span class="py-output">Pred: ['Red', 'Sports', 'Domestic'] gives No y is No</span>
+<span class="py-output">Pred: ['Red', 'Sports', 'Domestic'] gives No y is Yes</span>
+<span class="py-output">Pred: ['Yellow', 'Sports', 'Domestic'] gives No y is No</span>
+<span class="py-output">Pred: ['Yellow', 'Sports', 'Imported'] gives No y is Yes</span>
+<span class="py-output">Pred: ['Yellow', 'SUV', 'Imported'] gives No y is No</span>
+<span class="py-output">Pred: ['Yellow', 'SUV', 'Imported'] gives No y is Yes</span>
+<span class="py-output">Pred: ['Yellow', 'SUV', 'Domestic'] gives No y is No</span>
+<span class="py-output">Pred: ['Red', 'SUV', 'Imported'] gives No y is No</span>
+<span class="py-output">Pred: ['Red', 'Sports', 'Imported'] gives No y is Yes</span></pre>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -96,7 +139,7 @@ feature_fns  List of the feature functions.</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.MaxEntropy.MaxEntropy-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
+      x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.MaxEntropy-pysrc.html#MaxEntropy.__init__">source&nbsp;code</a></span>
             
@@ -183,7 +226,7 @@ feature_fns  List of the feature functions.</p>
     </td>
   </tr></table>
   
-  x.__init__(...) initializes x; see x.__class__.__doc__ for signature
+  x.__init__(...) initializes x; see help(type(x)) for signature
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -221,7 +264,7 @@ feature_fns  List of the feature functions.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 25 13:15:07 2016
+    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:27 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
