@@ -79,14 +79,13 @@
 </dd></dl>
 
 <hr />
-<p>Implement the methods specific to the enzymes for which the overhang
-and the cut are not variable.</p>
+<p>Implement methods for enzymes with defined recognition site and cut.</p>
 <dl class="rst-docutils">
 <dt>Typical example <span class="classifier-delimiter">:</span> <span class="rst-classifier">EcoRI -&gt; G^AATT_C</span></dt>
 <dd>The overhang will always be AATT</dd>
 <dt>Notes:</dt>
-<dd>Blunt enzymes are always defined. even if there site is GGATCCNNN^_N
-There overhang is always the same : blunt!</dd>
+<dd>Blunt enzymes are always defined. Even if their site is GGATCCNNN^_N
+Their overhang is always the same : blunt!</dd>
 </dl>
 <p>Internal use only. Not meant to be instantiated.</p>
 
@@ -171,12 +170,12 @@ There overhang is always the same : blunt!</dd>
 </tr>
 <tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">list</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#_drop" class="summary-sig-name" onclick="show_private();">_drop</a>(<span class="summary-sig-arg">RE</span>)</span><br />
-      for internal use only.</td>
+          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#_drop" class="summary-sig-name" onclick="show_private();">_drop</a>(<span class="summary-sig-arg">cls</span>)</span><br />
+      Remove cuts that are outsite of the sequence (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Restriction.Restriction-pysrc.html#Defined._drop">source&nbsp;code</a></span>
             
@@ -188,14 +187,12 @@ There overhang is always the same : blunt!</dd>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">bool</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#is_defined" class="summary-sig-name">is_defined</a>(<span class="summary-sig-arg">RE</span>)</span><br />
-      True if the sequence recognised and cut is constant,
-i.e. the recognition site is not degenerated AND the enzyme cut inside
-the site.</td>
+          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#is_defined" class="summary-sig-name">is_defined</a>(<span class="summary-sig-arg">cls</span>)</span><br />
+      Return if recognition sequence and cut are defined.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Restriction.Restriction-pysrc.html#Defined.is_defined">source&nbsp;code</a></span>
             
@@ -207,14 +204,12 @@ the site.</td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">bool</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#is_ambiguous" class="summary-sig-name">is_ambiguous</a>(<span class="summary-sig-arg">RE</span>)</span><br />
-      True if the sequence recognised and cut is ambiguous,
-i.e. the recognition site is degenerated AND/OR the enzyme cut outside
-the site.</td>
+          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#is_ambiguous" class="summary-sig-name">is_ambiguous</a>(<span class="summary-sig-arg">cls</span>)</span><br />
+      Return if recognition sequence and cut may be ambiguous.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Restriction.Restriction-pysrc.html#Defined.is_ambiguous">source&nbsp;code</a></span>
             
@@ -226,13 +221,12 @@ the site.</td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">bool</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#is_unknown" class="summary-sig-name">is_unknown</a>(<span class="summary-sig-arg">RE</span>)</span><br />
-      True if the sequence is unknown,
-i.e. the recognition site has not been characterised yet.</td>
+          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#is_unknown" class="summary-sig-name">is_unknown</a>(<span class="summary-sig-arg">cls</span>)</span><br />
+      Return if recognition sequence is unknown.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Restriction.Restriction-pysrc.html#Defined.is_unknown">source&nbsp;code</a></span>
             
@@ -244,23 +238,12 @@ i.e. the recognition site has not been characterised yet.</td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">str</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="elucidate"></a><span class="summary-sig-name">elucidate</span>(<span class="summary-sig-arg">RE</span>)</span><br />
-      return a representation of the site with the cut on the (+) strand
-represented as '^' and the cut on the (-) strand as '_'.
-ie:
-&gt;&gt;&gt; EcoRI.elucidate()   # 5' overhang
-'G^AATT_C'
-&gt;&gt;&gt; KpnI.elucidate()    # 3' overhang
-'G_GTAC^C'
-&gt;&gt;&gt; EcoRV.elucidate()   # blunt
-'GAT^_ATC'
-&gt;&gt;&gt; SnaI.elucidate()    # NotDefined, cut profile unknown.
-'? GTATAC ?'
-&gt;&gt;&gt;</td>
+          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#elucidate" class="summary-sig-name">elucidate</a>(<span class="summary-sig-arg">cls</span>)</span><br />
+      Return a string representing the recognition site and cuttings.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Restriction.Restriction-pysrc.html#Defined.elucidate">source&nbsp;code</a></span>
             
@@ -272,13 +255,13 @@ ie:
   </tr>
 <tr class="private">
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">bool</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#_mod2" class="summary-sig-name" onclick="show_private();">_mod2</a>(<span class="summary-sig-arg">RE</span>,
+          <td><span class="summary-sig"><a href="Bio.Restriction.Restriction.Defined-class.html#_mod2" class="summary-sig-name" onclick="show_private();">_mod2</a>(<span class="summary-sig-arg">cls</span>,
         <span class="summary-sig-arg">other</span>)</span><br />
-      for internal use only</td>
+      Test if other enzyme produces compatible ends for enzyme (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Restriction.Restriction-pysrc.html#Defined._mod2">source&nbsp;code</a></span>
             
@@ -366,7 +349,7 @@ ie:
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_drop</span>(<span class="sig-arg">RE</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_drop</span>(<span class="sig-arg">cls</span>)</span>
     <br /><em class="fname">Class Method</em>
   </h3>
   </td><td align="right" valign="top"
@@ -374,11 +357,11 @@ ie:
     </td>
   </tr></table>
   
-  <p>for internal use only.</p>
-<p>drop the site that are situated outside the sequence in linear
-sequence. modify the index for site in circular sequences.</p>
+  <p>Remove cuts that are outsite of the sequence (PRIVATE).</p>
+<p>For internal use only.</p>
+<p>Drop the site that are situated outside the sequence in linear
+sequence. Modify the index for site in circular sequences.</p>
   <dl class="fields">
-    <dt>Returns: list</dt>
   </dl>
 </td></tr></table>
 </div>
@@ -389,7 +372,7 @@ sequence. modify the index for site in circular sequences.</p>
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_defined</span>(<span class="sig-arg">RE</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_defined</span>(<span class="sig-arg">cls</span>)</span>
     <br /><em class="fname">Class Method</em>
   </h3>
   </td><td align="right" valign="top"
@@ -397,16 +380,19 @@ sequence. modify the index for site in circular sequences.</p>
     </td>
   </tr></table>
   
-  <p>True if the sequence recognised and cut is constant,
+  <p>Return if recognition sequence and cut are defined.</p>
+<p>True if the sequence recognised and cut is constant,
 i.e. the recognition site is not degenerated AND the enzyme cut inside
 the site.</p>
 <dl class="rst-docutils">
-<dt>see also:</dt>
-<dd>RE.is_ambiguous()
-RE.is_unknown()</dd>
+<dt>Related methods:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>RE.is_ambiguous()</li>
+<li>RE.is_unknown()</li>
+</ul>
+</dd>
 </dl>
   <dl class="fields">
-    <dt>Returns: bool</dt>
   </dl>
 </td></tr></table>
 </div>
@@ -417,7 +403,7 @@ RE.is_unknown()</dd>
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_ambiguous</span>(<span class="sig-arg">RE</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_ambiguous</span>(<span class="sig-arg">cls</span>)</span>
     <br /><em class="fname">Class Method</em>
   </h3>
   </td><td align="right" valign="top"
@@ -425,16 +411,19 @@ RE.is_unknown()</dd>
     </td>
   </tr></table>
   
-  <p>True if the sequence recognised and cut is ambiguous,
+  <p>Return if recognition sequence and cut may be ambiguous.</p>
+<p>True if the sequence recognised and cut is ambiguous,
 i.e. the recognition site is degenerated AND/OR the enzyme cut outside
 the site.</p>
 <dl class="rst-docutils">
-<dt>see also:</dt>
-<dd>RE.is_defined()
-RE.is_unknown()</dd>
+<dt>Related methods:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>RE.is_defined()</li>
+<li>RE.is_unknown()</li>
+</ul>
+</dd>
 </dl>
   <dl class="fields">
-    <dt>Returns: bool</dt>
   </dl>
 </td></tr></table>
 </div>
@@ -445,7 +434,7 @@ RE.is_unknown()</dd>
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_unknown</span>(<span class="sig-arg">RE</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_unknown</span>(<span class="sig-arg">cls</span>)</span>
     <br /><em class="fname">Class Method</em>
   </h3>
   </td><td align="right" valign="top"
@@ -453,15 +442,51 @@ RE.is_unknown()</dd>
     </td>
   </tr></table>
   
-  <p>True if the sequence is unknown,
+  <p>Return if recognition sequence is unknown.</p>
+<p>True if the sequence is unknown,
 i.e. the recognition site has not been characterised yet.</p>
 <dl class="rst-docutils">
-<dt>see also:</dt>
-<dd>RE.is_defined()
-RE.is_ambiguous()</dd>
+<dt>Related methods:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>RE.is_defined()</li>
+<li>RE.is_ambiguous()</li>
+</ul>
+</dd>
 </dl>
   <dl class="fields">
-    <dt>Returns: bool</dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="elucidate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">elucidate</span>(<span class="sig-arg">cls</span>)</span>
+    <br /><em class="fname">Class Method</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Restriction.Restriction-pysrc.html#Defined.elucidate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a string representing the recognition site and cuttings.</p>
+<p>Return a representation of the site with the cut on the (+) strand
+represented as '^' and the cut on the (-) strand as '_'.
+ie:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>EcoRI.elucidate()   <span class="py-comment"># 5' overhang</span>
+<span class="py-output">'G^AATT_C'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>KpnI.elucidate()    <span class="py-comment"># 3' overhang</span>
+<span class="py-output">'G_GTAC^C'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>EcoRV.elucidate()   <span class="py-comment"># blunt</span>
+<span class="py-output">'GAT^_ATC'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>SnaI.elucidate()    <span class="py-comment"># NotDefined, cut profile unknown.</span>
+<span class="py-output">'? GTATAC ?'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt;</span></pre>
+  <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
@@ -472,7 +497,7 @@ RE.is_ambiguous()</dd>
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">_mod2</span>(<span class="sig-arg">RE</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_mod2</span>(<span class="sig-arg">cls</span>,
         <span class="sig-arg">other</span>)</span>
     <br /><em class="fname">Class Method</em>
   </h3>
@@ -481,10 +506,10 @@ RE.is_ambiguous()</dd>
     </td>
   </tr></table>
   
-  <p>for internal use only</p>
-<p>test for the compatibility of restriction ending of RE and other.</p>
+  <p>Test if other enzyme produces compatible ends for enzyme (PRIVATE).</p>
+<p>For internal use only.</p>
+<p>Test for the compatibility of restriction ending of RE and other.</p>
   <dl class="fields">
-    <dt>Returns: bool</dt>
   </dl>
 </td></tr></table>
 </div>
@@ -517,7 +542,7 @@ RE.is_ambiguous()</dd>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Apr  6 17:42:23 2017
+    Generated by Epydoc 3.0.1 on Mon Jul 10 15:15:24 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

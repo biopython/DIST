@@ -58,7 +58,7 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module NaiveBayes</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.NaiveBayes-pysrc.html">source&nbsp;code</a></span></p>
-<p>This provides code for a general Naive Bayes learner.</p>
+<p>General Naive Bayes learner.</p>
 <p>Naive Bayes is a supervised classification algorithm that uses Bayes
 rule to compute the fit between a new observation and some previously
 observed data.  The observations are discrete feature vectors, with
@@ -79,7 +79,8 @@ is hardly ever true, the classifier works well enough in practice.</p>
 <dt>Functions:</dt>
 <dd><ul class="rst-first rst-last rst-simple">
 <li>train     - Train a new naive Bayes classifier.</li>
-<li>calculate - Calculate the probabilities of each class, given an observation.</li>
+<li>calculate - Calculate the probabilities of each class,
+given an observation.</li>
 <li>classify  - Classify an observation into a class.</li>
 </ul>
 </dd>
@@ -107,7 +108,7 @@ is hardly ever true, the classifier works well enough in practice.</p>
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="Bio.NaiveBayes.NaiveBayes-class.html" class="summary-name">NaiveBayes</a><br />
-      Holds information for a NaiveBayes classifier.
+      Hold information for a NaiveBayes classifier.
     </td>
   </tr>
 </table>
@@ -134,7 +135,8 @@ is hardly ever true, the classifier works well enough in practice.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_contents"></a><span class="summary-sig-name">_contents</span>(<span class="summary-sig-arg">items</span>)</span></td>
+          <td><span class="summary-sig"><a name="_contents"></a><span class="summary-sig-name">_contents</span>(<span class="summary-sig-arg">items</span>)</span><br />
+      Return a dictionary where the key is the item and the value is the probablity associated (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.NaiveBayes-pysrc.html#_contents">source&nbsp;code</a></span>
             
@@ -153,7 +155,7 @@ is hardly ever true, the classifier works well enough in practice.</p>
           <td><span class="summary-sig"><a href="Bio.NaiveBayes-module.html#calculate" class="summary-sig-name">calculate</a>(<span class="summary-sig-arg">nb</span>,
         <span class="summary-sig-arg">observation</span>,
         <span class="summary-sig-arg">scale</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Calculate <tt class="rst-docutils literal">log P(class|observation)</tt> for each class.</td>
+      Calculate the logarithmic conditional probability for each class.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.NaiveBayes-pysrc.html#calculate">source&nbsp;code</a></span>
             
@@ -169,7 +171,7 @@ is hardly ever true, the classifier works well enough in practice.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.NaiveBayes-module.html#classify" class="summary-sig-name">classify</a>(<span class="summary-sig-arg">nb</span>,
+          <td><span class="summary-sig"><a name="classify"></a><span class="summary-sig-name">classify</span>(<span class="summary-sig-arg">nb</span>,
         <span class="summary-sig-arg">observation</span>)</span><br />
       Classify an observation into a class.</td>
           <td align="right" valign="top">
@@ -191,7 +193,7 @@ is hardly ever true, the classifier works well enough in practice.</p>
         <span class="summary-sig-arg">results</span>,
         <span class="summary-sig-arg">priors</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">typecode</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Train a naive bayes classifier on a training set.</td>
+      Train a NaiveBayes classifier on a training set.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.NaiveBayes-pysrc.html#train">source&nbsp;code</a></span>
             
@@ -261,41 +263,19 @@ is hardly ever true, the classifier works well enough in practice.</p>
     </td>
   </tr></table>
   
-  <p>Calculate <tt class="rst-docutils literal">log P(class|observation)</tt> for each class.</p>
-<blockquote>
-<ul class="rst-simple">
+  <p>Calculate the logarithmic conditional probability for each class.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
 <li>nb          - A NaiveBayes classifier that has been trained.</li>
 <li>observation - A list representing the observed data.</li>
 <li>scale       - Boolean to indicate whether the probability should be
 scaled by <tt class="rst-docutils literal">P(observation)</tt>.  By default, no scaling is done.</li>
 </ul>
-</blockquote>
-<dl class="rst-docutils">
-<dt>Returns:</dt>
-<dd>A dictionary where the keys is the class and the value is the log
-probability of the class.</dd>
+</dd>
 </dl>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="classify"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">classify</span>(<span class="sig-arg">nb</span>,
-        <span class="sig-arg">observation</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="Bio.NaiveBayes-pysrc.html#classify">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Classify an observation into a class.</p>
-<p><tt class="rst-docutils literal">classify(nb, observation) <span class="pre">-&gt;</span> class</tt></p>
+<p>A dictionary is returned where the key is the class and the value is
+the log probability of the class.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -317,18 +297,19 @@ probability of the class.</dd>
     </td>
   </tr></table>
   
-  <p>Train a naive bayes classifier on a training set.</p>
-<p><tt class="rst-docutils literal">train(training_set, results[, priors]) <span class="pre">-&gt;</span> NaiveBayes</tt></p>
-<blockquote>
-<ul class="rst-simple">
+  <p>Train a NaiveBayes classifier on a training set.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
 <li>training_set - List of observations.</li>
 <li>results      - List of the class assignments for each observation.
 Thus, training_set and results must be the same length.</li>
 <li>priors       - Optional dictionary specifying the prior probabilities
-for each type of result.  If not specified, the priors will be
-estimated from the training results.</li>
+for each type of result. If not specified, the priors will
+be estimated from the training results.</li>
 </ul>
-</blockquote>
+</dd>
+</dl>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -362,7 +343,7 @@ estimated from the training results.</li>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:09 2017
+    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:13 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

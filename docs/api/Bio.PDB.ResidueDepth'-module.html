@@ -60,21 +60,23 @@
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module ResidueDepth'</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.PDB.ResidueDepth%27-pysrc.html">source&nbsp;code</a></span></p>
 <p>Calculation of residue depth using command line tool MSMS.</p>
-<p>This module uses Michel Sanner's MSMS program for the surface calculation
-(specifically commands msms and pdb_to_xyzr). See:
-<a class="rst-reference external" href="http://mgltools.scripps.edu/packages/MSMS" target="_top">http://mgltools.scripps.edu/packages/MSMS</a></p>
+<p>This module uses Michel Sanner's MSMS program for the surface calculation.
+See: <a class="rst-reference external" href="http://mgltools.scripps.edu/packages/MSMS" target="_top">http://mgltools.scripps.edu/packages/MSMS</a></p>
 <p>Residue depth is the average distance of the atoms of a residue from
 the solvent accessible surface.</p>
 <p>Residue Depth:</p>
 <blockquote>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>rd = ResidueDepth(model, pdb_file)
+<span class="py-prompt">&gt;&gt;&gt; </span>rd = ResidueDepth(model)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(rd[(chain_id, res_id)])</pre>
 </blockquote>
 <p>Direct MSMS interface, typical use:</p>
 <blockquote>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>surface = get_surface(<span class="py-string">&quot;1FAT.pdb&quot;</span>)</pre>
+<span class="py-prompt">&gt;&gt;&gt; </span>parser = PDBParser()
+<span class="py-prompt">&gt;&gt;&gt; </span>structure = parser.get_structure(<span class="py-string">'1FAT.pdb'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>model = structure[0]
+<span class="py-prompt">&gt;&gt;&gt; </span>surface = get_surface(model)</pre>
 </blockquote>
 <p>The surface is a Numeric array with all the surface vertices.</p>
 <p>Distance to surface:</p>
@@ -140,6 +142,24 @@ in a residue):</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="Bio.PDB.ResidueDepth%27-module.html#_get_atom_radius" class="summary-sig-name" onclick="show_private();">_get_atom_radius</a>(<span class="summary-sig-arg">atom</span>,
+        <span class="summary-sig-arg">rtype</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">united</code><code class="variable-quote">'</code></span>)</span><br />
+      Translates an atom object to an atomic radius defined in MSMS.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.PDB.ResidueDepth%27-pysrc.html#_get_atom_radius">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="_read_vertex_array"></a><span class="summary-sig-name">_read_vertex_array</span>(<span class="summary-sig-arg">filename</span>)</span><br />
       Read the vertex list into a Numeric array.</td>
           <td align="right" valign="top">
@@ -174,11 +194,10 @@ in a residue):</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="Bio.PDB.ResidueDepth%27-module.html#get_surface" class="summary-sig-name">get_surface</a>(<span class="summary-sig-arg">pdb_file</span>,
-        <span class="summary-sig-arg">PDB_TO_XYZR</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">pdb_to_xyzr</code><code class="variable-quote">'</code></span>,
+          <td><span class="summary-sig"><a href="Bio.PDB.ResidueDepth%27-module.html#get_surface" class="summary-sig-name">get_surface</a>(<span class="summary-sig-arg">model</span>,
+        <span class="summary-sig-arg">PDB_TO_XYZR</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">MSMS</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">msms</code><code class="variable-quote">'</code></span>)</span><br />
-      Return a Numeric array that represents
-the vertex list of the molecular surface.</td>
+      Represent molecular surface as a vertex list array.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.ResidueDepth%27-pysrc.html#get_surface">source&nbsp;code</a></span>
             
@@ -196,8 +215,7 @@ the vertex list of the molecular surface.</td>
         <tr>
           <td><span class="summary-sig"><a name="min_dist"></a><span class="summary-sig-name">min_dist</span>(<span class="summary-sig-arg">coord</span>,
         <span class="summary-sig-arg">surface</span>)</span><br />
-      Return minimum distance between coord
-and surface.</td>
+      Return minimum distance between coord and surface.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.ResidueDepth%27-pysrc.html#min_dist">source&nbsp;code</a></span>
             
@@ -213,10 +231,9 @@ and surface.</td>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="residue_depth"></a><span class="summary-sig-name">residue_depth</span>(<span class="summary-sig-arg">residue</span>,
+          <td><span class="summary-sig"><a href="Bio.PDB.ResidueDepth%27-module.html#residue_depth" class="summary-sig-name">residue_depth</a>(<span class="summary-sig-arg">residue</span>,
         <span class="summary-sig-arg">surface</span>)</span><br />
-      Return average distance to surface for all
-atoms in a residue, ie. the residue depth.</td>
+      Residue depth as average depth of all its atoms.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.PDB.ResidueDepth%27-pysrc.html#residue_depth">source&nbsp;code</a></span>
             
@@ -251,6 +268,21 @@ atoms in a residue, ie. the residue depth.</td>
         <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.PDB'"><code class="variable-quote">'</code><code class="variable-string">Bio.PDB</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.PDB.ResidueDepth%27-module.html#_atomic_radii" class="summary-name" onclick="show_private();">_atomic_radii</a> = <code title="{1: (0.57, 1.4, 1.4),
+ 2: (0.66, 1.4, 1.6),
+ 3: (0.57, 1.4, 1.4),
+ 4: (0.7, 1.54, 1.7),
+ 5: (0.7, 1.54, 1.8),
+ 6: (0.7, 1.54, 2.0),
+ 7: (0.77, 1.74, 2.0),
+ 8: (0.77, 1.74, 2.0),
+..."><code class="variable-group">{</code>1<code class="variable-op">: </code><code class="variable-group">(</code>0.57<code class="variable-op">, </code>1.4<code class="variable-op">, </code>1.4<code class="variable-group">)</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-group">(</code>0.66<code class="variable-op">, </code>1.4<code class="variable-op">, </code>1.6<code class="variable-group">)</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
 </table>
 <!-- ==================== FUNCTION DETAILS ==================== -->
 <a name="section-FunctionDetails"></a>
@@ -270,6 +302,36 @@ atoms in a residue, ie. the residue depth.</td>
   </td>
 </tr>
 </table>
+<a name="_get_atom_radius"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_get_atom_radius</span>(<span class="sig-arg">atom</span>,
+        <span class="sig-arg">rtype</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">united</code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.PDB.ResidueDepth%27-pysrc.html#_get_atom_radius">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Translates an atom object to an atomic radius defined in MSMS.</p>
+<p>Uses information from the parent residue and the atom object to define
+the atom type.</p>
+<dl class="rst-docutils">
+<dt>Returns the radius (float) according to the selected type:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>explicit (reads hydrogens)</li>
+<li>united (default)</li>
+</ul>
+</dd>
+</dl>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
 <a name="get_surface"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -277,8 +339,8 @@ atoms in a residue, ie. the residue depth.</td>
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_surface</span>(<span class="sig-arg">pdb_file</span>,
-        <span class="sig-arg">PDB_TO_XYZR</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">pdb_to_xyzr</code><code class="variable-quote">'</code></span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_surface</span>(<span class="sig-arg">model</span>,
+        <span class="sig-arg">PDB_TO_XYZR</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">MSMS</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">msms</code><code class="variable-quote">'</code></span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -286,11 +348,85 @@ atoms in a residue, ie. the residue depth.</td>
     </td>
   </tr></table>
   
-  <p>Return a Numeric array that represents
-the vertex list of the molecular surface.</p>
-<p>PDB_TO_XYZR --- pdb_to_xyzr executable (arg. to os.system)
-MSMS --- msms executable (arg. to os.system)</p>
+  <p>Represent molecular surface as a vertex list array.</p>
+<p>Return a Numpy array that represents the vertex list of the
+molecular surface.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>PDB_TO_XYZR - deprecated, ignore this.</li>
+<li>MSMS - msms executable (used as argument to os.system)</li>
+</ul>
+</dd>
+</dl>
   <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="residue_depth"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">residue_depth</span>(<span class="sig-arg">residue</span>,
+        <span class="sig-arg">surface</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.PDB.ResidueDepth%27-pysrc.html#residue_depth">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Residue depth as average depth of all its atoms.</p>
+<p>Return average distance to surface for all atoms in a residue,
+ie. the residue depth.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="_atomic_radii"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">_atomic_radii</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-group">{</code>1<code class="variable-op">: </code><code class="variable-group">(</code>0.57<code class="variable-op">, </code>1.4<code class="variable-op">, </code>1.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ 2<code class="variable-op">: </code><code class="variable-group">(</code>0.66<code class="variable-op">, </code>1.4<code class="variable-op">, </code>1.6<code class="variable-group">)</code><code class="variable-op">,</code>
+ 3<code class="variable-op">: </code><code class="variable-group">(</code>0.57<code class="variable-op">, </code>1.4<code class="variable-op">, </code>1.4<code class="variable-group">)</code><code class="variable-op">,</code>
+ 4<code class="variable-op">: </code><code class="variable-group">(</code>0.7<code class="variable-op">, </code>1.54<code class="variable-op">, </code>1.7<code class="variable-group">)</code><code class="variable-op">,</code>
+ 5<code class="variable-op">: </code><code class="variable-group">(</code>0.7<code class="variable-op">, </code>1.54<code class="variable-op">, </code>1.8<code class="variable-group">)</code><code class="variable-op">,</code>
+ 6<code class="variable-op">: </code><code class="variable-group">(</code>0.7<code class="variable-op">, </code>1.54<code class="variable-op">, </code>2.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ 7<code class="variable-op">: </code><code class="variable-group">(</code>0.77<code class="variable-op">, </code>1.74<code class="variable-op">, </code>2.0<code class="variable-group">)</code><code class="variable-op">,</code>
+ 8<code class="variable-op">: </code><code class="variable-group">(</code>0.77<code class="variable-op">, </code>1.74<code class="variable-op">, </code>2.0<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -323,7 +459,7 @@ MSMS --- msms executable (arg. to os.system)</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Apr  6 17:41:10 2017
+    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:14 2017
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

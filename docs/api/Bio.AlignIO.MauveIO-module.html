@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.AlignIO.MauveIO</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.AlignIO-module.html">Package&nbsp;AlignIO</a> ::
+        Module&nbsp;MauveIO
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.AlignIO.MauveIO-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module MauveIO</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.AlignIO.MauveIO-pysrc.html">source&nbsp;code</a></span></p>
+<p>Bio.AlignIO support for &quot;xmfa&quot; output from Mauve/ProgressiveMauve.</p>
+<p>You are expected to use this module via the Bio.AlignIO functions (or the
+Bio.SeqIO functions if you want to work directly with the gapped sequences).</p>
+<p>For example, consider a progressiveMauve alignment file containing the following:</p>
+<pre class="rst-literal-block">
+#FormatVersion Mauve1
+#Sequence1File      a.fa
+#Sequence1Entry     1
+#Sequence1Format    FastA
+#Sequence2File      b.fa
+#Sequence2Entry     2
+#Sequence2Format    FastA
+#Sequence3File      c.fa
+#Sequence3Entry     3
+#Sequence3Format    FastA
+#BackboneFile       three.xmfa.bbcols
+&gt; 1:0-0 + a.fa
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+&gt; 2:5417-5968 + b.fa
+TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACGTGAGAGGAGCGCCCTAAGCTTTGGGAAATTCAAGC-
+--------------------------------------------------------------------------------
+CTGGAACGTACTTGCTGGTTTCGCTACTATTTCAAACAAGTTAGAGGCCGTTACCTCGGGCGAACGTATAAACCATTCTG
+&gt; 3:9476-10076 - c.fa
+TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-GGGAGGAGATCGCCCCAAACGTATGGTGAGTCGGGCG
+TTTCCTATAGCTATAGGACCAATCCACTTACCATACGCCCGGCGTCGCCCAGTCCGGTTCGGTACCCTCCATGACCCACG
+---------------------------------------------------------AAATGAGGGCCCAGGGTATGCTT
+=
+&gt; 2:5969-6015 + b.fa
+-----------------------
+GGGCGAACGTATAAACCATTCTG
+&gt; 3:9429-9476 - c.fa
+TTCGGTACCCTCCATGACCCACG
+AAATGAGGGCCCAGGGTATGCTT
+</pre>
+<p>This is a multiple sequence alignment with multiple aligned sections, so you
+would probably load this using the Bio.AlignIO.parse() function:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
+<span class="py-prompt">&gt;&gt;&gt; </span>align = AlignIO.parse(<span class="py-string">&quot;Mauve/simple.xmfa&quot;</span>, <span class="py-string">&quot;mauve&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>alignments = list(align)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> aln <span class="py-keyword">in</span> alignments:
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(align)
+<span class="py-output">SingleLetterAlphabet() alignment with 3 rows and 240 columns</span>
+<span class="py-output">--------------------------------------------...--- 1</span>
+<span class="py-output">TTTAAACATCCCTCGGCCCGTCGCCCTTTTATAATAGCAGTACG...CTG 2</span>
+<span class="py-output">TTTAAACACCTTTTTGGATG--GCCCAGTTCGTTCAGTTGTG-G...CTT 3</span>
+<span class="py-output">SingleLetterAlphabet() alignment with 3 rows and 46 columns</span>
+<span class="py-output">---------------------------------------------- 1</span>
+<span class="py-output">-----------------------GGGCGAACGTATAAACCATTCTG 2</span>
+<span class="py-output">TTCGGTACCCTCCATGACCCACGAAATGAGGGCCCAGGGTATGCTT 3</span></pre>
+</blockquote>
+<p>Additional information is extracted from the XMFA file and available through
+the annotation attribute of each record:</p>
+<pre class="rst-literal-block">
+&gt;&gt;&gt; for record in alignments[0]:
+...   print record.id, len(record), record.annotations
+1 240 {'start': 0, 'end': 0, 'strand': 1}
+2 240 {'start': 5417, 'end': 5968, 'strand': 1}
+3 240 {'start': 9476, 'end': 10076, 'strand': -1}
+</pre>
+
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO.MauveIO.MauveWriter-class.html" class="summary-name">MauveWriter</a><br />
+      Mauve/XMFA alignment writer.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO.MauveIO.MauveIterator-class.html" class="summary-name">MauveIterator</a><br />
+      Mauve xmfa alignment iterator.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_identifier_split"></a><span class="summary-sig-name">_identifier_split</span>(<span class="summary-sig-arg">identifier</span>)</span><br />
+      Return (name, start, end) string tuple from an identifier (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.AlignIO.MauveIO-pysrc.html#_identifier_split">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO.MauveIO-module.html#XMFA_HEADER_REGEX" class="summary-name">XMFA_HEADER_REGEX</a> = <code title="re.compile(r'&gt; (?P&lt;id&gt;\d+):(?P&lt;start&gt;\d+)-(?P&lt;end&gt;\d+) (?P&lt;strand&gt;[\+-\
+]) (?P&lt;name&gt;.*)')">re.compile(r'&gt; <code class="re-group">(?P&lt;</code><code class="re-ref">id</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code>:<code class="re-group">(?P&lt;</code><code class="re-ref">start</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code>-<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO.MauveIO-module.html#XMFA_HEADER_REGEX_BIOPYTHON" class="summary-name">XMFA_HEADER_REGEX_BIOPYTHON</a> = <code title="re.compile(r'&gt; (?P&lt;id&gt;\d+):(?P&lt;start&gt;\d+)-(?P&lt;end&gt;\d+) (?P&lt;strand&gt;[\+-\
+]) (?P&lt;name&gt;[^#]*) # (?P&lt;realname&gt;.*)')">re.compile(r'&gt; <code class="re-group">(?P&lt;</code><code class="re-ref">id</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code>:<code class="re-group">(?P&lt;</code><code class="re-ref">s</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.AlignIO.MauveIO-module.html#ID_LINE_FMT" class="summary-name">ID_LINE_FMT</a> = <code title="'''&gt; {seq_name}:{start}-{end} {strand} {file} # {ugly_hack}
+'''"><code class="variable-quote">'</code><code class="variable-string">&gt; {seq_name}:{start}-{end} {strand} {file} # {u</code><code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__package__"></a><span class="summary-name">__package__</span> = <code title="'Bio.AlignIO'"><code class="variable-quote">'</code><code class="variable-string">Bio.AlignIO</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-VariablesDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="XMFA_HEADER_REGEX"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">XMFA_HEADER_REGEX</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'&gt; <code class="re-group">(?P&lt;</code><code class="re-ref">id</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code>:<code class="re-group">(?P&lt;</code><code class="re-ref">start</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code>-<code class="re-group">(?P&lt;</code><code class="re-ref">end</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code> <code class="re-group">(?P&lt;</code><code class="re-ref">strand</code><code class="re-group">&gt;</code><code class="re-group">[</code>\+-<code class="re-group"></code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="re-group">]</code><code class="re-group">)</code> <code class="re-group">(?P&lt;</code><code class="re-ref">name</code><code class="re-group">&gt;</code>.<code class="re-op">*</code><code class="re-group">)</code>')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="XMFA_HEADER_REGEX_BIOPYTHON"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">XMFA_HEADER_REGEX_BIOPYTHON</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+re.compile(r'&gt; <code class="re-group">(?P&lt;</code><code class="re-ref">id</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code>:<code class="re-group">(?P&lt;</code><code class="re-ref">start</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code>-<code class="re-group">(?P&lt;</code><code class="re-ref">end</code><code class="re-group">&gt;</code>\d<code class="re-op">+</code><code class="re-group">)</code> <code class="re-group">(?P&lt;</code><code class="re-ref">strand</code><code class="re-group">&gt;</code><code class="re-group">[</code>\+-<code class="re-group"></code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="re-group">]</code><code class="re-group">)</code> <code class="re-group">(?P&lt;</code><code class="re-ref">name</code><code class="re-group">&gt;</code><code class="re-group">[^</code>#<code class="re-group">]</code><code class="re-op">*</code><code class="re-group">)</code> # <code class="re-group">(?P&lt;</code><code class="re-ref">realname</code><code class="re-group">&gt;</code>.<code class="re-op">*</code><code class="re-group">)</code>')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ID_LINE_FMT"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">ID_LINE_FMT</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+<code class="variable-quote">'''</code><code class="variable-string">&gt; {seq_name}:{start}-{end} {strand} {file} # {ugly_hack}</code>
+<code class="variable-string"></code><code class="variable-quote">'''</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:10 2017
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
