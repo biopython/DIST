@@ -127,7 +127,7 @@ try to use the Bio.Blast module to parse them instead.</p>
 <td>BlastOutput_reference</td>
 </tr>
 <tr><td>version</td>
-<td>BlastOutput_version[1]</td>
+<td>BlastOutput_version <a class="rst-footnote-reference" href="#rst-id3" id="rst-id1">[*]</a></td>
 </tr>
 <tr><td>description</td>
 <td>Iteration_query-def</td>
@@ -290,17 +290,19 @@ BLAST result as much as possible.</p>
 flag). Commented BLAST tabular files may be parsed, indexed, or written using
 the keyword argument 'comments' set to True:</p>
 <blockquote>
-<p># blast-tab defaults to parsing uncommented files
-&gt;&gt;&gt; from Bio import SearchIO
-&gt;&gt;&gt; uncommented = 'Blast/tab_2226_tblastn_004.txt'
-&gt;&gt;&gt; qresult = SearchIO.read(uncommented, 'blast-tab')
-&gt;&gt;&gt; qresult
-QueryResult(id='gi|11464971:4-101', 5 hits)</p>
-<p># set the keyword argument to parse commented files
-&gt;&gt;&gt; commented = 'Blast/tab_2226_tblastn_008.txt'
-&gt;&gt;&gt; qresult = SearchIO.read(commented, 'blast-tab', comments=True)
-&gt;&gt;&gt; qresult
-QueryResult(id='gi|11464971:4-101', 5 hits)</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># blast-tab defaults to parsing uncommented files</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SearchIO
+<span class="py-prompt">&gt;&gt;&gt; </span>uncommented = <span class="py-string">'Blast/tab_2226_tblastn_004.txt'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = SearchIO.read(uncommented, <span class="py-string">'blast-tab'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult
+<span class="py-output">QueryResult(id='gi|11464971:4-101', 5 hits)</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># set the keyword argument to parse commented files</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>commented = <span class="py-string">'Blast/tab_2226_tblastn_008.txt'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = SearchIO.read(commented, <span class="py-string">'blast-tab'</span>, comments=True)
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult
+<span class="py-output">QueryResult(id='gi|11464971:4-101', 5 hits)</span></pre>
 </blockquote>
 <p>For uncommented files, the parser defaults to using BLAST's default column
 ordering: 'qseqid sseqid pident length mismatch gapopen qstart qend sstart send
@@ -311,18 +313,20 @@ the column follow BLAST's naming. For example, 'qseqid' is the column for the
 query sequence ID. These names may be passed either as a Python list or as a
 space-separated strings.</p>
 <blockquote>
-<p># pass the custom column names as a Python list
-&gt;&gt;&gt; fname = 'Blast/tab_2226_tblastn_009.txt'
-&gt;&gt;&gt; custom_fields = ['qseqid', 'sseqid']
-&gt;&gt;&gt; qresult = next(SearchIO.parse(fname, 'blast-tab', fields=custom_fields))
-&gt;&gt;&gt; qresult
-QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)</p>
-<p># pass the custom column names as a space-separated string
-&gt;&gt;&gt; fname = 'Blast/tab_2226_tblastn_009.txt'
-&gt;&gt;&gt; custom_fields = 'qseqid sseqid'
-&gt;&gt;&gt; qresult = next(SearchIO.parse(fname, 'blast-tab', fields=custom_fields))
-&gt;&gt;&gt; qresult
-QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># pass the custom column names as a Python list</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>fname = <span class="py-string">'Blast/tab_2226_tblastn_009.txt'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>custom_fields = [<span class="py-string">'qseqid'</span>, <span class="py-string">'sseqid'</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = next(SearchIO.parse(fname, <span class="py-string">'blast-tab'</span>, fields=custom_fields))
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult
+<span class="py-output">QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># pass the custom column names as a space-separated string</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>fname = <span class="py-string">'Blast/tab_2226_tblastn_009.txt'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>custom_fields = <span class="py-string">'qseqid sseqid'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult = next(SearchIO.parse(fname, <span class="py-string">'blast-tab'</span>, fields=custom_fields))
+<span class="py-prompt">&gt;&gt;&gt; </span>qresult
+<span class="py-output">QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)</span></pre>
 </blockquote>
 <p>You may also use the 'std' field name as an alias to BLAST's default 12 columns,
 just like when you run a command line BLAST search.</p>
@@ -421,7 +425,7 @@ indexing, and writing.</p>
 (also via
 HSP)</td>
 <td>frames</td>
-<td>frames[2]</td>
+<td>frames <a class="rst-footnote-reference" href="#rst-id4" id="rst-id2">[&#8224;]</a></td>
 </tr>
 <tr><td>aln_span</td>
 <td>length</td>
@@ -613,16 +617,16 @@ HSP)</td>
 </tr>
 </tbody>
 </table>
-<table class="rst-docutils footnote" frame="void" id="rst-id1" rules="none">
+<table class="rst-docutils footnote" frame="void" id="rst-id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="rst-label">[1]</td><td>may be modified</td></tr>
+<tr><td class="rst-label"><a class="fn-backref" href="#id1">[*]</a></td><td>may be modified</td></tr>
 </tbody>
 </table>
-<table class="rst-docutils footnote" frame="void" id="rst-id2" rules="none">
+<table class="rst-docutils footnote" frame="void" id="rst-id4" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="rst-label">[2]</td><td>When 'frames' is present, both <tt class="rst-docutils literal">query_frame</tt> and <tt class="rst-docutils literal">hit_frame</tt> will be
+<tr><td class="rst-label"><a class="fn-backref" href="#id2">[&#8224;]</a></td><td>When 'frames' is present, both <tt class="rst-docutils literal">query_frame</tt> and <tt class="rst-docutils literal">hit_frame</tt> will be
 present as well. It is recommended that you use these instead of 'frames' directly.</td></tr>
 </tbody>
 </table>
@@ -707,7 +711,7 @@ present as well. It is recommended that you use these instead of 'frames' direct
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:17 2017
+    Generated by Epydoc 3.0.1 on Wed Apr  4 10:48:04 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

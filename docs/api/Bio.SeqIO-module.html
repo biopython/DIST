@@ -294,12 +294,15 @@ to perform filtering or other extra operations as part of the process.</p>
 names are also used in Bio.AlignIO and include the following:</p>
 <blockquote>
 <ul class="rst-simple">
-<li>abif    - Applied Biosystem's sequencing trace format</li>
+<li>abi     - Applied Biosystem's sequencing trace format</li>
+<li>abi-trim - Same as &quot;abi&quot; but with quality trimming with Mott's algorithm</li>
 <li>ace     - Reads the contig sequences from an ACE assembly file.</li>
 <li>embl    - The EMBL flat file format. Uses Bio.GenBank internally.</li>
 <li>fasta   - The generic sequence file format where each record starts with
 an identifer line starting with a &quot;&gt;&quot; character, followed by
 lines of sequence.</li>
+<li>fasta-2line - Stricter interpretation of the FASTA format using exactly
+two lines per record (no line wrapping).</li>
 <li>fastq   - A &quot;FASTA like&quot; format used by Sanger which also stores PHRED
 sequence quality values (with an ASCII offset of 33).</li>
 <li>fastq-sanger - An alias for &quot;fastq&quot; for consistency with BioPerl and EMBOSS</li>
@@ -432,7 +435,7 @@ making up each alignment as SeqRecords.</p>
           <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#parse" class="summary-sig-name">parse</a>(<span class="summary-sig-arg">handle</span>,
         <span class="summary-sig-arg">format</span>,
         <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Turns a sequence file into an iterator returning SeqRecords.</td>
+      Turn a sequence file into an iterator returning SeqRecords.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.SeqIO-pysrc.html#parse">source&nbsp;code</a></span>
             
@@ -469,7 +472,7 @@ making up each alignment as SeqRecords.</p>
           <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">handle</span>,
         <span class="summary-sig-arg">format</span>,
         <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Turns a sequence file into a single SeqRecord.</td>
+      Turn a sequence file into a single SeqRecord.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.SeqIO-pysrc.html#read">source&nbsp;code</a></span>
             
@@ -487,7 +490,7 @@ making up each alignment as SeqRecords.</p>
         <tr>
           <td><span class="summary-sig"><a href="Bio.SeqIO-module.html#to_dict" class="summary-sig-name">to_dict</a>(<span class="summary-sig-arg">sequences</span>,
         <span class="summary-sig-arg">key_function</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Turns a sequence iterator or list into a dictionary.</td>
+      Turn a sequence iterator or list into a dictionary.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.SeqIO-pysrc.html#to_dict">source&nbsp;code</a></span>
             
@@ -581,15 +584,15 @@ making up each alignment as SeqRecords.</p>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.SeqIO-module.html#_FormatToIterator" class="summary-name" onclick="show_private();">_FormatToIterator</a> = <code title="{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;gb&quot;: InsdcIO.GenBankIterator, &quot;genba\
-nk&quot;: InsdcIO.GenBankIterator, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeature\
-Iterator, &quot;embl&quot;: InsdcIO.EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFea\
-tureIterator, &quot;imgt&quot;: InsdcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;sw\
-iss&quot;: SwissIO.SwissIterator, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-s\
-eqres&quot;: PdbIO.PdbSeqresIterator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceI\
-O.AceIterator, &quot;tab&quot;: TabIO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fa\
-stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.FastqPhr\
-...">{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;gb&quot;: Ins<code class="variable-ellipsis">...</code></code>
+        <a href="Bio.SeqIO-module.html#_FormatToIterator" class="summary-name" onclick="show_private();">_FormatToIterator</a> = <code title="{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;fasta-2line&quot;: FastaIO.FastaTwoLineIt\
+erator, &quot;gb&quot;: InsdcIO.GenBankIterator, &quot;genbank&quot;: InsdcIO.GenBankItera\
+tor, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeatureIterator, &quot;embl&quot;: InsdcIO\
+.EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFeatureIterator, &quot;imgt&quot;: Ins\
+dcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;swiss&quot;: SwissIO.SwissIterat\
+or, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-seqres&quot;: PdbIO.PdbSeqresIt\
+erator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceIO.AceIterator, &quot;tab&quot;: Tab\
+IO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fastq&quot;: QualityIO.FastqPhre\
+...">{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;fasta-2l<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr class="private">
@@ -598,12 +601,12 @@ stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.Fas
     </td><td class="summary">
         <a href="Bio.SeqIO-module.html#_FormatToWriter" class="summary-name" onclick="show_private();">_FormatToWriter</a> = <code title="{'embl': &lt;class 'Bio.SeqIO.InsdcIO.EmblWriter'&gt;,
  'fasta': &lt;class 'Bio.SeqIO.FastaIO.FastaWriter'&gt;,
+ 'fasta-2line': &lt;class 'Bio.SeqIO.FastaIO.FastaTwoLineWriter'&gt;,
  'fastq': &lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;,
  'fastq-illumina': &lt;class 'Bio.SeqIO.QualityIO.FastqIlluminaWriter'&gt;,
  'fastq-sanger': &lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;,
  'fastq-solexa': &lt;class 'Bio.SeqIO.QualityIO.FastqSolexaWriter'&gt;,
  'gb': &lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;,
- 'genbank': &lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;,
 ..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">embl</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.EmblWrite<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -611,7 +614,7 @@ stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.Fas
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="_BinaryFormats"></a><span class="summary-name">_BinaryFormats</span> = <code title="['sff', 'sff-trim', 'abi', 'abi-trim']"><code class="variable-group">[</code><code class="variable-quote">'</code><code class="variable-string">sff</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">sff-trim</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">abi</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">abi-trim</code><code class="variable-quote">'</code><code class="variable-group">]</code></code>
+        <a name="_BinaryFormats"></a><span class="summary-name">_BinaryFormats</span> = <code title="['sff', 'sff-trim', 'abi', 'abi-trim', 'seqxml']"><code class="variable-group">[</code><code class="variable-quote">'</code><code class="variable-string">sff</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">sff-trim</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">abi</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">abi-trim</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">seqxml</code><code class="variable-quote">'</code><code class="variable-group">]</code></code>
     </td>
   </tr>
 <tr>
@@ -690,7 +693,7 @@ Biopython 1.54 or later) a single SeqRecord.</li>
     </td>
   </tr></table>
   
-  <p>Turns a sequence file into an iterator returning SeqRecords.</p>
+  <p>Turn a sequence file into an iterator returning SeqRecords.</p>
 <dl class="rst-docutils">
 <dt>Arguments:</dt>
 <dd><ul class="rst-first rst-last rst-simple">
@@ -763,7 +766,7 @@ only.</p>
     </td>
   </tr></table>
   
-  <p>Turns a sequence file into a single SeqRecord.</p>
+  <p>Turn a sequence file into a single SeqRecord.</p>
 <dl class="rst-docutils">
 <dt>Arguments:</dt>
 <dd><ul class="rst-first rst-last rst-simple">
@@ -824,7 +827,7 @@ to read multiple records from the handle.</p>
     </td>
   </tr></table>
   
-  <p>Turns a sequence iterator or list into a dictionary.</p>
+  <p>Turn a sequence iterator or list into a dictionary.</p>
 <dl class="rst-docutils">
 <dt>Arguments:</dt>
 <dd><ul class="rst-first rst-last rst-simple">
@@ -1151,14 +1154,14 @@ the conversion is aborted (e.g. an invalid out_format name is given).</p>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;gb&quot;: InsdcIO.GenBankIterator, &quot;genba<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-nk&quot;: InsdcIO.GenBankIterator, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeature<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-Iterator, &quot;embl&quot;: InsdcIO.EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFea<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-tureIterator, &quot;imgt&quot;: InsdcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;sw<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-iss&quot;: SwissIO.SwissIterator, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-s<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-eqres&quot;: PdbIO.PdbSeqresIterator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceI<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-O.AceIterator, &quot;tab&quot;: TabIO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fa<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.FastqPhr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;fasta-2line&quot;: FastaIO.FastaTwoLineIt<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+erator, &quot;gb&quot;: InsdcIO.GenBankIterator, &quot;genbank&quot;: InsdcIO.GenBankItera<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+tor, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeatureIterator, &quot;embl&quot;: InsdcIO<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+.EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFeatureIterator, &quot;imgt&quot;: Ins<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+dcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;swiss&quot;: SwissIO.SwissIterat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+or, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-seqres&quot;: PdbIO.PdbSeqresIt<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+erator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceIO.AceIterator, &quot;tab&quot;: Tab<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+IO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fastq&quot;: QualityIO.FastqPhre<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1179,12 +1182,12 @@ stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.Fas
       <dd><table><tr><td><pre class="variable">
 <code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">embl</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.EmblWriter'&gt;<code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">fasta</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.FastaIO.FastaWriter'&gt;<code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">fasta-2line</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.FastaIO.FastaTwoLineWriter'&gt;<code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">fastq</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;<code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">fastq-illumina</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqIlluminaWriter'&gt;<code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">fastq-sanger</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqPhredWriter'&gt;<code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">fastq-solexa</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.QualityIO.FastqSolexaWriter'&gt;<code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">gb</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;<code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">genbank</code><code class="variable-quote">'</code><code class="variable-op">: </code>&lt;class 'Bio.SeqIO.InsdcIO.GenBankWriter'&gt;<code class="variable-op">,</code>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1220,7 +1223,7 @@ stq&quot;: QualityIO.FastqPhredIterator, &quot;fastq-sanger&quot;: QualityIO.Fas
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:18 2017
+    Generated by Epydoc 3.0.1 on Wed Apr  4 10:48:05 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

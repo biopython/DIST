@@ -60,18 +60,81 @@
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module Reduced</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.Alphabet.Reduced-pysrc.html">source&nbsp;code</a></span></p>
 <p>Reduced alphabets which lump together several amino-acids into one letter.</p>
-<p>Reduced (redundant or simplified) alphabets are used to represent protein sequences using an
-alternative alphabet which lumps together several amino-acids into one letter, based
-on physico-chemical traits. For example, all the aliphatics (I,L,V) are usually
-quite interchangeable, so many sequence studies group them into one letter</p>
+<p>Reduced (redundant or simplified) alphabets are used to represent protein
+sequences using an alternative alphabet which lumps together several
+amino-acids into one letter, based on physico-chemical traits. For example,
+all the aliphatics (I,L,V) are usually quite interchangeable, so many sequence
+studies group them into one letter</p>
 <p>Examples of reduced alphabets are available in:</p>
-<p><a class="rst-reference external" href="http://viscose.ifg.uni-muenster.de/html/alphabets.html" target="_top">http://viscose.ifg.uni-muenster.de/html/alphabets.html</a></p>
+<p><a class="rst-reference external" href="http://viscose.herokuapp.com/html/alphabets.html" target="_top">http://viscose.herokuapp.com/html/alphabets.html</a></p>
 <p>The Murphy tables are from here:</p>
 <p>Murphy L.R., Wallqvist A, Levy RM. (2000) Simplified amino acid
 alphabets for protein fold recognition and implications for folding.
 Protein Eng. 13(3):149-152</p>
-<p>Bio.utils.reduce_sequence is used to take a Protein alphabet, and reduce it using one of
-the tables here, or a user-defined table.</p>
+<p>These alphabets have been used with Bio.utils.reduce_sequence, which has been
+removed from Biopython. You can use this is alphabets and tables like this:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Alphabet
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> Reduced
+<span class="py-prompt">&gt;&gt;&gt; </span>my_protein = Seq(<span class="py-string">'MAGSKEWKRFCELTINEA'</span>, Alphabet.ProteinAlphabet())</pre>
+</blockquote>
+<p>Now, we convert this sequence into a sequence which only recognizes polar (P)
+or hydrophobic (H) residues:</p>
+<blockquote>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>new_protein = Seq(<span class="py-string">''</span>, Alphabet.Reduced.HPModel())
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> aa <span class="py-keyword">in</span> my_protein:
+<span class="py-more">... </span>    new_protein += Alphabet.Reduced.hp_model_tab[aa]
+<span class="py-prompt">&gt;&gt;&gt; </span>new_protein
+<span class="py-output">Seq('HPPPPPHPPHHPHPHPPP', HPModel())</span></pre>
+</blockquote>
+<p>The following Alphabet classes are available:</p>
+<blockquote>
+<ul>
+<li><dl class="rst-first rst-docutils">
+<dt>Murphy15: Maps 20 amino acids to 15, use murphy_15_tab for conversion,</dt>
+<dd><p class="rst-first rst-last">ambiguous letters: L: LVIM, F: FY, K: KR</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>Murphy10: Maps 20 amino acids to 10, use murphy_10_tab for conversion,</dt>
+<dd><p class="rst-first rst-last">ambiguous letters: L: LVIM, S: ST, F: FYW, E: EDNQ, K: KR</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>Murphy8: Maps 20 amino acids to 8, use murphy_8_tab for conversion,</dt>
+<dd><p class="rst-first rst-last">ambiguous letters: L: LVIMC, A: AG, S: ST, F: FYW, E: EDNQ,
+K: KR</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>Murphy4: Maps 20 amino acids to 4, use murphy_4_tab for conversion,</dt>
+<dd><p class="rst-first rst-last">ambiguous letters: L: LVIMC, A: AGSTP, F: FYW, E: EDNQKRH</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>HPModel: Groups amino acids as polar (hydrophilic) or hydrophobic</dt>
+<dd><p class="rst-first rst-last">(non-polar), use hp_model_tab for conversion,
+P: AGTSNQDEHRKP, H: CMFILVWY</p>
+</dd>
+</dl>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>PC5: Amino acids grouped according to 5 physico-chemical properties,</dt>
+<dd><p class="rst-first rst-last">use pc_5_table for conversion,
+A (Aliphatic): IVL, R (aRomatic): FYWH, C (Charged): KRDE, T (Tiny):
+GACS, D (Diverse): TMQNP</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
 
 <!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -94,42 +157,48 @@ the tables here, or a user-defined table.</p>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.Alphabet.Reduced.Murphy15-class.html" class="summary-name">Murphy15</a>
+        <a href="Bio.Alphabet.Reduced.Murphy15-class.html" class="summary-name">Murphy15</a><br />
+      Reduced protein alphabet with 15 letters.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.Alphabet.Reduced.Murphy10-class.html" class="summary-name">Murphy10</a>
+        <a href="Bio.Alphabet.Reduced.Murphy10-class.html" class="summary-name">Murphy10</a><br />
+      Reduced protein alphabet with 10 letters.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.Alphabet.Reduced.Murphy8-class.html" class="summary-name">Murphy8</a>
+        <a href="Bio.Alphabet.Reduced.Murphy8-class.html" class="summary-name">Murphy8</a><br />
+      Reduced protein alphabet with 8 letters.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.Alphabet.Reduced.Murphy4-class.html" class="summary-name">Murphy4</a>
+        <a href="Bio.Alphabet.Reduced.Murphy4-class.html" class="summary-name">Murphy4</a><br />
+      Reduced protein alphabet with 4 letters.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.Alphabet.Reduced.HPModel-class.html" class="summary-name">HPModel</a>
+        <a href="Bio.Alphabet.Reduced.HPModel-class.html" class="summary-name">HPModel</a><br />
+      Reduced protein alphabet with only two letters for polar or hydophobic.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.Alphabet.Reduced.PC5-class.html" class="summary-name">PC5</a>
+        <a href="Bio.Alphabet.Reduced.PC5-class.html" class="summary-name">PC5</a><br />
+      Reduced protein alphabet with 5 letters for physico-chemical properties.
     </td>
   </tr>
 </table>
@@ -257,6 +326,13 @@ the tables here, or a user-defined table.</p>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="hp_model"></a><span class="summary-name">hp_model</span> = <code title="HPModel()">HPModel()</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="Bio.Alphabet.Reduced-module.html#pc_5_table" class="summary-name">pc_5_table</a> = <code title="{'A': 'T',
  'C': 'T',
  'D': 'C',
@@ -272,7 +348,7 @@ the tables here, or a user-defined table.</p>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="hp_model"></a><span class="summary-name">hp_model</span> = <code title="HPModel()">HPModel()</code>
+        <a name="pc5"></a><span class="summary-name">pc5</span> = <code title="PC5()">PC5()</code>
     </td>
   </tr>
 <tr>
@@ -486,7 +562,7 @@ the tables here, or a user-defined table.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:11 2017
+    Generated by Epydoc 3.0.1 on Wed Apr  4 10:47:57 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

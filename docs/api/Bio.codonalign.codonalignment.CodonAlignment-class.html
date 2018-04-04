@@ -110,7 +110,7 @@
         <span class="summary-sig-arg">records</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">CodonAlphabet(Standard)</span>)</span><br />
-      Initialize a new MultipleSeqAlignment object.</td>
+      Initialize the class.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.codonalign.codonalignment-pysrc.html#CodonAlignment.__init__">source&nbsp;code</a></span>
             
@@ -245,6 +245,8 @@
       </p>
     <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.Align.MultipleSeqAlignment-class.html">Align.MultipleSeqAlignment</a></code></b> (private):
       <code><a href="Bio.Align.MultipleSeqAlignment-class.html#_append" onclick="show_private();">_append</a></code>,
+      <code><a href="Bio.Align.MultipleSeqAlignment-class.html#_get_per_column_annotations" onclick="show_private();">_get_per_column_annotations</a></code>,
+      <code><a href="Bio.Align.MultipleSeqAlignment-class.html#_set_per_column_annotations" onclick="show_private();">_set_per_column_annotations</a></code>,
       <code><a href="Bio.Align.MultipleSeqAlignment-class.html#_str_line" onclick="show_private();">_str_line</a></code>
       </p></div>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -317,6 +319,9 @@
 </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="Bio.Align.MultipleSeqAlignment-class.html">Align.MultipleSeqAlignment</a></code></b>:
+      <code><a href="Bio.Align.MultipleSeqAlignment-class.html#column_annotations">column_annotations</a></code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
       </p>
@@ -359,56 +364,10 @@
     </td>
   </tr></table>
   
-  <p>Initialize a new MultipleSeqAlignment object.</p>
-<dl class="rst-docutils">
-<dt>Arguments:</dt>
-<dd><ul class="rst-rst-first rst-rst-last rst-first rst-last">
-<li><dl class="rst-rst-first rst-first rst-docutils">
-<dt>records - A list (or iterator) of SeqRecord objects, whose</dt>
-<dd><p class="rst-rst-first rst-rst-last rst-first rst-last">sequences are all the same length.  This may be an be an
-empty list.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="rst-rst-first rst-first rst-docutils">
-<dt>alphabet - The alphabet for the whole alignment, typically a gapped</dt>
-<dd><p class="rst-rst-first rst-rst-last rst-first rst-last">alphabet, which should be a super-set of the individual
-record alphabets.  If omitted, a consensus alphabet is
-used.</p>
-</dd>
-</dl>
-</li>
-<li><p class="rst-rst-first rst-first">annotations - Information about the whole alignment (dictionary).</p>
-</li>
-</ul>
-</dd>
-</dl>
-<p>You would normally load a MSA from a file using Bio.AlignIO, but you
-can do this from a list of SeqRecord objects too:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Align <span class="py-keyword">import</span> MultipleSeqAlignment
-<span class="py-prompt">&gt;&gt;&gt; </span>a = SeqRecord(Seq(<span class="py-string">&quot;AAAACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Alpha&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>b = SeqRecord(Seq(<span class="py-string">&quot;AAA-CGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>c = SeqRecord(Seq(<span class="py-string">&quot;AAAAGGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>align = MultipleSeqAlignment([a, b, c], annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>})
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
-<span class="py-output">DNAAlphabet() alignment with 3 rows and 7 columns</span>
-<span class="py-output">AAAACGT Alpha</span>
-<span class="py-output">AAA-CGT Beta</span>
-<span class="py-output">AAAAGGT Gamma</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>align.annotations
-<span class="py-output">{'tool': 'demo'}</span></pre>
-<p>NOTE - The older Bio.Align.Generic.Alignment class only accepted a
-single argument, an alphabet.  This is still supported via a backwards
-compatible &quot;hack&quot; so as not to disrupt existing scripts and users, but
-is deprecated and will be removed in a future release.</p>
+  Initialize the class.
   <dl class="fields">
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -600,7 +559,7 @@ needed by CodonAlignment is met.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jul 10 15:16:38 2017
+    Generated by Epydoc 3.0.1 on Wed Apr  4 10:49:42 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

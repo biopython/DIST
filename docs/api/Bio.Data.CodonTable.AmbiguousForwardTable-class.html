@@ -67,6 +67,8 @@ object --+
 </pre>
 
 <hr />
+Forward table for translation of ambiguous nucleotide sequences.
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -94,7 +96,7 @@ object --+
         <span class="summary-sig-arg">forward_table</span>,
         <span class="summary-sig-arg">ambiguous_nucleotide</span>,
         <span class="summary-sig-arg">ambiguous_protein</span>)</span><br />
-      x.__init__(...) initializes x; see help(type(x)) for signature</td>
+      Initialize the class.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Data.CodonTable-pysrc.html#AmbiguousForwardTable.__init__">source&nbsp;code</a></span>
             
@@ -110,9 +112,28 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="Bio.Data.CodonTable.AmbiguousForwardTable-class.html#__contains__" class="summary-sig-name">__contains__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">codon</span>)</span><br />
+      Check if codon works as key for ambiguous forward_table.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Data.CodonTable-pysrc.html#AmbiguousForwardTable.__contains__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="get"></a><span class="summary-sig-name">get</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">codon</span>,
-        <span class="summary-sig-arg">failobj</span>=<span class="summary-sig-default">None</span>)</span></td>
+        <span class="summary-sig-arg">failobj</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Implement get for dictionary-like behaviour.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Data.CodonTable-pysrc.html#AmbiguousForwardTable.get">source&nbsp;code</a></span>
             
@@ -128,8 +149,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">codon</span>)</span></td>
+          <td><span class="summary-sig"><a href="Bio.Data.CodonTable.AmbiguousForwardTable-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">codon</span>)</span><br />
+      Implement dictionary-like behaviour for AmbiguousForwardTable.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Data.CodonTable-pysrc.html#AmbiguousForwardTable.__getitem__">source&nbsp;code</a></span>
             
@@ -219,12 +241,59 @@ object --+
     </td>
   </tr></table>
   
-  x.__init__(...) initializes x; see help(type(x)) for signature
+  Initialize the class.
   <dl class="fields">
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__contains__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__contains__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">codon</span>)</span>
+    <br /><em class="fname">(In operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Data.CodonTable-pysrc.html#AmbiguousForwardTable.__contains__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Check if codon works as key for ambiguous forward_table.</p>
+<p>Only returns 'True' if forward_table[codon] returns a value.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">codon</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.Data.CodonTable-pysrc.html#AmbiguousForwardTable.__getitem__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Implement dictionary-like behaviour for AmbiguousForwardTable.</p>
+<p>forward_table[codon] will either return an amino acid letter,
+or throws a KeyError (if codon does not encode an amino acid)
+or a TranslationError (if codon does encode for an amino acid,
+but either is also a stop codon or does encode several amino acids,
+for which no unique letter is available in the given alphabet.</p>
+  <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
@@ -257,7 +326,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:24 2017
+    Generated by Epydoc 3.0.1 on Wed Apr  4 10:48:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

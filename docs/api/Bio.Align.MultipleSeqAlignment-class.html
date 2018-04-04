@@ -173,10 +173,44 @@ reference sequence with special status.</p>
           <td><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">records</span>,
         <span class="summary-sig-arg">alphabet</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">annotations</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">annotations</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">column_annotations</span>=<span class="summary-sig-default">None</span>)</span><br />
       Initialize a new MultipleSeqAlignment object.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_set_per_column_annotations"></a><span class="summary-sig-name">_set_per_column_annotations</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment._set_per_column_annotations">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_per_column_annotations"></a><span class="summary-sig-name">_get_per_column_annotations</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.Align-pysrc.html#MultipleSeqAlignment._get_per_column_annotations">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -489,6 +523,14 @@ reference sequence with special status.</p>
     </table>
   </td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Align.MultipleSeqAlignment-class.html#column_annotations" class="summary-name">column_annotations</a><br />
+      Dictionary of per-letter-annotation for the sequence.
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -525,7 +567,8 @@ reference sequence with special status.</p>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">records</span>,
         <span class="sig-arg">alphabet</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">annotations</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">annotations</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">column_annotations</span>=<span class="sig-default">None</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -554,6 +597,14 @@ used.</p>
 </li>
 <li><p class="rst-first">annotations - Information about the whole alignment (dictionary).</p>
 </li>
+<li><dl class="rst-first rst-docutils">
+<dt>column_annotations - Per column annotation (restricted dictionary).</dt>
+<dd><p class="rst-first rst-last">This holds Python sequences (lists, strings, tuples)
+whose length matches the number of columns. A typical
+use would be a secondary structure consensus string.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </dd>
 </dl>
@@ -567,14 +618,18 @@ can do this from a list of SeqRecord objects too:</p>
 <span class="py-prompt">&gt;&gt;&gt; </span>a = SeqRecord(Seq(<span class="py-string">&quot;AAAACGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Alpha&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>b = SeqRecord(Seq(<span class="py-string">&quot;AAA-CGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>c = SeqRecord(Seq(<span class="py-string">&quot;AAAAGGT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>align = MultipleSeqAlignment([a, b, c], annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>})
+<span class="py-prompt">&gt;&gt;&gt; </span>align = MultipleSeqAlignment([a, b, c],
+<span class="py-more">... </span>                             annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>},
+<span class="py-more">... </span>                             column_annotations={<span class="py-string">&quot;stats&quot;</span>: <span class="py-string">&quot;CCCXCCC&quot;</span>})
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align)
 <span class="py-output">DNAAlphabet() alignment with 3 rows and 7 columns</span>
 <span class="py-output">AAAACGT Alpha</span>
 <span class="py-output">AAA-CGT Beta</span>
 <span class="py-output">AAAAGGT Gamma</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>align.annotations
-<span class="py-output">{'tool': 'demo'}</span></pre>
+<span class="py-output">{'tool': 'demo'}</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>align.column_annotations
+<span class="py-output">{'stats': 'CCCXCCC'}</span></pre>
 <p>NOTE - The older Bio.Align.Generic.Alignment class only accepted a
 single argument, an alphabet.  This is still supported via a backwards
 compatible &quot;hack&quot; so as not to disrupt existing scripts and users, but
@@ -891,7 +946,7 @@ no weight, 1.0 =&gt; highest weight)</li>
 </ul>
 </dd>
 </dl>
-<p>In general providing a SeqRecord and calling .append is prefered.</p>
+<p>In general providing a SeqRecord and calling .append is preferred.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1038,9 +1093,11 @@ Using the addition operator adds by column. For example,</p>
 <span class="py-prompt">&gt;&gt;&gt; </span>b2 = SeqRecord(Seq(<span class="py-string">&quot;GT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Beta&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>c2 = SeqRecord(Seq(<span class="py-string">&quot;GT&quot;</span>, generic_dna), id=<span class="py-string">&quot;Gamma&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>left = MultipleSeqAlignment([a1, b1, c1],
-<span class="py-more">... </span>                            annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>, <span class="py-string">&quot;name&quot;</span>: <span class="py-string">&quot;start&quot;</span>})
+<span class="py-more">... </span>                            annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>, <span class="py-string">&quot;name&quot;</span>: <span class="py-string">&quot;start&quot;</span>},
+<span class="py-more">... </span>                            column_annotations={<span class="py-string">&quot;stats&quot;</span>: <span class="py-string">&quot;CCCXC&quot;</span>})
 <span class="py-prompt">&gt;&gt;&gt; </span>right = MultipleSeqAlignment([a2, b2, c2],
-<span class="py-more">... </span>                            annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>, <span class="py-string">&quot;name&quot;</span>: <span class="py-string">&quot;end&quot;</span>})</pre>
+<span class="py-more">... </span>                            annotations={<span class="py-string">&quot;tool&quot;</span>: <span class="py-string">&quot;demo&quot;</span>, <span class="py-string">&quot;name&quot;</span>: <span class="py-string">&quot;end&quot;</span>},
+<span class="py-more">... </span>                            column_annotations={<span class="py-string">&quot;stats&quot;</span>: <span class="py-string">&quot;CC&quot;</span>})</pre>
 <p>Now, let's look at these two alignments:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(left)
@@ -1080,6 +1137,10 @@ accidental propagation of inappropriate values:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>combined.annotations
 <span class="py-output">{'tool': 'demo'}</span></pre>
+<p>Similarly any common per-column-annotations are combined:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>combined.column_annotations
+<span class="py-output">{'stats': 'CCCXCCC'}</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1283,6 +1344,43 @@ but backwards:</p>
 </td></tr></table>
 </div>
 <br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="column_annotations"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">column_annotations</h3>
+  Dictionary of per-letter-annotation for the sequence.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#_get_per_column_annotations" class="summary-sig-name" onclick="show_private();">_get_per_column_annotations</a>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="Bio.Align.MultipleSeqAlignment-class.html#_set_per_column_annotations" class="summary-sig-name" onclick="show_private();">_set_per_column_annotations</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -1311,7 +1409,7 @@ but backwards:</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jul 10 15:14:22 2017
+    Generated by Epydoc 3.0.1 on Wed Apr  4 10:48:08 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
