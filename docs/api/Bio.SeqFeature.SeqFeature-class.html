@@ -373,6 +373,30 @@ values. As of Biopython 1.69 this is an ordered dictionary.</li>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="Bio.SeqFeature.SeqFeature-class.html#translate" class="summary-sig-name">translate</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">parent_sequence</span>,
+        <span class="summary-sig-arg">table</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Standard</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">start_offset</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">stop_symbol</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">to_stop</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">cds</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">gap</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Get a translation of the feature's sequence.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqFeature-pysrc.html#SeqFeature.translate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="Bio.SeqFeature.SeqFeature-class.html#__bool__" class="summary-sig-name">__bool__</a>(<span class="summary-sig-arg">self</span>)</span><br />
       Boolean value of an instance of this class (True).</td>
           <td align="right" valign="top">
@@ -751,6 +775,80 @@ locations in the GenBank parser, extract() will raise a ValueError.</p>
   </dl>
 </td></tr></table>
 </div>
+<a name="translate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">translate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">parent_sequence</span>,
+        <span class="sig-arg">table</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Standard</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">start_offset</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">stop_symbol</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">*</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">to_stop</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">cds</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">gap</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.SeqFeature-pysrc.html#SeqFeature.translate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get a translation of the feature's sequence.</p>
+<p>This method is intended for CDS or other features that code proteins
+and is a shortcut that will both extract the feature and
+translate it, taking into account the codon_start and transl_table
+qualifiers, if they are present. If they are not present the
+value of the arguments &quot;table&quot; and &quot;start_offset&quot; are used.</p>
+<p>The arguments stop_symbol, to_stop, cds and gap have the same meaning
+as Seq.translate, refer to that documentation for further information.</p>
+<dl class="rst-docutils">
+<dt>Arguments:</dt>
+<dd><ul class="rst-first rst-last rst-simple">
+<li>parent_sequence - This method will translate DNA or RNA sequences,
+and those with a nucleotide or generic alphabet. Trying to
+translate a protein sequence raises an exception.</li>
+<li>table - Which codon table to use if there is no transl_table
+qualifier for this feature. This can be either a name
+(string), an NCBI identifier (integer), or a CodonTable
+object (useful for non-standard genetic codes).  This
+defaults to the &quot;Standard&quot; table.</li>
+<li>start_offset - offset at which the first complete codon of a
+coding feature can be found, relative to the first base of
+that feature. Has a valid value of 0, 1 or 2. NOTE: this
+uses python's 0-based numbering whereas the codon_start
+qualifier in files from NCBI use 1-based numbering.
+Will override a codon_start qualifier</li>
+</ul>
+</dd>
+</dl>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqFeature <span class="py-keyword">import</span> SeqFeature, FeatureLocation
+<span class="py-prompt">&gt;&gt;&gt; </span>seq = Seq(<span class="py-string">&quot;GGTTACACTTACCGATAATGTCTCTGATGA&quot;</span>, generic_dna)
+<span class="py-prompt">&gt;&gt;&gt; </span>f = SeqFeature(FeatureLocation(0, 30), type=<span class="py-string">&quot;CDS&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>f.qualifiers[<span class="py-string">'transl_table'</span>] = [11]
+<span class="py-prompt">&gt;&gt;&gt; </span>f.translate(seq)
+<span class="py-output">Seq('GYTYR*CL**', HasStopCodon(ExtendedIUPACProtein(), '*'))</span></pre>
+<p>Now use the start_offset argument to change the frame. Note
+this uses python 0-based numbering</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>f.translate(seq, start_offset=1)
+<span class="py-output">Seq('VTLTDNVSD', ExtendedIUPACProtein())</span></pre>
+<p>Alternatively use the codon_start qualifier to do the same
+thing. Note: this uses 1-based numbering, which is found
+in files from NCBI</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>f.qualifiers[<span class="py-string">'codon_start'</span>] = [2]
+<span class="py-prompt">&gt;&gt;&gt; </span>f.translate(seq)
+<span class="py-output">Seq('VTLTDNVSD', ExtendedIUPACProtein())</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
 <a name="__bool__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1077,7 +1175,7 @@ example just before a BeforePosition:</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Apr  4 10:49:40 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 16:36:05 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

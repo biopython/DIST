@@ -59,100 +59,103 @@
 </table>
 <h1 class="epydoc">Source Code for <a href="Bio.SearchIO.InterproscanIO-module.html">Package Bio.SearchIO.InterproscanIO</a></h1>
 <pre class="py-src">
-<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""InterProScan."""</tt> </tt>
-<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module Bio.SearchIO.InterproscanIO.interproscan_xml=Bio.SearchIO.InterproscanIO.interproscan_xml-module.html"><a title="Bio.SearchIO.InterproscanIO.interproscan_xml" class="py-name" href="#" onclick="return doclink('link-0', 'interproscan_xml', 'link-0');">interproscan_xml</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class Bio.SearchIO.InterproscanIO.interproscan_xml.InterproscanXmlParser=Bio.SearchIO.InterproscanIO.interproscan_xml.InterproscanXmlParser-class.html"><a title="Bio.SearchIO.InterproscanIO.interproscan_xml.InterproscanXmlParser" class="py-name" href="#" onclick="return doclink('link-1', 'InterproscanXmlParser', 'link-1');">InterproscanXmlParser</a></tt> </tt>
-<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
-<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-string">"""Bio.SearchIO support for InterProScan output formats.</tt> </tt>
-<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-string">This module adds support for parsing InterProScan XML output.</tt> </tt>
-<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-string">The InterProScan is available as a command line program or on</tt> </tt>
-<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-string">EMBL-EBI's web page.</tt> </tt>
-<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-string">Bio.SearchIO.InterproscanIO was tested on the following version:</tt> </tt>
-<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-string">- versions: 5.26-65.0 (interproscan-model-2.1.xsd)</tt> </tt>
-<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-string">More information about InterProScan are available through these links:</tt> </tt>
-<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-string">- Publication: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3998142/</tt> </tt>
-<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-string">- Web interface: https://www.ebi.ac.uk/interpro/search/sequence-search</tt> </tt>
-<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-string">- Documentation: https://github.com/ebi-pf-team/interproscan/wiki</tt> </tt>
-<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-string">Supported format</tt> </tt>
-<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-string">================</tt> </tt>
-<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-string">Bio.SearchIO.InterproscanIO supports the following format:</tt> </tt>
-<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-string">- XML   - 'interproscan-xml' - parsing</tt> </tt>
-<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-string">interproscan-xml</tt> </tt>
-<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-string">================</tt> </tt>
-<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-string">The interproscan-xml parser follows the InterProScan XML described here:</tt> </tt>
-<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-string">https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats</tt> </tt>
-<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-string">+----------------+--------------------+--------------------------------------+</tt> </tt>
-<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-string">| Object         | Attribute          | XML Element                          |</tt> </tt>
-<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt class="py-string">+================+====================+======================================+</tt> </tt>
-<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-string">| QueryResult    | target             | 'InterPro'                           |</tt> </tt>
-<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-string">|                | program            | 'InterProScan'                       |</tt> </tt>
-<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt class="py-string">|                | version            | protein-matches.interproscan-version |</tt> </tt>
-<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"><tt class="py-string">+----------------+--------------------+--------------------------------------+</tt> </tt>
-<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"><tt class="py-string">| Hit            | accession          | signature.name                       |</tt> </tt>
-<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line"><tt class="py-string">|                | id                 | signature.ac                         |</tt> </tt>
-<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"><tt class="py-string">|                | description        | signature.desc                       |</tt> </tt>
-<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"><tt class="py-string">|                | dbxrefs            | IPR:entry.ac                         |</tt> </tt>
-<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line"><tt class="py-string">|                |                    | go-xref.id                           |</tt> </tt>
-<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"><tt class="py-string">|                |                    | pathway-xref.db:pathway-xref.id      |</tt> </tt>
-<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"><tt class="py-string">|                | attributes         |                                      |</tt> </tt>
-<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"><tt class="py-string">|                | ['Target']         | *-match / *-location                 |</tt> </tt>
-<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"><tt class="py-string">|                | ['Target version'] | signature-library-release.library    |</tt> </tt>
-<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line"><tt class="py-string">|                | ['Hit type']       | signature-library-release.version    |</tt> </tt>
-<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"><tt class="py-string">+----------------+--------------------+--------------------------------------+</tt> </tt>
-<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line"><tt class="py-string">| HSP            | bitscore           | *-location.score                     |</tt> </tt>
-<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"><tt class="py-string">|                | evalue             | *-location.evalue                    |</tt> </tt>
-<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"><tt class="py-string">+----------------+--------------------+--------------------------------------+</tt> </tt>
-<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"><tt class="py-string">| HSPFragment    | query_start        | *-location.start                     |</tt> </tt>
-<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"><tt class="py-string">| (also via      +--------------------+--------------------------------------+</tt> </tt>
-<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line"><tt class="py-string">| HSP)           | query_end          | *-location.end                       |</tt> </tt>
-<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"><tt class="py-string">|                | hit_start          | *-location.hmm-start                 |</tt> </tt>
-<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"><tt class="py-string">|                | hit_end            | *-location.hmm-end                   |</tt> </tt>
-<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"><tt class="py-string">|                +--------------------+--------------------------------------+</tt> </tt>
-<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line"><tt class="py-string">|                | query              | sequence                             |</tt> </tt>
-<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"><tt class="py-string">+----------------+--------------------+--------------------------------------+</tt> </tt>
-<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line"><tt class="py-string">InterProScan XML files may contain a match with multiple locations or multiple</tt> </tt>
-<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line"><tt class="py-string">matches to the same protein with a single location. In both cases, the match is</tt> </tt>
-<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line"><tt class="py-string">uniquely stored as a HIT object and the locations as HSP objects.</tt> </tt>
-<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line"><tt class="py-string">HSP.*start == *start - 1 (Since every start position is 0-based in Biopython)</tt> </tt>
-<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line"><tt class="py-string">HSP.aln_span ==  query-end - query-start</tt> </tt>
-<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line"><tt class="py-string">The types of matches or locations (eg. hmmer3-match, hmmer3-location,</tt> </tt>
-<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line"><tt class="py-string">coils-match, panther-location) are stored in hit.attributes['Hit type'].</tt> </tt>
-<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line"><tt class="py-string">For instance, for every 'phobious-match', there will be a 'phobious-location'.</tt> </tt>
-<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line"><tt class="py-string">Therefore, Hit.type will store the string excluding '-match' or '-location'</tt> </tt>
-<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line"><tt class="py-string">('phobious', in this example).</tt> </tt>
-<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line"><tt class="py-string"></tt> </tt>
-<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line"><tt class="py-string">"""</tt> </tt>
-<a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line"> </tt>
-<a name="L88"></a><tt class="py-lineno">88</tt>  <tt class="py-line"><tt class="py-comment"># if not used as a module, run the doctest</tt> </tt>
-<a name="L89"></a><tt class="py-lineno">89</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
-<a name="L90"></a><tt class="py-lineno">90</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-2" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-2', 'Bio', 'link-2');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Module Bio.Phylo._utils=Bio.Phylo._utils-module.html,Module Bio.SearchIO._utils=Bio.SearchIO._utils-module.html,Module Bio._utils=Bio._utils-module.html"><a title="Bio.Phylo._utils
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2018 by Adhemar Zerlotini. All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of the Biopython distribution and governed by your</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># choice of the "Biopython License Agreement" or the "BSD 3-Clause License".</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"># Please see the LICENSE file that should have been included as part of this</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"># package.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">"""Bio.SearchIO support for InterProScan output formats.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring">This module adds support for parsing InterProScan XML output.</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">The InterProScan is available as a command line program or on</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">EMBL-EBI's web page.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">Bio.SearchIO.InterproscanIO was tested on the following version:</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">- versions: 5.26-65.0 (interproscan-model-2.1.xsd)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring">More information about InterProScan are available through these links:</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">- Publication: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3998142/</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">- Web interface: https://www.ebi.ac.uk/interpro/search/sequence-search</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">- Documentation: https://github.com/ebi-pf-team/interproscan/wiki</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-docstring">Supported format</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring">================</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-docstring">Bio.SearchIO.InterproscanIO supports the following format:</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-docstring">- XML   - 'interproscan-xml' - parsing</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-docstring">interproscan-xml</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-docstring">================</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-docstring">The interproscan-xml parser follows the InterProScan XML described here:</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-docstring">https://github.com/ebi-pf-team/interproscan/wiki/OutputFormats</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-docstring">+--------------+--------------------+----------------------------------------+</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-docstring">| Object       | Attribute          | XML Element                            |</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-docstring">+==============+====================+========================================+</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt class="py-docstring">| QueryResult  | target             | `InterPro`                             |</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"><tt class="py-docstring">|              | program            | `InterProScan`                         |</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"><tt class="py-docstring">|              | version            | `protein-matches.interproscan-version` |</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line"><tt class="py-docstring">+--------------+--------------------+----------------------------------------+</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"><tt class="py-docstring">| Hit          | accession          | `signature.name`                       |</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"><tt class="py-docstring">|              | id                 | `signature.ac`                         |</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line"><tt class="py-docstring">|              | description        | `signature.desc`                       |</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line"><tt class="py-docstring">|              | dbxrefs            | `IPR:entry.ac`                         |</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"><tt class="py-docstring">|              |                    | `go-xref.id`                           |</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"><tt class="py-docstring">|              |                    | `pathway-xref.db:pathway-xref.id`      |</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line"><tt class="py-docstring">|              | attributes         |                                        |</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"><tt class="py-docstring">|              | ['Target']         | `*-match` / `*-location`               |</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line"><tt class="py-docstring">|              | ['Target version'] | `signature-library-release.library`    |</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"><tt class="py-docstring">|              | ['Hit type']       | `signature-library-release.version`    |</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line"><tt class="py-docstring">+--------------+--------------------+----------------------------------------+</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"><tt class="py-docstring">| HSP          | bitscore           | `*-location.score`                     |</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line"><tt class="py-docstring">|              | evalue             | `*-location.evalue`                    |</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line"><tt class="py-docstring">+--------------+--------------------+----------------------------------------+</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line"><tt class="py-docstring">| HSPFragment  | query_start        | `*-location.start`                     |</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"><tt class="py-docstring">| (also via    +--------------------+----------------------------------------+</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line"><tt class="py-docstring">| HSP)         | query_end          | `*-location.end`                       |</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line"><tt class="py-docstring">|              | hit_start          | `*-location.hmm-start`                 |</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"><tt class="py-docstring">|              | hit_end            | `*-location.hmm-end`                   |</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"><tt class="py-docstring">|              +--------------------+----------------------------------------+</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line"><tt class="py-docstring">|              | query              | `sequence`                             |</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line"><tt class="py-docstring">+--------------+--------------------+----------------------------------------+</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line"><tt class="py-docstring">InterProScan XML files may contain a match with multiple locations or multiple</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line"><tt class="py-docstring">matches to the same protein with a single location. In both cases, the match</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line"><tt class="py-docstring">is uniquely stored as a HIT object and the locations as HSP objects.</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line"><tt class="py-docstring">`HSP.*start == *start - 1` (Since every start position is 0-based in Biopython)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line"><tt class="py-docstring">`HSP.aln_span ==  query-end - query-start`</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line"><tt class="py-docstring">The types of matches or locations (eg. hmmer3-match, hmmer3-location,</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line"><tt class="py-docstring">coils-match, panther-location) are stored in hit.attributes['Hit type'].</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line"><tt class="py-docstring">For instance, for every 'phobious-match', there will be a 'phobious-location'.</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line"><tt class="py-docstring">Therefore, Hit.type will store the string excluding '-match' or '-location'</tt> </tt>
+<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line"><tt class="py-docstring">('phobious', in this example).</tt> </tt>
+<a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L88"></a><tt class="py-lineno">88</tt>  <tt class="py-line"> </tt>
+<a name="L89"></a><tt class="py-lineno">89</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Module Bio.SearchIO.InterproscanIO.interproscan_xml=Bio.SearchIO.InterproscanIO.interproscan_xml-module.html"><a title="Bio.SearchIO.InterproscanIO.interproscan_xml" class="py-name" href="#" onclick="return doclink('link-0', 'interproscan_xml', 'link-0');">interproscan_xml</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Class Bio.SearchIO.InterproscanIO.interproscan_xml.InterproscanXmlParser=Bio.SearchIO.InterproscanIO.interproscan_xml.InterproscanXmlParser-class.html"><a title="Bio.SearchIO.InterproscanIO.interproscan_xml.InterproscanXmlParser" class="py-name" href="#" onclick="return doclink('link-1', 'InterproscanXmlParser', 'link-1');">InterproscanXmlParser</a></tt> </tt>
+<a name="L90"></a><tt class="py-lineno">90</tt>  <tt class="py-line"> </tt>
+<a name="L91"></a><tt class="py-lineno">91</tt>  <tt class="py-line"><tt class="py-comment"># if not used as a module, run the doctest</tt> </tt>
+<a name="L92"></a><tt class="py-lineno">92</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L93"></a><tt class="py-lineno">93</tt>  <tt class="py-line">    <tt class="py-keyword">from</tt> <tt id="link-2" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-2', 'Bio', 'link-2');">Bio</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Module Bio.Phylo._utils=Bio.Phylo._utils-module.html,Module Bio.SearchIO._utils=Bio.SearchIO._utils-module.html,Module Bio._utils=Bio._utils-module.html"><a title="Bio.Phylo._utils
 Bio.SearchIO._utils
 Bio._utils" class="py-name" href="#" onclick="return doclink('link-3', '_utils', 'link-3');">_utils</a></tt> <tt class="py-keyword">import</tt> <tt id="link-4" class="py-name" targets="Function Bio._utils.run_doctest()=Bio._utils-module.html#run_doctest"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-4', 'run_doctest', 'link-4');">run_doctest</a></tt> </tt>
-<a name="L91"></a><tt class="py-lineno">91</tt>  <tt class="py-line">    <tt id="link-5" class="py-name"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-5', 'run_doctest', 'link-4');">run_doctest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
-<a name="L92"></a><tt class="py-lineno">92</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<a name="L94"></a><tt class="py-lineno">94</tt>  <tt class="py-line">    <tt id="link-5" class="py-name"><a title="Bio._utils.run_doctest" class="py-name" href="#" onclick="return doclink('link-5', 'run_doctest', 'link-4');">run_doctest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno">95</tt>  <tt class="py-line"> </tt><script type="text/javascript">
 <!--
 expandto(location.href);
 // -->
@@ -187,7 +190,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Apr  4 10:49:50 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 16:36:12 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
