@@ -178,7 +178,7 @@ Code for dealing with Codon Alignments.
         <span class="summary-sig-arg">codon_table</span>=<span class="summary-sig-default">default_codon_table</span>,
         <span class="summary-sig-arg">complete_protein</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">anchor_len</span>=<span class="summary-sig-default">10</span>)</span><br />
-      Check if the nucleotide can be translated into the protein.</td>
+      Check if the nucleotide can be translated into the protein (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.codonalign-pysrc.html#_check_corr">source&nbsp;code</a></span>
             
@@ -200,7 +200,7 @@ Code for dealing with Codon Alignments.
         <span class="summary-sig-arg">aa2re</span>,
         <span class="summary-sig-arg">anchor_len</span>,
         <span class="summary-sig-arg">shift_id_pos</span>)</span><br />
-      Find a regular expression matching a potentially shifted anchor.</td>
+      Find a regular expression matching a potentially shifted anchor (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.codonalign-pysrc.html#_get_shift_anchor_re">source&nbsp;code</a></span>
             
@@ -354,34 +354,33 @@ ant changes prior to its future official release.',
 <dt>Arguments:</dt>
 <dd><ul class="rst-first rst-last rst-simple">
 <li>pro_align  - a protein MultipleSeqAlignment object</li>
-<li>nucl_align - an object returned by SeqIO.parse or SeqIO.index
+<li>nucl_seqs - an object returned by SeqIO.parse or SeqIO.index
 or a collection of SeqRecord.</li>
 <li>alphabet   - alphabet for the returned codon alignment</li>
 <li>corr_dict  - a dict that maps protein id to nucleotide id</li>
 <li>complete_protein - whether the sequence begins with a start
 codon</li>
-<li>frameshift - whether to apply frameshift detection</li>
 </ul>
 </dd>
 </dl>
-<p>Return a CodonAlignment object</p>
+<p>Return a CodonAlignment object.</p>
+<p>The example below answers this Biostars question: <a class="rst-reference external" href="https://www.biostars.org/p/89741/" target="_top">https://www.biostars.org/p/89741/</a></p>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> IUPAC
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Alphabet <span class="py-keyword">import</span> generic_dna, generic_protein
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqRecord <span class="py-keyword">import</span> SeqRecord
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Align <span class="py-keyword">import</span> MultipleSeqAlignment
-<span class="py-prompt">&gt;&gt;&gt; </span>seq1 = SeqRecord(Seq(<span class="py-string">'TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG'</span>,
-<span class="py-more">... </span>    alphabet=IUPAC.IUPACUnambiguousDNA()), id=<span class="py-string">'pro1'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>seq2 = SeqRecord(Seq(<span class="py-string">'TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG'</span>,
-<span class="py-more">... </span>    alphabet=IUPAC.IUPACUnambiguousDNA()), id=<span class="py-string">'pro2'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>pro1 = SeqRecord(Seq(<span class="py-string">'SGTARTKLLLLLAALCAAGGALE'</span>, alphabet=IUPAC.protein),id=<span class="py-string">'pro1'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>pro2 = SeqRecord(Seq(<span class="py-string">'SGTSRTKRLLLLAALGAAGGALE'</span>, alphabet=IUPAC.protein),id=<span class="py-string">'pro2'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.codonalign <span class="py-keyword">import</span> build
+<span class="py-prompt">&gt;&gt;&gt; </span>seq1 = SeqRecord(Seq(<span class="py-string">'ATGTCTCGT'</span>, alphabet=generic_dna), id=<span class="py-string">'pro1'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>seq2 = SeqRecord(Seq(<span class="py-string">'ATGCGT'</span>, alphabet=generic_dna), id=<span class="py-string">'pro2'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>pro1 = SeqRecord(Seq(<span class="py-string">'MSR'</span>, alphabet=generic_protein), id=<span class="py-string">'pro1'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>pro2 = SeqRecord(Seq(<span class="py-string">'M-R'</span>, alphabet=generic_protein), id=<span class="py-string">'pro2'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>aln = MultipleSeqAlignment([pro1, pro2])
 <span class="py-prompt">&gt;&gt;&gt; </span>codon_aln = build(aln, [seq1, seq2])
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(codon_aln)
-<span class="py-output">CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)</span>
-<span class="py-output">TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1</span>
-<span class="py-output">TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2</span></pre>
+<span class="py-output">CodonAlphabet(Standard) CodonAlignment with 2 rows and 9 columns (3 codons)</span>
+<span class="py-output">ATGTCTCGT pro1</span>
+<span class="py-output">ATG---CGT pro2</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -405,7 +404,7 @@ codon</li>
     </td>
   </tr></table>
   
-  <p>Check if the nucleotide can be translated into the protein.</p>
+  <p>Check if the nucleotide can be translated into the protein (PRIVATE).</p>
 <p>Expects two SeqRecord objects.</p>
   <dl class="fields">
   </dl>
@@ -430,7 +429,7 @@ codon</li>
     </td>
   </tr></table>
   
-  <p>Find a regular expression matching a potentially shifted anchor.</p>
+  <p>Find a regular expression matching a potentially shifted anchor (PRIVATE).</p>
 <dl class="rst-docutils">
 <dt>Arguments:</dt>
 <dd><ul class="rst-first rst-last rst-simple">
@@ -584,7 +583,7 @@ by a rf_table (with frameshift in some of them).</li>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Jun 22 16:34:27 2018
+    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:23 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

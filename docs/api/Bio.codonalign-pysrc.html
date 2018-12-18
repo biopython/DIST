@@ -97,32 +97,32 @@ Bio.SeqRecord.SeqRecord" class="py-name" href="#" onclick="return doclink('link-
 <a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
 <a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">    Arguments:</tt> </tt>
 <a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">     - pro_align  - a protein MultipleSeqAlignment object</tt> </tt>
-<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">     - nucl_align - an object returned by SeqIO.parse or SeqIO.index</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">     - nucl_seqs - an object returned by SeqIO.parse or SeqIO.index</tt> </tt>
 <a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">       or a collection of SeqRecord.</tt> </tt>
 <a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">     - alphabet   - alphabet for the returned codon alignment</tt> </tt>
 <a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">     - corr_dict  - a dict that maps protein id to nucleotide id</tt> </tt>
 <a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">     - complete_protein - whether the sequence begins with a start</tt> </tt>
 <a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">       codon</tt> </tt>
-<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">     - frameshift - whether to apply frameshift detection</tt> </tt>
-<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">    Return a CodonAlignment object</tt> </tt>
-<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
-<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.Alphabet import IUPAC</tt> </tt>
-<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.Seq import Seq</tt> </tt>
-<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.SeqRecord import SeqRecord</tt> </tt>
-<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.Align import MultipleSeqAlignment</tt> </tt>
-<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; seq1 = SeqRecord(Seq('TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG',</tt> </tt>
-<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro1')</tt> </tt>
-<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; seq2 = SeqRecord(Seq('TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG',</tt> </tt>
-<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    ...     alphabet=IUPAC.IUPACUnambiguousDNA()), id='pro2')</tt> </tt>
-<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; pro1 = SeqRecord(Seq('SGTARTKLLLLLAALCAAGGALE', alphabet=IUPAC.protein),id='pro1')</tt> </tt>
-<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; pro2 = SeqRecord(Seq('SGTSRTKRLLLLAALGAAGGALE', alphabet=IUPAC.protein),id='pro2')</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">    Return a CodonAlignment object.</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line"><tt class="py-docstring">    The example below answers this Biostars question: https://www.biostars.org/p/89741/</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.Alphabet import generic_dna, generic_protein</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.Seq import Seq</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.SeqRecord import SeqRecord</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.Align import MultipleSeqAlignment</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; from Bio.codonalign import build</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; seq1 = SeqRecord(Seq('ATGTCTCGT', alphabet=generic_dna), id='pro1')</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; seq2 = SeqRecord(Seq('ATGCGT', alphabet=generic_dna), id='pro2')</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; pro1 = SeqRecord(Seq('MSR', alphabet=generic_protein), id='pro1')</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; pro2 = SeqRecord(Seq('M-R', alphabet=generic_protein), id='pro2')</tt> </tt>
 <a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; aln = MultipleSeqAlignment([pro1, pro2])</tt> </tt>
 <a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; codon_aln = build(aln, [seq1, seq2])</tt> </tt>
 <a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">    &gt;&gt;&gt; print(codon_aln)</tt> </tt>
-<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    CodonAlphabet(Standard) CodonAlignment with 2 rows and 69 columns (23 codons)</tt> </tt>
-<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">    TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGT...GAG pro1</tt> </tt>
-<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">    TCAGGGACTTCGAGAACCAAGCG-CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGT...GAG pro2</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line"><tt class="py-docstring">    CodonAlphabet(Standard) CodonAlignment with 2 rows and 9 columns (3 codons)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line"><tt class="py-docstring">    ATGTCTCGT pro1</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"><tt class="py-docstring">    ATG---CGT pro2</tt> </tt>
 <a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
 <a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
 <a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">    <tt class="py-comment"># TODO</tt> </tt>
@@ -442,7 +442,7 @@ BioSQL.BioSeqDatabase.DBServer.items" class="py-name" href="#" onclick="return d
 <a name="L232"></a><tt class="py-lineno">232</tt>  <tt class="py-line"> </tt>
 <a name="_check_corr"></a><div id="_check_corr-def"><a name="L233"></a><tt class="py-lineno">233</tt> <a class="py-toggle" href="#" id="_check_corr-toggle" onclick="return toggle('_check_corr');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.codonalign-module.html#_check_corr">_check_corr</a><tt class="py-op">(</tt><tt class="py-param">pro</tt><tt class="py-op">,</tt> <tt class="py-param">nucl</tt><tt class="py-op">,</tt> <tt class="py-param">gap_char</tt><tt class="py-op">=</tt><tt class="py-string">'-'</tt><tt class="py-op">,</tt> <tt class="py-param">codon_table</tt><tt class="py-op">=</tt><tt id="link-108" class="py-name"><a title="Bio.codonalign.codonalphabet.default_codon_table" class="py-name" href="#" onclick="return doclink('link-108', 'default_codon_table', 'link-28');">default_codon_table</a></tt><tt class="py-op">,</tt> </tt>
 <a name="L234"></a><tt class="py-lineno">234</tt>  <tt class="py-line">                <tt class="py-param">complete_protein</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> <tt class="py-param">anchor_len</tt><tt class="py-op">=</tt><tt class="py-number">10</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="_check_corr-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_check_corr-expanded"><a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">    <tt class="py-docstring">"""Check if the nucleotide can be translated into the protein.</tt> </tt>
+</div><div id="_check_corr-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_check_corr-expanded"><a name="L235"></a><tt class="py-lineno">235</tt>  <tt class="py-line">    <tt class="py-docstring">"""Check if the nucleotide can be translated into the protein (PRIVATE).</tt> </tt>
 <a name="L236"></a><tt class="py-lineno">236</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
 <a name="L237"></a><tt class="py-lineno">237</tt>  <tt class="py-line"><tt class="py-docstring">    Expects two SeqRecord objects.</tt> </tt>
 <a name="L238"></a><tt class="py-lineno">238</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
@@ -820,7 +820,7 @@ Bio.SearchIO._model.query.QueryResult.id" class="py-name" href="#" onclick="retu
 <a name="L423"></a><tt class="py-lineno">423</tt>  <tt class="py-line"> </tt>
 <a name="_get_shift_anchor_re"></a><div id="_get_shift_anchor_re-def"><a name="L424"></a><tt class="py-lineno">424</tt> <a class="py-toggle" href="#" id="_get_shift_anchor_re-toggle" onclick="return toggle('_get_shift_anchor_re');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.codonalign-module.html#_get_shift_anchor_re">_get_shift_anchor_re</a><tt class="py-op">(</tt><tt class="py-param">sh_anc</tt><tt class="py-op">,</tt> <tt class="py-param">sh_nuc</tt><tt class="py-op">,</tt> <tt class="py-param">shift_val</tt><tt class="py-op">,</tt> <tt class="py-param">aa2re</tt><tt class="py-op">,</tt> <tt class="py-param">anchor_len</tt><tt class="py-op">,</tt> </tt>
 <a name="L425"></a><tt class="py-lineno">425</tt>  <tt class="py-line">                         <tt class="py-param">shift_id_pos</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
-</div><div id="_get_shift_anchor_re-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_shift_anchor_re-expanded"><a name="L426"></a><tt class="py-lineno">426</tt>  <tt class="py-line">    <tt class="py-docstring">"""Find a regular expression matching a potentially shifted anchor.</tt> </tt>
+</div><div id="_get_shift_anchor_re-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_get_shift_anchor_re-expanded"><a name="L426"></a><tt class="py-lineno">426</tt>  <tt class="py-line">    <tt class="py-docstring">"""Find a regular expression matching a potentially shifted anchor (PRIVATE).</tt> </tt>
 <a name="L427"></a><tt class="py-lineno">427</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
 <a name="L428"></a><tt class="py-lineno">428</tt>  <tt class="py-line"><tt class="py-docstring">    Arguments:</tt> </tt>
 <a name="L429"></a><tt class="py-lineno">429</tt>  <tt class="py-line"><tt class="py-docstring">     - sh_anc    - shifted anchor sequence</tt> </tt>
@@ -1238,7 +1238,7 @@ Bio.Seq.MutableSeq.index
 Bio.SeqIO.index" class="py-name" href="#" onclick="return doclink('link-278', 'index', 'link-276');">index</a></tt><tt class="py-op">(</tt><tt id="link-279" class="py-name"><a title="Bio.PDB.Polypeptide.i
 Bio.SeqIO.SffIO.i" class="py-name" href="#" onclick="return doclink('link-279', 'i', 'link-56');">i</a></tt><tt class="py-op">)</tt> </tt>
 <a name="L606"></a><tt class="py-lineno">606</tt>  <tt class="py-line">                <tt class="py-name">shift_val</tt> <tt class="py-op">=</tt> <tt class="py-number">6</tt> <tt class="py-op">-</tt> <tt class="py-op">(</tt><tt class="py-name">shift_pos</tt><tt class="py-op">[</tt><tt class="py-name">shift_index</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">-</tt> </tt>
-<a name="L607"></a><tt class="py-lineno">607</tt>  <tt class="py-line">                            <tt class="py-name">shift_pos</tt><tt class="py-op">[</tt><tt class="py-name">shift_index</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L607"></a><tt class="py-lineno">607</tt>  <tt class="py-line">                                 <tt class="py-name">shift_pos</tt><tt class="py-op">[</tt><tt class="py-name">shift_index</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
 <a name="L608"></a><tt class="py-lineno">608</tt>  <tt class="py-line">                <tt class="py-name">rf_table</tt><tt class="py-op">.</tt><tt id="link-280" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
 Bio.Crystal.Chain.append
 Bio.SCOP.Raf.SeqMap.append
@@ -1641,7 +1641,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Jun 22 16:36:20 2018
+    Generated by Epydoc 3.0.1 on Tue Dec 18 15:58:28 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

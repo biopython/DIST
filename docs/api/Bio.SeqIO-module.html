@@ -297,6 +297,11 @@ names are also used in Bio.AlignIO and include the following:</p>
 <li>abi     - Applied Biosystem's sequencing trace format</li>
 <li>abi-trim - Same as &quot;abi&quot; but with quality trimming with Mott's algorithm</li>
 <li>ace     - Reads the contig sequences from an ACE assembly file.</li>
+<li>cif-atom - Uses Bio.PDB.MMCIFParser to determine the (partial) protein
+sequence as it appears in the structure based on the atomic coordinates.</li>
+<li>cif-seqres - Reads a macromolecular Crystallographic Information File
+(mmCIF) file to determine the complete protein sequence as defined by the
+_pdbx_poly_seq_scheme records.</li>
 <li>embl    - The EMBL flat file format. Uses Bio.GenBank internally.</li>
 <li>fasta   - The generic sequence file format where each record starts with
 an identifer line starting with a &quot;&gt;&quot; character, followed by
@@ -590,8 +595,8 @@ tor, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeatureIterator, &quot;embl&quot
 .EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFeatureIterator, &quot;imgt&quot;: Ins\
 dcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;swiss&quot;: SwissIO.SwissIterat\
 or, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-seqres&quot;: PdbIO.PdbSeqresIt\
-erator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceIO.AceIterator, &quot;tab&quot;: Tab\
-IO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fastq&quot;: QualityIO.FastqPhre\
+erator, &quot;cif-seqres&quot;: PdbIO.CifSeqresIterator, &quot;cif-atom&quot;: PdbIO.CifAt\
+omIterator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceIO.AceIterator, &quot;tab&quot;:\
 ...">{&quot;fasta&quot;: FastaIO.FastaIterator, &quot;fasta-2l<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -854,14 +859,20 @@ or,  key_function = lambda rec : rec.description.split()[0]</p>
 <p>If key_function is omitted then record.id is used, on the assumption
 that the records objects returned are SeqRecords with a unique id.</p>
 <p>If there are duplicate keys, an error is raised.</p>
+<p>Since Python 3.7, the default dict class maintains key order, meaning
+this dictionary will reflect the order of records given to it. For
+CPython, this was already implemented in 3.6.</p>
+<p>As of Biopython 1.73, we explicitly use OrderedDict for CPython older
+than 3.6 (and for other Python older than 3.7) so that you can always
+assume the record order is preserved.</p>
 <p>Example usage, defaulting to using the record.id as key:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
 <span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;GenBank/cor6_6.gb&quot;</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>format = <span class="py-string">&quot;genbank&quot;</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>id_dict = SeqIO.to_dict(SeqIO.parse(filename, format))
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sorted(id_dict))
-<span class="py-output">['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(list(id_dict))
+<span class="py-output">['X55053.1', 'X62281.1', 'M81224.1', 'AJ237582.1', 'L31939.1', 'AF297471.1']</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(id_dict[<span class="py-string">&quot;L31939.1&quot;</span>].description)
 <span class="py-output">Brassica rapa (clone bif72) kin mRNA, complete cds</span></pre>
 <p>A more complex example, using the key_function argument in order to
@@ -884,6 +895,10 @@ use a sequence checksum as the dictionary key:</p>
 <p>This approach is not suitable for very large sets of sequences, as all
 the SeqRecord objects are held in memory. Instead, consider using the
 Bio.SeqIO.index() function (if it supports your particular file format).</p>
+<p>Since Python 3.6, the default dict class maintains key order, meaning
+this dictionary will reflect the order of records given to it. As of
+Biopython 1.72, on older versions of Python we explicitly use an
+OrderedDict so that you can always assume the record order is preserved.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -921,14 +936,16 @@ dictionary.</li>
 </dd>
 </dl>
 <p>This indexing function will return a dictionary like object, giving the
-SeqRecord objects as values:</p>
+SeqRecord objects as values.</p>
+<p>As of Biopython 1.69, this will preserve the ordering of the records in
+file when iterating over the entries.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
 <span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.index(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>len(records)
 <span class="py-output">3</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(records)
-<span class="py-output">['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>list(records)  <span class="py-comment"># make a list of the keys</span>
+<span class="py-output">['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>].format(<span class="py-string">&quot;fasta&quot;</span>))
 <span class="py-output">&gt;EAS54_6_R1_2_1_540_792</span>
 <span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
@@ -949,8 +966,8 @@ GZIP files are not supported:</p>
 <span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>records.close()</pre>
 <p>Note that this pseudo dictionary will not support all the methods of a
-true Python dictionary, for example values() is not defined since this
-would require loading all of the records into memory at once.</p>
+true Python dictionary, for example values() is not defined as in Python 2
+since this would require loading all of the records into memory at once.</p>
 <p>When you call the index function, it will scan through the file, noting
 the location of each record. When you access a particular record via the
 dictionary methods, the code will jump to the appropriate part of the
@@ -966,8 +983,8 @@ dictionary, e.g.</p>
 <span class="py-prompt">&gt;&gt;&gt; </span>records = SeqIO.to_dict(SeqIO.parse(<span class="py-string">&quot;Quality/example.fastq&quot;</span>, <span class="py-string">&quot;fastq&quot;</span>))
 <span class="py-prompt">&gt;&gt;&gt; </span>len(records)
 <span class="py-output">3</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(records)
-<span class="py-output">['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>list(records)  <span class="py-comment"># make a list of the keys</span>
+<span class="py-output">['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_540_792', 'EAS54_6_R1_2_1_443_348']</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[<span class="py-string">&quot;EAS54_6_R1_2_1_540_792&quot;</span>].format(<span class="py-string">&quot;fasta&quot;</span>))
 <span class="py-output">&gt;EAS54_6_R1_2_1_540_792</span>
 <span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
@@ -984,8 +1001,8 @@ this (the record identifier string) into your preferred key. For example:</p>
 <span class="py-more">... </span>                      key_function=make_tuple)
 <span class="py-prompt">&gt;&gt;&gt; </span>len(records)
 <span class="py-output">3</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>sorted(records)
-<span class="py-output">[(413, 324), (443, 348), (540, 792)]</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>list(records)  <span class="py-comment"># make a list of the keys</span>
+<span class="py-output">[(413, 324), (540, 792), (443, 348)]</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(records[(540, 792)].format(<span class="py-string">&quot;fasta&quot;</span>))
 <span class="py-output">&gt;EAS54_6_R1_2_1_540_792</span>
 <span class="py-output">TTGGCAGGCCAAGGCCGATGGATCA</span>
@@ -1171,8 +1188,8 @@ tor, &quot;genbank-cds&quot;: InsdcIO.GenBankCdsFeatureIterator, &quot;embl&quot
 .EmblIterator, &quot;embl-cds&quot;: InsdcIO.EmblCdsFeatureIterator, &quot;imgt&quot;: Ins<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 dcIO.ImgtIterator, &quot;ig&quot;: IgIO.IgIterator, &quot;swiss&quot;: SwissIO.SwissIterat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 or, &quot;pdb-atom&quot;: PdbIO.PdbAtomIterator, &quot;pdb-seqres&quot;: PdbIO.PdbSeqresIt<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-erator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceIO.AceIterator, &quot;tab&quot;: Tab<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-IO.TabIterator, &quot;pir&quot;: PirIO.PirIterator, &quot;fastq&quot;: QualityIO.FastqPhre<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+erator, &quot;cif-seqres&quot;: PdbIO.CifSeqresIterator, &quot;cif-atom&quot;: PdbIO.CifAt<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+omIterator, &quot;phd&quot;: PhdIO.PhdIterator, &quot;ace&quot;: AceIO.AceIterator, &quot;tab&quot;:<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1255,7 +1272,7 @@ a&quot;: QualityIO.as_fastq_illumina, &quot;qual&quot;: QualityIO.as_qual,}
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Jun 22 16:34:25 2018
+    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:21 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
