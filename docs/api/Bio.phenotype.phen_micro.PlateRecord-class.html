@@ -73,25 +73,37 @@ Microarray plate, along with metadata (if any). The single wells can be
 accessed calling their id as an index or iterating on the PlateRecord:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;plate.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;phenotype/Plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>well = plate[<span class="py-string">'A05'</span>]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> well <span class="py-keyword">in</span> plate:
-<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;%s&quot;</span> % well.id)
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(well.id)
 <span class="py-more">...</span>
 <span class="py-output">A01</span>
-<span class="py-output">A02</span>
 <span class="py-output">...</span></pre>
 <p>The plate rows and columns can be queried with an indexing system similar
 to NumPy and other matrices:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(plate[1])
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 12</span>
+<span class="py-output">Rows: 1</span>
+<span class="py-output">Columns: 12</span>
 <span class="py-output">PlateRecord('WellRecord['B01'], WellRecord['B02'], WellRecord['B03'], ..., WellRecord['B12']')</span></pre>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(plate[:,1])
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 8</span>
+<span class="py-output">Rows: 8</span>
+<span class="py-output">Columns: 1</span>
 <span class="py-output">PlateRecord('WellRecord['A02'], WellRecord['B02'], WellRecord['C02'], ..., WellRecord['H02']')</span></pre>
 <p>Single WellRecord objects can be accessed using this indexing system:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(plate[1,2])
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well ID: B03</span>
+<span class="py-output">Time points: 384</span>
+<span class="py-output">Minum signal 0.00 at time 11.00</span>
+<span class="py-output">Maximum signal 76.25 at time 18.00</span>
 <span class="py-output">WellRecord('(0.0, 11.0), (0.25, 11.0), (0.5, 11.0), (0.75, 11.0), (1.0, 11.0), ..., (95.75, 11.0)')</span></pre>
 <p>The presence of a particular well can be inspected with the &quot;in&quot; keyword:
 &gt;&gt;&gt; 'A01' in plate
@@ -100,7 +112,7 @@ True</p>
 the well id) in the plate can be obtained:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> well <span class="py-keyword">in</span> plate.get_row(<span class="py-string">'H'</span>):
-<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s&quot;</span> % well.id)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(well.id)
 <span class="py-more">...</span>
 <span class="py-output">H01</span>
 <span class="py-output">H02</span>
@@ -110,16 +122,16 @@ the well id) in the plate can be obtained:</p>
 in the plate can be obtained:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> well <span class="py-keyword">in</span> plate.get_column(12):
-<span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s&quot;</span> % well.id)
+<span class="py-more">... </span>    <span class="py-keyword">print</span>(well.id)
 <span class="py-more">...</span>
-<span class="py-output">A01</span>
+<span class="py-output">A12</span>
 <span class="py-output">B12</span>
 <span class="py-output">C12</span>
 <span class="py-output">...</span></pre>
 <p>Two PlateRecord objects can be compared: if all their wells are equal the
 two plates are considered equal:</p>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>plate2 = phenotype.read(<span class="py-string">&quot;plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>plate2 = phenotype.read(<span class="py-string">&quot;phenotype/Plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>plate == plate2
 <span class="py-output">True</span></pre>
 <p>Two PlateRecord object can be summed up or subracted from each other: the
@@ -606,7 +618,7 @@ plate[:,1:3] uses only columns 1 and 2
 plate[0:2,1:3] uses only rows 0 &amp; 1 and only cols 1 &amp; 2</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;plate.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>)</pre>
+<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;phenotype/Plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)</pre>
 <p>You can access a well of the plate, using its id.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>w = plate[<span class="py-string">'A01'</span>]</pre>
@@ -615,15 +627,27 @@ index:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>first_row = plate[0]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(first_row)
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 12</span>
+<span class="py-output">Rows: 1</span>
+<span class="py-output">Columns: 12</span>
 <span class="py-output">PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['A12']')</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>last_row = plate[-1]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(last_row)
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 12</span>
+<span class="py-output">Rows: 1</span>
+<span class="py-output">Columns: 12</span>
 <span class="py-output">PlateRecord('WellRecord['H01'], WellRecord['H02'], WellRecord['H03'], ..., WellRecord['H12']')</span></pre>
 <p>You can also access use python's slice notation to sub-plates
 containing only some of the plate rows:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>sub_plate = plate[2:5]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_plate)
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 36</span>
+<span class="py-output">Rows: 3</span>
+<span class="py-output">Columns: 12</span>
 <span class="py-output">PlateRecord('WellRecord['C01'], WellRecord['C02'], WellRecord['C03'], ..., WellRecord['E12']')</span></pre>
 <p>This includes support for a step, i.e. plate[start:end:step], which
 can be used to select every second row:</p>
@@ -634,20 +658,32 @@ Using simple integers gives you the single wells. e.g.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>w = plate[3, 4]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(w.id)
-<span class="py-output">'D05'</span></pre>
+<span class="py-output">D05</span></pre>
 <p>To get a single column use this syntax:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>sub_plate = plate[:, 4]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_plate)
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 8</span>
+<span class="py-output">Rows: 8</span>
+<span class="py-output">Columns: 1</span>
 <span class="py-output">PlateRecord('WellRecord['A05'], WellRecord['B05'], WellRecord['C05'], ..., WellRecord['H05']')</span></pre>
 <p>Or, to get part of a column,</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>sub_plate = plate[1:3, 4]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(sub_plate)
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 2</span>
+<span class="py-output">Rows: 2</span>
+<span class="py-output">Columns: 1</span>
 <span class="py-output">PlateRecord(WellRecord['B05'], WellRecord['C05'])</span></pre>
 <p>However, in general you get a sub-plate,</p>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(align[1:5, 3:6])
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(plate[1:5, 3:6])
+<span class="py-output">Plate ID: PM01</span>
+<span class="py-output">Well: 12</span>
+<span class="py-output">Rows: 4</span>
+<span class="py-output">Columns: 3</span>
 <span class="py-output">PlateRecord('WellRecord['B04'], WellRecord['B05'], WellRecord['B06'], ..., WellRecord['E06']')</span></pre>
 <p>This should all seem familiar to anyone who has used the NumPy
 array or matrix objects.</p>
@@ -813,13 +849,13 @@ A new PlateRecord object is returned</p>
 method.  e.g.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>record = phenotype.read(<span class="py-string">&quot;plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = next(phenotype.parse(<span class="py-string">&quot;phenotype/Plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>))
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record)
-<span class="py-output">Plate ID: PM09</span>
+<span class="py-output">Plate ID: PM01</span>
 <span class="py-output">Well: 96</span>
 <span class="py-output">Rows: 8</span>
 <span class="py-output">Columns: 12</span>
-<span class="py-output">PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], WellRecord['A04']...WellRecord['H12']')</span></pre>
+<span class="py-output">PlateRecord('WellRecord['A01'], WellRecord['A02'], WellRecord['A03'], ..., WellRecord['H12']')</span></pre>
 <p>Note that long well lists are shown truncated.</p>
   <dl class="fields">
     <dt>Overrides:
@@ -857,7 +893,7 @@ method.  e.g.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:58:09 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:05:01 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

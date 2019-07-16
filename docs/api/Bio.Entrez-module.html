@@ -75,17 +75,28 @@ Cookbook: <a class="rst-reference external" href="http://biopython.org/DIST/docs
 which has a <tt class="rst-docutils literal">.name</tt> attribute giving the filename, the handles from
 <tt class="rst-docutils literal">Bio.Entrez</tt> all have a <tt class="rst-docutils literal">.url</tt> attribute instead giving the URL
 used to connect to the NCBI Entrez API.</p>
+<p>All the functions that send requests to the NCBI Entrez API will
+automatically respect the NCBI rate limit (of 3 requests per second
+without an API key, or 10 requests per second with an API key) and
+will automatically retry when encountering transient failures
+(i.e. connection failures or HTTP 5XX codes). By default, Biopython
+does a maximum of three tries before giving up, and sleeps for 15
+seconds between tries. You can tweak these parameters by setting
+<tt class="rst-docutils literal">Bio.Entrez.max_tries</tt> and <tt class="rst-docutils literal">Bio.Entrez.sleep_between_tries</tt>.</p>
 <p>The Entrez module also provides an XML parser which takes a handle
 as input.</p>
 <p>Variables:</p>
 <blockquote>
-<ul class="rst-simple">
-<li>email        Set the Entrez email parameter (default is not set).</li>
-<li>tool         Set the Entrez tool parameter (default is <tt class="rst-docutils literal">biopython</tt>).</li>
+<ul>
+<li><p class="rst-first">email        Set the Entrez email parameter (default is not set).</p>
+</li>
+<li><p class="rst-first">tool         Set the Entrez tool parameter (default is <tt class="rst-docutils literal">biopython</tt>).</p>
+</li>
 <li><dl class="rst-first rst-docutils">
 <dt>api_key      Personal API key from NCBI. If not set, only 3 queries per</dt>
-<dd>seconds are allowed. 10 queries per seconds otherwise with a
-valid API key.</dd>
+<dd><p class="rst-first rst-last">seconds are allowed. 10 queries per seconds otherwise with a
+valid API key.</p>
+</dd>
 </dl>
 </li>
 </ul>
@@ -280,7 +291,7 @@ multiple records, and is particular useful for large files.</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Entrez-module.html#einfo" class="summary-sig-name">einfo</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
-      Return a summary of the Entez databases as a results handle.</td>
+      Return a summary of the Entrez databases as a results handle.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Entrez-pysrc.html#einfo">source&nbsp;code</a></span>
             
@@ -297,7 +308,7 @@ multiple records, and is particular useful for large files.</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.Entrez-module.html#esummary" class="summary-sig-name">esummary</a>(<span class="summary-sig-arg">**keywds</span>)</span><br />
-      Rtrieve document summaries as a results handle.</td>
+      Retrieve document summaries as a results handle.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.Entrez-pysrc.html#esummary">source&nbsp;code</a></span>
             
@@ -513,6 +524,21 @@ multiple records, and is particular useful for large files.</p>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="max_tries"></a><span class="summary-name">max_tries</span> = <code title="3">3</code><br />
+      hash(x)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="sleep_between_tries"></a><span class="summary-name">sleep_between_tries</span> = <code title="15">15</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="tool"></a><span class="summary-name">tool</span> = <code title="'biopython'"><code class="variable-quote">'</code><code class="variable-string">biopython</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
@@ -712,7 +738,7 @@ note's entry in the PubMed database:</p>
     </td>
   </tr></table>
   
-  <p>Return a summary of the Entez databases as a results handle.</p>
+  <p>Return a summary of the Entrez databases as a results handle.</p>
 <p>EInfo provides field names, index term counts, last update, and
 available links for each Entrez database.</p>
 <p>See the online documentation for an explanation of the parameters:
@@ -744,7 +770,7 @@ available links for each Entrez database.</p>
     </td>
   </tr></table>
   
-  <p>Rtrieve document summaries as a results handle.</p>
+  <p>Retrieve document summaries as a results handle.</p>
 <p>ESummary retrieves document summaries from a list of primary IDs or
 from the user's environment.</p>
 <p>See the online documentation for an explanation of the parameters:
@@ -978,9 +1004,9 @@ the tag name in my_element.tag.</p>
 <p>Open a handle to Entrez.  cgi is the URL for the cgi script to access.
 params is a dictionary with the options to pass to it.  Does some
 simple error checking, and will raise an IOError if it encounters one.</p>
-<p>The arugment post should be a boolean to explicitly control if an HTTP
+<p>The argument post should be a boolean to explicitly control if an HTTP
 POST should be used rather an HTTP GET based on the query length.
-By default (post=None), POST is used if the URL encoded paramters would
+By default (post=None), POST is used if the URL encoded parameters would
 be over 1000 characters long.</p>
 <p>This function also enforces the &quot;up to three queries per second rule&quot;
 to avoid abusing the NCBI servers.</p>
@@ -1017,7 +1043,7 @@ to avoid abusing the NCBI servers.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:15 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:52 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

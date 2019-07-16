@@ -66,12 +66,10 @@ and format string.  This returns an iterator giving PlateRecord objects:</p>
 <blockquote>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> phenotype.parse(<span class="py-string">&quot;plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>):
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> phenotype.parse(<span class="py-string">&quot;phenotype/Plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>):
 <span class="py-more">... </span>    <span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
 <span class="py-more">...</span>
 <span class="py-output">PM01 96</span>
-<span class="py-output">PM01 96</span>
-<span class="py-output">PM09 96</span>
 <span class="py-output">PM09 96</span></pre>
 </blockquote>
 <p>Note that the parse() function will invoke the relevant parser for the
@@ -86,7 +84,7 @@ raise an exception if there are no records or more than one record:</p>
 <blockquote>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>record = phenotype.read(<span class="py-string">&quot;plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = phenotype.read(<span class="py-string">&quot;phenotype/Plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
 <span class="py-output">PM01 96</span></pre>
 </blockquote>
@@ -99,7 +97,7 @@ iterator's next() method):</p>
 <blockquote>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>record = next(phenotype.parse(<span class="py-string">&quot;plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>record = next(phenotype.parse(<span class="py-string">&quot;phenotype/Plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>))
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;%s %i&quot;</span> % (record.id, len(record)))
 <span class="py-output">PM01 96</span></pre>
 </blockquote>
@@ -113,18 +111,17 @@ silently ignored.</p>
 PlateRecord objects (either as a list, or an iterator), an output file handle
 (or in recent versions of Biopython an output filename as a string) and of
 course the file format:</p>
-<blockquote>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>records = ...
-<span class="py-prompt">&gt;&gt;&gt; </span>phenotype.write(records, <span class="py-string">&quot;example.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)</pre>
-</blockquote>
+<pre class="rst-literal-block">
+from Bio import phenotype
+records = ...
+phenotype.write(records, &quot;example.json&quot;, &quot;pm-json&quot;)
+</pre>
 <p>Or, using a handle:</p>
 <pre class="rst-literal-block">
-&gt;&gt;&gt; from Bio import phenotype
-&gt;&gt;&gt; records = ...
-&gt;&gt;&gt; with open(&quot;example.json&quot;, &quot;w&quot;) as handle:
-&gt;&gt;&gt;    phenotype.write(records, handle, &quot;pm-json&quot;)
+from Bio import phenotype
+records = ...
+with open(&quot;example.json&quot;, &quot;w&quot;) as handle:
+   phenotype.write(records, handle, &quot;pm-json&quot;)
 </pre>
 <p>You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.</p>
@@ -133,11 +130,13 @@ using a handle, make sure you close it to flush the data to the hard disk.</p>
 <h1 class="heading">File Formats</h1>
 <p>When specifying the file format, use lowercase strings.</p>
 <blockquote>
-<ul class="rst-simple">
-<li>pm-json - Phenotype Microarray plates in JSON format.</li>
+<ul>
+<li><p class="rst-first">pm-json - Phenotype Microarray plates in JSON format.</p>
+</li>
 <li><dl class="rst-first rst-docutils">
 <dt>pm-csv  - Phenotype Microarray plates in CSV format, which is the</dt>
-<dd>machine vendor format</dd>
+<dd><p class="rst-first rst-last">machine vendor format</p>
+</dd>
 </dl>
 </li>
 </ul>
@@ -290,7 +289,7 @@ write in JSON format.</p>
         <a href="Bio.phenotype-module.html#__warningregistry__" class="summary-name">__warningregistry__</a> = <code title="{('Bio.phenotype is an experimental submodule which may undergo signif\
 icant changes prior to its future official release.',
   &lt;class 'Bio.BiopythonExperimentalWarning'&gt;,
-  101): True}"><code class="variable-group">{</code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Bio.phenotype is an experimental subm</code><code class="variable-ellipsis">...</code></code>
+  99): True}"><code class="variable-group">{</code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Bio.phenotype is an experimental subm</code><code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 </table>
@@ -330,14 +329,17 @@ icant changes prior to its future official release.',
   
   <p>Write complete set of PlateRecords to a file.</p>
 <blockquote>
-<ul class="rst-simple">
-<li>plates    - A list (or iterator) of PlateRecord objects.</li>
+<ul>
+<li><p class="rst-first">plates    - A list (or iterator) of PlateRecord objects.</p>
+</li>
 <li><dl class="rst-first rst-docutils">
 <dt>handle    - File handle object to write to, or filename as string</dt>
-<dd>(note older versions of Biopython only took a handle).</dd>
+<dd><p class="rst-first rst-last">(note older versions of Biopython only took a handle).</p>
+</dd>
 </dl>
 </li>
-<li>format    - lower case string describing the file format to write.</li>
+<li><p class="rst-first">format    - lower case string describing the file format to write.</p>
+</li>
 </ul>
 </blockquote>
 <p>You should close the handle after calling this function.</p>
@@ -363,24 +365,28 @@ icant changes prior to its future official release.',
   
   <p>Turn a phenotype file into an iterator returning PlateRecords.</p>
 <blockquote>
-<ul class="rst-simple">
+<ul>
 <li><dl class="rst-first rst-docutils">
 <dt>handle   - handle to the file, or the filename as a string</dt>
-<dd>(note older versions of Biopython only took a handle).</dd>
+<dd><p class="rst-first rst-last">(note older versions of Biopython only took a handle).</p>
+</dd>
 </dl>
 </li>
-<li>format   - lower case string describing the file format.</li>
+<li><p class="rst-first">format   - lower case string describing the file format.</p>
+</li>
 </ul>
 </blockquote>
 <p>Typical usage, opening a file to read in, and looping over the record(s):</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;plates.csv&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>filename = <span class="py-string">&quot;phenotype/Plates.csv&quot;</span>
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> record <span class="py-keyword">in</span> phenotype.parse(filename, <span class="py-string">&quot;pm-csv&quot;</span>):
 <span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;ID %s&quot;</span> % record.id)
 <span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;Number of wells %i&quot;</span> % len(record))
 <span class="py-more">...</span>
 <span class="py-output">ID PM01</span>
+<span class="py-output">Number of wells 96</span>
+<span class="py-output">ID PM09</span>
 <span class="py-output">Number of wells 96</span></pre>
 <p>Use the Bio.phenotype.read(...) function when you expect a single record
 only.</p>
@@ -405,40 +411,43 @@ only.</p>
   
   <p>Turn a phenotype file into a single PlateRecord.</p>
 <blockquote>
-<ul class="rst-simple">
+<ul>
 <li><dl class="rst-first rst-docutils">
 <dt>handle   - handle to the file, or the filename as a string</dt>
-<dd>(note older versions of Biopython only took a handle).</dd>
+<dd><p class="rst-first rst-last">(note older versions of Biopython only took a handle).</p>
+</dd>
 </dl>
 </li>
-<li>format   - string describing the file format.</li>
+<li><p class="rst-first">format   - string describing the file format.</p>
+</li>
 </ul>
 </blockquote>
 <p>This function is for use parsing phenotype files containing
 exactly one record.  For example, reading a PM JSON file:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>record = phenotype.read(<span class="py-string">&quot;plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = phenotype.read(<span class="py-string">&quot;phenotype/Plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;ID %s&quot;</span> % record.id)
-<span class="py-output">PM09</span>
+<span class="py-output">ID PM01</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Number of wells %i&quot;</span> % len(record))
 <span class="py-output">Number of wells 96</span></pre>
 <p>If the handle contains no records, or more than one record,
 an exception is raised.  For example:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>record = phenotype.read(<span class="py-string">&quot;plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>)
-<span class="py-except">Traceback (most recent call last):</span>
-<span class="py-except">    ...</span>
-<span class="py-except">ValueError: More than one record found in handle</span></pre>
+<pre class="rst-literal-block">
+from Bio import phenotype
+record = phenotype.read(&quot;plates.csv&quot;, &quot;pm-csv&quot;)
+Traceback (most recent call last):
+...
+ValueError: More than one record found in handle
+</pre>
 <p>If however you want the first record from a file containing
 multiple records this function would raise an exception (as
 shown in the example above).  Instead use:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>record = next(phenotype.parse(<span class="py-string">&quot;plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>))
+<span class="py-prompt">&gt;&gt;&gt; </span>record = next(phenotype.parse(<span class="py-string">&quot;phenotype/Plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>))
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;First record's ID %s&quot;</span> % record.id)
-<span class="py-output">First record's ID PM09</span></pre>
+<span class="py-output">First record's ID PM01</span></pre>
 <p>Use the Bio.phenotype.parse(handle, format) function if you want
 to read multiple records from the handle.</p>
   <dl class="fields">
@@ -516,7 +525,7 @@ to read multiple records from the handle.</p>
 <code class="variable-group">{</code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Bio.phenotype is an experimental submodule which may undergo signif</code><span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-string">icant changes prior to its future official release.</code><code class="variable-quote">'</code><code class="variable-op">,</code>
   &lt;class 'Bio.BiopythonExperimentalWarning'&gt;<code class="variable-op">,</code>
-  101<code class="variable-group">)</code><code class="variable-op">: </code>True<code class="variable-group">}</code>
+  99<code class="variable-group">)</code><code class="variable-op">: </code>True<code class="variable-group">}</code>
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -551,7 +560,7 @@ to read multiple records from the handle.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:23 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:58 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

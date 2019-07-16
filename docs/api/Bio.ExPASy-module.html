@@ -93,7 +93,7 @@
     <li> <strong class="uidlink"><a href="Bio.ExPASy.Enzyme-module.html">Bio.ExPASy.Enzyme</a></strong>: <em class="summary">Parse the enzyme.dat file from Enzyme at ExPASy.</em>    </li>
     <li> <strong class="uidlink"><a href="Bio.ExPASy.Prodoc-module.html">Bio.ExPASy.Prodoc</a></strong>: <em class="summary">Code to work with the prosite.doc file from Prosite.</em>    </li>
     <li> <strong class="uidlink"><a href="Bio.ExPASy.Prosite-module.html">Bio.ExPASy.Prosite</a></strong>: <em class="summary">Parser for the prosite dat file from Prosite at ExPASy.</em>    </li>
-    <li> <strong class="uidlink"><a href="Bio.ExPASy.ScanProsite-module.html">Bio.ExPASy.ScanProsite</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="Bio.ExPASy.ScanProsite-module.html">Bio.ExPASy.ScanProsite</a></strong>: <em class="summary">Code for calling and parsing ScanProsite from ExPASy.</em>    </li>
     <li> <strong class="uidlink"><a href="Bio.ExPASy.cellosaurus-module.html">Bio.ExPASy.cellosaurus</a></strong>: <em class="summary">Parser for the cellosaurus.txt file from ExPASy.</em>    </li>
   </ul></td></tr>
 </table>
@@ -249,11 +249,13 @@
   <p>Get a text handle to a PRODOC entry at ExPASy in HTML format.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> ExPASy
-<span class="py-prompt">&gt;&gt;&gt; </span>with ExPASy.get_prodoc_entry(<span class="py-string">'PDOC00001'</span>) <span class="py-keyword">as</span> in_handle:
-<span class="py-more">... </span>    html = in_handle.read()
+<span class="py-prompt">&gt;&gt;&gt; </span>in_handle = ExPASy.get_prodoc_entry(<span class="py-string">'PDOC00001'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>html = in_handle.read()
+<span class="py-prompt">&gt;&gt;&gt; </span>in_handle.close()
 <span class="py-more">...</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;myprodocrecord.html&quot;</span>, <span class="py-string">&quot;w&quot;</span>) <span class="py-keyword">as</span> out_handle:
-<span class="py-more">... </span>    out_handle.write(html)
+<span class="py-more">... </span>    <span class="py-comment"># Python2/3 docstring workaround: Revise for 'Python 3 only'</span>
+<span class="py-more">... </span>    _ = out_handle.write(html)
 <span class="py-more">...</span></pre>
 <p>For a non-existing key XXX, ExPASy returns an HTML-formatted page
 containing this text: 'There is currently no PROSITE entry for'</p>
@@ -279,11 +281,13 @@ containing this text: 'There is currently no PROSITE entry for'</p>
   <p>Get a text handle to a PROSITE entry at ExPASy in HTML format.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> ExPASy
-<span class="py-prompt">&gt;&gt;&gt; </span>with ExPASy.get_prosite_entry(<span class="py-string">'PS00001'</span>) <span class="py-keyword">as</span> in_handle:
-<span class="py-more">... </span>    html = in_handle.read()
+<span class="py-prompt">&gt;&gt;&gt; </span>in_handle = ExPASy.get_prosite_entry(<span class="py-string">'PS00001'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>html = in_handle.read()
+<span class="py-prompt">&gt;&gt;&gt; </span>in_handle.close()
 <span class="py-more">...</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;myprositerecord.html&quot;</span>, <span class="py-string">&quot;w&quot;</span>) <span class="py-keyword">as</span> out_handle:
-<span class="py-more">... </span>    out_handle.write(html)
+<span class="py-more">... </span>    <span class="py-comment"># Python 2/3 docstring workaround: Revise for 'Python 3 only'</span>
+<span class="py-more">... </span>    _ = out_handle.write(html)
 <span class="py-more">...</span></pre>
 <p>For a non-existing key XXX, ExPASy returns an HTML-formatted page
 containing this text: 'There is currently no PROSITE entry for'</p>
@@ -309,21 +313,22 @@ containing this text: 'There is currently no PROSITE entry for'</p>
   <p>Get a text handle to a raw PROSITE or PRODOC record at ExPASy.</p>
 <p>The cgi argument is deprecated due to changes in the ExPASy
 website.</p>
-<p>For a non-existing key, ExPASy returns nothing.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> ExPASy
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.ExPASy <span class="py-keyword">import</span> Prosite
-<span class="py-prompt">&gt;&gt;&gt; </span>with ExPASy.get_prosite_raw(<span class="py-string">'PS00001'</span>) <span class="py-keyword">as</span> handle:
-<span class="py-more">... </span>   record = Prosite.read(handle)
-<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = ExPASy.get_prosite_raw(<span class="py-string">'PS00001'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = Prosite.read(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.accession)
 <span class="py-output">PS00001</span></pre>
 <p>For a non-existing key, ExPASy returns an error:</p>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>handle = get_prosite_raw(<span class="py-string">&quot;does_not_exist&quot;</span>)
-<span class="py-except">Traceback (most recent call last):</span>
-<span class="py-except">...</span>
-<span class="py-except">urllib.error.HTTPError: HTTP Error 404: Not Found</span></pre>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># Python 2/3 docstring workaround: Revise for 'Python 3 only'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>try:
+<span class="py-more">... </span>   handle = ExPASy.get_prosite_raw(<span class="py-string">&quot;does_not_exist&quot;</span>)
+<span class="py-more">... </span><span class="py-keyword">except</span> Exception <span class="py-keyword">as</span> e:
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">'HTTPError: %s'</span> %e)
+<span class="py-output">HTTPError: ... Error 404: Not Found</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -348,17 +353,19 @@ website.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> ExPASy
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SwissProt
-<span class="py-prompt">&gt;&gt;&gt; </span>with ExPASy.get_sprot_raw(<span class="py-string">&quot;O23729&quot;</span>) <span class="py-keyword">as</span> handle:
-<span class="py-more">... </span>    record = SwissProt.read(handle)
-<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>handle = ExPASy.get_sprot_raw(<span class="py-string">&quot;O23729&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>record = SwissProt.read(handle)
+<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record.entry_name)
 <span class="py-output">CHS3_BROFI</span></pre>
 <p>For a non-existing identifier, UniProt returns an error:</p>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>ExPASy.get_sprot_raw(<span class="py-string">&quot;DOES_NOT_EXIST&quot;</span>)
-<span class="py-except">Traceback (most recent call last):</span>
-<span class="py-except">...</span>
-<span class="py-except">urllib.error.HTTPError: HTTP Error 404: Not Found</span></pre>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># Python2/3 docstring workaround: Revise for 'Python 3 only'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>try:
+<span class="py-more">... </span>   ExPASy.get_sprot_raw(<span class="py-string">&quot;DOES_NOT_EXIST&quot;</span>)
+<span class="py-more">... </span><span class="py-keyword">except</span> Exception <span class="py-keyword">as</span> e:
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">'HTTPError: %s'</span> %e)
+<span class="py-output">HTTPError: ... Error 404:</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -392,7 +399,7 @@ website.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:15 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:52 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

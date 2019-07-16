@@ -62,7 +62,10 @@
 <p>This provides functions to get global and local alignments between two
 sequences. A global alignment finds the best concordance between all
 characters in two sequences. A local alignment finds just the
-subsequences that align the best.</p>
+subsequences that align the best. Local alignments must have a positive
+score to be reported and they will not be extended for 'zero counting'
+matches. This means a local alignment will always start and end with
+a positive counting match.</p>
 <p>When doing alignments, you can specify the match score and gap
 penalties.  The match score indicates the compatibility between an
 alignment of two characters in the sequences. Highly compatible
@@ -160,19 +163,21 @@ characters are given 1 point. No points are deducted for mismatches or gaps.</p>
 <span class="py-output">&lt;BLANKLINE&gt;</span></pre>
 </blockquote>
 </li>
-<li><p class="rst-first">Same thing as before, but with a local alignment.</p>
+<li><p class="rst-first">Same thing as before, but with a local alignment. Note that
+<tt class="rst-docutils literal">format_alignment</tt> will only show the aligned parts of the sequences,
+together with the starting positions.</p>
 <blockquote>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> a <span class="py-keyword">in</span> pairwise2.align.localxx(<span class="py-string">&quot;ACCGT&quot;</span>, <span class="py-string">&quot;ACG&quot;</span>):
 <span class="py-more">... </span>    <span class="py-keyword">print</span>(format_alignment(*a))
-<span class="py-output">ACCGT</span>
-<span class="py-output">| ||</span>
-<span class="py-output">A-CG-</span>
+<span class="py-output">1 ACCG</span>
+<span class="py-output">  | ||</span>
+<span class="py-output">1 A-CG</span>
 <span class="py-output">  Score=3</span>
 <span class="py-output">&lt;BLANKLINE&gt;</span>
-<span class="py-output">ACCGT</span>
-<span class="py-output">|| |</span>
-<span class="py-output">AC-G-</span>
+<span class="py-output">1 ACCG</span>
+<span class="py-output">  || |</span>
+<span class="py-output">1 AC-G</span>
 <span class="py-output">  Score=3</span>
 <span class="py-output">&lt;BLANKLINE&gt;</span></pre>
 </blockquote>
@@ -271,7 +276,7 @@ return a score.</p>
 </ul>
 <p>To see a description of the parameters for a function, please look at
 the docstring for the function via the help function, e.g.
-type <tt class="rst-docutils literal">help(pairwise2.align.localds</tt>) at the Python prompt.</p>
+type <tt class="rst-docutils literal">help(pairwise2.align.localds)</tt> at the Python prompt.</p>
 
 <!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -393,6 +398,7 @@ type <tt class="rst-docutils literal">help(pairwise2.align.localds</tt>) at the 
           <td><span class="summary-sig"><a href="Bio.pairwise2-module.html#_recover_alignments" class="summary-sig-name" onclick="show_private();">_recover_alignments</a>(<span class="summary-sig-arg">sequenceA</span>,
         <span class="summary-sig-arg">sequenceB</span>,
         <span class="summary-sig-arg">starts</span>,
+        <span class="summary-sig-arg">best_score</span>,
         <span class="summary-sig-arg">score_matrix</span>,
         <span class="summary-sig-arg">trace_matrix</span>,
         <span class="summary-sig-arg">align_globally</span>,
@@ -418,6 +424,7 @@ type <tt class="rst-docutils literal">help(pairwise2.align.localds</tt>) at the 
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.pairwise2-module.html#_find_start" class="summary-sig-name" onclick="show_private();">_find_start</a>(<span class="summary-sig-arg">score_matrix</span>,
+        <span class="summary-sig-arg">best_score</span>,
         <span class="summary-sig-arg">align_globally</span>)</span><br />
       Return a list of starting points (score, (row, col)) (PRIVATE).</td>
           <td align="right" valign="top">
@@ -508,7 +515,9 @@ type <tt class="rst-docutils literal">help(pairwise2.align.localds</tt>) at the 
         <span class="summary-sig-arg">gap_fn</span>,
         <span class="summary-sig-arg">target</span>,
         <span class="summary-sig-arg">index</span>,
-        <span class="summary-sig-arg">direction</span>)</span><br />
+        <span class="summary-sig-arg">direction</span>,
+        <span class="summary-sig-arg">best_score</span>,
+        <span class="summary-sig-arg">align_globally</span>)</span><br />
       Find the starting point(s) of the extended gap (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_find_gap_open">source&nbsp;code</a></span>
@@ -570,6 +579,51 @@ type <tt class="rst-docutils literal">help(pairwise2.align.localds</tt>) at the 
       Format the alignment prettily into a string.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.pairwise2-pysrc.html#format_alignment">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="Bio.pairwise2-module.html#_python_make_score_matrix_fast" class="summary-sig-name" onclick="show_private();">_python_make_score_matrix_fast</a>(<span class="summary-sig-arg">sequenceA</span>,
+        <span class="summary-sig-arg">sequenceB</span>,
+        <span class="summary-sig-arg">match_fn</span>,
+        <span class="summary-sig-arg">open_A</span>,
+        <span class="summary-sig-arg">extend_A</span>,
+        <span class="summary-sig-arg">open_B</span>,
+        <span class="summary-sig-arg">extend_B</span>,
+        <span class="summary-sig-arg">penalize_extend_when_opening</span>,
+        <span class="summary-sig-arg">penalize_end_gaps</span>,
+        <span class="summary-sig-arg">align_globally</span>,
+        <span class="summary-sig-arg">score_only</span>)</span><br />
+      Generate a score and traceback matrix according to Gotoh (PRIVATE).</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_python_make_score_matrix_fast">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_python_rint"></a><span class="summary-sig-name">_python_rint</span>(<span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">precision</span>=<span class="summary-sig-default">1000</span>)</span><br />
+      Print number with declared precision.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.pairwise2-pysrc.html#_python_rint">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -714,6 +768,7 @@ with <tt class="rst-docutils literal">force_generic=True</tt>.</p>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">_recover_alignments</span>(<span class="sig-arg">sequenceA</span>,
         <span class="sig-arg">sequenceB</span>,
         <span class="sig-arg">starts</span>,
+        <span class="sig-arg">best_score</span>,
         <span class="sig-arg">score_matrix</span>,
         <span class="sig-arg">trace_matrix</span>,
         <span class="sig-arg">align_globally</span>,
@@ -752,6 +807,7 @@ sequence classes preserve these semantics.</p>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">_find_start</span>(<span class="sig-arg">score_matrix</span>,
+        <span class="sig-arg">best_score</span>,
         <span class="sig-arg">align_globally</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -805,12 +861,56 @@ empty alignments.</p>
   </tr></table>
   
   <p>Format the alignment prettily into a string.</p>
+<p>IMPORTANT: Gap symbol must be &quot;-&quot; (or ['-'] for lists)!</p>
 <p>Since Biopython 1.71 identical matches are shown with a pipe
 character, mismatches as a dot, and gaps as a space.</p>
-<p>Note that spaces are also used at the start/end of a local
-alignment.</p>
 <p>Prior releases just used the pipe character to indicate the
 aligned region (matches, mismatches and gaps).</p>
+<p>Also, in local alignments, if the alignment does not include
+the whole sequences, now only the aligned part is shown,
+together with the start positions of the aligned subsequences.
+The start positions are 1-based; so start position n is the
+n-th base/amino acid in the <em>un-aligned</em> sequence.</p>
+<p>NOTE: This is different to the alignment's begin/end values,
+which give the Python indices (0-based) of the bases/amino acids
+in the <em>aligned</em> sequences.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="_python_make_score_matrix_fast"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_python_make_score_matrix_fast</span>(<span class="sig-arg">sequenceA</span>,
+        <span class="sig-arg">sequenceB</span>,
+        <span class="sig-arg">match_fn</span>,
+        <span class="sig-arg">open_A</span>,
+        <span class="sig-arg">extend_A</span>,
+        <span class="sig-arg">open_B</span>,
+        <span class="sig-arg">extend_B</span>,
+        <span class="sig-arg">penalize_extend_when_opening</span>,
+        <span class="sig-arg">penalize_end_gaps</span>,
+        <span class="sig-arg">align_globally</span>,
+        <span class="sig-arg">score_only</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="Bio.pairwise2-pysrc.html#_python_make_score_matrix_fast">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Generate a score and traceback matrix according to Gotoh (PRIVATE).</p>
+<p>This is an implementation of the Needleman-Wunsch dynamic programming
+algorithm as modified by Gotoh, implementing affine gap penalties.
+In short, we have three matrices, holding scores for alignments ending
+in (1) a match/mismatch, (2) a gap in sequence A, and (3) a gap in
+sequence B, respectively. However, we can combine them in one matrix,
+which holds the best scores, and store only those values from the
+other matrices that are actually used for the next step of calculation.
+The traceback matrix holds the positions for backtracing the alignment.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -844,7 +944,7 @@ aligned region (matches, mismatches and gaps).</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:23 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:58 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

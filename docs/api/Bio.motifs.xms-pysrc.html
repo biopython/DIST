@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Bio.motifs.xms</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="Bio-module.html">Package&nbsp;Bio</a> ::
+        <a href="Bio.motifs-module.html">Package&nbsp;motifs</a> ::
+        Module&nbsp;xms
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="Bio.motifs.xms-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="Bio.motifs.xms-module.html">Module Bio.motifs.xms</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Copyright 2015 by Gert Hulselmans.  All rights reserved.</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># This file is part of the Biopython distribution and governed by your</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># choice of the "Biopython License Agreement" or the "BSD 3-Clause License".</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-comment"># Please see the LICENSE file that should have been included as part of this</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-comment"># package.</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-docstring">"""Parse XMS motif files."""</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Package Bio=Bio-module.html"><a title="Bio" class="py-name" href="#" onclick="return doclink('link-0', 'Bio', 'link-0');">Bio</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Package Bio.motifs=Bio.motifs-module.html"><a title="Bio.motifs" class="py-name" href="#" onclick="return doclink('link-1', 'motifs', 'link-1');">motifs</a></tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">xml</tt><tt class="py-op">.</tt><tt class="py-name">dom</tt> <tt class="py-keyword">import</tt> <tt class="py-name">minidom</tt><tt class="py-op">,</tt> <tt id="link-2" class="py-name" targets="Class Bio.Cluster.Node=Bio.Cluster.Node-class.html,Class Bio.Nexus.Nodes.Node=Bio.Nexus.Nodes.Node-class.html,Class Bio.SCOP.Node=Bio.SCOP.Node-class.html"><a title="Bio.Cluster.Node
+Bio.Nexus.Nodes.Node
+Bio.SCOP.Node" class="py-name" href="#" onclick="return doclink('link-2', 'Node', 'link-2');">Node</a></tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">re</tt> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="XMSScanner"></a><div id="XMSScanner-def"><a name="L16"></a><tt class="py-lineno"> 16</tt> <a class="py-toggle" href="#" id="XMSScanner-toggle" onclick="return toggle('XMSScanner');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.motifs.xms.XMSScanner-class.html">XMSScanner</a><tt class="py-op">:</tt> </tt>
+</div><div id="XMSScanner-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="XMSScanner-expanded"><a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">    <tt class="py-docstring">"""Class for scanning XMS XML file."""</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"> </tt>
+<a name="XMSScanner.__init__"></a><div id="XMSScanner.__init__-def"><a name="L19"></a><tt class="py-lineno"> 19</tt> <a class="py-toggle" href="#" id="XMSScanner.__init__-toggle" onclick="return toggle('XMSScanner.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.motifs.xms.XMSScanner-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">doc</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="XMSScanner.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="XMSScanner.__init__-expanded"><a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line">        <tt class="py-docstring">"""Generate motif Record from xms document, an XML-like motif pfm file."""</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">record</tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name" targets="Class Bio.Affy.CelFile.Record=Bio.Affy.CelFile.Record-class.html,Module Bio.Blast.Record=Bio.Blast.Record-module.html,Class Bio.Cluster.Record=Bio.Cluster.Record-class.html,Class Bio.Compass.Record=Bio.Compass.Record-class.html,Class Bio.Emboss.Primer3.Record=Bio.Emboss.Primer3.Record-class.html,Class Bio.ExPASy.Enzyme.Record=Bio.ExPASy.Enzyme.Record-class.html,Class Bio.ExPASy.Prodoc.Record=Bio.ExPASy.Prodoc.Record-class.html,Class Bio.ExPASy.Prosite.Record=Bio.ExPASy.Prosite.Record-class.html,Class Bio.ExPASy.ScanProsite.Record=Bio.ExPASy.ScanProsite.Record-class.html,Class Bio.ExPASy.cellosaurus.Record=Bio.ExPASy.cellosaurus.Record-class.html,Module Bio.GenBank.Record=Bio.GenBank.Record-module.html,Class Bio.GenBank.Record.Record=Bio.GenBank.Record.Record-class.html,Module Bio.Geo.Record=Bio.Geo.Record-module.html,Class Bio.Geo.Record.Record=Bio.Geo.Record.Record-class.html,Class Bio.KEGG.Compound.Record=Bio.KEGG.Compound.Record-class.html,Class Bio.KEGG.Enzyme.Record=Bio.KEGG.Enzyme.Record-class.html,Class Bio.KEGG.Gene.Record=Bio.KEGG.Gene.Record-class.html,Class Bio.Medline.Record=Bio.Medline.Record-class.html,Class Bio.PopGen.GenePop.LargeFileParser.Record=Bio.PopGen.GenePop.LargeFileParser.Record-class.html,Class Bio.PopGen.GenePop.Record=Bio.PopGen.GenePop.Record-class.html,Class Bio.SCOP.Cla.Record=Bio.SCOP.Cla.Record-class.html,Class Bio.SCOP.Des.Record=Bio.SCOP.Des.Record-class.html,Class Bio.SCOP.Dom.Record=Bio.SCOP.Dom.Record-class.html,Class Bio.SCOP.Hie.Record=Bio.SCOP.Hie.Record-class.html,Class Bio.Sequencing.Phd.Record=Bio.Sequencing.Phd.Record-class.html,Class Bio.SwissProt.KeyWList.Record=Bio.SwissProt.KeyWList.Record-class.html,Class Bio.SwissProt.Record=Bio.SwissProt.Record-class.html,Class Bio.UniGene.Record=Bio.UniGene.Record-class.html,Class Bio.motifs.alignace.Record=Bio.motifs.alignace.Record-class.html,Class Bio.motifs.clusterbuster.Record=Bio.motifs.clusterbuster.Record-class.html,Class Bio.motifs.jaspar.Record=Bio.motifs.jaspar.Record-class.html,Class Bio.motifs.mast.Record=Bio.motifs.mast.Record-class.html,Class Bio.motifs.meme.Record=Bio.motifs.meme.Record-class.html,Class Bio.motifs.minimal.Record=Bio.motifs.minimal.Record-class.html,Class Bio.motifs.pfm.Record=Bio.motifs.pfm.Record-class.html,Class Bio.motifs.transfac.Record=Bio.motifs.transfac.Record-class.html,Class Bio.motifs.xms.Record=Bio.motifs.xms.Record-class.html"><a title="Bio.Affy.CelFile.Record
+Bio.Blast.Record
+Bio.Cluster.Record
+Bio.Compass.Record
+Bio.Emboss.Primer3.Record
+Bio.ExPASy.Enzyme.Record
+Bio.ExPASy.Prodoc.Record
+Bio.ExPASy.Prosite.Record
+Bio.ExPASy.ScanProsite.Record
+Bio.ExPASy.cellosaurus.Record
+Bio.GenBank.Record
+Bio.GenBank.Record.Record
+Bio.Geo.Record
+Bio.Geo.Record.Record
+Bio.KEGG.Compound.Record
+Bio.KEGG.Enzyme.Record
+Bio.KEGG.Gene.Record
+Bio.Medline.Record
+Bio.PopGen.GenePop.LargeFileParser.Record
+Bio.PopGen.GenePop.Record
+Bio.SCOP.Cla.Record
+Bio.SCOP.Des.Record
+Bio.SCOP.Dom.Record
+Bio.SCOP.Hie.Record
+Bio.Sequencing.Phd.Record
+Bio.SwissProt.KeyWList.Record
+Bio.SwissProt.Record
+Bio.UniGene.Record
+Bio.motifs.alignace.Record
+Bio.motifs.clusterbuster.Record
+Bio.motifs.jaspar.Record
+Bio.motifs.mast.Record
+Bio.motifs.meme.Record
+Bio.motifs.minimal.Record
+Bio.motifs.pfm.Record
+Bio.motifs.transfac.Record
+Bio.motifs.xms.Record" class="py-name" href="#" onclick="return doclink('link-3', 'Record', 'link-3');">Record</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">child</tt> <tt class="py-keyword">in</tt> <tt class="py-name">doc</tt><tt class="py-op">.</tt><tt class="py-name">getElementsByTagName</tt><tt class="py-op">(</tt><tt class="py-string">'motif'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">child</tt><tt class="py-op">.</tt><tt class="py-name">nodeType</tt> <tt class="py-op">==</tt> <tt id="link-4" class="py-name"><a title="Bio.Cluster.Node
+Bio.Nexus.Nodes.Node
+Bio.SCOP.Node" class="py-name" href="#" onclick="return doclink('link-4', 'Node', 'link-2');">Node</a></tt><tt class="py-op">.</tt><tt class="py-name">ELEMENT_NODE</tt><tt class="py-op">:</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method Bio.motifs.xms.XMSScanner.handle_motif()=Bio.motifs.xms.XMSScanner-class.html#handle_motif"><a title="Bio.motifs.xms.XMSScanner.handle_motif" class="py-name" href="#" onclick="return doclink('link-5', 'handle_motif', 'link-5');">handle_motif</a></tt><tt class="py-op">(</tt><tt class="py-name">child</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"> </tt>
+<a name="XMSScanner.handle_motif"></a><div id="XMSScanner.handle_motif-def"><a name="L26"></a><tt class="py-lineno"> 26</tt> <a class="py-toggle" href="#" id="XMSScanner.handle_motif-toggle" onclick="return toggle('XMSScanner.handle_motif');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.motifs.xms.XMSScanner-class.html#handle_motif">handle_motif</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">node</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="XMSScanner.handle_motif-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="XMSScanner.handle_motif-expanded"><a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line">        <tt class="py-docstring">"""Read the motif's name and column from the node and add the motif record."""</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">        <tt class="py-name">motif_name</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method Bio.motifs.xms.XMSScanner.get_text()=Bio.motifs.xms.XMSScanner-class.html#get_text"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-6', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt id="link-7" class="py-name" targets="Method Bio.Nexus.Trees.Tree.node()=Bio.Nexus.Trees.Tree-class.html#node"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-7', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">getElementsByTagName</tt><tt class="py-op">(</tt><tt class="py-string">"name"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line">        <tt class="py-name">nucleotide_counts</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-string">'A'</tt><tt class="py-op">:</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-string">'C'</tt><tt class="py-op">:</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-string">'G'</tt><tt class="py-op">:</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-string">'T'</tt><tt class="py-op">:</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt><tt class="py-op">}</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">column</tt> <tt class="py-keyword">in</tt> <tt id="link-8" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-8', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">getElementsByTagName</tt><tt class="py-op">(</tt><tt class="py-string">"column"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line">            <tt class="py-op">[</tt><tt class="py-name">nucleotide_counts</tt><tt class="py-op">[</tt><tt class="py-name">nucleotide</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method Bio.Align.MultipleSeqAlignment.append()=Bio.Align.MultipleSeqAlignment-class.html#append,Method Bio.Crystal.Chain.append()=Bio.Crystal.Chain-class.html#append,Method Bio.SCOP.Raf.SeqMap.append()=Bio.SCOP.Raf.SeqMap-class.html#append,Method Bio.SearchIO._model.hit.Hit.append()=Bio.SearchIO._model.hit.Hit-class.html#append,Method Bio.SearchIO._model.query.QueryResult.append()=Bio.SearchIO._model.query.QueryResult-class.html#append,Method Bio.Seq.MutableSeq.append()=Bio.Seq.MutableSeq-class.html#append,Method Bio.Wise.psw.Alignment.append()=Bio.Wise.psw.Alignment-class.html#append,Method Bio.Wise.psw.AlignmentColumn.append()=Bio.Wise.psw.AlignmentColumn-class.html#append"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-9', 'append', 'link-9');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">nucleotide_count</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line">             <tt class="py-keyword">for</tt> <tt class="py-name">nucleotide</tt><tt class="py-op">,</tt> <tt class="py-name">nucleotide_count</tt> <tt class="py-keyword">in</tt> <tt class="py-name">zip</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-string">'A'</tt><tt class="py-op">,</tt> <tt class="py-string">'C'</tt><tt class="py-op">,</tt> <tt class="py-string">'G'</tt><tt class="py-op">,</tt> <tt class="py-string">'T'</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Method Bio.motifs.xms.XMSScanner.get_acgt()=Bio.motifs.xms.XMSScanner-class.html#get_acgt"><a title="Bio.motifs.xms.XMSScanner.get_acgt" class="py-name" href="#" onclick="return doclink('link-10', 'get_acgt', 'link-10');">get_acgt</a></tt><tt class="py-op">(</tt><tt class="py-name">column</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-name">motif</tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="Bio.motifs" class="py-name" href="#" onclick="return doclink('link-11', 'motifs', 'link-1');">motifs</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Class Bio.motifs.Motif=Bio.motifs.Motif-class.html,Class Bio.motifs.jaspar.Motif=Bio.motifs.jaspar.Motif-class.html,Class Bio.motifs.meme.Motif=Bio.motifs.meme.Motif-class.html,Class Bio.motifs.transfac.Motif=Bio.motifs.transfac.Motif-class.html"><a title="Bio.motifs.Motif
+Bio.motifs.jaspar.Motif
+Bio.motifs.meme.Motif
+Bio.motifs.transfac.Motif" class="py-name" href="#" onclick="return doclink('link-12', 'Motif', 'link-12');">Motif</a></tt><tt class="py-op">(</tt><tt id="link-13" class="py-name" targets="Variable Bio.SearchIO._model.hsp.HSP.alphabet=Bio.SearchIO._model.hsp.HSP-class.html#alphabet,Variable Bio.SearchIO._model.hsp.HSPFragment.alphabet=Bio.SearchIO._model.hsp.HSPFragment-class.html#alphabet"><a title="Bio.SearchIO._model.hsp.HSP.alphabet
+Bio.SearchIO._model.hsp.HSPFragment.alphabet" class="py-name" href="#" onclick="return doclink('link-13', 'alphabet', 'link-13');">alphabet</a></tt><tt class="py-op">=</tt><tt class="py-string">'GATC'</tt><tt class="py-op">,</tt> <tt class="py-name">counts</tt><tt class="py-op">=</tt><tt class="py-name">nucleotide_counts</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">        <tt class="py-name">motif</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Variable Bio.KEGG.KGML.KGML_pathway.Entry.name=Bio.KEGG.KGML.KGML_pathway.Entry-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Pathway.name=Bio.KEGG.KGML.KGML_pathway.Pathway-class.html#name,Variable Bio.KEGG.KGML.KGML_pathway.Reaction.name=Bio.KEGG.KGML.KGML_pathway.Reaction-class.html#name,Method Bio.Phylo.PhyloXMLIO.Writer.name()=Bio.Phylo.PhyloXMLIO.Writer-class.html#name,Variable Bio.codonalign.codonalphabet.CodonAlphabet.name=Bio.codonalign.codonalphabet.CodonAlphabet-class.html#name"><a title="Bio.KEGG.KGML.KGML_pathway.Entry.name
+Bio.KEGG.KGML.KGML_pathway.Pathway.name
+Bio.KEGG.KGML.KGML_pathway.Reaction.name
+Bio.Phylo.PhyloXMLIO.Writer.name
+Bio.codonalign.codonalphabet.CodonAlphabet.name" class="py-name" href="#" onclick="return doclink('link-14', 'name', 'link-14');">name</a></tt> <tt class="py-op">=</tt> <tt class="py-name">motif_name</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">record</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-15', 'append', 'link-9');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">motif</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"> </tt>
+<a name="XMSScanner.get_property_value"></a><div id="XMSScanner.get_property_value-def"><a name="L40"></a><tt class="py-lineno"> 40</tt> <a class="py-toggle" href="#" id="XMSScanner.get_property_value-toggle" onclick="return toggle('XMSScanner.get_property_value');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.motifs.xms.XMSScanner-class.html#get_property_value">get_property_value</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">node</tt><tt class="py-op">,</tt> <tt class="py-param">key_name</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="XMSScanner.get_property_value-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="XMSScanner.get_property_value-expanded"><a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-docstring">"""Extract the value of the motif's property named key_name from node."""</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">cur_property</tt> <tt class="py-keyword">in</tt> <tt id="link-16" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-16', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">getElementsByTagName</tt><tt class="py-op">(</tt><tt class="py-string">'prop'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">            <tt class="py-name">right_property</tt> <tt class="py-op">=</tt> <tt class="py-name">False</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">            <tt class="py-name">cur_value</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">child</tt> <tt class="py-keyword">in</tt> <tt class="py-name">cur_property</tt><tt class="py-op">.</tt><tt class="py-name">childNodes</tt><tt class="py-op">:</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">child</tt><tt class="py-op">.</tt><tt class="py-name">nodeType</tt> <tt class="py-op">!=</tt> <tt id="link-17" class="py-name"><a title="Bio.Cluster.Node
+Bio.Nexus.Nodes.Node
+Bio.SCOP.Node" class="py-name" href="#" onclick="return doclink('link-17', 'Node', 'link-2');">Node</a></tt><tt class="py-op">.</tt><tt class="py-name">ELEMENT_NODE</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">                    <tt class="py-keyword">continue</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">child</tt><tt class="py-op">.</tt><tt class="py-name">tagName</tt> <tt class="py-op">==</tt> <tt class="py-string">'key'</tt> <tt class="py-keyword">and</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-18', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">child</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">key_name</tt><tt class="py-op">:</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">                    <tt class="py-name">right_property</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">child</tt><tt class="py-op">.</tt><tt class="py-name">tagName</tt> <tt class="py-op">==</tt> <tt class="py-string">'value'</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">                    <tt class="py-name">cur_value</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-19', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">child</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">right_property</tt><tt class="py-op">:</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">cur_value</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"> </tt>
+<a name="XMSScanner.get_acgt"></a><div id="XMSScanner.get_acgt-def"><a name="L56"></a><tt class="py-lineno"> 56</tt> <a class="py-toggle" href="#" id="XMSScanner.get_acgt-toggle" onclick="return toggle('XMSScanner.get_acgt');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.motifs.xms.XMSScanner-class.html#get_acgt">get_acgt</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">node</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="XMSScanner.get_acgt-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="XMSScanner.get_acgt-expanded"><a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-docstring">"""Get and return the motif's weights of A, C, G, T."""</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt id="link-20" class="py-name" targets="Variable Bio.Graphics.ColorSpiral.ColorSpiral.a=Bio.Graphics.ColorSpiral.ColorSpiral-class.html#a"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-20', 'a', 'link-20');">a</a></tt><tt class="py-op">,</tt> <tt class="py-name">c</tt><tt class="py-op">,</tt> <tt class="py-name">g</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt><tt class="py-op">,</tt> <tt class="py-number">0.0</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">weight</tt> <tt class="py-keyword">in</tt> <tt id="link-21" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-21', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">getElementsByTagName</tt><tt class="py-op">(</tt><tt class="py-string">'weight'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">weight</tt><tt class="py-op">.</tt><tt class="py-name">getAttribute</tt><tt class="py-op">(</tt><tt class="py-string">"symbol"</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">"adenine"</tt><tt class="py-op">:</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">                <tt id="link-22" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-22', 'a', 'link-20');">a</a></tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-23', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">weight</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">weight</tt><tt class="py-op">.</tt><tt class="py-name">getAttribute</tt><tt class="py-op">(</tt><tt class="py-string">"symbol"</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">"cytosine"</tt><tt class="py-op">:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">                <tt class="py-name">c</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-24', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">weight</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">weight</tt><tt class="py-op">.</tt><tt class="py-name">getAttribute</tt><tt class="py-op">(</tt><tt class="py-string">"symbol"</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">"guanine"</tt><tt class="py-op">:</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">                <tt class="py-name">g</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-25', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">weight</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt class="py-name">weight</tt><tt class="py-op">.</tt><tt class="py-name">getAttribute</tt><tt class="py-op">(</tt><tt class="py-string">"symbol"</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-string">"thymine"</tt><tt class="py-op">:</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">                <tt class="py-name">t</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-26', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">weight</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt id="link-27" class="py-name"><a title="Bio.Graphics.ColorSpiral.ColorSpiral.a" class="py-name" href="#" onclick="return doclink('link-27', 'a', 'link-20');">a</a></tt><tt class="py-op">,</tt> <tt class="py-name">c</tt><tt class="py-op">,</tt> <tt class="py-name">g</tt><tt class="py-op">,</tt> <tt class="py-name">t</tt> </tt>
+</div><a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"> </tt>
+<a name="XMSScanner.get_text"></a><div id="XMSScanner.get_text-def"><a name="L70"></a><tt class="py-lineno"> 70</tt> <a class="py-toggle" href="#" id="XMSScanner.get_text-toggle" onclick="return toggle('XMSScanner.get_text');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.motifs.xms.XMSScanner-class.html#get_text">get_text</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">nodelist</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="XMSScanner.get_text-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="XMSScanner.get_text-expanded"><a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">        <tt class="py-docstring">"""Return a string representation of the motif's properties listed on nodelist ."""</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-name">retlist</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt id="link-28" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-28', 'node', 'link-7');">node</a></tt> <tt class="py-keyword">in</tt> <tt class="py-name">nodelist</tt><tt class="py-op">:</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt id="link-29" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-29', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">nodeType</tt> <tt class="py-op">==</tt> <tt id="link-30" class="py-name"><a title="Bio.Cluster.Node
+Bio.Nexus.Nodes.Node
+Bio.SCOP.Node" class="py-name" href="#" onclick="return doclink('link-30', 'Node', 'link-2');">Node</a></tt><tt class="py-op">.</tt><tt class="py-name">TEXT_NODE</tt><tt class="py-op">:</tt> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">                <tt class="py-name">retlist</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-31', 'append', 'link-9');">append</a></tt><tt class="py-op">(</tt><tt id="link-32" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-32', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">wholeText</tt><tt class="py-op">)</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">            <tt class="py-keyword">elif</tt> <tt id="link-33" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-33', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">hasChildNodes</tt><tt class="py-op">:</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">                <tt class="py-name">retlist</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="Bio.Align.MultipleSeqAlignment.append
+Bio.Crystal.Chain.append
+Bio.SCOP.Raf.SeqMap.append
+Bio.SearchIO._model.hit.Hit.append
+Bio.SearchIO._model.query.QueryResult.append
+Bio.Seq.MutableSeq.append
+Bio.Wise.psw.Alignment.append
+Bio.Wise.psw.AlignmentColumn.append" class="py-name" href="#" onclick="return doclink('link-34', 'append', 'link-9');">append</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="Bio.motifs.xms.XMSScanner.get_text" class="py-name" href="#" onclick="return doclink('link-35', 'get_text', 'link-6');">get_text</a></tt><tt class="py-op">(</tt><tt id="link-36" class="py-name"><a title="Bio.Nexus.Trees.Tree.node" class="py-name" href="#" onclick="return doclink('link-36', 'node', 'link-7');">node</a></tt><tt class="py-op">.</tt><tt class="py-name">childNodes</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">sub</tt><tt class="py-op">(</tt><tt class="py-string">r'\s+'</tt><tt class="py-op">,</tt> <tt class="py-string">' '</tt><tt class="py-op">,</tt> <tt class="py-string">''</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Method Bio.Seq.MutableSeq.join()=Bio.Seq.MutableSeq-class.html#join,Method Bio.Seq.Seq.join()=Bio.Seq.Seq-class.html#join,Method Bio.Seq.UnknownSeq.join()=Bio.Seq.UnknownSeq-class.html#join"><a title="Bio.Seq.MutableSeq.join
+Bio.Seq.Seq.join
+Bio.Seq.UnknownSeq.join" class="py-name" href="#" onclick="return doclink('link-37', 'join', 'link-37');">join</a></tt><tt class="py-op">(</tt><tt class="py-name">retlist</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"> </tt>
+<a name="Record"></a><div id="Record-def"><a name="L82"></a><tt class="py-lineno"> 82</tt> <a class="py-toggle" href="#" id="Record-toggle" onclick="return toggle('Record');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="Bio.motifs.xms.Record-class.html">Record</a><tt class="py-op">(</tt><tt class="py-base-class">list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Record-expanded"><a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">    <tt class="py-docstring">"""Class to store the information in a XMS matrix table.</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-docstring">    The record inherits from a list containing the individual motifs.</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"> </tt>
+<a name="Record.__str__"></a><div id="Record.__str__-def"><a name="L88"></a><tt class="py-lineno"> 88</tt> <a class="py-toggle" href="#" id="Record.__str__-toggle" onclick="return toggle('Record.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.motifs.xms.Record-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Record.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Record.__str__-expanded"><a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"\n"</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name"><a title="Bio.Seq.MutableSeq.join
+Bio.Seq.Seq.join
+Bio.Seq.UnknownSeq.join" class="py-name" href="#" onclick="return doclink('link-38', 'join', 'link-37');">join</a></tt><tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">motif</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">motif</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line"> </tt>
+<a name="read"></a><div id="read-def"><a name="L92"></a><tt class="py-lineno"> 92</tt> <a class="py-toggle" href="#" id="read-toggle" onclick="return toggle('read');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="Bio.motifs.xms-module.html#read">read</a><tt class="py-op">(</tt><tt class="py-param">handle</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="read-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="read-expanded"><a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">    <tt class="py-docstring">"""Read motifs in XMS matrix format from a file handle.</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring">    XMS is an XML format for describing regulatory motifs and PSSMs.</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"><tt class="py-docstring">    This format was defined by Thomas Down, and used in the NestedMICA and MotifExplorer programs.</tt> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">    <tt class="py-name">xms_doc</tt> <tt class="py-op">=</tt> <tt class="py-name">minidom</tt><tt class="py-op">.</tt><tt id="link-39" class="py-name" targets="Function Bio.AlignIO.parse()=Bio.AlignIO-module.html#parse,Function Bio.Blast.NCBIXML.parse()=Bio.Blast.NCBIXML-module.html#parse,Function Bio.Compass.parse()=Bio.Compass-module.html#parse,Function Bio.Emboss.Primer3.parse()=Bio.Emboss.Primer3-module.html#parse,Method Bio.Entrez.Parser.DataHandler.parse()=Bio.Entrez.Parser.DataHandler-class.html#parse,Function Bio.Entrez.parse()=Bio.Entrez-module.html#parse,Function Bio.ExPASy.Enzyme.parse()=Bio.ExPASy.Enzyme-module.html#parse,Function Bio.ExPASy.Prodoc.parse()=Bio.ExPASy.Prodoc-module.html#parse,Function Bio.ExPASy.Prosite.parse()=Bio.ExPASy.Prosite-module.html#parse,Function Bio.ExPASy.cellosaurus.parse()=Bio.ExPASy.cellosaurus-module.html#parse,Method Bio.GenBank.FeatureParser.parse()=Bio.GenBank.FeatureParser-class.html#parse,Method Bio.GenBank.RecordParser.parse()=Bio.GenBank.RecordParser-class.html#parse,Method Bio.GenBank.Scanner.InsdcScanner.parse()=Bio.GenBank.Scanner.InsdcScanner-class.html#parse,Function Bio.Geo.parse()=Bio.Geo-module.html#parse,Function Bio.KEGG.Compound.parse()=Bio.KEGG.Compound-module.html#parse,Function Bio.KEGG.Enzyme.parse()=Bio.KEGG.Enzyme-module.html#parse,Function Bio.KEGG.Gene.parse()=Bio.KEGG.Gene-module.html#parse,Method Bio.KEGG.KGML.KGML_parser.KGMLParser.parse()=Bio.KEGG.KGML.KGML_parser.KGMLParser-class.html#parse,Function Bio.KEGG.KGML.KGML_parser.parse()=Bio.KEGG.KGML.KGML_parser-module.html#parse,Function Bio.KEGG.Map.parse()=Bio.KEGG.Map-module.html#parse,Function Bio.Medline.parse()=Bio.Medline-module.html#parse,Method Bio.Phylo.CDAOIO.Parser.parse()=Bio.Phylo.CDAOIO.Parser-class.html#parse,Function Bio.Phylo.CDAOIO.parse()=Bio.Phylo.CDAOIO-module.html#parse,Method Bio.Phylo.NeXMLIO.Parser.parse()=Bio.Phylo.NeXMLIO.Parser-class.html#parse,Function Bio.Phylo.NeXMLIO.parse()=Bio.Phylo.NeXMLIO-module.html#parse,Method Bio.Phylo.NewickIO.Parser.parse()=Bio.Phylo.NewickIO.Parser-class.html#parse,Function Bio.Phylo.NewickIO.parse()=Bio.Phylo.NewickIO-module.html#parse,Function Bio.Phylo.NexusIO.parse()=Bio.Phylo.NexusIO-module.html#parse,Method Bio.Phylo.PhyloXMLIO.Parser.parse()=Bio.Phylo.PhyloXMLIO.Parser-class.html#parse,Function Bio.Phylo.PhyloXMLIO.parse()=Bio.Phylo.PhyloXMLIO-module.html#parse,Function Bio.Phylo._io.parse()=Bio.Phylo._io-module.html#parse,Function Bio.SCOP.Cla.parse()=Bio.SCOP.Cla-module.html#parse,Function Bio.SCOP.Des.parse()=Bio.SCOP.Des-module.html#parse,Function Bio.SCOP.Dom.parse()=Bio.SCOP.Dom-module.html#parse,Function Bio.SCOP.Hie.parse()=Bio.SCOP.Hie-module.html#parse,Function Bio.SCOP.Raf.parse()=Bio.SCOP.Raf-module.html#parse,Method Bio.SearchIO._legacy.NCBIStandalone.BlastErrorParser.parse()=Bio.SearchIO._legacy.NCBIStandalone.BlastErrorParser-class.html#parse,Method Bio.SearchIO._legacy.NCBIStandalone.BlastParser.parse()=Bio.SearchIO._legacy.NCBIStandalone.BlastParser-class.html#parse,Method Bio.SearchIO._legacy.NCBIStandalone.PSIBlastParser.parse()=Bio.SearchIO._legacy.NCBIStandalone.PSIBlastParser-class.html#parse,Method Bio.SearchIO._legacy.ParserSupport.AbstractParser.parse()=Bio.SearchIO._legacy.ParserSupport.AbstractParser-class.html#parse,Function Bio.SearchIO.parse()=Bio.SearchIO-module.html#parse,Method Bio.SeqIO.UniprotIO.Parser.parse()=Bio.SeqIO.UniprotIO.Parser-class.html#parse,Function Bio.SeqIO.parse()=Bio.SeqIO-module.html#parse,Function Bio.Sequencing.Ace.parse()=Bio.Sequencing.Ace-module.html#parse,Function Bio.Sequencing.Phd.parse()=Bio.Sequencing.Phd-module.html#parse,Function Bio.SwissProt.KeyWList.parse()=Bio.SwissProt.KeyWList-module.html#parse,Function Bio.SwissProt.parse()=Bio.SwissProt-module.html#parse,Function Bio.UniGene.parse()=Bio.UniGene-module.html#parse,Function Bio.Wise.psw.parse()=Bio.Wise.psw-module.html#parse,Function Bio.motifs.parse()=Bio.motifs-module.html#parse,Function Bio.phenotype.parse()=Bio.phenotype-module.html#parse"><a title="Bio.AlignIO.parse
+Bio.Blast.NCBIXML.parse
+Bio.Compass.parse
+Bio.Emboss.Primer3.parse
+Bio.Entrez.Parser.DataHandler.parse
+Bio.Entrez.parse
+Bio.ExPASy.Enzyme.parse
+Bio.ExPASy.Prodoc.parse
+Bio.ExPASy.Prosite.parse
+Bio.ExPASy.cellosaurus.parse
+Bio.GenBank.FeatureParser.parse
+Bio.GenBank.RecordParser.parse
+Bio.GenBank.Scanner.InsdcScanner.parse
+Bio.Geo.parse
+Bio.KEGG.Compound.parse
+Bio.KEGG.Enzyme.parse
+Bio.KEGG.Gene.parse
+Bio.KEGG.KGML.KGML_parser.KGMLParser.parse
+Bio.KEGG.KGML.KGML_parser.parse
+Bio.KEGG.Map.parse
+Bio.Medline.parse
+Bio.Phylo.CDAOIO.Parser.parse
+Bio.Phylo.CDAOIO.parse
+Bio.Phylo.NeXMLIO.Parser.parse
+Bio.Phylo.NeXMLIO.parse
+Bio.Phylo.NewickIO.Parser.parse
+Bio.Phylo.NewickIO.parse
+Bio.Phylo.NexusIO.parse
+Bio.Phylo.PhyloXMLIO.Parser.parse
+Bio.Phylo.PhyloXMLIO.parse
+Bio.Phylo._io.parse
+Bio.SCOP.Cla.parse
+Bio.SCOP.Des.parse
+Bio.SCOP.Dom.parse
+Bio.SCOP.Hie.parse
+Bio.SCOP.Raf.parse
+Bio.SearchIO._legacy.NCBIStandalone.BlastErrorParser.parse
+Bio.SearchIO._legacy.NCBIStandalone.BlastParser.parse
+Bio.SearchIO._legacy.NCBIStandalone.PSIBlastParser.parse
+Bio.SearchIO._legacy.ParserSupport.AbstractParser.parse
+Bio.SearchIO.parse
+Bio.SeqIO.UniprotIO.Parser.parse
+Bio.SeqIO.parse
+Bio.Sequencing.Ace.parse
+Bio.Sequencing.Phd.parse
+Bio.SwissProt.KeyWList.parse
+Bio.SwissProt.parse
+Bio.UniGene.parse
+Bio.Wise.psw.parse
+Bio.motifs.parse
+Bio.phenotype.parse" class="py-name" href="#" onclick="return doclink('link-39', 'parse', 'link-39');">parse</a></tt><tt class="py-op">(</tt><tt class="py-name">handle</tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">    <tt class="py-name">record</tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name" targets="Class Bio.motifs.xms.XMSScanner=Bio.motifs.xms.XMSScanner-class.html"><a title="Bio.motifs.xms.XMSScanner" class="py-name" href="#" onclick="return doclink('link-40', 'XMSScanner', 'link-40');">XMSScanner</a></tt><tt class="py-op">(</tt><tt class="py-name">xms_doc</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">record</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">record</tt> </tt>
+</div><a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://biopython.org">Biopython</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:05:44 2019
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

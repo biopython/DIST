@@ -63,46 +63,37 @@
 <h1 class="heading">Examples</h1>
 <blockquote>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Rana.fts <span class="py-keyword">import</span> fts    <span class="py-comment">#</span>
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Rana.Vector <span class="py-keyword">import</span> *   <span class="py-comment"># Just a way to get a sequence.</span>
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq     <span class="py-comment"># Use your preferred method here.</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>pbr = fts(pBR322)           <span class="py-comment">#</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>seq = Seq(str(pbr))         <span class="py-comment">#</span>
-<span class="py-prompt">&gt;&gt;&gt;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Restriction <span class="py-keyword">import</span> *
-<span class="py-prompt">&gt;&gt;&gt; </span>a = Analysis(AllEnzymes, seq, linear=False)
-<span class="py-prompt">&gt;&gt;&gt; </span>b = a.blunt()
+<span class="py-prompt">&gt;&gt;&gt; </span>pBs_mcs = <span class="py-string">'GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTCCTG'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>pBs_mcs += <span class="py-string">'CAGCCCGGGGGATCCACTAGTTCTAGAGCGGCCGCCACCGCGGTGGAGCTC'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>seq = Seq(pBs_mcs)  <span class="py-comment"># Multiple-cloning site of pBluescript SK(-)</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>a = Analysis(AllEnzymes, seq)
 <span class="py-prompt">&gt;&gt;&gt; </span>a.print_that()              <span class="py-comment"># no argument -&gt; print all the results</span>
-<span class="py-output">AasI       :  2169, 2582.</span>
-<span class="py-output">AatII      :  4289.</span>
-<span class="py-output">Acc16I     :  263, 1359, 1457, 3589.</span>
-<span class="py-output">...</span>
-<span class="py-output">More enzymes here.</span>
-<span class="py-output">...</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>b = a.without_site()
-<span class="py-prompt">&gt;&gt;&gt; </span>a.print_that(b)  <span class="py-comment"># Enzymes which do not cut pBR322</span>
-<span class="py-output">AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI</span>
-<span class="py-output">AhlI      AleI      AloI      ApaI      ApoI      AscI      AsiAI     AsiSI</span>
-<span class="py-output">Asp718I   AspA2I    AsuII     AvaIII    AvrII     AxyI      BaeI      BbrPI</span>
-<span class="py-output">BbvCI     BclI      BcuI      BfrBI     BfrI      BglII     BlnI      BlpI</span>
-<span class="py-output">BmgBI     BmgI      BplI      Bpu1102I  Bpu14I    BsaXI     Bse21I    BsePI</span>
-<span class="py-output">BseRI     BshTI     BsiWI     Bsp119I   Bsp120I   Bsp1407I  Bsp1720I  Bsp19I</span>
-<span class="py-output">BspT104I  BspTI     BsrGI     BssHI     BssHII    Bst98I    BstAUI    BstBI</span>
-<span class="py-output">BstEII    BstPI     BstSNI    BstXI     Bsu36I    BtrI      CciNI     CelII</span>
-<span class="py-output">Cfr42I    Cfr9I     CpoI      Csp45I    CspAI     CspCI     CspI      DraIII</span>
-<span class="py-output">DrdII     Ecl136II  Eco105I   Eco147I   Eco72I    Eco81I    Eco91I    EcoICRI</span>
-<span class="py-output">EcoO65I   EcoRI     EcoT22I   EspI      FalI      FbaI      FseI      FunII</span>
-<span class="py-output">HpaI      KpnI      Ksp22I    KspAI     KspI      MabI      MfeI      MluI</span>
-<span class="py-output">Mph1103I  MspCI     MssI      MunI      NcoI      NotI      NsiI      NspV</span>
-<span class="py-output">OliI      PacI      PaeR7I    PasI      PauI      PceI      Pfl23II   PinAI</span>
-<span class="py-output">PmaCI     PmeI      PmlI      Ppu10I    PsiI      Psp124BI  PspAI     PspCI</span>
-<span class="py-output">PspEI     PspLI     PspOMI    PspXI     PsrI      RleAI     Rsr2I     RsrII</span>
-<span class="py-output">SacI      SacII     SanDI     SauI      SbfI      SciI      SdaI      SexAI</span>
-<span class="py-output">SfiI      Sfr274I   Sfr303I   SfuI      SgfI      SgrBI     SlaI      SmaI</span>
-<span class="py-output">SmiI      SnaBI     SpeI      SplI      SrfI      Sse232I   Sse8387I  Sse8647I</span>
-<span class="py-output">SseBI     SspBI     SstI      StuI      SunI      SwaI      TliI      UthSI</span>
-<span class="py-output">Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI</span>
-<span class="py-output">Zsp2I</span></pre>
+<span class="py-output">AbaSI      :  10, 12, 13, 16, 17, 18, 19, 20, 22, 23, 24, 25, 25, 26, 27...</span>
+<span class="py-output">BmeDI      :  2, 7, 8, 8, 9, 9, 13, 14, 15, 16, 17, 18, 19, 19, 21, 21...</span>
+<span class="py-output">YkrI       :  10, 12, 13, 16, 16, 17, 19, 20, 21, 22, 23, 24, 25, 25, 26...</span></pre>
+<p>BmeDI      :  1, 2, 7, 8, 8, 9, 9, 13, 14, 15, 16, 17, 18, 19...
+AccII      :  98.
+AciI       :  86, 90, 96, 98...</p>
+<p>Enzymes which do not cut the sequence.</p>
+<p>AspLEI    BstHHI    CfoI      CviAII    FaeI      FaiI      FatI      GlaI
+HhaI      Hin1II    Hin6I     HinP1I    HpyCH4IV  HpySE526I Hsp92II   HspAI
+MaeII     MseI      NlaIII    SaqAI     TaiI      Tru1I     Tru9I...
+&lt;BLANKLINE&gt;
+&gt;&gt;&gt; b = a.blunt()  # Analysis with blunt enzmyes
+&gt;&gt;&gt; a.print_that(b)  # Print results for blunt cutters
+AccII      :  98.
+AfaI       :  4.
+AluBI      :  40, 106.
+AluI       :  40, 106.
+Bsh1236I   :  98.
+BshFI      :  10, 89.
+BsnI       :  10, 89.
+BspANI     :  10, 89...</p>
+<p>Enzymes which do not cut the sequence.</p>
+<p>FaiI      GlaI      CdiI      MlyI      SchI      SspD5I    AanI...
+&lt;BLANKLINE&gt;</p>
 </blockquote>
 </div>
 
@@ -126,9 +117,8 @@
   <tr><td class="summary">
   <ul class="nomargin">
     <li> <strong class="uidlink"><a href="Bio.Restriction.PrintFormat-module.html">Bio.Restriction.PrintFormat</a></strong>: <em class="summary">Print the results of restriction enzyme analysis.</em>    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.RanaConfig-module.html">Bio.Restriction.RanaConfig</a></strong>: <em class="summary">Configuration of the console.</em>    </li>
     <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction-module.html">Bio.Restriction.Restriction</a></strong>: <em class="summary">Restriction Enzyme classes.</em>    </li>
-    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction_Dictionary-module.html">Bio.Restriction.Restriction_Dictionary</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="Bio.Restriction.Restriction_Dictionary-module.html">Bio.Restriction.Restriction_Dictionary</a></strong>: <em class="summary">Restriction Analysis Libraries.</em>    </li>
   </ul></td></tr>
 </table>
 
@@ -186,7 +176,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:19 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:55 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

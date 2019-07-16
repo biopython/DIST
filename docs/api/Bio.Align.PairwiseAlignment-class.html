@@ -313,6 +313,14 @@ to the vertices of the path in the traceback matrix.</p>
     </table>
   </td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="Bio.Align.PairwiseAlignment-class.html#aligned" class="summary-name">aligned</a><br />
+      Return the indices of subsequences aligned to each other.
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -361,15 +369,19 @@ to the vertices of the path in the traceback matrix.</p>
   <p>Initialize a new PairwiseAlignment object.</p>
 <dl class="rst-docutils">
 <dt>Arguments:</dt>
-<dd><ul class="rst-first rst-last rst-simple">
-<li>target  - The first sequence, as a plain string, without gaps.</li>
-<li>query   - The second sequence, as a plain string, without gaps.</li>
+<dd><ul class="rst-first rst-last">
+<li><p class="rst-first">target  - The first sequence, as a plain string, without gaps.</p>
+</li>
+<li><p class="rst-first">query   - The second sequence, as a plain string, without gaps.</p>
+</li>
 <li><dl class="rst-first rst-docutils">
 <dt>path    - The path through the traceback matrix, defining an</dt>
-<dd>alignment.</dd>
+<dd><p class="rst-first rst-last">alignment.</p>
+</dd>
 </dl>
 </li>
-<li>score   - The alignment score.</li>
+<li><p class="rst-first">score   - The alignment score.</p>
+</li>
 </ul>
 </dd>
 </dl>
@@ -431,6 +443,95 @@ over a PairwiseAlignments object.</p>
 </td></tr></table>
 </div>
 <br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="aligned"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">aligned</h3>
+  <p>Return the indices of subsequences aligned to each other.</p>
+<p>This property returns the start and end indices of subsequences
+in the target and query sequence that were aligned to each other.
+If the alignment between target (t) and query (q) consists of N
+chunks, you get two tuples of length N:</p>
+<blockquote>
+<dl class="rst-docutils">
+<dt>(((t_start1, t_end1), (t_start2, t_end2), ..., (t_startN, t_endN)),</dt>
+<dd>((q_start1, q_end1), (q_start2, q_end2), ..., (q_startN, q_endN)))</dd>
+</dl>
+</blockquote>
+<p>For example,</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Align
+<span class="py-prompt">&gt;&gt;&gt; </span>aligner = Align.PairwiseAligner()
+<span class="py-prompt">&gt;&gt;&gt; </span>alignments = aligner.align(<span class="py-string">&quot;GAACT&quot;</span>, <span class="py-string">&quot;GAT&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>alignment = alignments[0]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(alignment)
+<span class="py-output">GAACT</span>
+<span class="py-output">||--|</span>
+<span class="py-output">GA--T</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>alignment.aligned
+<span class="py-output">(((0, 2), (4, 5)), ((0, 2), (2, 3)))</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>alignment = alignments[1]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(alignment)
+<span class="py-output">GAACT</span>
+<span class="py-output">|-|-|</span>
+<span class="py-output">G-A-T</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>alignment.aligned
+<span class="py-output">(((0, 1), (2, 3), (4, 5)), ((0, 1), (1, 2), (2, 3)))</span></pre>
+<p>Note that different alignments may have the same subsequences
+aligned to each other. In particular, this may occur if alignments
+differ from each other in terms of their gap placement only:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>aligner.mismatch_score = -10
+<span class="py-prompt">&gt;&gt;&gt; </span>alignments = aligner.align(<span class="py-string">&quot;AAACAAA&quot;</span>, <span class="py-string">&quot;AAAGAAA&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>len(alignments)
+<span class="py-output">2</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(alignments[0])
+<span class="py-output">AAAC-AAA</span>
+<span class="py-output">|||--|||</span>
+<span class="py-output">AAA-GAAA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>alignments[0].aligned
+<span class="py-output">(((0, 3), (4, 7)), ((0, 3), (4, 7)))</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(alignments[1])
+<span class="py-output">AAA-CAAA</span>
+<span class="py-output">|||--|||</span>
+<span class="py-output">AAAG-AAA</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>alignments[1].aligned
+<span class="py-output">(((0, 3), (4, 7)), ((0, 3), (4, 7)))</span></pre>
+<p>The property can be used to identify alignments that are identical
+to each other in terms of their aligned sequences.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.aligned(<span class="summary-sig-arg">self</span>)</span>
+        - Return the indices of subsequences aligned to each other.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -459,7 +560,7 @@ over a PairwiseAlignments object.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:24 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:59 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

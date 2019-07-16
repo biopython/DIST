@@ -309,8 +309,9 @@ Vector class, including rotation-related functions.
   </tr></table>
   
   <p>Return angles, axis pair that corresponds to rotation matrix m.</p>
-<p>The case where <code class="link">m</code> is the identity matrix corresponds to a singularity where any
-rotation axis is valid. In that case, <a href="Bio.PDB.vectors.Vector-class.html" class="link">Vector([1,0,0])</a>, is returned.</p>
+<p>The case where <tt class="rst-docutils literal">m</tt> is the identity matrix corresponds to a singularity
+where any rotation axis is valid. In that case, <tt class="rst-docutils literal"><span class="pre">Vector([1,</span> 0, 0])</tt>,
+is returned.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -364,8 +365,12 @@ theta rad around vector.</p>
 <div class="rst-section" id="rst-examples">
 <h1 class="heading">Examples</h1>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>m = rotaxis(pi, Vector(1, 0, 0))
-<span class="py-prompt">&gt;&gt;&gt; </span>rotated_vector = any_vector.left_multiply(m)</pre>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> numpy <span class="py-keyword">import</span> pi
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.vectors <span class="py-keyword">import</span> rotaxis2m
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.vectors <span class="py-keyword">import</span> Vector
+<span class="py-prompt">&gt;&gt;&gt; </span>m = rotaxis2m(pi, Vector(1, 0, 0))
+<span class="py-prompt">&gt;&gt;&gt; </span>Vector(1, 2, 3).left_multiply(m)
+<span class="py-output">&lt;Vector 1.00, -2.00, -3.00&gt;</span></pre>
 </div>
   <dl class="fields">
     <dt>Parameters:</dt>
@@ -399,8 +404,12 @@ theta rad around vector.</p>
 <div class="rst-section" id="rst-rst-examples">
 <h1 class="heading">Examples</h1>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>m = rotaxis(pi, Vector(1, 0, 0))
-<span class="py-prompt">&gt;&gt;&gt; </span>rotated_vector = any_vector.left_multiply(m)</pre>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> numpy <span class="py-keyword">import</span> pi
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.vectors <span class="py-keyword">import</span> rotaxis2m
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.vectors <span class="py-keyword">import</span> Vector
+<span class="py-prompt">&gt;&gt;&gt; </span>m = rotaxis2m(pi, Vector(1, 0, 0))
+<span class="py-prompt">&gt;&gt;&gt; </span>Vector(1, 2, 3).left_multiply(m)
+<span class="py-output">&lt;Vector 1.00, -2.00, -3.00&gt;</span></pre>
 </div>
   <dl class="fields">
     <dt>Parameters:</dt>
@@ -432,10 +441,14 @@ theta rad around vector.</p>
 <div class="rst-section" id="rst-examples">
 <h1 class="heading">Examples</h1>
 <pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.vectors <span class="py-keyword">import</span> refmat
+<span class="py-prompt">&gt;&gt;&gt; </span>p, q = Vector(1, 2, 3), Vector(2, 3, 5)
 <span class="py-prompt">&gt;&gt;&gt; </span>mirror = refmat(p, q)
 <span class="py-prompt">&gt;&gt;&gt; </span>qq = p.left_multiply(mirror)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(q)
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(qq)  <span class="py-comment"># q and qq should be the same</span></pre>
+<span class="py-output">&lt;Vector 2.00, 3.00, 5.00&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(qq)
+<span class="py-output">&lt;Vector 1.21, 1.82, 3.03&gt;</span></pre>
 </div>
   <dl class="fields">
     <dt>Parameters:</dt>
@@ -466,9 +479,15 @@ theta rad around vector.</p>
 <div class="rst-section" id="rst-examples">
 <h1 class="heading">Examples</h1>
 <pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.PDB.vectors <span class="py-keyword">import</span> rotmat
+<span class="py-prompt">&gt;&gt;&gt; </span>p, q = Vector(1, 2, 3), Vector(2, 3, 5)
 <span class="py-prompt">&gt;&gt;&gt; </span>r = rotmat(p, q)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(q)
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(p.left_multiply(r))</pre>
+<span class="py-output">&lt;Vector 2.00, 3.00, 5.00&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(p)
+<span class="py-output">&lt;Vector 1.00, 2.00, 3.00&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>p.left_multiply(r)
+<span class="py-output">&lt;Vector 1.21, 1.82, 3.03&gt;</span></pre>
 </div>
   <dl class="fields">
     <dt>Parameters:</dt>
@@ -568,7 +587,7 @@ representing 4 connected points. The angle is in
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:18 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:54 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

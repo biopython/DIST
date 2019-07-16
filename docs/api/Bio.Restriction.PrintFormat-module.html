@@ -66,33 +66,77 @@ format: list, column or map.</p>
 <blockquote>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Restriction.PrintFormat <span class="py-keyword">import</span> PrintFormat
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Restriction.Restriction <span class="py-keyword">import</span> AllEnzymes
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Entrez
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> SeqIO
-<span class="py-prompt">&gt;&gt;&gt; </span>handle = Entrez.efetch(db=<span class="py-string">&quot;nucleotide&quot;</span>, rettype=<span class="py-string">&quot;fasta&quot;</span>, id=<span class="py-string">&quot;SYNPBR322&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>pBR322 = SeqIO.read(handle, <span class="py-string">&quot;fasta&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>handle.close()
-<span class="py-prompt">&gt;&gt;&gt; </span>dct = AllEnzymes.search(pBR322.seq)
-<span class="py-prompt">&gt;&gt;&gt; </span>new = PrintFormat()
-<span class="py-prompt">&gt;&gt;&gt; </span>new.print_that(dct, <span class="py-string">'My pBR322 analysis:\n'</span>, <span class="py-string">'No site:\n'</span>)
-<span class="py-output">My pBR322 analysis:</span>
-<span class="py-output">AasI       :  2169, 2582.</span>
-<span class="py-output">AatII      :  4289.</span>
-<span class="py-output">...</span>
-<span class="py-output">ZraI       :  4287.</span>
-<span class="py-output">ZrmI       :  3847.</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Restriction.Restriction <span class="py-keyword">import</span> RestrictionBatch
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Seq <span class="py-keyword">import</span> Seq
+<span class="py-prompt">&gt;&gt;&gt; </span>pBs_mcs = Seq(<span class="py-string">'GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTC'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>restriction_batch = RestrictionBatch([<span class="py-string">'EcoRI'</span>, <span class="py-string">'BamHI'</span>, <span class="py-string">'ApaI'</span>])
+<span class="py-prompt">&gt;&gt;&gt; </span>result = restriction_batch.search(pBs_mcs)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_map = PrintFormat()
+<span class="py-prompt">&gt;&gt;&gt; </span>my_map.print_that(result, <span class="py-string">'My pBluescript mcs analysis:\n'</span>,
+<span class="py-more">... </span>              <span class="py-string">'No site:\n'</span>)
+<span class="py-output">My pBluescript mcs analysis:</span>
+<span class="py-output">ApaI       :  12.</span>
+<span class="py-output">EcoRI      :  50.</span>
 <span class="py-output">No site:</span>
-<span class="py-output">AarI      AatI      Acc65I    AcsI      AcvI      AdeI      AflII     AgeI</span>
-<span class="py-output">...</span>
-<span class="py-output">Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI</span>
-<span class="py-output">Zsp2I</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>new.sequence = pBR322.seq
-<span class="py-prompt">&gt;&gt;&gt; </span>new.print_as(<span class="py-string">&quot;map&quot;</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>new.print_that(dct)
-<span class="py-more">...</span></pre>
+<span class="py-output">BamHI</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_map.sequence = pBs_mcs
+<span class="py-prompt">&gt;&gt;&gt; </span>my_map.print_as(<span class="py-string">&quot;map&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_map.print_that(result)
+<span class="py-output">           12 ApaI</span>
+<span class="py-output">           |</span>
+<span class="py-output">           |                                     50 EcoRI</span>
+<span class="py-output">           |                                     |</span>
+<span class="py-output">GGTACCGGGCCCCCCCTCGAGGTCGACGGTATCGATAAGCTTGATATCGAATTC</span>
+<span class="py-output">||||||||||||||||||||||||||||||||||||||||||||||||||||||</span>
+<span class="py-output">CCATGGCCCGGGGGGGAGCTCCAGCTGCCATAGCTATTCGAACTATAGCTTAAG</span>
+<span class="py-output">1                                                   54</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">   Enzymes which do not cut the sequence.</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">BamHI</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt;</span></pre>
 </blockquote>
 <p>Some of the methods of PrintFormat are meant to be overridden by derived
 class.</p>
+<p>Use the following parameters to control the appearance:</p>
+<ul>
+<li><dl class="rst-first rst-docutils">
+<dt>ConsoleWidth <span class="classifier-delimiter">:</span> <span class="rst-classifier">width of the console used default to 80.</span></dt>
+<dd><p class="rst-first rst-last">should never be less than 60.</p>
+</dd>
+</dl>
+</li>
+<li><p class="rst-first">NameWidth    : space attributed to the name in PrintList method.</p>
+</li>
+<li><p class="rst-first">Indent       : Indent of the second line.</p>
+</li>
+<li><dl class="rst-first rst-docutils">
+<dt>MaxSize <span class="classifier-delimiter">:</span> <span class="rst-classifier">Maximal size of the sequence (default=6:</span></dt>
+<dd><p class="rst-first">-&gt; 99 999 bp + 1 trailing ','
+people are unlikely to ask for restriction map of sequences
+bigger than 100.000 bp. This is needed to determine the
+space to be reserved for sites location.</p>
+<ul class="rst-last rst-simple">
+<li>MaxSize = 5  =&gt;   9.999 bp</li>
+<li>MaxSize = 6  =&gt;  99.999 bp</li>
+<li>MaxSize = 7  =&gt; 999.999 bp</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Example output:</p>
+<pre class="rst-literal-block">
+&lt;------------ ConsoleWidth ---------------&gt;
+&lt;- NameWidth -&gt;
+EcoRI         :   1, 45, 50, 300, 400, 650,
+                      700, 1200, 2500.
+                  &lt;--&gt;
+                    Indent
+</pre>
 
 <!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -173,7 +217,7 @@ class.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:19 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:55 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -67,7 +67,7 @@ M. de Hoon et al. (2004) <a class="rst-reference external" href="https://doi.org
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        1.55
+        1.58
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -125,7 +125,8 @@ distance between the two members of this node.
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="Bio.Cluster.Tree-class.html" class="summary-name">Tree</a>
+        <a href="Bio.Cluster.Tree-class.html" class="summary-name">Tree</a><br />
+      Hierarchical clustering tree.
     </td>
   </tr>
 <tr>
@@ -607,19 +608,17 @@ the distance matrix.</p>
 <p>Examples are:</p>
 <blockquote>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 1.:</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> numpy <span class="py-keyword">import</span> array
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 1:</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>distance = array([[0.0, 1.1, 2.3],
 <span class="py-more">... </span>                  [1.1, 0.0, 4.5],
 <span class="py-more">... </span>                  [2.3, 4.5, 0.0]])
-<span class="py-more">...</span>
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 2.:</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 2:</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>distance = array([1.1, 2.3, 4.5])
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 3.:</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 3:</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>distance = [array([]),
 <span class="py-more">... </span>            array([1.1]),
-<span class="py-more">... </span>            array([2.3, 4.5])]
-<span class="py-more">...</span>
-<span class="py-prompt">&gt;&gt;&gt;</span></pre>
+<span class="py-more">... </span>            array([2.3, 4.5])]</pre>
 </blockquote>
 <p>These three correspond to the same distance matrix.</p>
 </li>
@@ -720,19 +719,17 @@ the distance matrix.</p>
 <p>Examples are:</p>
 <blockquote>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 1.:</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> numpy <span class="py-keyword">import</span> array
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 1:</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>distance = array([[0.0, 1.1, 2.3],
 <span class="py-more">... </span>                  [1.1, 0.0, 4.5],
 <span class="py-more">... </span>                  [2.3, 4.5, 0.0]])
-<span class="py-more">...</span>
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 2.:</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 2:</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>distance = array([1.1, 2.3, 4.5])
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 3.:</span>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># option 3:</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>distance = [array([]),
 <span class="py-more">... </span>            array([1.1]),
-<span class="py-more">... </span>            array([2.3, 4.5])]
-<span class="py-more">...</span>
-<span class="py-prompt">&gt;&gt;&gt;</span></pre>
+<span class="py-more">... </span>            array([2.3, 4.5])]</pre>
 </blockquote>
 <p>These three correspond to the same distance matrix.</p>
 <p>PLEASE NOTE:
@@ -915,18 +912,23 @@ which cluster each item belongs. The centroid is defined as either
 the mean or the median over all items for each dimension.</p>
 <dl class="rst-docutils">
 <dt>Keyword arguments:</dt>
-<dd><ul class="rst-first rst-last rst-simple">
-<li>data: nrows x ncolumns array containing the data values.</li>
-<li>mask: nrows x ncolumns array of integers, showing which data are
-missing. If mask[i, j]==0, then data[i, j] is missing.</li>
-<li>clusterid: array containing the cluster number for each item.
-The cluster number should be non-negative.</li>
-<li>method: specifies whether the centroid is calculated from the
+<dd><ul class="rst-first rst-last">
+<li><p class="rst-first">data: nrows x ncolumns array containing the data values.</p>
+</li>
+<li><p class="rst-first">mask: nrows x ncolumns array of integers, showing which data are
+missing. If mask[i, j]==0, then data[i, j] is missing.</p>
+</li>
+<li><p class="rst-first">clusterid: array containing the cluster number for each item.
+The cluster number should be non-negative.</p>
+</li>
+<li><p class="rst-first">method: specifies whether the centroid is calculated from the
 arithmetic mean (method == 'a', default) or the median (method == 'm')
-over each dimension.</li>
+over each dimension.</p>
+</li>
 <li><dl class="rst-first rst-docutils">
 <dt>transpose: if False, each row contains the data for one item;</dt>
-<dd>if True, each column contains the data for one item.</dd>
+<dd><p class="rst-first rst-last">if True, each column contains the data for one item.</p>
+</dd>
 </dl>
 </li>
 </ul>
@@ -969,17 +971,21 @@ if any, are missing.</li>
 <p>This function returns the distance matrix calculated from the data.</p>
 <dl class="rst-docutils">
 <dt>Keyword arguments:</dt>
-<dd><ul class="rst-first rst-last rst-simple">
-<li>data: nrows x ncolumns array containing the data values.</li>
-<li>mask: nrows x ncolumns array of integers, showing which data are
-missing. If mask[i, j]==0, then data[i, j] is missing.</li>
-<li>weight: the weights to be used when calculating distances.</li>
+<dd><ul class="rst-first rst-last">
+<li><p class="rst-first">data: nrows x ncolumns array containing the data values.</p>
+</li>
+<li><p class="rst-first">mask: nrows x ncolumns array of integers, showing which data are
+missing. If mask[i, j]==0, then data[i, j] is missing.</p>
+</li>
+<li><p class="rst-first">weight: the weights to be used when calculating distances.</p>
+</li>
 <li><dl class="rst-first rst-docutils">
 <dt>transpose: if False: the distances between rows are calculated;</dt>
-<dd>if True:  the distances between columns are calculated.</dd>
+<dd><p class="rst-first rst-last">if True:  the distances between columns are calculated.</p>
+</dd>
 </dl>
 </li>
-<li>dist: specifies the distance function to be used:
+<li><p class="rst-first">dist: specifies the distance function to be used:
 - dist == 'e': Euclidean distance
 - dist == 'b': City Block distance
 - dist == 'c': Pearson correlation
@@ -987,7 +993,8 @@ missing. If mask[i, j]==0, then data[i, j] is missing.</li>
 - dist == 'u': uncentered correlation
 - dist == 'x': absolute uncentered correlation
 - dist == 's': Spearman's rank correlation
-- dist == 'k': Kendall's tau</li>
+- dist == 'k': Kendall's tau</p>
+</li>
 </ul>
 </dd>
 </dl>
@@ -995,21 +1002,33 @@ missing. If mask[i, j]==0, then data[i, j] is missing.</li>
 The distance matrix is returned as a list of 1D arrays containing the
 distance matrix calculated from the data. The number of columns in eac
 row is equal to the row number. Hence, the first row has zero length.
-An example of the return value is:</p>
-<blockquote>
+For example:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> numpy <span class="py-keyword">import</span> array
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Cluster <span class="py-keyword">import</span> distancematrix
+<span class="py-prompt">&gt;&gt;&gt; </span>data = array([[0, 1,  2,  3],
+<span class="py-more">... </span>              [4, 5,  6,  7],
+<span class="py-more">... </span>              [8, 9, 10, 11],
+<span class="py-more">... </span>              [1, 2,  3,  4]])
+<span class="py-prompt">&gt;&gt;&gt; </span>distances = distancematrix(data, dist=<span class="py-string">'e'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>distances
+<span class="py-output">[array([], dtype=float64), array([ 16.]), array([ 64.,  16.]), array([  1.,   9.,  49.])]</span></pre>
 <dl class="rst-docutils">
-<dt>matrix = [[],</dt>
-<dd>array([1.]),
-array([7., 3.]),
-array([4., 2., 6.])]</dd>
+<dt>which can be rewritten as</dt>
+<dd><dl class="rst-first rst-last rst-docutils">
+<dt>distances = [array([], dtype=float64),</dt>
+<dd>array([ 16.]),
+array([ 64.,  16.]),
+array([  1.,   9.,  49.])]</dd>
 </dl>
-</blockquote>
+</dd>
+</dl>
 <p>This corresponds to the distance matrix:</p>
 <blockquote>
-[0., 1., 7., 4.]
-[1., 0., 3., 2.]
-[7., 3., 0., 6.]
-[4., 2., 6., 0.]</blockquote>
+[ 0., 16., 64.,  1.]
+[16.,  0., 16.,  9.]
+[64., 16.,  0., 49.]
+[ 1.,  9., 49.,  0.]</blockquote>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1045,10 +1064,18 @@ coordinates, and the eigenvalues are sorted by the magnitude of the
 eigenvalue, with the largest eigenvalues appearing first. Here, nmin is
 the smaller of nrows and ncolumns.
 Adding the column means to the dot product of the coordinates and the
-principal components,</p>
+principal components recreates the data matrix:</p>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>columnmean + dot(coordinates, pc)</pre>
-<p>recreates the data matrix.</p>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> numpy <span class="py-keyword">import</span> array, dot, amax, amin
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Cluster <span class="py-keyword">import</span> pca
+<span class="py-prompt">&gt;&gt;&gt; </span>matrix = array([[ 0.,  0.,  0.],
+<span class="py-more">... </span>                [ 1.,  0.,  0.],
+<span class="py-more">... </span>                [ 7.,  3.,  0.],
+<span class="py-more">... </span>                [ 4.,  2.,  6.]])
+<span class="py-prompt">&gt;&gt;&gt; </span>columnmean, coordinates, pc, _ = pca(matrix)
+<span class="py-prompt">&gt;&gt;&gt; </span>m = matrix - (columnmean + dot(coordinates, pc))
+<span class="py-prompt">&gt;&gt;&gt; </span>amax(m) &lt; 1e-12 <span class="py-keyword">and</span> amin(m) &gt; -1e-12
+<span class="py-output">True</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -1103,7 +1130,7 @@ Cluster/TreeView program.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:14 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:51 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

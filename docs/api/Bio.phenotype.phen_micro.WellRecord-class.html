@@ -69,31 +69,31 @@ object --+
 <hr />
 <p>WellRecord stores all time course signals of a phenotype Microarray well.</p>
 <p>The single time points and signals can be accessed iterating on the
-WellRecord or using lists indeces or slices:</p>
+WellRecord or using lists indexes or slices:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;plate.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;phenotype/Plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>well = plate[<span class="py-string">'A05'</span>]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> time, signal <span class="py-keyword">in</span> well:
-<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;Time: %f, Signal: %f&quot;</span> % (time, signal))
+<span class="py-more">... </span>   <span class="py-keyword">print</span>(<span class="py-string">&quot;Time: %f, Signal: %f&quot;</span> % (time, signal)) <span class="py-comment"># doctest:+ELLIPSIS</span>
 <span class="py-more">...</span>
-<span class="py-output">Time: 0.0, Signal: 10.0</span>
-<span class="py-output">Time: 0.25, Signal: 14.0</span>
-<span class="py-output">Time: 0.5, Signal: 19.0</span>
-<span class="py-output">Time: 24.25, Signal: 32.0</span>
+<span class="py-output">Time: 0.000000, Signal: 14.000000</span>
+<span class="py-output">Time: 0.250000, Signal: 13.000000</span>
+<span class="py-output">Time: 0.500000, Signal: 15.000000</span>
+<span class="py-output">Time: 0.750000, Signal: 15.000000</span>
 <span class="py-output">...</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>well[1]
-<span class="py-output">23.0</span>
+<span class="py-output">16.0</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>well[1:5]
-<span class="py-output">[23.0, 23.0, 26.0, 26.0]</span>
+<span class="py-output">[16.0, 20.0, 18.0, 15.0]</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>well[1:5:0.5]
-<span class="py-output">[23.0, 23.0, 23.0, 26.0, 26.0, 26.0, 26.0, 26.0]</span></pre>
+<span class="py-output">[16.0, 19.0, 20.0, 18.0, 18.0, 18.0, 15.0, 18.0]</span></pre>
 <p>If a time point was not present in the input file but it's between the
 minimum and maximum time point, the interpolated signal is returned,
 otherwise a nan value:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>well[1.3]
-<span class="py-output">23.0</span>
+<span class="py-output">19.0</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>well[1250]
 <span class="py-output">nan</span></pre>
 <p>Two WellRecord objects can be compared: if their input time/signal pairs
@@ -105,6 +105,7 @@ are exactly the same, the two records are considered equal:</p>
 <p>Two WellRecord objects can be summed up or subtracted from each other: a new
 WellRecord object is returned, having the left operand id.</p>
 <pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>well1 = plate[<span class="py-string">'A05'</span>]
 <span class="py-prompt">&gt;&gt;&gt; </span>well2 = well + well1
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(well2.id)
 <span class="py-output">A05</span></pre>
@@ -114,16 +115,20 @@ in order to extract some parameters; three sigmoid functions are available:
 * logistic
 * richards
 The functions are described in Zwietering et al., 1990 (PMID: 16348228)</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>well.fit()
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(well.slope, well.model)
-<span class="py-output">(61.853516785566917, 'logistic')</span></pre>
+<p>For example:</p>
+<pre class="rst-literal-block">
+well.fit()
+print(well.slope, well.model)
+(61.853516785566917, 'logistic')
+</pre>
 <p>If not sigmoid function is specified, the first one that is successfully
 fitted is used. The user can also specify a specific function.</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>well.fit(<span class="py-string">'gompertz'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(well.slope, well.model)
-<span class="py-output">(127.94630059171354, 'gompertz')</span></pre>
+<p>To specify gompertz:</p>
+<pre class="rst-literal-block">
+well.fit('gompertz')
+print(well.slope, well.model)
+(127.94630059171354, 'gompertz')
+</pre>
 <p>If no function can be fitted, the parameters are left as None, except for
 the max, min, average_height and area.</p>
 
@@ -600,15 +605,15 @@ left operand</p>
 method.  e.g.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> phenotype
-<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;plates.csv&quot;</span>, <span class="py-string">&quot;pm-csv&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>plate = phenotype.read(<span class="py-string">&quot;phenotype/Plate.json&quot;</span>, <span class="py-string">&quot;pm-json&quot;</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>record = plate[<span class="py-string">'A05'</span>]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(record)
-<span class="py-output">Plate ID: PM09</span>
+<span class="py-output">Plate ID: PM01</span>
 <span class="py-output">Well ID: A05</span>
-<span class="py-output">Time points: 288</span>
-<span class="py-output">Minum signal 0.00 at time 10.00</span>
-<span class="py-output">Maximum signal 7.50 at time 32.00</span>
-<span class="py-output">WellRecord('(0.0, 10.0), (0.25, 14.0), (0.5, 19.0), (0.75, 19.0), (1.0, 23.0)...(71.75, 32.0)')</span></pre>
+<span class="py-output">Time points: 384</span>
+<span class="py-output">Minum signal 0.25 at time 13.00</span>
+<span class="py-output">Maximum signal 19.50 at time 23.00</span>
+<span class="py-output">WellRecord('(0.0, 14.0), (0.25, 13.0), (0.5, 15.0), (0.75, 15.0), (1.0, 16.0), ..., (95.75, 16.0)')</span></pre>
 <p>Note that long time spans are shown truncated.</p>
   <dl class="fields">
     <dt>Overrides:
@@ -684,7 +689,7 @@ function names as strings.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:58:09 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:05:01 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

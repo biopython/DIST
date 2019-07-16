@@ -59,6 +59,8 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module minimal</h1><p class="nomargin-top"><span class="codelink"><a href="Bio.motifs.minimal-pysrc.html">source&nbsp;code</a></span></p>
+Module for the support of MEME minimal motif format.
+
 <!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -126,7 +128,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_read_background"></a><span class="summary-sig-name">_read_background</span>(<span class="summary-sig-arg">record</span>,
-        <span class="summary-sig-arg">handle</span>)</span></td>
+        <span class="summary-sig-arg">handle</span>)</span><br />
+      Read background letter frequencies (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.motifs.minimal-pysrc.html#_read_background">source&nbsp;code</a></span>
             
@@ -143,7 +146,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_read_version"></a><span class="summary-sig-name">_read_version</span>(<span class="summary-sig-arg">record</span>,
-        <span class="summary-sig-arg">handle</span>)</span></td>
+        <span class="summary-sig-arg">handle</span>)</span><br />
+      Read MEME version (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.motifs.minimal-pysrc.html#_read_version">source&nbsp;code</a></span>
             
@@ -160,7 +164,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_read_alphabet"></a><span class="summary-sig-name">_read_alphabet</span>(<span class="summary-sig-arg">record</span>,
-        <span class="summary-sig-arg">handle</span>)</span></td>
+        <span class="summary-sig-arg">handle</span>)</span><br />
+      Read alphabet (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.motifs.minimal-pysrc.html#_read_alphabet">source&nbsp;code</a></span>
             
@@ -177,7 +182,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_read_lpm"></a><span class="summary-sig-name">_read_lpm</span>(<span class="summary-sig-arg">line</span>,
-        <span class="summary-sig-arg">handle</span>)</span></td>
+        <span class="summary-sig-arg">handle</span>)</span><br />
+      Read letter probability matrix (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.motifs.minimal-pysrc.html#_read_lpm">source&nbsp;code</a></span>
             
@@ -194,7 +200,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_read_motif_statistics"></a><span class="summary-sig-name">_read_motif_statistics</span>(<span class="summary-sig-arg">line</span>,
-        <span class="summary-sig-arg">handle</span>)</span></td>
+        <span class="summary-sig-arg">handle</span>)</span><br />
+      Read motif statistics (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.motifs.minimal-pysrc.html#_read_motif_statistics">source&nbsp;code</a></span>
             
@@ -210,7 +217,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_read_motif_name"></a><span class="summary-sig-name">_read_motif_name</span>(<span class="summary-sig-arg">handle</span>)</span></td>
+          <td><span class="summary-sig"><a name="_read_motif_name"></a><span class="summary-sig-name">_read_motif_name</span>(<span class="summary-sig-arg">handle</span>)</span><br />
+      Read motif name (PRIVATE).</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.motifs.minimal-pysrc.html#_read_motif_name">source&nbsp;code</a></span>
             
@@ -282,26 +290,27 @@
 <p>Example:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.motifs <span class="py-keyword">import</span> minimal
-<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;meme.output.txt&quot;</span>) <span class="py-keyword">as</span> f:
-<span class="py-more">... </span>    record = meme.read(f)
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;motifs/meme.out&quot;</span>) <span class="py-keyword">as</span> f:
+<span class="py-more">... </span>    record = minimal.read(f)
 <span class="py-more">...</span>
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> motif <span class="py-keyword">in</span> record:
 <span class="py-more">... </span>    <span class="py-keyword">print</span>(motif.name, motif.evalue)
-<span class="py-more">...</span></pre>
+<span class="py-more">...</span>
+<span class="py-output">1 1.1e-22</span></pre>
 <p>You can access individual motifs in the record by their index or find a motif
 by its name:</p>
 <p>Example:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> motifs
-<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;test_minimal.meme&quot;</span>) <span class="py-keyword">as</span> f:
+<span class="py-prompt">&gt;&gt;&gt; </span>with open(<span class="py-string">&quot;motifs/minimal_test.meme&quot;</span>) <span class="py-keyword">as</span> f:
 <span class="py-more">... </span>    record = motifs.parse(f, <span class="py-string">'minimal'</span>)
 <span class="py-more">...</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>motif = record[0]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(motif.name)
-<span class="py-output">LEXA</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>motif = record[<span class="py-string">'LEXA'</span>]
+<span class="py-output">KRP</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>motif = record[<span class="py-string">'IFXA'</span>]
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(motif.name)
-<span class="py-output">LEXA</span></pre>
+<span class="py-output">IFXA</span></pre>
 <p>This function wont retrieve instances, as there are none in minimal meme format.</p>
   <dl class="fields">
   </dl>
@@ -336,7 +345,7 @@ by its name:</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec 18 15:56:23 2018
+    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:58 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
