@@ -260,13 +260,15 @@ are: <em>alpha, node_color, node_size, node_shape, edge_color, style,
 font_size, font_color, font_weight, font_family</em></p>
 <div class="rst-section" id="rst-examples">
 <h1 class="heading">Examples</h1>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> pylab
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Phylo
-<span class="py-prompt">&gt;&gt;&gt; </span>tree = Phylo.read(<span class="py-string">'ex/apaf.xml'</span>, <span class="py-string">'phyloxml'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>Phylo.draw_graphviz(tree)
-<span class="py-prompt">&gt;&gt;&gt; </span>pylab.show()
-<span class="py-prompt">&gt;&gt;&gt; </span>pylab.savefig(<span class="py-string">'apaf.png'</span>)</pre>
+<p>Load a PhyloXML format tree, and draw a PNG using GraphViz:</p>
+<pre class="rst-literal-block">
+import pylab
+from Bio import Phylo
+tree = Phylo.read('PhyloXML/apaf.xml', 'phyloxml')
+Phylo.draw_graphviz(tree)
+pylab.show()
+pylab.savefig('apaf.png')
+</pre>
 </div>
   <dl class="fields">
     <dt>Parameters:</dt>
@@ -281,17 +283,16 @@ ValueError); all other exception types will still be raised. This
 means you can use a lambda expression that simply attempts to look
 up the desired value without checking if the intermediate attributes
 are available:</p>
-<blockquote>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Phylo, AlignIO
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Phylo.TreeConstruction <span class="py-keyword">import</span> DistanceCalculator, DistanceTreeConstructor
-<span class="py-prompt">&gt;&gt;&gt; </span>constructor = DistanceTreeConstructor()
-<span class="py-prompt">&gt;&gt;&gt; </span>aln = AlignIO.read(open(<span class="py-string">'Tests/TreeConstruction/msa.phy'</span>), <span class="py-string">'phylip'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>calculator = DistanceCalculator(<span class="py-string">'identity'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>dm = calculator.get_distance(aln)
-<span class="py-prompt">&gt;&gt;&gt; </span>tree = constructor.upgma(dm)
-<span class="py-prompt">&gt;&gt;&gt; </span>Phylo.draw_graphviz(tree, <span class="py-keyword">lambda</span> n: n.taxonomies[0].code)</pre>
-</blockquote></li>
+<pre class="rst-literal-block">
+from Bio import Phylo, AlignIO
+from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+constructor = DistanceTreeConstructor()
+aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+calculator = DistanceCalculator('identity')
+dm = calculator.get_distance(aln)
+tree = constructor.upgma(dm)
+Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
+</pre></li>
         <li><strong class="pname"><code>prog</code></strong> (string) - The Graphviz program to use when rendering the graph. 'twopi'
 behaves the best for large graphs, reliably avoiding crossing edges,
 but for moderate graphs 'neato' looks a bit nicer.  For small
@@ -373,16 +374,17 @@ options. The input format should be in the form of:
 pyplot_option_name=(tuple), pyplot_option_name=(tuple, dict), or
 pyplot_option_name=(dict).</p>
 <p>Example using the pyplot options 'axhspan' and 'axvline':</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> Phylo, AlignIO
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Phylo.TreeConstruction <span class="py-keyword">import</span> DistanceCalculator, DistanceTreeConstructor
-<span class="py-prompt">&gt;&gt;&gt; </span>constructor = DistanceTreeConstructor()
-<span class="py-prompt">&gt;&gt;&gt; </span>aln = AlignIO.read(open(<span class="py-string">'Tests/TreeConstruction/msa.phy'</span>), <span class="py-string">'phylip'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>calculator = DistanceCalculator(<span class="py-string">'identity'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>dm = calculator.get_distance(aln)
-<span class="py-prompt">&gt;&gt;&gt; </span>tree = constructor.upgma(dm)
-<span class="py-prompt">&gt;&gt;&gt; </span>Phylo.draw(tree, axhspan=((0.25, 7.75), {<span class="py-string">'facecolor'</span>:<span class="py-string">'0.5'</span>}),
-<span class="py-more">... </span>    axvline={<span class="py-string">'x'</span>:<span class="py-string">'0'</span>, <span class="py-string">'ymin'</span>:<span class="py-string">'0'</span>, <span class="py-string">'ymax'</span>:<span class="py-string">'1'</span>})</pre>
+<pre class="rst-literal-block">
+from Bio import Phylo, AlignIO
+from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+constructor = DistanceTreeConstructor()
+aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+calculator = DistanceCalculator('identity')
+dm = calculator.get_distance(aln)
+tree = constructor.upgma(dm)
+Phylo.draw(tree, axhspan=((0.25, 7.75), {'facecolor':'0.5'}),
+... axvline={'x':0, 'ymin':0, 'ymax':1})
+</pre>
 <p>Visual aspects of the plot can also be modified using pyplot's own functions
 and objects (via pylab or matplotlib). In particular, the pyplot.rcParams
 object can be used to scale the font size (rcParams[&quot;font.size&quot;]) and line
@@ -441,7 +443,7 @@ None, the label will be shown in black.</li>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jul 16 17:00:54 2019
+    Generated by Epydoc 3.0.1 on Wed Nov  6 13:32:23 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

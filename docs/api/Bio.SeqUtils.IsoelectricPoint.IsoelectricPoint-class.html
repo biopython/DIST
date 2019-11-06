@@ -67,10 +67,37 @@ object --+
 </pre>
 
 <hr />
-<p>A class with one public method to calculate the pI of a protein.</p>
-<p>Access this class through ProtParam.ProteinAnalysis class.
-First make a ProteinAnalysis object and then call its isoelectric_point
-method.</p>
+<p>A class for calculating the IEP or charge at given pH of a protein.</p>
+<div class="rst-section" id="rst-parameters">
+<h1 class="heading">Parameters</h1>
+</div>
+<div class="rst-section" id="rst-methods">
+<h1 class="heading">Methods</h1>
+</div>
+<div class="rst-section" id="rst-examples">
+<h1 class="heading">Examples</h1>
+<p>The methods of this class can either be accessed from the class itself
+or from a <tt class="rst-docutils literal">ProtParam.ProteinAnalysis</tt> object (with partially different
+names):</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils.IsoelectricPoint <span class="py-keyword">import</span> IsoelectricPoint <span class="py-keyword">as</span> IP
+<span class="py-prompt">&gt;&gt;&gt; </span>protein = IP(<span class="py-string">&quot;INGAR&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;IEP of peptide {} is {:.2f}&quot;</span>
+<span class="py-more">... </span>      .format(protein.sequence, protein.pi()))
+<span class="py-output">IEP of peptide INGAR is 9.75</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;It's charge at pH 7 is {:.2f}&quot;</span>
+<span class="py-more">... </span>      .format(protein.charge_at_pH(7.0)))
+<span class="py-output">It's charge at pH 7 is 0.76</span></pre>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.SeqUtils.ProtParam <span class="py-keyword">import</span> ProteinAnalysis <span class="py-keyword">as</span> PA
+<span class="py-prompt">&gt;&gt;&gt; </span>protein = PA(<span class="py-string">&quot;PETER&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;IEP of {}: {:.2f}&quot;</span>.format(protein.sequence,
+<span class="py-more">... </span>                                 protein.isoelectric_point()))
+<span class="py-output">IEP of PETER: 4.53</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(<span class="py-string">&quot;Charge at pH 4.53: {:.2f}&quot;</span>
+<span class="py-more">... </span>      .format(protein.charge_at_pH(4.53)))
+<span class="py-output">Charge at pH 4.53: 0.00</span></pre>
+</div>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -96,8 +123,8 @@ method.</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">ProteinSequence</span>,
-        <span class="summary-sig-arg">AminoAcidsContent</span>)</span><br />
+        <span class="summary-sig-arg">protein_sequence</span>,
+        <span class="summary-sig-arg">aa_content</span>=<span class="summary-sig-default">None</span>)</span><br />
       Initialize the class.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.SeqUtils.IsoelectricPoint-pysrc.html#IsoelectricPoint.__init__">source&nbsp;code</a></span>
@@ -115,7 +142,7 @@ method.</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="_select_charged"></a><span class="summary-sig-name">_select_charged</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">AminoAcidsContent</span>)</span></td>
+        <span class="summary-sig-arg">aa_content</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.SeqUtils.IsoelectricPoint-pysrc.html#IsoelectricPoint._select_charged">source&nbsp;code</a></span>
             
@@ -131,12 +158,45 @@ method.</p>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a name="_update_pKs_tables"></a><span class="summary-sig-name">_update_pKs_tables</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Update pKs tables with seq specific values for N- and C-termini.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.IsoelectricPoint-pysrc.html#IsoelectricPoint._update_pKs_tables">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="_chargeR"></a><span class="summary-sig-name">_chargeR</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">pH</span>,
-        <span class="summary-sig-arg">pos_pKs</span>,
-        <span class="summary-sig-arg">neg_pKs</span>)</span></td>
+        <span class="summary-sig-arg">pH</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="Bio.SeqUtils.IsoelectricPoint-pysrc.html#IsoelectricPoint._chargeR">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="charge_at_pH"></a><span class="summary-sig-name">charge_at_pH</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pH</span>)</span><br />
+      Calculate the charge of a protein at given pH.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="Bio.SeqUtils.IsoelectricPoint-pysrc.html#IsoelectricPoint.charge_at_pH">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -231,8 +291,8 @@ method.</p>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">ProteinSequence</span>,
-        <span class="sig-arg">AminoAcidsContent</span>)</span>
+        <span class="sig-arg">protein_sequence</span>,
+        <span class="sig-arg">aa_content</span>=<span class="sig-default">None</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -277,7 +337,7 @@ method.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jul 16 17:04:59 2019
+    Generated by Epydoc 3.0.1 on Wed Nov  6 13:33:47 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

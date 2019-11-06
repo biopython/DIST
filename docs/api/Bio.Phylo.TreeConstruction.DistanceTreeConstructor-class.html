@@ -72,41 +72,49 @@
 <p>Distance based tree constructor.</p>
 <div class="rst-section" id="rst-examples">
 <h1 class="heading">Examples</h1>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> TreeConstruction <span class="py-keyword">import</span> DistanceTreeConstructor
-<span class="py-prompt">&gt;&gt;&gt; </span>constructor = DistanceTreeConstructor()</pre>
-<p>UPGMA Tree:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio.Phylo.TreeConstruction <span class="py-keyword">import</span> DistanceCalculator
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> Bio <span class="py-keyword">import</span> AlignIO
-<span class="py-prompt">&gt;&gt;&gt; </span>aln = AlignIO.read(open(<span class="py-string">'Tests/TreeConstruction/msa.phy'</span>), <span class="py-string">'phylip'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>calculator = DistanceCalculator(<span class="py-string">'identity'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>dm = calculator.get_distance(aln)
-<span class="py-prompt">&gt;&gt;&gt; </span>upgmatree = constructor.upgma(dm)
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(upgmatree)
-<span class="py-output">Tree(rooted=True)</span>
-<span class="py-output">    Clade(name='Inner4')</span>
-<span class="py-output">        Clade(branch_length=0.171955155115, name='Inner1')</span>
-<span class="py-output">            Clade(branch_length=0.111111111111, name='Epsilon')</span>
-<span class="py-output">            Clade(branch_length=0.111111111111, name='Delta')</span>
-<span class="py-output">        Clade(branch_length=0.0673103855608, name='Inner3')</span>
-<span class="py-output">            Clade(branch_length=0.0907558806655, name='Inner2')</span>
-<span class="py-output">                Clade(branch_length=0.125, name='Gamma')</span>
-<span class="py-output">                Clade(branch_length=0.125, name='Beta')</span>
-<span class="py-output">            Clade(branch_length=0.215755880666, name='Alpha')</span></pre>
-<p>NJ Tree:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>njtree = constructor.nj(dm)
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span>(njtree)
-<span class="py-output">Tree(rooted=False)</span>
-<span class="py-output">    Clade(name='Inner3')</span>
-<span class="py-output">        Clade(branch_length=0.0142054862889, name='Inner2')</span>
-<span class="py-output">            Clade(branch_length=0.239265540676, name='Inner1')</span>
-<span class="py-output">                Clade(branch_length=0.0853101915988, name='Epsilon')</span>
-<span class="py-output">                Clade(branch_length=0.136912030623, name='Delta')</span>
-<span class="py-output">            Clade(branch_length=0.292306275042, name='Alpha')</span>
-<span class="py-output">        Clade(branch_length=0.0747705106139, name='Beta')</span>
-<span class="py-output">        Clade(branch_length=0.175229489386, name='Gamma')</span></pre>
+<p>Loading a small PHYLIP alignment from which to compute distances, and then
+build a upgma Tree:</p>
+<pre class="rst-literal-block">
+from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+from Bio.Phylo.TreeConstruction import DistanceCalculator
+from Bio import AlignIO
+aln = AlignIO.read(open('TreeConstruction/msa.phy'), 'phylip')
+constructor = DistanceTreeConstructor()
+calculator = DistanceCalculator('identity')
+dm = calculator.get_distance(aln)
+upgmatree = constructor.upgma(dm)
+print(upgmatree)
+</pre>
+<p>Output:</p>
+<pre class="rst-literal-block">
+Tree(rooted=True)
+    Clade(branch_length=0, name='Inner4')
+        Clade(branch_length=0.18749999999999994, name='Inner1')
+            Clade(branch_length=0.07692307692307693, name='Epsilon')
+            Clade(branch_length=0.07692307692307693, name='Delta')
+        Clade(branch_length=0.11057692307692304, name='Inner3')
+            Clade(branch_length=0.038461538461538464, name='Inner2')
+                Clade(branch_length=0.11538461538461536, name='Gamma')
+                Clade(branch_length=0.11538461538461536, name='Beta')
+            Clade(branch_length=0.15384615384615383, name='Alpha')
+</pre>
+<p>Build a NJ Tree:</p>
+<pre class="rst-literal-block">
+njtree = constructor.nj(dm)
+print(njtree)
+</pre>
+<p>Output:</p>
+<pre class="rst-literal-block">
+Tree(rooted=False)
+    Clade(branch_length=0, name='Inner3')
+        Clade(branch_length=0.18269230769230765, name='Alpha')
+        Clade(branch_length=0.04807692307692307, name='Beta')
+        Clade(branch_length=0.04807692307692307, name='Inner2')
+            Clade(branch_length=0.27884615384615385, name='Inner1')
+                Clade(branch_length=0.051282051282051266, name='Epsilon')
+                Clade(branch_length=0.10256410256410259, name='Delta')
+            Clade(branch_length=0.14423076923076922, name='Gamma')
+</pre>
 </div>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -437,7 +445,7 @@ with Arithmetic mean (UPGMA) tree.</p>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jul 16 17:01:07 2019
+    Generated by Epydoc 3.0.1 on Wed Nov  6 13:32:28 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
